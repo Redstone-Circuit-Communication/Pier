@@ -32,7 +32,8 @@ namespace pier
         constexpr char const* kSeed = R"({
   "language": "auto",
   "mods": {
-    "disabled": []
+    "disabled": [],
+    "adopt": true
   },
   "hooks": {
     "disabled": [],
@@ -43,7 +44,8 @@ namespace pier
     "warn_ms": 2000,
     "hang_ms": 30000,
     "shutdown_ms": 10000
-  }
+  },
+  "native_detour": false
 }
 )";
 
@@ -172,6 +174,8 @@ namespace pier
                 static_cast<std::uint32_t>(number(root, "watchdog.hang_ms", d.watchdogHangMs, 0, 3600000, out));
             c.watchdogShutdownMs = static_cast<std::uint32_t>(
                 number(root, "watchdog.shutdown_ms", d.watchdogShutdownMs, 0, 3600000, out));
+            c.adoptMods = flag(root, "mods.adopt", d.adoptMods, out);
+            c.nativeDetour = flag(root, "native_detour", d.nativeDetour, out);
             return c;
         }
     } // namespace

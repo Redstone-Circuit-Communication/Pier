@@ -52,6 +52,9 @@ def run():
         return r
     host = m.group(1)
     r.note("the mod type name the host registers = %r" % host)
+    with open(os.path.join(ROOT, "manifest.json"), encoding="utf-8-sig") as f:
+        host_mod = json.load(f).get("name")
+    r.note("the manifest name of the host = %r, the name a dependency on it uses" % host_mod)
 
     # This may run against another repository: a consumer of Pier, meaning a mod, is bound
     # by the same equality while having no hosted_mod.h of its own. The host name is read
@@ -95,11 +98,17 @@ def run():
                    "scanned and nothing is reported" % (rel, j.get("type"), host))
 
         deps = [d.get("name") for d in j.get("dependencies", []) if isinstance(d, dict)]
-        if host not in deps:
-            r.fail("the dependencies of %s do not include %r, so the load order cannot be "
-                   "guaranteed; they currently are %s" % (rel, host, deps))
+        # LeviLamina resolves a dependency by the manifest name of the mod it names, compared
+        # exactly, so a pier mod names the host's manifest name and not the mod type.
+        if host_mod not in deps:
+            r.fail("the dependencies of %s do not include %r, the manifest name of the host, "
+                   "so the load order cannot be guaranteed; they currently are %s"
+                   % (rel, host_mod, deps))
+        if host in deps and host != host_mod:
+            r.fail("%s depends on %r, which LeviLamina refuses and pier-adopt only tolerates "
+                   "with a warning; an example names %r" % (rel, host, host_mod))
         for d in deps:
-            if d and d != host and d.startswith(("levilamina-", "pier-")):
+            if d and d not in (host, host_mod) and d.startswith(("levilamina-", "pier-")):
                 r.fail("%s depends on %r, which is not the host name and is most likely a rename left half done" % (rel, d))
 
         # entry against the crate name

@@ -80,6 +80,15 @@ namespace pier
 
         /** The same limit once shutdown has begun. 0 waits for the mod forever. */
         std::uint32_t watchdogShutdownMs = 10000;
+
+        /** Whether pier mods that LeviLamina refused for naming the host "pier" are loaded
+         *  by pier-adopt after the startup pass. On by default: such a mod followed the old
+         *  documentation, and each one adopted is named in a warning until it is fixed. */
+        bool adoptMods = true;
+
+        /** Whether the native_* slots answer. Off by default: they hand engine addresses
+         *  and detours to a mod, and the host can check nothing a mod does with them. */
+        bool nativeDetour = false;
     };
 
     /** Reads modDir/config.json, seeding it when absent, and installs the result.

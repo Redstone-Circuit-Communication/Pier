@@ -1,6 +1,7 @@
 /** runtime/SysInfo.cpp: system information and environment variables. Plain OS calls,
  *  compiled into both targets. */
 #include <string>
+#include <process.h>
 
 #include "ll/api/utils/SystemUtils.h"
 
@@ -29,6 +30,9 @@ namespace pier::api_impl
                     return true;
                 case PIER_SYS_LOCALE:
                     sink(ctx, ps(ll::sys_utils::getSystemLocaleCode()));
+                    return true;
+                case PIER_SYS_PROCESS_ID:
+                    sink(ctx, ps(std::to_string(_getpid())));
                     return true;
                 case PIER_SYS_LOCAL_TIME:
                 {

@@ -36,6 +36,12 @@ conf.parse_failed={} 不是合法的 JSON。这一局每一项都是默认值，
 conf.bad_type=「{}」要的是{}，写在那里的值被忽略了
 conf.bad_entry=「{}」里有一条不是文本，只有那一条被忽略
 conf.clamped=「{}」写的是 {}，落在 {}..{} 之外；实际用的是 {}
+adopt.loaded={} 的 manifest 把依赖名写成了 "{}"，LeviLamina 因此拒绝加载它，Pier 已经找到并加载了这个 mod。官方写法是 "{}"，请尽快在 {} 中改正，否则下次启动 LeviLamina 仍会拒绝它
+adopt.loaded_via={} 依赖的 {} 把依赖名写成了 "{}"，LeviLamina 因此把两者都拒绝了，Pier 已经找到并一并加载了 {}。改正那个写错依赖名的 mod 的 manifest 后，两者都会正常加载
+adopt.failed={} 把依赖名写成了 "{}"，Pier 尝试代替 LeviLamina 加载它，但失败了：{}
+adopt.stuck={} 没有加载，因为它依赖的 {} 加载失败了
+native.disabled=Pier 未开启此功能，请查看配置文件 {} 中的 native_detour 是否为 true
+native.unhook_failed=native detour {}（属于 {}）无法在其 dll 卸载前移除，此后对它的调用会落入已释放的内存
 mod.disabled=「{}」在 config.json 的 mods.disabled 里被点名，这个宿主不会装载它
 hooks.disabled=合成事件「{}」在 hooks.disabled 里被点名，所以「{}」的订阅被拒绝，而不是发给它一个永远不触发的句柄
 

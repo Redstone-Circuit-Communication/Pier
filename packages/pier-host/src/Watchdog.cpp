@@ -72,7 +72,11 @@ namespace pier::watchdog
         std::mutex gRunMu;
         std::condition_variable gRunCv;
         bool gStop = false;
-        std::thread gThread;
+        // Leaked on purpose, like the containers above. A std::thread that is still
+        // joinable when its destructor runs calls std::terminate, and a client can end
+        // through exit() with no mod unloaded, so stop() never joins this one. The system
+        // has ended the thread by then; the object only has to outlive it.
+        std::thread& gThread = *new std::thread();
 
         Slot* mySlot() noexcept
         {

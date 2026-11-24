@@ -96,6 +96,7 @@ namespace pier::spi
      * writes its cleanup once.
      *
      * Stage assignment, spaced to leave room for later insertions:
+     *    5 native detours
      *   10 scheduled tasks  20 bus  30 services  40 lanes  50 command callbacks
      *   60 form tickets  70 KvDb  80 synthetic events  90 packet hooks
      *  100 economy callbacks  110 client resources

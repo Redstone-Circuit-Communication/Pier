@@ -52,13 +52,14 @@ ALLOWED_DEPS = {
     "pier-lane": {"pier-abi", "pier-support", "pier-host"},
     "pier-dimensions": {"pier-abi", "pier-support", "pier-host"},
     "pier-client": {"pier-abi", "pier-support", "pier-host"},
+    "pier-adopt": {"pier-abi", "pier-support", "pier-host"},
 }
 
 # Capability packages. They are siblings with no edge between them.
-CAPABILITY = {"pier-api", "pier-hooks", "pier-lane", "pier-dimensions", "pier-client"}
+CAPABILITY = {"pier-api", "pier-hooks", "pier-lane", "pier-dimensions", "pier-client", "pier-adopt"}
 
 # Optional packages: deleting that line from the root xmake must still compile.
-OPTIONAL = {"pier-lane", "pier-dimensions"}
+OPTIONAL = {"pier-lane", "pier-dimensions", "pier-adopt"}
 
 # The directories now separate this themselves: `packages/` holds only the C++ packages of
 # the host proper and `bindings/<language>/` holds the bindings. A language discriminator
@@ -85,6 +86,7 @@ INCLUDE_OWNER = {
     "pier/lane/": "pier-lane",
     "pier/dimensions/": "pier-dimensions",
     "pier/client/": "pier-client",
+    "pier/adopt/": "pier-adopt",
 }
 
 

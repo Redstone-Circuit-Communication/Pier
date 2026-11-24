@@ -21,7 +21,7 @@ namespace pier
      * only when it dispatches a load (see ModManagerRegistry::loadMod) and sorts
      * topologically by `dependencies`, so this manager is guaranteed to exist by the
      * time any mod declaring
-     *   "dependencies": [{ "name": "pier" }]
+     *   "dependencies": [{ "name": "Pier" }]
      * is dispatched to it.
      */
     class ModHost : public ll::mod::ModManager

@@ -23,6 +23,13 @@ Usage:
     xmake project -k compile_commands        # refresh the database first
     python3 tools/compile-all.py             # every file
     python3 tools/compile-all.py pier-api    # only paths containing that text
+    python3 tools/compile-all.py --stale-ok  # run on a database that misses sources
+
+A database written before a source was added, or before a package changed its include
+directories, compiles the wrong set of files with the wrong flags: a new file is never
+tried, and a header a dependency added is "not found" in every file that reaches it. So
+the run refuses when a source under packages/ is missing from the database, and names
+the files, unless --stale-ok is given.
 
 The exit code is the number of files that failed, capped at 125.
 """
@@ -30,12 +37,57 @@ The exit code is the number of files that failed, capped at 125.
 import concurrent.futures
 import json
 import os
+import re
 import subprocess
 import sys
 import tempfile
 
 ROOT = os.path.normpath(os.path.join(os.path.dirname(__file__), ".."))
 DB = os.path.join(ROOT, "compile_commands.json")
+
+
+def conditional_packages():
+    """Packages the root xmake.lua includes only under a condition, such as pier-client on a
+    client build. A database written for the other target lists none of their sources."""
+    out, depth = set(), 0
+    with open(os.path.join(ROOT, "xmake.lua"), encoding="utf-8") as f:
+        for line in f:
+            s = line.strip()
+            if re.match(r"^if\b.*\bthen$", s):
+                depth += 1
+            elif re.match(r"^end\b", s):
+                depth = max(0, depth - 1)
+            m = re.search(r'includes\("packages/([\w-]+)"\)', s)
+            if m and depth > 0:
+                out.add(m.group(1))
+    return out
+
+
+def missing_sources(db):
+    """Sources under packages/ that the database does not list, relative to ROOT.
+
+    Compared by the path from packages/ on, with either slash, so a database written on
+    one machine is still read correctly where its absolute directory does not exist. A
+    package only the other target builds is skipped when the database lists none of it."""
+    def key(path):
+        path = path.replace("\\", "/").lower()
+        at = path.find("packages/")
+        return path[at:] if at >= 0 else path
+    listed = {key(e.get("file") or (e.get("arguments") or [""])[-1]) for e in db}
+    present = {k.split("/")[1] for k in listed if k.startswith("packages/") and k.count("/") > 1}
+    optional = conditional_packages()
+    missing = []
+    for top, dirs, files in os.walk(os.path.join(ROOT, "packages")):
+        dirs[:] = [d for d in dirs if d not in ("build", ".xmake")]
+        for fn in files:
+            if fn.endswith(".cpp"):
+                rel = os.path.relpath(os.path.join(top, fn), ROOT)
+                pkg = key(rel).split("/")[1]
+                if pkg in optional and pkg not in present:
+                    continue
+                if key(rel) not in listed:
+                    missing.append(rel)
+    return sorted(missing)
 
 
 def entries(needle):
@@ -45,6 +97,15 @@ def entries(needle):
         sys.exit(126)
     with open(DB, encoding="utf-8") as f:
         db = json.load(f)
+    missing = missing_sources(db)
+    if missing and "--stale-ok" not in sys.argv:
+        print("compile_commands.json is older than the tree: %d source file(s) are not in it:"
+              % len(missing))
+        for m in missing:
+            print("    " + m)
+        print("Refresh it from the shell the build runs in, then run this again:")
+        print("    xmake project -k compile_commands")
+        sys.exit(126)
     out = []
     for e in db:
         src = e.get("file") or (e.get("arguments") or [""])[-1]
@@ -80,11 +141,12 @@ def compile_one(item, objdir):
     args = list(e.get("arguments") or [])
     if not args:
         return None
-    # Redirect the object next to nothing the build reads. /Fo is MSVC, -o is the rest.
+    # Redirect the object next to nothing the build reads. cl.exe and clang-cl take /Fo or
+    # -Fo, and xmake writes -Fo for clang-cl; -o is the rest.
     stem = os.path.basename(src).replace(".", "_")
     for i, a in enumerate(args):
-        if a.startswith("/Fo"):
-            args[i] = "/Fo" + os.path.join(objdir, stem + ".obj")
+        if a.startswith(("/Fo", "-Fo")):
+            args[i] = a[:3] + os.path.join(objdir, stem + ".obj")
         elif a == "-o" and i + 1 < len(args):
             args[i + 1] = os.path.join(objdir, stem + ".o")
     try:
@@ -98,7 +160,8 @@ def compile_one(item, objdir):
 
 
 def main():
-    needle = sys.argv[1] if len(sys.argv) > 1 else None
+    rest = [a for a in sys.argv[1:] if a != "--stale-ok"]
+    needle = rest[0] if rest else None
     items = entries(needle)
     if not items:
         print("no entry matched %r" % needle)

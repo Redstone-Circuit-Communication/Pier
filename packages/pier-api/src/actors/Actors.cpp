@@ -2,6 +2,8 @@
  *  An actor handle is an ActorUniqueID, re-resolved through Level::fetchEntity on
  *  every call. */
 #include <cmath>
+#include <charconv>
+#include <span>
 #include <string>
 
 #include "mc/deps/core/math/Vec2.h"
@@ -24,12 +26,19 @@
 #include "mc/world/level/BlockSource.h"
 #include "mc/world/level/Level.h"
 #include "mc/world/level/Spawner.h"
+#include "mc/world/attribute/Attribute.h"
+#include "mc/world/attribute/AttributeInstance.h"
+#include "mc/world/attribute/AttributeInstanceConstRef.h"
+#include "mc/world/attribute/BaseAttributeMap.h"
+#include "mc/world/attribute/SharedAttributes.h"
+#include "mc/deps/core/string/HashedString.h"
 
 #include "sdk/abi.h"
 
 #include "pier/api/bridge.h"
 #include "pier/host/spi.h"
 #include "pier/support/guard.h"
+#include "pier/support/snbt.h"
 #include "pier/support/str.h"
 
 namespace pier::api_impl
@@ -241,6 +250,36 @@ namespace pier::api_impl
                 case PIER_APROP_DEATH_TIME:
                     *out = static_cast<double>(actor->getDeathTime());
                     return true;
+                case PIER_APROP_IS_SPRINTING:
+                    *out = actor->isSprinting() ? 1.0 : 0.0;
+                    return true;
+                case PIER_APROP_IS_SWIMMING:
+                    *out = actor->isSwimming() ? 1.0 : 0.0;
+                    return true;
+                case PIER_APROP_IS_SLEEPING:
+                    *out = actor->isSleeping() ? 1.0 : 0.0;
+                    return true;
+                case PIER_APROP_IS_SITTING:
+                    *out = actor->isSitting() ? 1.0 : 0.0;
+                    return true;
+                case PIER_APROP_IS_ANGRY:
+                    *out = actor->isAngry() ? 1.0 : 0.0;
+                    return true;
+                case PIER_APROP_IS_PLAYER:
+                    *out = actor->isPlayer() ? 1.0 : 0.0;
+                    return true;
+                case PIER_APROP_IS_SIMULATED_PLAYER:
+                    *out = actor->isSimulatedPlayer() ? 1.0 : 0.0;
+                    return true;
+                case PIER_APROP_CAN_FLY:
+                    *out = actor->canFly() ? 1.0 : 0.0;
+                    return true;
+                case PIER_APROP_STRENGTH:
+                    *out = static_cast<double>(actor->getStrength());
+                    return true;
+                case PIER_APROP_ENTITY_TYPE:
+                    *out = static_cast<double>(static_cast<int>(actor->getEntityTypeId()));
+                    return true;
                 case PIER_APROP_HAS_PASSENGER:
                     *out = actor->hasPassenger() ? 1.0 : 0.0;
                     return true;
@@ -268,6 +307,28 @@ namespace pier::api_impl
                     // getScoreTag() sits behind #ifdef LL_PLAT_C and is unavailable on
                     // the server. setScoreTag() exists, but the getter is client only.
                     return false;
+                case PIER_ASTR_TAGS:
+                    {
+                        std::string out = "[";
+                        for (auto const& tag : actor->getTags())
+                        {
+                            if (out.size() > 1) out += ',';
+                            out += '"';
+                            for (char ch : tag)
+                            {
+                                if (ch == '"' || ch == '\\') out += '\\';
+                                if (static_cast<unsigned char>(ch) < 0x20) continue;
+                                out += ch;
+                            }
+                            out += '"';
+                        }
+                        out += ']';
+                        sink(ctx, ps(out));
+                        return true;
+                    }
+                case PIER_ASTR_OWNER_ID:
+                    sink(ctx, ps(std::to_string(actor->getOwnerId().rawID)));
+                    return true;
                 case PIER_ASTR_FILTERED_NAME:
                     // getFilteredNameTag() is likewise behind LL_PLAT_C, so the public
                     // member mFilteredNameTag, a TypedStorage<string>, is read
@@ -285,6 +346,45 @@ namespace pier::api_impl
                 }
             PIER_API_GUARD_END
         }
+
+        using AttributeGetter = Attribute const& (*)();
+
+        /** The attributes the engine declares as statics, which are the ones the attribute
+         *  verbs can name. Every other attribute is built at runtime from an entity
+         *  definition and has no static to reach it by. */
+        std::span<AttributeGetter const> knownAttributes()
+        {
+            static AttributeGetter const kAll[] = {
+                &SharedAttributes::ABSORPTION, &SharedAttributes::AIR_DRAG_MODIFIER,
+                &SharedAttributes::ATTACK_DAMAGE, &SharedAttributes::BOUNCINESS,
+                &SharedAttributes::FOLLOW_RANGE, &SharedAttributes::FRICTION_MODIFIER,
+                &SharedAttributes::HEALTH, &SharedAttributes::JUMP_STRENGTH,
+                &SharedAttributes::KNOCKBACK_RESISTANCE, &SharedAttributes::LAVA_MOVEMENT_SPEED,
+                &SharedAttributes::LUCK, &SharedAttributes::MOVEMENT_SPEED,
+                &SharedAttributes::UNDERWATER_MOVEMENT_SPEED, &Player::EXHAUSTION, &Player::EXPERIENCE,
+                &Player::HUNGER, &Player::LEVEL, &Player::SATURATION};
+            return kAll;
+        }
+
+        /** Matched exactly against the attribute's own name, such as "minecraft:health". */
+        Attribute const* attributeNamed(std::string_view name)
+        {
+            for (auto get : knownAttributes())
+            {
+                auto const& attribute = get();
+                if (std::string_view{attribute.mName->mStr} == name) return &attribute;
+            }
+            return nullptr;
+        }
+
+        /** The instance an actor holds for `attribute`, or nullptr when it has none. */
+        AttributeInstance const* instanceOf(Actor& actor, Attribute const& attribute)
+        {
+            auto const ref = actor.getAttributes()->getInstance(attribute);
+            return static_cast<AttributeInstance const*>(ref.mPtr);
+        }
+
+        std::string jsonNumber(float v) { return std::to_string(static_cast<double>(v)); }
 
         bool api_actor_action(
             PierActorId id,
@@ -397,7 +497,24 @@ namespace pier::api_impl
                             static_cast<float>(a), ::SharedTypes::Legacy::ActorDamageCause::Override);
                     }
                 case PIER_AACT_ATTRIBUTE_GET:
-                    return false; // Reserved for generic attributes by name
+                case PIER_AACT_ATTRIBUTE_INFO:
+                    {
+                        auto const* attribute = attributeNamed(sv(sarg));
+                        auto const* instance = attribute ? instanceOf(*actor, *attribute) : nullptr;
+                        if (!instance) return false;
+                        if (!out) return true;
+                        if (action == PIER_AACT_ATTRIBUTE_GET)
+                        {
+                            out(ctx, ps(jsonNumber(instance->mCurrentValue)));
+                            return true;
+                        }
+                        std::string json = "{\"current\":" + jsonNumber(instance->mCurrentValue)
+                            + ",\"min\":" + jsonNumber(instance->mCurrentMinValue)
+                            + ",\"max\":" + jsonNumber(instance->mCurrentMaxValue)
+                            + ",\"default\":" + jsonNumber(instance->mDefaultValue) + "}";
+                        out(ctx, ps(json));
+                        return true;
+                    }
                 /*  Appended  */
                 /*
                  * The synched-data writes below reach the field the removed setters wrote.
@@ -486,6 +603,53 @@ namespace pier::api_impl
                     // this game version scale has no synched data id at all.
                     if (sarg.len == 0) return false;
                     return actor->executeEvent(toString(sarg), VariantParameterList{});
+                case PIER_AACT_SET_SITTING:
+                    actor->setSitting(a != 0.0);
+                    return true;
+                case PIER_AACT_START_RIDING:
+                    {
+                        // The vehicle's id arrives as text: an actor id is a 64-bit integer,
+                        // and a double holds only 53 bits of it exactly.
+                        auto const text = sv(sarg);
+                        std::int64_t vehicleId = 0;
+                        auto const [end, ec] = std::from_chars(text.data(), text.data() + text.size(), vehicleId);
+                        if (text.empty() || ec != std::errc{} || end != text.data() + text.size()) return false;
+                        auto* vehicle = bridge::resolveActor(vehicleId);
+                        if (!vehicle || vehicle == actor) return false;
+                        return actor->startRiding(*vehicle, a != 0.0);
+                    }
+                case PIER_AACT_ATTRIBUTE_SET:
+                case PIER_AACT_ATTRIBUTE_SET_MAX:
+                case PIER_AACT_ATTRIBUTE_SET_DEFAULT:
+                    {
+                        auto const* attribute = attributeNamed(sv(sarg));
+                        if (!attribute || !instanceOf(*actor, *attribute)) return false;
+                        // The server headers declare only the const overload of
+                        // Actor::getAttributes; the mutable one sits behind LL_PLAT_C. The map
+                        // belongs to the actor and is no const object, so the cast undoes only
+                        // the overload choice for the LeviLamina setters below.
+                        auto* map = const_cast<BaseAttributeMap*>(actor->getAttributes().get());
+                        auto const value = static_cast<float>(a);
+                        if (action == PIER_AACT_ATTRIBUTE_SET) return map->setCurrentValue(*attribute, value);
+                        if (action == PIER_AACT_ATTRIBUTE_SET_MAX) return map->setMaxValue(*attribute, value);
+                        return map->setDefaultValue(*attribute, value);
+                    }
+                case PIER_AACT_ATTRIBUTE_LIST:
+                    {
+                        std::string json = "[";
+                        for (auto get : knownAttributes())
+                        {
+                            auto const& attribute = get();
+                            if (!instanceOf(*actor, attribute)) continue;
+                            if (json.size() > 1) json += ',';
+                            json += '"';
+                            json += attribute.mName->mStr;
+                            json += '"';
+                        }
+                        json += ']';
+                        if (out) out(ctx, ps(json));
+                        return true;
+                    }
                 case PIER_AACT_SET_ROTATION:
                     // Vec2 is (x = pitch, y = yaw), matching the order the ROT_*
                     // properties read. setRotationWrapped is inlined away; mRot is the

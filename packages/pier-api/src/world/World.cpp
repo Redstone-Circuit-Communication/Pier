@@ -29,6 +29,7 @@
 #include "mc/world/level/ChunkBlockPos.h"
 #include "mc/world/level/dimension/Dimension.h"
 #include "mc/world/phys/AABB.h"
+#include "mc/deps/core/math/Color.h"
 
 #include "sdk/abi.h"
 
@@ -424,6 +425,26 @@ namespace pier::api_impl
                 case PIER_BPROP_IS_SOLID:
                     *out = block->_isSolid() ? 1.0 : 0.0;
                     return true;
+                case PIER_BPROP_IS_THIN_FENCE:
+                    *out = block->getBlockType().isThinFenceBlock() ? 1.0 : 0.0;
+                    return true;
+                case PIER_BPROP_IS_LEVER:
+                    *out = block->getBlockType().isLeverBlock() ? 1.0 : 0.0;
+                    return true;
+                case PIER_BPROP_IS_STEM:
+                    *out = block->getBlockType().isStemBlock() ? 1.0 : 0.0;
+                    return true;
+                case PIER_BPROP_CAN_INSTATICK:
+                    *out = block->getBlockType().canInstatick() ? 1.0 : 0.0;
+                    return true;
+                case PIER_BPROP_MAP_COLOR:
+                    {
+                        auto const color = block->getBlockType().getMapColor(*bs, BlockPos{x, y, z}, *block);
+                        auto channel = [](float v)
+                        { return static_cast<int>(std::lround(std::clamp(v, 0.0f, 1.0f) * 255.0f)); };
+                        *out = static_cast<double>((channel(color.r) << 16) | (channel(color.g) << 8) | channel(color.b));
+                        return true;
+                    }
                 case PIER_BPROP_REQUIRES_TOOL:
                     // BlockType keeps the flag as a bit field; the two forwards that read
                     // it are inlined away.

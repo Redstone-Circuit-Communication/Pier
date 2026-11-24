@@ -84,6 +84,7 @@ if not is_client then
     includes("packages/pier-dimensions")
 end
 includes("packages/pier-lane")
+includes("packages/pier-adopt")
 if is_client then
     includes("packages/pier-client")
 end
@@ -101,7 +102,7 @@ target("Pier")
     add_rules("@levibuildscript/linkrule")
     add_rules("@levibuildscript/modpacker")
     set_kind("shared")
-    add_deps("pier-abi", "pier-support", "pier-host", "pier-api", "pier-lane")
+    add_deps("pier-abi", "pier-support", "pier-host", "pier-api", "pier-lane", "pier-adopt")
     if not is_client then
         add_deps("pier-hooks", "pier-dimensions")
         add_packages("levilamina", "legacymoney", "bedrockdata", "snappy", "magic_enum")

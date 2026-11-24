@@ -38,6 +38,12 @@ conf.parse_failed={} is not valid JSON. Every setting is at its default this run
 conf.bad_type='{}' wants {}, and the value written there is ignored
 conf.bad_entry='{}' holds an entry that is not text, and that entry alone is ignored
 conf.clamped='{}' was {}, which is outside {}..{}; {} is used
+adopt.loaded={} names the dependency "{}" in its manifest, so LeviLamina refused it, and Pier has found and loaded it. The official name is "{}": correct it in {}, or LeviLamina refuses it again on the next start
+adopt.loaded_via={} depends on {}, which names the dependency "{}", so LeviLamina refused both, and Pier has found and loaded {} as well. Correcting the manifest of the mod that names it lets both load normally
+adopt.failed={} names the dependency "{}", and Pier tried to load it in place of LeviLamina, which failed: {}
+adopt.stuck={} was not loaded, because {}, which it depends on, failed to load
+native.disabled=Pier has not enabled this feature: check whether native_detour is true in {}
+native.unhook_failed=native detour {} of {} could not be removed before its dll is unmapped; a call into it after this point lands in freed memory
 mod.disabled='{}' is named in mods.disabled in config.json, so this host will not load it
 hooks.disabled=synthetic event '{}' is named in hooks.disabled, so the subscription from '{}' is refused rather than answered with a handle that never fires
 

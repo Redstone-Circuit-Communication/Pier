@@ -62,6 +62,7 @@
 #include "mc/world/level/dimension/DimensionType.h"
 #include "mc/world/scores/ObjectiveSortOrder.h"
 #include "mc/world/scores/ScoreboardId.h"
+#include "mc/network/ConnectionRequest.h"
 
 #include "sdk/abi.h"
 
@@ -510,6 +511,21 @@ namespace pier::api_impl
                 case PIER_PPROP_DIMENSION:
                     *out = static_cast<double>(static_cast<int>(p->getDimensionId()));
                     return true;
+                case PIER_PPROP_IS_SLEEPING:
+                    *out = p->isSleeping() ? 1.0 : 0.0;
+                    return true;
+                case PIER_PPROP_IS_SIMULATED:
+                    *out = p->isSimulatedPlayer() ? 1.0 : 0.0;
+                    return true;
+                case PIER_PPROP_ITEM_USE_DURATION:
+                    *out = static_cast<double>(p->getItemUseDuration());
+                    return true;
+                case PIER_PPROP_XP_EARNED_AT_LEVEL:
+                    *out = static_cast<double>(p->getXpEarnedAtCurrentLevel());
+                    return true;
+                case PIER_PPROP_CAN_FLY:
+                    *out = p->canFly() ? 1.0 : 0.0;
+                    return true;
                 case PIER_PPROP_IS_INITIALIZED:
                     *out = clientInitialized(*p) ? 1.0 : 0.0;
                     return true;
@@ -556,6 +572,18 @@ namespace pier::api_impl
                         std::string snbt = "{x:" + snbtNum(pos->x) + ",y:" + snbtNum(pos->y)
                             + ",z:" + snbtNum(pos->z) + "}";
                         sink(ctx, ps(snbt));
+                        return true;
+                    }
+                case PIER_PSTR_SELECTED_ITEM:
+                    sink(ctx, ps(bridge::itemToSnbt(p->getSelectedItem())));
+                    return true;
+                case PIER_PSTR_DEVICE_MODEL:
+                    {
+                        // A simulated player never sent a connection request, and the read
+                        // fails for it rather than answering with an empty model.
+                        auto const request = p->getConnectionRequest();
+                        if (!request) return false;
+                        sink(ctx, ps(request->getDeviceModel()));
                         return true;
                     }
                 case PIER_PSTR_RESPAWN_POS:
@@ -1145,6 +1173,21 @@ namespace pier::api_impl
                             SidebarKey{static_cast<int64_t>(p->getOrCreateUniqueID().rawID), toString(sarg)});
 
                         hostLogger().debug("[api] sidebar '{}' cleared, slot unbound and objective removed", sv(sarg));
+                        return true;
+                    }
+                case PIER_PACT_STOP_SLEEPING:
+                    if (!p->isSleeping()) return false;
+                    p->stopSleepInBed(a != 0.0, true);
+                    return true;
+                case PIER_PACT_CAUSE_EXHAUSTION:
+                    if (!(a > 0.0)) return false;
+                    p->causeFoodExhaustion(static_cast<float>(a));
+                    return true;
+                case PIER_PACT_EAT:
+                    {
+                        auto const food = bridge::itemFromSnbt(sv(sarg));
+                        if (!food || food->isNull()) return false;
+                        p->eat(*food);
                         return true;
                     }
                 case PIER_PACT_SET_PERMISSION_LEVEL:

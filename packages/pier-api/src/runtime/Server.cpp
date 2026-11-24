@@ -25,6 +25,7 @@
 #include "mc/world/level/storage/GameRule.h"
 #include "mc/world/level/storage/GameRuleId.h"
 #include "mc/world/level/storage/GameRules.h"
+#include "ll/api/Versions.h"
 
 #include "sdk/abi.h"
 
@@ -297,6 +298,25 @@ namespace pier::api_impl
                     auto* level = bridge::levelReady();
                     if (!level) return false;
                     sink(ctx, ps(snbtNum(level->getLevelData().mNetworkVersion)));
+                    return true;
+                }
+                case PIER_SRV_LOADER_VERSION:
+                    sink(ctx, ps(ll::getLoaderVersion().to_string()));
+                    return true;
+                case PIER_SRV_LEVEL_NAME:
+                case PIER_SRV_IS_HARDCORE:
+                case PIER_SRV_WORLD_START_COUNT:
+                case PIER_SRV_EDUCATION_FEATURES:
+                {
+                    auto* level = bridge::levelReady();
+                    if (!level) return false;
+                    auto& data = level->getLevelData();
+                    std::string value;
+                    if (prop == PIER_SRV_LEVEL_NAME) value = static_cast<std::string const&>(data.mLevelName);
+                    else if (prop == PIER_SRV_IS_HARDCORE) value = static_cast<bool>(data.mIsHardcore) ? "1" : "0";
+                    else if (prop == PIER_SRV_WORLD_START_COUNT) value = std::to_string(static_cast<uint>(data.mWorldStartCount));
+                    else value = static_cast<bool>(data.mEducationFeaturesEnabled) ? "1" : "0";
+                    sink(ctx, ps(value));
                     return true;
                 }
                 case PIER_SRV_GAME_SEM_VERSION:

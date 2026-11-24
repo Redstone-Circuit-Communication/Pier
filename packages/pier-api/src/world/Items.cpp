@@ -134,6 +134,58 @@ namespace pier::api_impl
                     // hasUserData read exactly this pointer.
                     *out = item->mUserData ? 1.0 : 0.0;
                     return true;
+                case PIER_IPROP_IS_FOOD:
+                    if (!item->mItem) return false;
+                    *out = item->mItem->isFood() ? 1.0 : 0.0;
+                    return true;
+                case PIER_IPROP_IS_DYEABLE:
+                    if (!item->mItem) return false;
+                    *out = item->mItem->isDyeable() ? 1.0 : 0.0;
+                    return true;
+                case PIER_IPROP_IS_HAND_EQUIPPED:
+                    if (!item->mItem) return false;
+                    *out = item->mItem->isHandEquipped() ? 1.0 : 0.0;
+                    return true;
+                case PIER_IPROP_IS_LIQUID_CLIP:
+                    if (!item->mItem) return false;
+                    *out = item->mItem->isLiquidClipItem() ? 1.0 : 0.0;
+                    return true;
+                case PIER_IPROP_IS_STACKED_BY_DATA:
+                    if (!item->mItem) return false;
+                    *out = item->mItem->isStackedByData() ? 1.0 : 0.0;
+                    return true;
+                case PIER_IPROP_COOLDOWN_DURATION:
+                    if (!item->mItem) return false;
+                    *out = static_cast<double>(item->mItem->getCooldownDuration());
+                    return true;
+                case PIER_IPROP_IS_COMPONENT_BASED:
+                    if (!item->mItem) return false;
+                    *out = item->mItem->isComponentBased() ? 1.0 : 0.0;
+                    return true;
+                case PIER_IPROP_IS_HUMANOID_ARMOR:
+                    if (!item->mItem) return false;
+                    *out = item->mItem->isHumanoidArmor() ? 1.0 : 0.0;
+                    return true;
+                case PIER_IPROP_ARMOR_VALUE:
+                    if (!item->mItem) return false;
+                    *out = static_cast<double>(item->mItem->getArmorValue());
+                    return true;
+                case PIER_IPROP_CAN_BE_DEPLETED:
+                    if (!item->mItem) return false;
+                    *out = item->mItem->canBeDepleted() ? 1.0 : 0.0;
+                    return true;
+                case PIER_IPROP_IS_USEABLE:
+                    if (!item->mItem) return false;
+                    *out = item->mItem->isUseable() ? 1.0 : 0.0;
+                    return true;
+                case PIER_IPROP_CAN_DESTROY_IN_CREATIVE:
+                    if (!item->mItem) return false;
+                    *out = item->mItem->canDestroyInCreative() ? 1.0 : 0.0;
+                    return true;
+                case PIER_IPROP_SHOWS_DURABILITY_IN_CREATIVE:
+                    if (!item->mItem) return false;
+                    *out = item->mItem->showsDurabilityInCreative() ? 1.0 : 0.0;
+                    return true;
                 case PIER_IPROP_HAS_CUSTOM_NAME:
                     if (!item->mItem) return false;
                     *out = item->mItem->hasCustomHoverName(*item) ? 1.0 : 0.0;
