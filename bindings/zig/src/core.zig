@@ -201,6 +201,44 @@ pub const Collector = struct {
     }
 };
 
+/// Turns the bool a slot answers a request with into the error of a request the host may
+/// refuse: false is Refused.
+pub fn expect(ok: bool) Error!void {
+    if (!ok) return error.Refused;
+}
+
+/// Calls a slot that ends in `(void* ctx, PierStrSink sink)` with `args` in front of those two
+/// and returns the last piece it sank, owned by the caller. A slot that answers false, or
+/// sinks nothing, is NoAnswer.
+pub fn sinkOne(allocator: std.mem.Allocator, f: anytype, args: anytype) Error![]u8 {
+    var col = Collector.init(allocator);
+    defer col.deinit();
+    const ran = @call(.auto, f, args ++ .{ &col, &Collector.sink });
+    if (comptime @TypeOf(ran) == bool) {
+        if (!ran) return error.NoAnswer;
+    }
+    return col.take();
+}
+
+/// As `sinkOne`, for a slot that sinks one piece per item: every piece, owned by the caller
+/// with the slice holding them, which `freeList` releases. A slot that answers false is
+/// NoAnswer, and one that sinks nothing gives an empty list.
+pub fn sinkAll(allocator: std.mem.Allocator, f: anytype, args: anytype) Error![][]u8 {
+    var col = Collector.init(allocator);
+    defer col.deinit();
+    const ran = @call(.auto, f, args ++ .{ &col, &Collector.sink });
+    if (comptime @TypeOf(ran) == bool) {
+        if (!ran) return error.NoAnswer;
+    }
+    return col.takeAll();
+}
+
+/// Frees a list `Collector.takeAll` or `sinkAll` returned: every piece and the slice.
+pub fn freeList(allocator: std.mem.Allocator, list: [][]u8) void {
+    for (list) |piece| allocator.free(piece);
+    allocator.free(list);
+}
+
 /// A task id, for cancel.
 pub const TaskId = u64;
 

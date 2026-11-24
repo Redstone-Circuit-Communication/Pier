@@ -47,6 +47,9 @@
  *   - Threading: unless a slot says otherwise, call only on the server thread.
  *     log, gaming_status, schedule and schedule_after are thread-safe. Every
  *     callback (event, command, scheduled task) fires on the server thread.
+ *   - No address of an engine object or engine function crosses this boundary.
+ *     The native_* group is the one exception, off unless the operator turns it
+ *     on; its section below says what a caller then answers for.
  */
 #ifndef PIER_SDK_ABI_H
 #define PIER_SDK_ABI_H
@@ -615,6 +618,197 @@ typedef int32_t PierFocusImpact;
  *  impact — current focus impact (see PierFocusImpact) */
 typedef void (*PierKeyCb)(void* user, PierKeyAction action, PierFocusImpact impact);
 
+/** client_get_num keys. Each value is read from this client's own state, so on a
+ *  remote server it describes what this client sees. APPEND-ONLY, like every key
+ *  enumeration in this file; an unknown key makes the call return false. Keys 0 to 5
+ *  and 13 to 27 read the local player and fail while the client is not in a world. */
+enum PierClientNumProp
+{
+    PIER_CPROP_POS_X = 0, /* Actor::getFeetPos of the local player */
+    PIER_CPROP_POS_Y = 1, /* feet height, the same point get_player_position reports */
+    PIER_CPROP_POS_Z = 2,
+    PIER_CPROP_PITCH = 3, /* Actor::getRotation, degrees; negative looks up */
+    PIER_CPROP_YAW = 4, /* Actor::getRotation, degrees */
+    PIER_CPROP_DIMENSION = 5, /* Actor::getDimensionId of the local player */
+    PIER_CPROP_GUI_SCALE = 6, /* IClientInstance::getGuiScale */
+    PIER_CPROP_SERVER_PING_MS = 7, /* IClientInstance::getServerPingTime */
+    PIER_CPROP_IS_SHOWING_MENU = 8, /* IClientInstance::isShowingMenu, 1 or 0 */
+    PIER_CPROP_IS_SHOWING_PAUSE_SCREEN = 9, /* IClientInstance::isShowingPauseScreen */
+    PIER_CPROP_IS_PLAYING = 10, /* IClientInstance::isPlaying */
+    PIER_CPROP_IS_IN_REALM = 11, /* IClientInstance::isInRealm */
+    PIER_CPROP_IS_GAME_INPUT_ENABLED = 12, /* IClientInstance::isInGameInputEnabled */
+    PIER_CPROP_HEALTH = 13, /* Actor::getHealth of the local player */
+    PIER_CPROP_MAX_HEALTH = 14, /* Actor::getMaxHealth of the local player */
+    PIER_CPROP_IS_ON_GROUND = 15, /* Actor::isOnGround of the local player */
+    PIER_CPROP_IS_IN_WATER = 16, /* Actor::isInWater of the local player */
+    PIER_CPROP_IS_SNEAKING = 17, /* Actor::isSneaking of the local player */
+    PIER_CPROP_IS_SPRINTING = 18, /* Actor::isSprinting of the local player */
+    PIER_CPROP_IS_SWIMMING = 19, /* Actor::isSwimming of the local player */
+    PIER_CPROP_IS_ON_FIRE = 20, /* Actor::isOnFire of the local player */
+    PIER_CPROP_IS_FLYING = 21, /* Player::isFlying of the local player */
+    PIER_CPROP_GAME_TYPE = 22, /* Player::getPlayerGameType of the local player */
+    PIER_CPROP_SELECTED_SLOT = 23, /* Player::getSelectedItemSlot of the local player */
+    PIER_CPROP_VEL_X = 24, /* Actor::getPosDelta of the local player, blocks per tick */
+    PIER_CPROP_VEL_Y = 25, /* Actor::getPosDelta, the vertical part */
+    PIER_CPROP_VEL_Z = 26, /* Actor::getPosDelta, the z part */
+    PIER_CPROP_XP_NEEDED_NEXT_LEVEL = 27, /* Player::getXpNeededForNextLevel of the local player */
+    PIER_CPROP_IS_LEAVING_GAME = 28, /* IClientInstance::isLeavingGame */
+    PIER_CPROP_IS_EXITING_LEVEL = 29, /* IClientInstance::isExitingLevel */
+    PIER_CPROP_IS_IN_BED_SCREEN = 30, /* IClientInstance::isInBedScreen */
+    PIER_CPROP_IS_IN_DEATH_SCREEN = 31, /* IClientInstance::isInDeathScreen */
+    PIER_CPROP_IS_SHOWING_LOADING_SCREEN = 32, /* IClientInstance::isShowingLoadingScreen */
+    PIER_CPROP_IS_SHOWING_PROGRESS_SCREEN = 33, /* IClientInstance::isShowingProgressScreen */
+    PIER_CPROP_IS_SHOWING_WORLD_PROGRESS_SCREEN = 34,
+    /* IClientInstance::isShowingWorldProgressScreen */
+    PIER_CPROP_IS_SHOWING_DEATH_SCREEN = 35, /* IClientInstance::isShowingDeathScreen */
+    PIER_CPROP_IS_SHOWING_SERVER_FORM = 36, /* IClientInstance::isShowingServerForm */
+    PIER_CPROP_IS_IN_WORLD_WITHOUT_MENU = 37,
+    /* IClientInstance::isInWorldAndNotShowingAnyMenuScreens */
+    PIER_CPROP_IS_WORLD_ACTIVE = 38, /* IClientInstance::isWorldActive */
+    PIER_CPROP_HAS_LEVEL = 39, /* IClientInstance::hasLevel */
+    PIER_CPROP_IS_PRE_GAME = 40, /* IClientInstance::isPreGame */
+    PIER_CPROP_IS_IN_MULTIPLAYER_GAME = 41, /* IClientInstance::isInMultiplayerGame */
+    PIER_CPROP_IS_MULTIPLAYER_CLIENT = 42, /* IClientInstance::isMultiPlayerClient */
+    PIER_CPROP_IS_PRIMARY_LEVEL_MULTIPLAYER = 43, /* IClientInstance::isPrimaryLevelMultiplayer */
+    PIER_CPROP_IS_PRIMARY_LEVEL_CROSS_PLATFORM = 44,
+    /* IClientInstance::isPrimaryLevelCrossPlatformMultiplayer */
+    PIER_CPROP_IS_KEYBOARD_ENABLED = 45, /* IClientInstance::isKeyboardEnabled */
+    PIER_CPROP_IS_USING_CONTROLLER = 46, /* IClientInstance::useController */
+    PIER_CPROP_IS_USING_TOUCHSCREEN = 47, /* IClientInstance::useTouchscreen */
+    PIER_CPROP_IS_MOUSE_GRABBED = 48, /* IClientInstance::getMouseGrabbed */
+    PIER_CPROP_IS_MOUSE_AND_KEYBOARD = 49, /* IClientInstance::currentInputModeIsMouseAndKeyboard */
+    PIER_CPROP_HAS_CONNECTED_CONTROLLER = 50, /* IClientInstance::hasConnectedController */
+    PIER_CPROP_CONTROLLER_ID = 51, /* IClientInstance::getControllerId */
+    PIER_CPROP_IS_TOUCH_GAMEPLAY_ALLOWED = 52, /* IClientInstance::isTouchGameplayAllowed */
+    PIER_CPROP_IS_SPLIT_SCREEN_ACTIVE = 53, /* IClientInstance::isSplitScreenActive */
+    PIER_CPROP_SPLIT_SCREEN_COUNT = 54, /* IClientInstance::getSplitScreenCount */
+    PIER_CPROP_GUI_SCALE_OFFSET = 55, /* IClientInstance::getGuiScaleOffset */
+    PIER_CPROP_IS_EDU_MODE = 56, /* IClientInstance::isEduMode */
+    PIER_CPROP_IS_IN_EDITOR = 57, /* IClientInstance::isPlayerInEditor */
+    PIER_CPROP_IS_READY_TO_RENDER = 58, /* IClientInstance::isReadyToRender */
+    PIER_CPROP_IS_FULL_VANILLA_PACK_ON_STACK = 59, /* IClientInstance::isFullVanillaPackOnStack */
+    PIER_CPROP_SERVER_CONNECTION_TIME = 60, /* IClientInstance::getServerConnectionTime */
+    PIER_CPROP_REMOTE_SERVER_TIME_MS = 61, /* IClientInstance::getRemoteServerTimeMs */
+    PIER_CPROP_REMOTE_SERVER_NETWORK_TIME_MS = 62, /* IClientInstance::getRemoteServerNetworkTimeMs
+                                                      */
+    PIER_CPROP_FRAME_ALPHA = 63, /* IClientInstance::getFrameAlpha, how far the frame is between two
+                                    ticks */
+    PIER_CPROP_GAME_UPDATE_SECONDS = 64, /* IClientInstance::getGameUpdateDurationInSeconds */
+    PIER_CPROP_IS_PRIMARY_CLIENT = 65, /* IClientInstance::isPrimaryClient */
+    PIER_CPROP_USER_ID = 66, /* IClientInstance::getUserId */
+    PIER_CPROP_IS_GAMEPLAY_TIPS_ENABLED = 67, /* IClientInstance::isGamePlayTipsEnabled */
+    PIER_CPROP_HAS_COMMANDS = 68, /* IClientInstance::hasCommands */
+};
+
+/** client_get_str keys. */
+enum PierClientStrProp
+{
+    PIER_CSTR_SCREEN_NAME = 0, /* IClientInstance::getScreenName, as client_get_screen_name */
+    PIER_CSTR_TOP_SCREEN_NAME = 1, /* IClientInstance::getTopScreenName */
+    PIER_CSTR_PLATFORM_ID = 2, /* IClientInstance::getPlatformId */
+    PIER_CSTR_PLATFORM_ONLINE_ID = 3, /* IClientInstance::getPlatformOnlineId */
+    PIER_CSTR_LOCAL_XUID = 4, /* Player::getXuid of the local player; fails outside a world */
+    PIER_CSTR_LOCAL_UUID = 5, /* Player::getUuid of the local player in its canonical form */
+    PIER_CSTR_LOCAL_NAME_TAG = 6, /* Actor::getNameTag of the local player */
+    PIER_CSTR_CLIPBOARD = 7, /* AppPlatform::getClipboardText, the system clipboard */
+};
+
+/** client_action verbs. Args are (sarg, a, b, c); unused args are ignored. The text
+ *  verbs write to this client's HUD only and send nothing to a server. */
+enum PierClientAction
+{
+    PIER_CACT_SHOW_MESSAGE = 0, /* sarg: text. GuiData::displayClientMessage */
+    PIER_CACT_SET_TITLE = 1, /* sarg: text. GuiData::setTitle */
+    PIER_CACT_SET_SUBTITLE = 2, /* sarg: text. GuiData::setSubtitle */
+    PIER_CACT_SET_ACTION_BAR = 3, /* sarg: text. GuiData::setActionBarMessage */
+    PIER_CACT_SHOW_TIP = 4, /* sarg: text. GuiData::showTipMessage */
+    PIER_CACT_PLAY_UI_SOUND = 5, /* sarg: sound name, a: volume, b: pitch.
+                                    IClientInstance::playUI */
+    PIER_CACT_GRAB_MOUSE = 6, /* IClientInstance::grabMouse */
+    PIER_CACT_RELEASE_MOUSE = 7, /* IClientInstance::releaseMouse */
+    PIER_CACT_SET_INPUT_DISABLED = 8, /* a: non-zero disables game input.
+                                         IClientInstance::setDisableInput */
+    PIER_CACT_LEAVE_LEVEL = 9, /* IClientInstance::requestLeaveGame(true, false): leaves
+                                  the world for the menus, asynchronously */
+    PIER_CACT_SHOW_POPUP = 10, /* sarg: message, or message and subtitle split at the first newline.
+                                  GuiData::showPopupNotice */
+    PIER_CACT_SHOW_DEV_CONSOLE_MESSAGE = 11, /* sarg: text. GuiData::displayDevConsoleMessage */
+    PIER_CACT_SET_SUSPEND_INPUT = 12, /* a: non-zero suspends input.
+                                         IClientInstance::setSuspendInput */
+    PIER_CACT_SET_SUSPEND_DIRECTIONAL_INPUT = 13, /* a: non-zero suspends movement input.
+                                                     IClientInstance::setSuspendDirectionalInput */
+    PIER_CACT_SET_GAME_INPUT_ENABLED = 14, /* a: non-zero enables.
+                                              IClientInstance::setInGameInputEnabled */
+    PIER_CACT_REFOCUS_MOUSE = 15, /* a: non-zero when the mouse was lost.
+                                     IClientInstance::refocusMouse */
+    PIER_CACT_MUTE_AUDIO = 16, /* IClientInstance::muteAudio */
+    PIER_CACT_UNMUTE_AUDIO = 17, /* IClientInstance::unMuteAudio */
+    PIER_CACT_FADE_OUT_MUSIC = 18, /* IClientInstance::fadeOutMusic */
+    PIER_CACT_SET_GUI_SCALE_OFFSET = 19, /* a: the offset. IClientInstance::setGuiScaleOffset */
+    PIER_CACT_RESET_PLAYER_MOVEMENT = 20, /* IClientInstance::resetPlayerMovement */
+    PIER_CACT_PUSH_LEAVE_GAME_SCREEN = 21, /* IClientInstance::tryPushLeaveGameScreen */
+    PIER_CACT_OPEN_CONTENT_LOG_HISTORY = 22, /* IClientInstance::openContentLogHistory */
+    PIER_CACT_SET_CLIPBOARD = 23, /* sarg: text, empty allowed. AppPlatform::setClipboard */
+    PIER_CACT_NAVIGATE_HOW_TO_PLAY = 24, /* sarg: the topic, empty allowed.
+                                            IClientInstance::navigateToHowToPlayScreen */
+};
+
+/*  Native escape hatch
+ *
+ * Every other slot in this file hands over names and ids, and the host looks the object
+ * up again on each call. The native_* slots are the exception: they hand over raw
+ * addresses of engine functions and engine objects, and they install native detours.
+ * They exist for an engine call this table does not wrap, made by a mod that knows the
+ * engine's own API and LeviLamina's.
+ *
+ * The host checks nothing about what a mod does with an address. The caller answers for
+ * the signature and calling convention of a function, the layout of an object on this
+ * exact engine build, the thread it calls on, and the lifetime of every object it was
+ * handed. A pointer from native_player stays valid while that player is online, and
+ * nothing here tells the mod when the player leaves. No exception and no other
+ * unwinding may cross an engine function or a detour.
+ *
+ * The group is off unless config.json of the host sets "native_detour": true. While it
+ * is off, every native_* slot except native_enabled returns PIER_NATIVE_DISABLED and
+ * writes no output, and the host logs once per mod, to that mod's logger, which setting
+ * to change. One switch covers the whole group, because an engine object's address
+ * reaches the same memory a detour does.
+ */
+
+/** world_get_num keys, read from the Weather object of one dimension. APPEND-ONLY. */
+enum PierWorldNumProp
+{
+    PIER_WPROP_RAIN_LEVEL = 0, /* Weather::mRainLevel, 0 for none to 1 for full rain */
+    PIER_WPROP_TARGET_RAIN_LEVEL = 1, /* Weather::mTargetRainLevel, the level rain moves toward */
+    PIER_WPROP_LIGHTNING_LEVEL = 2, /* Weather::mLightningLevel, 0 for none to 1 for a storm */
+    PIER_WPROP_TARGET_LIGHTNING_LEVEL = 3, /* Weather::mTargetLightningLevel */
+    PIER_WPROP_FOG_LEVEL = 4, /* Weather::mFogLevel */
+    PIER_WPROP_SKY_FLASH_TIME = 5, /* Weather::mSkyFlashTime, ticks left of a lightning flash */
+    PIER_WPROP_WEATHER_TICK = 6, /* Weather::mTick */
+};
+
+/** native_* return codes. */
+#define PIER_NATIVE_OK 0        /* done; the outputs are written */
+#define PIER_NATIVE_DISABLED 1  /* config.json of the host does not set native_detour to true */
+#define PIER_NATIVE_NOT_FOUND 2 /* no such symbol, pattern match, export, object or actor now */
+#define PIER_NATIVE_REFUSED 3   /* a null or malformed argument, an unknown kind, a foreign id */
+#define PIER_NATIVE_FAILED 4    /* the engine-side call failed: a detour that did not install */
+
+/** native_object kinds. */
+enum PierNativeObject
+{
+    PIER_NATIVE_OBJ_MINECRAFT = 0, /* ll::service::getMinecraft */
+    PIER_NATIVE_OBJ_LEVEL = 1, /* ll::service::getLevel */
+    PIER_NATIVE_OBJ_SERVER_NETWORK_HANDLER = 2, /* ll::service::getServerNetworkHandler */
+    PIER_NATIVE_OBJ_SERVER_INSTANCE = 3, /* ll::service::getServerInstance */
+    PIER_NATIVE_OBJ_COMMAND_REGISTRY = 4, /* ll::service::getCommandRegistry */
+    PIER_NATIVE_OBJ_NETWORK_SYSTEM = 5, /* ll::service::getNetworkSystem */
+    PIER_NATIVE_OBJ_DB_STORAGE = 6, /* ll::service::getDBStorage */
+    PIER_NATIVE_OBJ_CLIENT_INSTANCE = 7, /* ll::service::getClientInstance, client hosts */
+    PIER_NATIVE_OBJ_MULTIPLAYER_LEVEL = 8, /* ll::service::getMultiPlayerLevel, client hosts:
+                                              the level the client renders */
+};
+
 /*  Property and action keys. APPEND-ONLY: never renumber or remove. Unknown
  * values make the call return false; a safe SDK layer maps that to an
  * "unsupported" error, which is the forward-compatibility negotiation.  */
@@ -662,6 +856,11 @@ enum PierPlayerNumProp
     PIER_PPROP_HAS_DIED_BEFORE = 34, /* (G) Player::hasDiedBefore */
     PIER_PPROP_DIMENSION = 35, /* (G) Actor::getDimensionId */
     PIER_PPROP_IS_INITIALIZED = 36, /* (G) Player::isPlayerInitialized; 1 for a simulated player */
+    PIER_PPROP_IS_SLEEPING = 37, /* (G) Player::isSleeping */
+    PIER_PPROP_IS_SIMULATED = 38, /* (G) Actor::isSimulatedPlayer */
+    PIER_PPROP_ITEM_USE_DURATION = 39, /* (G) Player::getItemUseDuration, in ticks */
+    PIER_PPROP_XP_EARNED_AT_LEVEL = 40, /* (G) Player::getXpEarnedAtCurrentLevel */
+    PIER_PPROP_CAN_FLY = 41, /* (G) Actor::canFly */
 };
 
 /** player_get_str keys. */
@@ -681,6 +880,9 @@ enum PierPlayerStrProp
     PIER_PSTR_RESPAWN_POS = 10, /* SNBT {x,y,z,dim}: where this player would respawn.
                                    Never empty; a player with no bed reports the world
                                    spawn, and the two are not distinguishable. */
+    PIER_PSTR_SELECTED_ITEM = 11, /* Player::getSelectedItem as item SNBT */
+    PIER_PSTR_DEVICE_MODEL = 12, /* ConnectionRequest::getDeviceModel; fails for a player with no
+                                    connection request */
 };
 
 /**
@@ -734,6 +936,10 @@ enum PierPlayerAction
        LayeredAbilities::setPlayerPermissions plus UpdateAbilitiesPacket.
        The read side is PIER_PPROP_PERMISSION_LEVEL. Refused until the player has
        finished joining, like PIER_PACT_SET_ABILITY. */
+    PIER_PACT_STOP_SLEEPING = 27, /* a: non-zero wakes forcefully. Player::stopSleepInBed; false
+                                     when not asleep */
+    PIER_PACT_CAUSE_EXHAUSTION = 28, /* a: amount, positive. Player::causeFoodExhaustion */
+    PIER_PACT_EAT = 29, /* sarg: item SNBT. Player::eat, the food value of that item */
 };
 
 /** actor_get_num / actor_set_num keys. (S)=settable via actor_set_num. */
@@ -788,6 +994,17 @@ enum PierActorNumProp
     PIER_APROP_IS_IN_LOVE = 45, /* (G) unsupported since BDS 1.26.40: Actor::isInLove is gone */
     PIER_APROP_DEATH_TIME = 46, /* (G) Actor::getDeathTime */
     PIER_APROP_HAS_PASSENGER = 47, /* (G) Actor::hasPassenger */
+    PIER_APROP_IS_SPRINTING = 48, /* Actor::isSprinting */
+    PIER_APROP_IS_SWIMMING = 49, /* Actor::isSwimming */
+    PIER_APROP_IS_SLEEPING = 50, /* Actor::isSleeping */
+    PIER_APROP_IS_SITTING = 51, /* Actor::isSitting */
+    PIER_APROP_IS_ANGRY = 52, /* Actor::isAngry */
+    PIER_APROP_STRENGTH = 53, /* Actor::getStrength */
+    PIER_APROP_IS_PLAYER = 54, /* Actor::isPlayer */
+    PIER_APROP_IS_SIMULATED_PLAYER = 55, /* Actor::isSimulatedPlayer */
+    PIER_APROP_ENTITY_TYPE = 56, /* Actor::getEntityTypeId, the bits of an entity entry of
+                                    registry_list */
+    PIER_APROP_CAN_FLY = 57, /* Actor::canFly */
 };
 
 /** actor_get_str keys. */
@@ -798,6 +1015,8 @@ enum PierActorStrProp
     /*  Appended  */
     PIER_ASTR_SCORE_TAG = 2, /* Actor::getScoreTag */
     PIER_ASTR_FILTERED_NAME = 3, /* Actor::getFilteredNameTag */
+    PIER_ASTR_TAGS = 4, /* Actor::getTags as a JSON array of strings */
+    PIER_ASTR_OWNER_ID = 5, /* Actor::getOwnerId as a decimal actor id, -1 when it has none */
 };
 
 /** actor_action verbs. Args (sarg, a, b, c); `out` receives a result where noted. */
@@ -838,6 +1057,18 @@ enum PierActorAction
     PIER_AACT_REMOVE_ALL_PASSENGERS = 30, /*                       Actor::removeAllPassengers */
     PIER_AACT_EXECUTE_EVENT = 31, /* sarg=event name       Actor::executeEvent */
     PIER_AACT_SET_ROTATION = 32, /* a=pitch b=yaw         Actor::setRotationWrapped */
+    PIER_AACT_SET_SITTING = 33, /* a: non-zero sits. Actor::setSitting */
+    PIER_AACT_START_RIDING = 34, /* sarg: the vehicle actor id in decimal, a: non-zero forces.
+                                    Actor::startRiding */
+    PIER_AACT_ATTRIBUTE_SET = 35, /* sarg: attribute name, a: value.
+                                     BaseAttributeMap::setCurrentValue */
+    PIER_AACT_ATTRIBUTE_SET_MAX = 36, /* sarg: attribute name, a: maximum.
+                                         BaseAttributeMap::setMaxValue */
+    PIER_AACT_ATTRIBUTE_SET_DEFAULT = 37, /* sarg: attribute name, a: default.
+                                             BaseAttributeMap::setDefaultValue */
+    PIER_AACT_ATTRIBUTE_LIST = 38, /* out: a JSON array of the attribute names this actor has, of
+                                      the ones the attribute verbs know */
+    PIER_AACT_ATTRIBUTE_INFO = 39, /* sarg: attribute name; out: JSON {current, min, max, default} */
 };
 
 /** block_get_num keys. */
@@ -873,6 +1104,11 @@ enum PierBlockNumProp
     PIER_BPROP_BOUNCINESS = 26, /* Block::getBounciness */
     PIER_BPROP_IS_SOLID = 27, /* Block::isSolid */
     PIER_BPROP_REQUIRES_TOOL = 28, /* Block::requiresCorrectToolForDrops */
+    PIER_BPROP_IS_THIN_FENCE = 29, /* BlockType::isThinFenceBlock */
+    PIER_BPROP_IS_LEVER = 30, /* BlockType::isLeverBlock */
+    PIER_BPROP_IS_STEM = 31, /* BlockType::isStemBlock */
+    PIER_BPROP_CAN_INSTATICK = 32, /* BlockType::canInstatick */
+    PIER_BPROP_MAP_COLOR = 33, /* BlockType::getMapColor as 0xRRGGBB */
 };
 
 /** block_get_str keys. */
@@ -932,6 +1168,19 @@ enum PierItemNumProp
     PIER_IPROP_IS_BUNDLE = 25, /* ItemStackBase::isBundle */
     PIER_IPROP_HAS_USER_DATA = 26, /* ItemStackBase::hasUserData */
     PIER_IPROP_HAS_CUSTOM_NAME = 27, /* ItemStackBase::hasCustomHoverName */
+    PIER_IPROP_IS_FOOD = 28, /* Item::isFood */
+    PIER_IPROP_IS_DYEABLE = 29, /* Item::isDyeable */
+    PIER_IPROP_IS_HAND_EQUIPPED = 30, /* Item::isHandEquipped */
+    PIER_IPROP_IS_LIQUID_CLIP = 31, /* Item::isLiquidClipItem */
+    PIER_IPROP_IS_STACKED_BY_DATA = 32, /* Item::isStackedByData */
+    PIER_IPROP_COOLDOWN_DURATION = 33, /* Item::getCooldownDuration, in ticks */
+    PIER_IPROP_IS_COMPONENT_BASED = 34, /* Item::isComponentBased */
+    PIER_IPROP_IS_HUMANOID_ARMOR = 35, /* Item::isHumanoidArmor */
+    PIER_IPROP_ARMOR_VALUE = 36, /* Item::getArmorValue */
+    PIER_IPROP_CAN_BE_DEPLETED = 37, /* Item::canBeDepleted */
+    PIER_IPROP_IS_USEABLE = 38, /* Item::isUseable */
+    PIER_IPROP_CAN_DESTROY_IN_CREATIVE = 39, /* Item::canDestroyInCreative */
+    PIER_IPROP_SHOWS_DURABILITY_IN_CREATIVE = 40, /* Item::showsDurabilityInCreative */
 };
 
 /** item_get_str keys. */
@@ -1050,6 +1299,7 @@ enum PierSysInfoProp
     PIER_SYS_OS_VERSION = 1, /* sys_utils::getSystemVersion → string */
     PIER_SYS_LOCALE = 2, /* sys_utils::getSystemLocaleCode */
     PIER_SYS_LOCAL_TIME = 3, /* sys_utils::getLocalTime → SNBT {year,month,day,hour,minute,second,ms} */
+    PIER_SYS_PROCESS_ID = 4, /* the id of the server process */
 };
 
 /** server_info_str keys. */
@@ -1070,6 +1320,12 @@ enum PierServerInfoProp
     /* "major.minor.patch" of the running build, from CurrentGameSemVersion. Lets a mod
      * carry its own version→protocol table instead of waiting for a Pier release. */
     PIER_SRV_GAME_SEM_VERSION = 3,
+    PIER_SRV_LOADER_VERSION = 4, /* ll::getLoaderVersion, the running LeviLamina */
+    PIER_SRV_LEVEL_NAME = 5, /* LevelData::mLevelName, the world name */
+    PIER_SRV_IS_HARDCORE = 6, /* LevelData::mIsHardcore, "1" or "0" */
+    PIER_SRV_WORLD_START_COUNT = 7, /* LevelData::mWorldStartCount, how many times the world was
+                                       opened */
+    PIER_SRV_EDUCATION_FEATURES = 8, /* LevelData::mEducationFeaturesEnabled, "1" or "0" */
 };
 
 /**
@@ -1782,9 +2038,10 @@ typedef struct PierApi
     /** True when the client is inside a level (a world is loaded). */
     bool (*client_is_in_level)(void);
 
-    /** Current screen / UI name (e.g. "hud_screen", "pause_screen"). NULL on
-     *  every current host, client builds included: the engine exposes no
-     *  stable accessor for it. */
+    /** Current screen name through IClientInstance::getScreenName, such as
+     *  "hud_screen" or "pause_screen". Returns false, sinking nothing, before the
+     *  client has an instance. PIER_CSTR_TOP_SCREEN_NAME of client_get_str reads the
+     *  topmost screen of the stack instead. */
     bool (*client_get_screen_name)(void* ctx, PierStrSink sink);
 
     /** Register a key binding via ll::input::KeyRegistry::getOrCreateKey.
@@ -2642,6 +2899,125 @@ typedef struct PierApi
      *  failing. */
     bool (*player_execute_command)(PierPlayerSel sel, PierStr cmd, void* ctx,
                                    PierCmdOutputSink sink);
+
+    /*  Client capability group, continued. NULL on a server host, like client_* above;
+     * these sit here because a slot only ever goes at the end. Client thread only. */
+
+    /** Reads one PIER_CPROP_* value into *out. Returns false, leaving *out alone, for an
+     *  unknown key, a null `out`, a client that has no instance yet, or a key about the
+     *  local player while the client is not in a world. A flag reads 1 or 0. */
+    bool (*client_get_num)(int32_t prop, double* out);
+
+    /** Reads one PIER_CSTR_* value through `sink`, called once. Returns false, sinking
+     *  nothing, for an unknown key, a null sink, or a client that has no instance yet. */
+    bool (*client_get_str)(int32_t prop, void* ctx, PierStrSink sink);
+
+    /** Performs one PIER_CACT_* verb on this client. Returns false for an unknown verb, a
+     *  text verb given empty text, or a client that has no instance yet. The text verbs
+     *  need the HUD, which exists once a world is loaded, and return false before that.
+     *  True means the call reached the engine, which reports nothing back. */
+    bool (*client_action)(int32_t action, PierStr sarg, double a, double b, double c);
+
+    /** Feeds the name of every binding ll::input::KeyRegistry holds to `sink`, one call
+     *  each, whichever mod registered it. Returns false only for a null sink. */
+    bool (*client_list_keys)(void* ctx, PierStrSink sink);
+
+    /*  Native escape hatch (native_*); its section near the top of this file is the
+     * contract. Filled on every host. While config.json leaves native_detour off, each
+     * slot but native_enabled answers PIER_NATIVE_DISABLED. Call them on the thread the
+     * host calls the mod on: the server thread, or the client thread on a client host.
+     * Every `out` is set to NULL or 0 first and written on PIER_NATIVE_OK only. */
+
+    /** Whether native_detour is on, so the other native_* slots can answer. Logs
+     *  nothing. */
+    bool (*native_enabled)(void);
+
+    /** The address of an engine function by its decorated symbol name, through the
+     *  host's own resolution, ll::memory::SymbolView::resolve. */
+    int32_t (*native_resolve_symbol)(PierModHandle mod, PierStr symbol, void** out);
+
+    /** The first match of a byte pattern in the engine executable. `pattern` is tokens
+     *  separated by spaces, each two hexadecimal digits or a wildcard written "?" or
+     *  "??", such as "48 8B ?? 08". A token of any other shape refuses the call; it is
+     *  never read as a byte. */
+    int32_t (*native_resolve_signature)(PierModHandle mod, PierStr pattern, void** out);
+
+    /** An export of a module already loaded into the process, through GetModuleHandle
+     *  and GetProcAddress. An empty `module` names the engine executable. LeviLamina's
+     *  own API is reached this way, as an export of LeviLamina.dll under its decorated
+     *  name. The host never loads a module for this call. */
+    int32_t (*native_module_export)(PierModHandle mod, PierStr module, PierStr name,
+                                    void** out);
+
+    /** The address of one engine service object, `kind` a PIER_NATIVE_OBJ_* value.
+     *  PIER_NATIVE_NOT_FOUND while the object does not exist, as the level before a world
+     *  loads, and for a client-only kind on a server host. */
+    int32_t (*native_object)(PierModHandle mod, int32_t kind, void** out);
+
+    /** The Player object of an online player, resolved like every other selector. */
+    int32_t (*native_player)(PierModHandle mod, PierPlayerSel sel, void** out);
+
+    /** The Actor object of a loaded actor. */
+    int32_t (*native_actor)(PierModHandle mod, PierActorId id, void** out);
+
+    /** The Dimension object of a dimension id, custom dimensions included. A custom
+     *  dimension the engine has not built yet is built by this call, the same as a block
+     *  write into it would build it. */
+    int32_t (*native_dimension)(PierModHandle mod, int32_t dim, void** out);
+
+    /** The BlockSource of a dimension id, under the same rule as native_dimension. */
+    int32_t (*native_block_source)(PierModHandle mod, int32_t dim, void** out);
+
+    /** Installs a native detour on `target` through ll::memory::hook.
+     *
+     *  `detour` must have the exact signature and calling convention of `target`, which
+     *  the host cannot check. `priority` is 0 highest to 400 lowest with 200 normal, the
+     *  values of ll::memory::HookPriority; a value outside 0..400 refuses the call. On
+     *  PIER_NATIVE_OK *out_original receives the address through which the detour calls
+     *  the next detour or the engine, and *out_id the id native_hook_remove takes.
+     *
+     *  The host records which mod installed what. When a mod unloads, every detour it
+     *  still holds is removed before its dll is unmapped. A call already running inside
+     *  a detour on another thread is not waited for, so a mod unloaded at runtime removes
+     *  its detours itself first or keeps them off other threads. One (target, detour)
+     *  pair installs once; a second install of the same pair is refused. */
+    int32_t (*native_hook_install)(PierModHandle mod, void* target, void* detour,
+                                   int32_t priority, void** out_original, uint64_t* out_id);
+
+    /** Removes a detour this mod installed. PIER_NATIVE_NOT_FOUND for an id this mod does
+     *  not hold, one already removed included. PIER_NATIVE_FAILED when the engine-side
+     *  removal fails; the detour then stays recorded and is tried again at unload. */
+    int32_t (*native_hook_remove)(PierModHandle mod, uint64_t id);
+
+    /*  Client capability group, options. NULL on a server host. Client thread only. An
+     * option is addressed by the key options.txt stores it under, and its value travels in
+     * the text form options.txt holds. The engine declares no names for OptionID, so each
+     * call walks the ids the registry reports valid. */
+
+    /** Feeds every option to `sink`, one (key, value) pair each, as Option::save writes
+     *  them. An option that stores several keys, such as one value per input mode, feeds
+     *  each. Returns false for a null sink or a client that has no instance yet. */
+    bool (*client_option_list)(void* ctx, PierKvSink sink);
+
+    /** Reads one option by its options.txt key through `sink`, called once. Returns false,
+     *  sinking nothing, for an unknown key, a null sink, or a client that has no instance
+     *  yet. */
+    bool (*client_option_get)(PierStr key, void* ctx, PierStrSink sink);
+
+    /** Writes the option that stores `key`, passing `value` to Option::load, the parser
+     *  options.txt is read with. Returns false for an unknown key, an option the engine
+     *  marks as not modifiable now, or a client that has no instance yet. The engine keeps
+     *  what it can parse and reports nothing, so a caller that needs to know reads the key
+     *  back. The host does not write options.txt itself. */
+    bool (*client_option_set)(PierStr key, PierStr value);
+
+    /*  World state readers. Server thread only. */
+
+    /** Reads one PIER_WPROP_* value of dimension `dim` into *out. Returns false, leaving *out
+     *  alone, for an unknown key, a null `out`, a dimension that does not exist, or a level
+     *  that is not ready. A custom dimension not built yet is built by this call, the same as
+     *  a block read from it would build it. */
+    bool (*world_get_num)(int32_t dim, int32_t prop, double* out);
 } PierApi;
 
 /**

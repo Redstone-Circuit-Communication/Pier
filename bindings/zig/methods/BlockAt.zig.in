@@ -1,0 +1,23 @@
+    /// One block state value by its name, owned by the caller.
+    pub fn getStateValue(self: BlockAt, allocator: std.mem.Allocator, state_name: []const u8) core.Error![]u8 {
+        const f = core.slot("block_get_state") orelse return error.NotProvided;
+        return core.sinkOne(allocator, f, .{ self.dim_id, self.pos_x, self.pos_y, self.pos_z, core.str(state_name) });
+    }
+
+    /// Writes one block state value, given as text.
+    pub fn setStateValue(self: BlockAt, state_name: []const u8, value: []const u8) core.Error!void {
+        const f = core.slot("block_set_state") orelse return error.NotProvided;
+        try core.expect(f(self.dim_id, self.pos_x, self.pos_y, self.pos_z, core.str(state_name), core.str(value)));
+    }
+
+    /// The block entity as SNBT, owned by the caller. NoAnswer when the cell holds none.
+    pub fn blockEntity(self: BlockAt, allocator: std.mem.Allocator) core.Error![]u8 {
+        const f = core.slot("block_entity_snbt") orelse return error.NotProvided;
+        return core.sinkOne(allocator, f, .{ self.dim_id, self.pos_x, self.pos_y, self.pos_z });
+    }
+
+    /// The collision shape as the host writes it, owned by the caller.
+    pub fn collisionBox(self: BlockAt, allocator: std.mem.Allocator) core.Error![]u8 {
+        const f = core.slot("block_get_collision_shape") orelse return error.NotProvided;
+        return core.sinkOne(allocator, f, .{ self.dim_id, self.pos_x, self.pos_y, self.pos_z });
+    }

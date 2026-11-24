@@ -1,0 +1,155 @@
+    const internal = @import("internal.zig");
+    const types = @import("types.zig");
+
+    /// The whole actor as SNBT, owned by the caller.
+    pub fn snapshot(self: Entity, allocator: std.mem.Allocator) core.Error![]u8 {
+        const f = core.slot("actor_snapshot") orelse return error.NotProvided;
+        return core.sinkOne(allocator, f, .{self.actor_id});
+    }
+
+    /// Clones this actor to a given position.
+    pub fn cloneAt(self: Entity, dim: i32, x: f64, y: f64, z: f64) core.Error!Entity {
+        const f = core.slot("actor_clone") orelse return error.NotProvided;
+        var out: i64 = 0;
+        if (!f(self.actor_id, dim, x, y, z, &out)) return error.Refused;
+        return Entity.of(out);
+    }
+
+    /// The distance between two actors. The host refuses across dimensions.
+    pub fn distanceTo(self: Entity, other: Entity) core.Error!f64 {
+        const f = core.slot("actor_distance_to") orelse return error.NotProvided;
+        var out: f64 = 0;
+        if (!f(self.actor_id, other.actor_id, &out)) return error.NoAnswer;
+        return out;
+    }
+
+    /// The bounding box.
+    pub fn aabb(self: Entity, allocator: std.mem.Allocator) core.Error!types.Aabb {
+        const f = core.slot("actor_get_aabb") orelse return error.NotProvided;
+        const text = try core.sinkOne(allocator, f, .{self.actor_id});
+        defer allocator.free(text);
+        var arena = std.heap.ArenaAllocator.init(allocator);
+        defer arena.deinit();
+        const v = try internal.parse(arena.allocator(), text);
+        return .{
+            .min = internal.vecOf(v.get("min") orelse return error.NoAnswer) orelse return error.NoAnswer,
+            .max = internal.vecOf(v.get("max") orelse return error.NoAnswer) orelse return error.NoAnswer,
+        };
+    }
+
+    /// Every status effect on this actor.
+    pub fn effects(self: Entity, allocator: std.mem.Allocator) core.Error!types.Owned(types.Effect) {
+        const f = core.slot("actor_get_effects") orelse return error.NotProvided;
+        const text = try core.sinkOne(allocator, f, .{self.actor_id});
+        defer allocator.free(text);
+        var arena = std.heap.ArenaAllocator.init(allocator);
+        errdefer arena.deinit();
+        const a = arena.allocator();
+        const root = try internal.parse(a, text);
+        const items = switch (root) {
+            .list => |list| list,
+            else => return error.NoAnswer,
+        };
+        var out: std.ArrayList(types.Effect) = .empty;
+        for (items) |entry| {
+            const id: []const u8 = if (entry.get("id")) |v| switch (v) {
+                .string => |s| try a.dupe(u8, s),
+                else => if (internal.intOf(v)) |n| try std.fmt.allocPrint(a, "{d}", .{n}) else "",
+            } else "";
+            try out.append(a, .{
+                .id = id,
+                .ticks = std.math.cast(i32, entry.getInt("ticks") orelse 0) orelse 0,
+                .amplifier = std.math.cast(i32, entry.getInt("amplifier") orelse 0) orelse 0,
+                .visible = entry.getBool("visible") orelse true,
+            });
+        }
+        return .{ .arena = arena, .items = try out.toOwnedSlice(a) };
+    }
+
+    /// What is equipped in one slot, as item SNBT owned by the caller.
+    pub fn equippedItem(self: Entity, allocator: std.mem.Allocator, slot: types.EquipSlot) core.Error![]u8 {
+        const f = core.slot("actor_get_equipped_item") orelse return error.NotProvided;
+        return core.sinkOne(allocator, f, .{ self.actor_id, @intFromEnum(slot) });
+    }
+
+    pub fn setEquippedItem(self: Entity, slot: types.EquipSlot, item_snbt: []const u8) core.Error!void {
+        const f = core.slot("actor_set_equipped_item") orelse return error.NotProvided;
+        try core.expect(f(self.actor_id, @intFromEnum(slot), core.str(item_snbt)));
+    }
+
+    fn related(comptime slot_name: []const u8, self: Entity) core.Error!?Entity {
+        const f = core.slot(slot_name) orelse return error.NotProvided;
+        var out: i64 = 0;
+        if (!f(self.actor_id, &out) or out == 0) return null;
+        return Entity.of(out);
+    }
+
+    /// The vehicle being ridden. Riding nothing gives null and only a missing slot is an error.
+    pub fn vehicle(self: Entity) core.Error!?Entity {
+        return related("actor_get_vehicle", self);
+    }
+
+    pub fn firstPassenger(self: Entity) core.Error!?Entity {
+        return related("actor_get_first_passenger", self);
+    }
+
+    pub fn owner(self: Entity) core.Error!?Entity {
+        return related("actor_get_owner", self);
+    }
+
+    pub fn target(self: Entity) core.Error!?Entity {
+        return related("actor_get_target", self);
+    }
+
+    /// Reads one bit of `ActorFlags`.
+    pub fn statusFlag(self: Entity, flag_index: i32) core.Error!bool {
+        const f = core.slot("actor_get_status_flag") orelse return error.NotProvided;
+        return f(self.actor_id, flag_index);
+    }
+
+    pub fn setStatusFlag(self: Entity, flag_index: i32, value: bool) core.Error!void {
+        const f = core.slot("actor_set_status_flag") orelse return error.NotProvided;
+        try core.expect(f(self.actor_id, flag_index, value));
+    }
+
+    fn rayHit(allocator: std.mem.Allocator, text: []const u8) core.Error!types.RayHit {
+        var arena = std.heap.ArenaAllocator.init(allocator);
+        defer arena.deinit();
+        const v = try internal.parse(arena.allocator(), text);
+        const kind = v.getString("type") orelse "none";
+        const zero = types.Vec3{ .x = 0, .y = 0, .z = 0 };
+        const pos = if (v.get("pos")) |p| internal.vecOf(p) orelse zero else zero;
+        if (std.mem.eql(u8, kind, "entity")) {
+            const id = v.getInt("entity_id") orelse v.getInt("entity") orelse return error.NoAnswer;
+            return .{ .entity = .{ .id = id, .pos = pos } };
+        }
+        if (std.mem.eql(u8, kind, "block")) {
+            const cell = if (v.get("block")) |b| internal.posOf(b) else null;
+            const block = cell orelse types.Pos3{ .x = @intFromFloat(@floor(pos.x)), .y = @intFromFloat(@floor(pos.y)), .z = @intFromFloat(@floor(pos.z)) };
+            return .{ .block = .{
+                .block = block,
+                .facing = std.math.cast(i32, v.getInt("facing") orelse -1) orelse -1,
+                .name = try allocator.dupe(u8, v.getString("block_name") orelse ""),
+                .pos = pos,
+            } };
+        }
+        if (std.mem.eql(u8, kind, "none")) return .none;
+        return error.NoAnswer;
+    }
+
+    /// Casts a ray along the line of sight of this actor and reports what it hits. A block hit
+    /// carries a name owned by `allocator`; `RayHit.deinit` frees it.
+    pub fn traceRay(self: Entity, allocator: std.mem.Allocator, max_dist: f32, include_actors: bool, include_blocks: bool) core.Error!types.RayHit {
+        const f = core.slot("actor_trace_ray") orelse return error.NotProvided;
+        const text = try core.sinkOne(allocator, f, .{ self.actor_id, max_dist, include_actors, include_blocks });
+        defer allocator.free(text);
+        return rayHit(allocator, text);
+    }
+
+    /// As `traceRay`, reporting the hit as a block cell and carrying the face that was hit.
+    pub fn traceRayBlocks(self: Entity, allocator: std.mem.Allocator, max_dist: f32, include_actors: bool, include_blocks: bool) core.Error!types.RayHit {
+        const f = core.slot("edit_trace_ray") orelse return error.NotProvided;
+        const text = try core.sinkOne(allocator, f, .{ self.actor_id, max_dist, include_actors, include_blocks });
+        defer allocator.free(text);
+        return rayHit(allocator, text);
+    }

@@ -1,0 +1,152 @@
+    const internal = @import("internal.zig");
+    const types = @import("types.zig");
+    const nbt = @import("nbt.zig");
+
+    /// Builds an item from a type name and a count, as SNBT owned by the caller.
+    pub fn create(allocator: std.mem.Allocator, type_name: []const u8, amount: u8) std.mem.Allocator.Error![]u8 {
+        var w = nbt.Writer.init(allocator);
+        errdefer w.deinit();
+        try w.beginCompound();
+        try w.key("Name");
+        try w.string(type_name);
+        try w.key("Count");
+        try w.byte(@intCast(@min(amount, 127)));
+        try w.endCompound();
+        return w.toOwnedSlice();
+    }
+
+    /// Whether two items are the same kind of thing.
+    pub fn matches(self: Item, other: Item) core.Error!bool {
+        const f = core.slot("item_matches") orelse return error.NotProvided;
+        return f(core.str(self.item_snbt), core.str(other.item_snbt));
+    }
+
+    /// Runs one transform and returns the new item as SNBT, owned by the caller. This item is unchanged.
+    pub fn transform(self: Item, allocator: std.mem.Allocator, op: types.ItemOp, sarg: []const u8, narg: f64) core.Error![]u8 {
+        const f = core.slot("item_transform") orelse return error.NotProvided;
+        return core.sinkOne(allocator, f, .{ core.str(self.item_snbt), @intFromEnum(op), core.str(sarg), narg });
+    }
+
+    pub fn withCustomName(self: Item, allocator: std.mem.Allocator, new_name: []const u8) core.Error![]u8 {
+        return self.transform(allocator, .set_custom_name, new_name, 0);
+    }
+
+    pub fn withoutCustomName(self: Item, allocator: std.mem.Allocator) core.Error![]u8 {
+        return self.transform(allocator, .reset_name, "", 0);
+    }
+
+    pub fn withDamage(self: Item, allocator: std.mem.Allocator, value: i32) core.Error![]u8 {
+        return self.transform(allocator, .set_damage, "", @floatFromInt(value));
+    }
+
+    pub fn withCount(self: Item, allocator: std.mem.Allocator, amount: u8) core.Error![]u8 {
+        return self.transform(allocator, .set_count, "", @floatFromInt(amount));
+    }
+
+    pub fn withUnbreakable(self: Item, allocator: std.mem.Allocator, on: bool) core.Error![]u8 {
+        return self.transform(allocator, .set_unbreakable, "", if (on) 1 else 0);
+    }
+
+    /// Wears the item down by `wear`, breaking it when it runs out.
+    pub fn hurtAndBreak(self: Item, allocator: std.mem.Allocator, wear: i32) core.Error![]u8 {
+        return self.transform(allocator, .hurt_and_break, "", @floatFromInt(wear));
+    }
+
+    pub fn withRepairCost(self: Item, allocator: std.mem.Allocator, cost: i32) core.Error![]u8 {
+        return self.transform(allocator, .set_repair_cost, "", @floatFromInt(cost));
+    }
+
+    fn listText(allocator: std.mem.Allocator, lines: []const []const u8) std.mem.Allocator.Error![]u8 {
+        var w = nbt.Writer.init(allocator);
+        errdefer w.deinit();
+        try w.beginList();
+        for (lines) |line| try w.string(line);
+        try w.endList();
+        return w.toOwnedSlice();
+    }
+
+    /// Sets the lore, one string per line.
+    pub fn withLore(self: Item, allocator: std.mem.Allocator, lines: []const []const u8) core.Error![]u8 {
+        const text = try listText(allocator, lines);
+        defer allocator.free(text);
+        return self.transform(allocator, .set_lore, text, 0);
+    }
+
+    pub fn withoutLore(self: Item, allocator: std.mem.Allocator) core.Error![]u8 {
+        return self.transform(allocator, .clear_lore, "", 0);
+    }
+
+    /// Adds an enchantment. A level of 0 removes it, as far as the engine is concerned.
+    pub fn withEnchant(self: Item, allocator: std.mem.Allocator, enchant_id: []const u8, level: i32) core.Error![]u8 {
+        const spec = try std.fmt.allocPrint(allocator, "{s}:{d}", .{ enchant_id, level });
+        defer allocator.free(spec);
+        return self.transform(allocator, .add_enchant, spec, 0);
+    }
+
+    pub fn withoutEnchants(self: Item, allocator: std.mem.Allocator) core.Error![]u8 {
+        return self.transform(allocator, .remove_enchants, "", 0);
+    }
+
+    /// The blocks the item may break in adventure mode.
+    pub fn withCanDestroy(self: Item, allocator: std.mem.Allocator, blocks: []const []const u8) core.Error![]u8 {
+        const text = try listText(allocator, blocks);
+        defer allocator.free(text);
+        return self.transform(allocator, .set_can_destroy, text, 0);
+    }
+
+    /// The blocks the item may be placed on in adventure mode.
+    pub fn withCanPlaceOn(self: Item, allocator: std.mem.Allocator, blocks: []const []const u8) core.Error![]u8 {
+        const text = try listText(allocator, blocks);
+        defer allocator.free(text);
+        return self.transform(allocator, .set_can_place_on, text, 0);
+    }
+
+    /// The enchantments on the item.
+    pub fn enchants(self: Item, allocator: std.mem.Allocator) core.Error!types.Owned(types.Enchant) {
+        const f = core.slot("item_get_enchants") orelse return error.NotProvided;
+        const text = try core.sinkOne(allocator, f, .{core.str(self.item_snbt)});
+        defer allocator.free(text);
+        var arena = std.heap.ArenaAllocator.init(allocator);
+        errdefer arena.deinit();
+        const a = arena.allocator();
+        const root = try internal.parse(a, text);
+        const items = switch (root) {
+            .list => |list| list,
+            else => return error.NoAnswer,
+        };
+        var out: std.ArrayList(types.Enchant) = .empty;
+        for (items) |entry| {
+            const enchant_id: []const u8 = switch (entry.get("id") orelse continue) {
+                .string => |s| try a.dupe(u8, s),
+                else => |v| try std.fmt.allocPrint(a, "{d}", .{internal.intOf(v) orelse continue}),
+            };
+            try out.append(a, .{ .id = enchant_id, .level = std.math.cast(i32, entry.getInt("level") orelse 1) orelse 1 });
+        }
+        return .{ .arena = arena, .items = try out.toOwnedSlice(a) };
+    }
+
+    /// Replaces the whole enchantment set and returns the new item as SNBT, owned by the caller.
+    /// Every current host answers NotProvided: writing enchantments is not implemented, and
+    /// `withEnchant` is the way to add one.
+    pub fn withEnchants(self: Item, allocator: std.mem.Allocator, set: []const types.Enchant) core.Error![]u8 {
+        const f = core.slot("item_set_enchants") orelse return error.NotProvided;
+        var w = nbt.Writer.init(allocator);
+        defer w.deinit();
+        try w.beginList();
+        for (set) |e| {
+            try w.beginCompound();
+            try w.key("id");
+            try w.string(e.id);
+            try w.key("level");
+            try w.int(e.level);
+            try w.endCompound();
+        }
+        try w.endList();
+        return core.sinkOne(allocator, f, .{ core.str(self.item_snbt), core.str(w.text()) });
+    }
+
+    /// The custom NBT of the item, the `tag` section, as SNBT owned by the caller. It goes through a dedicated slot and not a string property.
+    pub fn userDataSnbt(self: Item, allocator: std.mem.Allocator) core.Error![]u8 {
+        const f = core.slot("item_get_user_data") orelse return error.NotProvided;
+        return core.sinkOne(allocator, f, .{core.str(self.item_snbt)});
+    }

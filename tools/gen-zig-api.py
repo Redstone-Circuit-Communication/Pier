@@ -149,6 +149,28 @@ pub const Item = struct {
 }
 
 
+METHODS = os.path.join(ROOT, "bindings", "zig", "methods")
+
+
+def fragment(type_name, generated):
+    """The hand-written methods of one type, from bindings/zig/methods/<Type>.zig.in, or ''.
+
+    The text is already indented as it sits in the struct. A name it declares that a generated
+    method has as well is an error, so a method written by hand never hides a generated one.
+    """
+    path = os.path.join(METHODS, type_name + ".zig.in")
+    if not os.path.exists(path):
+        return ""
+    with open(path, encoding="utf-8") as f:
+        text = f.read().rstrip("\n") + "\n"
+    name = r'pub fn (@"[^"]+"|\w+)\('
+    clash = set(re.findall(name, text)) & set(re.findall(name, generated))
+    if clash:
+        raise SystemExit("%s.zig.in declares %s, which the generated methods of %s already have; "
+                         "rename the hand-written one" % (type_name, ", ".join(sorted(clash)), type_name))
+    return text
+
+
 def render():
     g = go_gen()
     members = g.enum_members(read_abi())
@@ -232,6 +254,9 @@ def render():
     for t, text in TYPES.items():
         out.append(text)
         out.append("\n\n".join(by_type[t]))
+        frag = fragment(t, "\n\n".join(by_type[t]))
+        if frag:
+            out.append("\n" + frag.rstrip("\n"))
         out.append("};\n")
     out.append("\n".join(free and ["\n" + "\n\n".join(free)]))
     text = "\n".join(out)

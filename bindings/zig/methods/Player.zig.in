@@ -1,0 +1,154 @@
+    const internal = @import("internal.zig");
+    const types = @import("types.zig");
+    const container = @import("container.zig");
+
+    /// Resolves the selector to the player's actor, which gives the calls of `Entity`. NoAnswer when the player is offline.
+    pub fn asEntity(self: Player) core.Error!Entity {
+        const f = core.slot("player_resolve") orelse return error.NotProvided;
+        var out: i64 = 0;
+        if (!f(self.cSel(), &out)) return error.NoAnswer;
+        return Entity.of(out);
+    }
+
+    /// Whether the selector resolves to anyone online now.
+    pub fn isOnline(self: Player) bool {
+        _ = self.asEntity() catch return false;
+        return true;
+    }
+
+    /// The connection id of this player, the same number a packet handler sees. NoAnswer when the player is offline or has no network identity.
+    pub fn connId(self: Player) core.Error!u64 {
+        const f = core.slot("player_conn_id") orelse return error.NotProvided;
+        const id = f(self.cSel());
+        if (id == 0) return error.NoAnswer;
+        return id;
+    }
+
+    /// Teleports. A custom dimension, with an id of 3 or above, goes through here too, and the host refuses a dimension whose engine instance does not match.
+    pub fn teleport(self: Player, dim: i32, x: f64, y: f64, z: f64) core.Error!void {
+        const f = core.slot("player_teleport") orelse return error.NotProvided;
+        try core.expect(f(self.cSel(), dim, x, y, z));
+    }
+
+    pub fn sendMessage(self: Player, msg: []const u8) core.Error!void {
+        const f = core.slot("player_send_message") orelse return error.NotProvided;
+        try core.expect(f(self.cSel(), core.str(msg)));
+    }
+
+    /// Sends one message with a given `TextPacketType`.
+    pub fn tell(self: Player, msg: []const u8, kind: types.MessageType) core.Error!void {
+        const f = core.slot("player_send_message_typed") orelse return error.NotProvided;
+        try core.expect(f(self.cSel(), core.str(msg), @intFromEnum(kind)));
+    }
+
+    /// Sends one title. Only a title, a subtitle or an action bar carries text. `times` of null leaves the durations to the host.
+    pub fn sendTitle(self: Player, kind: types.TitleKind, text: []const u8, times: ?types.TitleTimes) core.Error!void {
+        const f = core.slot("player_send_title") orelse return error.NotProvided;
+        const t = times orelse types.TitleTimes{ .fade_in = -1, .stay = -1, .fade_out = -1 };
+        try core.expect(f(self.cSel(), @intFromEnum(kind), core.str(if (kind.usesText()) text else ""), t.fade_in, t.stay, t.fade_out));
+    }
+
+    pub fn setGameMode(self: Player, mode: types.GameMode) core.Error!void {
+        const f = core.slot("player_set_gamemode") orelse return error.NotProvided;
+        try core.expect(f(self.cSel(), @intFromEnum(mode)));
+    }
+
+    /// Disconnects the player with a reason the client shows.
+    pub fn disconnect(self: Player, reason: []const u8) core.Error!void {
+        const f = core.slot("player_disconnect") orelse return error.NotProvided;
+        try core.expect(f(self.cSel(), core.str(reason)));
+    }
+
+    /// One inventory slot as item SNBT, owned by the caller.
+    pub fn item(self: Player, allocator: std.mem.Allocator, slot: i32) core.Error![]u8 {
+        const f = core.slot("player_get_item") orelse return error.NotProvided;
+        return core.sinkOne(allocator, f, .{ self.cSel(), slot });
+    }
+
+    /// Writes one inventory slot. Refresh the container afterwards, or the client keeps showing the old item.
+    pub fn setItem(self: Player, slot: i32, item_snbt: []const u8) core.Error!void {
+        const f = core.slot("player_set_item") orelse return error.NotProvided;
+        try core.expect(f(self.cSel(), slot, core.str(item_snbt)));
+    }
+
+    /// The item in hand as item SNBT, owned by the caller.
+    pub fn carriedItem(self: Player, allocator: std.mem.Allocator) core.Error![]u8 {
+        const f = core.slot("player_get_carried_item") orelse return error.NotProvided;
+        return core.sinkOne(allocator, f, .{self.cSel()});
+    }
+
+    /// The full equipment set. For the `slot` numbering see `types.EquipSlot`.
+    pub fn equipment(self: Player, allocator: std.mem.Allocator) core.Error!types.Owned(types.EquipmentEntry) {
+        const f = core.slot("player_get_equipment") orelse return error.NotProvided;
+        const text = try core.sinkOne(allocator, f, .{self.cSel()});
+        defer allocator.free(text);
+        var arena = std.heap.ArenaAllocator.init(allocator);
+        errdefer arena.deinit();
+        const a = arena.allocator();
+        const root = try internal.parse(a, text);
+        const items = switch (root) {
+            .list => |list| list,
+            else => return error.NoAnswer,
+        };
+        var out: std.ArrayList(types.EquipmentEntry) = .empty;
+        for (items) |entry| {
+            const slot = std.math.cast(i32, entry.getInt("slot") orelse continue) orelse continue;
+            const snbt = entry.getString("item_snbt") orelse continue;
+            try out.append(a, .{ .slot = slot, .item_snbt = snbt });
+        }
+        return .{ .arena = arena, .items = try out.toOwnedSlice(a) };
+    }
+
+    /// How many ticks of cooldown one item has left; null when it is not on cooldown.
+    pub fn cooldown(self: Player, item_name: []const u8) core.Error!?i32 {
+        const f = core.slot("player_get_cooldown") orelse return error.NotProvided;
+        const ticks = f(self.cSel(), core.str(item_name));
+        return if (ticks < 0) null else ticks;
+    }
+
+    pub fn setCooldown(self: Player, item_name: []const u8, ticks: i32) core.Error!void {
+        const f = core.slot("player_start_cooldown") orelse return error.NotProvided;
+        try core.expect(f(self.cSel(), core.str(item_name), ticks));
+    }
+
+    /// The network status in detail.
+    pub fn networkDetail(self: Player, allocator: std.mem.Allocator) core.Error!types.NetworkStatus {
+        const f = core.slot("player_get_network_status") orelse return error.NotProvided;
+        const text = try core.sinkOne(allocator, f, .{self.cSel()});
+        defer allocator.free(text);
+        var arena = std.heap.ArenaAllocator.init(allocator);
+        defer arena.deinit();
+        const v = try internal.parse(arena.allocator(), text);
+        return .{
+            .ping = std.math.cast(i32, v.getInt("ping") orelse -1) orelse -1,
+            .avg_ping = std.math.cast(i32, v.getInt("avg_ping") orelse -1) orelse -1,
+            .max_ping = std.math.cast(i32, v.getInt("max_ping") orelse -1) orelse -1,
+            .packet_loss = std.math.cast(i32, v.getInt("packet_loss") orelse -1) orelse -1,
+        };
+    }
+
+    /// The feet position and the dimension. It goes through a dedicated slot and not a property number, because a position needs three numbers and an id at once.
+    pub fn position(self: Player, allocator: std.mem.Allocator) core.Error!types.PlayerPosition {
+        const f = core.slot("get_player_position") orelse return error.NotProvided;
+        const name = try self.realName(allocator);
+        defer allocator.free(name);
+        const p = f(core.str(name));
+        if (!p.found) return error.NoAnswer;
+        return .{ .pos = .{ .x = p.x, .y = p.y, .z = p.z }, .dim = p.dimension };
+    }
+
+    pub fn inventory(self: Player) container.Container {
+        return container.Container.ofPlayer(self, .inventory);
+    }
+
+    pub fn enderChest(self: Player) container.Container {
+        return container.Container.ofPlayer(self, .ender_chest);
+    }
+
+    pub fn armor(self: Player) container.Container {
+        return container.Container.ofPlayer(self, .armor);
+    }
+
+    pub fn offhandContainer(self: Player) container.Container {
+        return container.Container.ofPlayer(self, .off_hand);
+    }

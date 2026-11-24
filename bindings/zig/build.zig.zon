@@ -1,6 +1,6 @@
 .{
     .name = .pier,
-    .version = "26.51.3",
+    .version = "26.51.4",
     .fingerprint = 0xabfc00ddb334ccec,
     .minimum_zig_version = "0.15.2",
     .dependencies = .{},

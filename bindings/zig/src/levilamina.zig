@@ -18,6 +18,22 @@ const core = @import("core.zig");
 
 pub const nbt = @import("nbt.zig");
 pub const props = @import("props_gen.zig");
+pub const client = @import("client.zig");
+pub const native = @import("native.zig");
+pub const world = @import("world.zig");
+pub const server = @import("server.zig");
+pub const types = @import("types.zig");
+pub const container = @import("container.zig");
+pub const kvdb = @import("kvdb.zig");
+pub const money = @import("money.zig");
+pub const scoreboard = @import("scoreboard.zig");
+pub const gui = @import("gui.zig");
+pub const packet = @import("packet.zig");
+pub const sim = @import("sim.zig");
+pub const dimensions = @import("dimensions.zig");
+pub const registry = @import("registry.zig");
+pub const lane = @import("lane.zig");
+pub const command = @import("command.zig");
 
 pub const c = core.c;
 pub const Error = core.Error;
@@ -86,6 +102,20 @@ const TypeCheck = struct {
     }
     fn task() void {}
     pub fn enable(_: *Context) error{Refused}!void {}
+    fn onForm(_: ?*anyopaque, _: gui.Response) void {}
+    fn onPacket(_: *packet.Packet) packet.Verdict {
+        return .forward;
+    }
+    fn onConnection(_: u64, _: []const u8, _: packet.ConnectionState) void {}
+    fn onMoneyBefore(_: money.Event) bool {
+        return false;
+    }
+    fn onMoneyAfter(_: money.Event) void {}
+    fn generate(_: ?*anyopaque, _: dimensions.ChunkRequest) bool {
+        return false;
+    }
+    fn onTypedCommand(_: *command.Call) void {}
+    fn onKey(_: ?*anyopaque, _: client.KeyAction, _: i32) void {}
 };
 
 fn instantiateGenerics() void {
@@ -95,11 +125,43 @@ fn instantiateGenerics() void {
     if (registerService("type-check", TypeCheck.provide)) |_| {} else |_| {}
     if (schedule(TypeCheck.task)) |_| {} else |_| {}
     if (scheduleAfter(1, TypeCheck.task)) |_| {} else |_| {}
+    if (packet.intercept(.both, TypeCheck.onPacket)) |_| {} else |_| {}
+    if (packet.interceptIds(.both, &.{1}, TypeCheck.onPacket)) |_| {} else |_| {}
+    if (packet.onConnection(TypeCheck.onConnection)) |_| {} else |_| {}
+    if (money.onBefore(TypeCheck.onMoneyBefore)) |_| {} else |_| {}
+    if (money.onAfter(TypeCheck.onMoneyAfter)) |_| {} else |_| {}
+    if (dimensions.addDimensionGenerated(std.testing.allocator, "type-check", "{}", &.{"minecraft:air"}, &.{"minecraft:plains"}, null, TypeCheck.generate)) |_| {} else |_| {}
+    var typed = command.Builder.init(std.testing.allocator, "type-check", "", .any);
+    if (typed.register(TypeCheck.onTypedCommand)) |_| {} else |_| {}
+    if (client.registerKey("type-check", &.{1}, false, null, TypeCheck.onKey)) |_| {} else |_| {}
+    const who = Player.byName("type-check");
+    var simple = gui.SimpleForm.init(std.testing.allocator, "type-check");
+    if (simple.send(who, null, TypeCheck.onForm)) |_| {} else |_| {}
+    const modal = gui.ModalForm.init(std.testing.allocator, "type-check", "type-check");
+    if (modal.send(who, null, TypeCheck.onForm)) |_| {} else |_| {}
+    var custom = gui.CustomForm.init(std.testing.allocator, "type-check");
+    if (custom.send(who, null, TypeCheck.onForm)) |_| {} else |_| {}
 }
 
 test "the whole binding type-checks against abi.h" {
     std.testing.refAllDecls(core);
     std.testing.refAllDeclsRecursive(props);
+    std.testing.refAllDecls(client);
+    std.testing.refAllDecls(native);
+    std.testing.refAllDecls(world);
+    std.testing.refAllDecls(server);
+    std.testing.refAllDecls(types);
+    std.testing.refAllDecls(container);
+    std.testing.refAllDecls(kvdb);
+    std.testing.refAllDecls(money);
+    std.testing.refAllDecls(scoreboard);
+    std.testing.refAllDeclsRecursive(gui);
+    std.testing.refAllDeclsRecursive(packet);
+    std.testing.refAllDeclsRecursive(sim);
+    std.testing.refAllDeclsRecursive(dimensions);
+    std.testing.refAllDeclsRecursive(registry);
+    std.testing.refAllDeclsRecursive(lane);
+    std.testing.refAllDeclsRecursive(command);
     _ = &instantiateGenerics;
     comptime exportMod(TypeCheck, "type-check");
     // No host table in a test, so every slot is absent: the gate answers null, not a call.
@@ -108,4 +170,9 @@ test "the whole binding type-checks against abi.h" {
 
 test {
     _ = nbt;
+}
+
+// Declared after the test above, which asserts that no table is installed: these install one.
+test {
+    _ = @import("host_test.zig");
 }

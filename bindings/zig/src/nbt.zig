@@ -3,6 +3,7 @@
 //! fixes the type; true and false are bytes; any other bare word is a string.
 
 const std = @import("std");
+const core = @import("core.zig");
 
 /// The deepest nesting accepted, the cap Minecraft puts on NBT. A deeper payload is refused
 /// instead of exhausting the stack of a host thread.
@@ -323,6 +324,207 @@ fn isNumeric(text: []const u8) bool {
     return true;
 }
 
+/// Builds SNBT text the way the Rust and Go bindings write it, so the host's stricter parser
+/// accepts it: every key is quoted, every number carries its type suffix, and a control
+/// character is written as `\uXXXX`.
+///
+/// Open a container, write into it, close it; a key goes before each value of a compound.
+/// The writer does not check that the calls balance.
+pub const Writer = struct {
+    allocator: std.mem.Allocator,
+    out: std.ArrayList(u8) = .empty,
+    /// One entry per open container: true while it has no element yet.
+    empty: std.ArrayList(bool) = .empty,
+    after_key: bool = false,
+
+    pub fn init(allocator: std.mem.Allocator) Writer {
+        return .{ .allocator = allocator };
+    }
+
+    pub fn deinit(self: *Writer) void {
+        self.out.deinit(self.allocator);
+        self.empty.deinit(self.allocator);
+    }
+
+    /// The text written so far.
+    pub fn text(self: *const Writer) []const u8 {
+        return self.out.items;
+    }
+
+    /// The finished text, owned by the caller. The writer is empty afterwards.
+    pub fn toOwnedSlice(self: *Writer) std.mem.Allocator.Error![]u8 {
+        self.empty.deinit(self.allocator);
+        self.empty = .empty;
+        self.after_key = false;
+        return self.out.toOwnedSlice(self.allocator);
+    }
+
+    pub fn beginCompound(self: *Writer) std.mem.Allocator.Error!void {
+        try self.start();
+        try self.out.append(self.allocator, '{');
+        try self.empty.append(self.allocator, true);
+    }
+
+    pub fn endCompound(self: *Writer) std.mem.Allocator.Error!void {
+        _ = self.empty.pop();
+        try self.out.append(self.allocator, '}');
+    }
+
+    pub fn beginList(self: *Writer) std.mem.Allocator.Error!void {
+        try self.start();
+        try self.out.append(self.allocator, '[');
+        try self.empty.append(self.allocator, true);
+    }
+
+    pub fn endList(self: *Writer) std.mem.Allocator.Error!void {
+        _ = self.empty.pop();
+        try self.out.append(self.allocator, ']');
+    }
+
+    /// Writes the key of the next entry of the open compound.
+    pub fn key(self: *Writer, name: []const u8) std.mem.Allocator.Error!void {
+        try self.separate();
+        try self.quoted(name);
+        try self.out.append(self.allocator, ':');
+        self.after_key = true;
+    }
+
+    pub fn string(self: *Writer, value: []const u8) std.mem.Allocator.Error!void {
+        try self.start();
+        try self.quoted(value);
+    }
+
+    pub fn byte(self: *Writer, value: i8) std.mem.Allocator.Error!void {
+        try self.number("{d}b", value);
+    }
+
+    pub fn short(self: *Writer, value: i16) std.mem.Allocator.Error!void {
+        try self.number("{d}s", value);
+    }
+
+    pub fn int(self: *Writer, value: i32) std.mem.Allocator.Error!void {
+        try self.number("{d}", value);
+    }
+
+    pub fn long(self: *Writer, value: i64) std.mem.Allocator.Error!void {
+        try self.number("{d}L", value);
+    }
+
+    /// A boolean is a byte, 1b or 0b.
+    pub fn boolean(self: *Writer, value: bool) std.mem.Allocator.Error!void {
+        try self.byte(if (value) 1 else 0);
+    }
+
+    pub fn float(self: *Writer, value: f32) std.mem.Allocator.Error!void {
+        try self.start();
+        try self.decimal(value);
+        try self.out.append(self.allocator, 'f');
+    }
+
+    /// A double always carries its decimal point and its `d`. A value SNBT cannot express, NaN
+    /// or an infinity, is written as 0.0.
+    pub fn double(self: *Writer, value: f64) std.mem.Allocator.Error!void {
+        try self.start();
+        try self.decimal(value);
+        try self.out.append(self.allocator, 'd');
+    }
+
+    /// Inserts text that is already SNBT, one value or several separated by commas, in the place
+    /// of one value.
+    pub fn raw(self: *Writer, snbt: []const u8) std.mem.Allocator.Error!void {
+        if (snbt.len == 0) return;
+        try self.start();
+        try self.out.appendSlice(self.allocator, snbt);
+    }
+
+    fn start(self: *Writer) std.mem.Allocator.Error!void {
+        if (self.after_key) {
+            self.after_key = false;
+            return;
+        }
+        try self.separate();
+    }
+
+    fn separate(self: *Writer) std.mem.Allocator.Error!void {
+        if (self.empty.items.len == 0) return;
+        const top = &self.empty.items[self.empty.items.len - 1];
+        if (!top.*) try self.out.append(self.allocator, ',');
+        top.* = false;
+    }
+
+    fn number(self: *Writer, comptime fmt: []const u8, value: anytype) std.mem.Allocator.Error!void {
+        try self.start();
+        var buf: [40]u8 = undefined;
+        const piece = std.fmt.bufPrint(&buf, fmt, .{value}) catch unreachable;
+        try self.out.appendSlice(self.allocator, piece);
+    }
+
+    fn decimal(self: *Writer, value: anytype) std.mem.Allocator.Error!void {
+        if (!std.math.isFinite(value)) return self.out.appendSlice(self.allocator, "0.0");
+        var buf: [512]u8 = undefined;
+        const piece = std.fmt.bufPrint(&buf, "{d}", .{value}) catch unreachable;
+        try self.out.appendSlice(self.allocator, piece);
+        if (std.mem.indexOfAny(u8, piece, ".eE") == null) try self.out.appendSlice(self.allocator, ".0");
+    }
+
+    fn quoted(self: *Writer, value: []const u8) std.mem.Allocator.Error!void {
+        try self.out.append(self.allocator, '"');
+        for (value) |ch| switch (ch) {
+            '"' => try self.out.appendSlice(self.allocator, "\\\""),
+            '\\' => try self.out.appendSlice(self.allocator, "\\\\"),
+            '\n' => try self.out.appendSlice(self.allocator, "\\n"),
+            '\r' => try self.out.appendSlice(self.allocator, "\\r"),
+            '\t' => try self.out.appendSlice(self.allocator, "\\t"),
+            0...8, 11, 12, 14...31, 127 => {
+                var buf: [6]u8 = undefined;
+                const piece = std.fmt.bufPrint(&buf, "\\u{x:0>4}", .{ch}) catch unreachable;
+                try self.out.appendSlice(self.allocator, piece);
+            },
+            else => try self.out.append(self.allocator, ch),
+        };
+        try self.out.append(self.allocator, '"');
+    }
+};
+
+test "the writer's output parses back to what was written" {
+    var w = Writer.init(std.testing.allocator);
+    defer w.deinit();
+    try w.beginCompound();
+    try w.key("title");
+    try w.string("a \"quoted\" line\nnext\\");
+    try w.key("n");
+    try w.int(7);
+    try w.key("big");
+    try w.long(3000000000);
+    try w.key("ratio");
+    try w.double(1);
+    try w.key("on");
+    try w.boolean(true);
+    try w.key("items");
+    try w.beginList();
+    try w.string("x");
+    try w.int(2);
+    try w.endList();
+    try w.key("inner");
+    try w.beginCompound();
+    try w.key("k");
+    try w.float(0.5);
+    try w.endCompound();
+    try w.endCompound();
+
+    var arena_state = std.heap.ArenaAllocator.init(std.testing.allocator);
+    defer arena_state.deinit();
+    const root = try parse(arena_state.allocator(), w.text());
+    try std.testing.expectEqualStrings("a \"quoted\" line\nnext\\", root.getString("title").?);
+    try std.testing.expectEqual(@as(?i64, 7), root.getInt("n"));
+    try std.testing.expectEqual(@as(?i64, 3000000000), root.getInt("big"));
+    try std.testing.expectEqual(@as(?f64, 1.0), root.getFloat("ratio"));
+    try std.testing.expectEqual(@as(?bool, true), root.getBool("on"));
+    try std.testing.expectEqual(@as(usize, 2), root.get("items").?.list.len);
+    try std.testing.expectEqual(@as(?f64, 0.5), root.getFloat("inner.k"));
+    try std.testing.expect(std.mem.indexOf(u8, w.text(), "\"ratio\":1.0d") != null);
+}
+
 test "scalars and containers follow the binding rules" {
     var arena_state = std.heap.ArenaAllocator.init(std.testing.allocator);
     defer arena_state.deinit();
@@ -359,4 +561,45 @@ test "nesting past the cap is an error and not a stack overflow" {
     try std.testing.expectError(error.TooDeep, parse(arena, "[" ** 600));
     const ok_depth = ("[" ** max_depth) ++ ("]" ** max_depth);
     _ = try parse(arena, ok_depth);
+}
+
+/// The binary form of an NBT payload.
+pub const Format = enum(i32) {
+    /// Little-endian, as a level stores it on disk.
+    disk = 0,
+    /// The network encoding.
+    network = 1,
+};
+
+const ByteCollector = struct {
+    allocator: std.mem.Allocator,
+    bytes: std.ArrayList(u8) = .empty,
+    failed: bool = false,
+
+    fn sink(ctx: ?*anyopaque, data: [*c]const u8, len: usize) callconv(.c) void {
+        const self: *ByteCollector = @ptrCast(@alignCast(ctx orelse return));
+        if (len == 0 or data == null) return;
+        self.bytes.appendSlice(self.allocator, data[0..len]) catch {
+            self.failed = true;
+        };
+    }
+};
+
+/// Encodes SNBT as binary NBT, owned by the caller. Refused for text the host cannot parse.
+pub fn snbtToBinary(allocator: std.mem.Allocator, snbt: []const u8, format: Format) core.Error![]u8 {
+    const f = core.slot("nbt_snbt_to_binary") orelse return error.NotProvided;
+    var out = ByteCollector{ .allocator = allocator };
+    errdefer out.bytes.deinit(allocator);
+    if (!f(core.str(snbt), @intFromEnum(format), &out, &ByteCollector.sink)) return error.Refused;
+    if (out.failed) return error.OutOfMemory;
+    return out.bytes.toOwnedSlice(allocator);
+}
+
+/// Decodes binary NBT as SNBT, owned by the caller. Refused for bytes that are not NBT.
+pub fn binaryToSnbt(allocator: std.mem.Allocator, data: []const u8, format: Format) core.Error![]u8 {
+    const f = core.slot("nbt_binary_to_snbt") orelse return error.NotProvided;
+    var col = core.Collector.init(allocator);
+    defer col.deinit();
+    if (!f(data.ptr, data.len, @intFromEnum(format), &col, &core.Collector.sink)) return error.Refused;
+    return col.take();
 }

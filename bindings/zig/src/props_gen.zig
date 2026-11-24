@@ -362,6 +362,46 @@ pub const Player = struct {
         return out_value != 0;
     }
 
+    /// PIER_PPROP_IS_SLEEPING: (G) Player::isSleeping
+    pub fn isSleeping(self: Player) core.Error!bool {
+        const slot_fn = core.slot("player_get_num") orelse return error.NotProvided;
+        var out_value: f64 = 0;
+        if (!slot_fn(self.cSel(), core.c.PIER_PPROP_IS_SLEEPING, &out_value)) return error.NoAnswer;
+        return out_value != 0;
+    }
+
+    /// PIER_PPROP_IS_SIMULATED: (G) Actor::isSimulatedPlayer
+    pub fn isSimulated(self: Player) core.Error!bool {
+        const slot_fn = core.slot("player_get_num") orelse return error.NotProvided;
+        var out_value: f64 = 0;
+        if (!slot_fn(self.cSel(), core.c.PIER_PPROP_IS_SIMULATED, &out_value)) return error.NoAnswer;
+        return out_value != 0;
+    }
+
+    /// PIER_PPROP_ITEM_USE_DURATION: (G) Player::getItemUseDuration, in ticks
+    pub fn itemUseDuration(self: Player) core.Error!f64 {
+        const slot_fn = core.slot("player_get_num") orelse return error.NotProvided;
+        var out_value: f64 = 0;
+        if (!slot_fn(self.cSel(), core.c.PIER_PPROP_ITEM_USE_DURATION, &out_value)) return error.NoAnswer;
+        return out_value;
+    }
+
+    /// PIER_PPROP_XP_EARNED_AT_LEVEL: (G) Player::getXpEarnedAtCurrentLevel
+    pub fn xpEarnedAtLevel(self: Player) core.Error!f64 {
+        const slot_fn = core.slot("player_get_num") orelse return error.NotProvided;
+        var out_value: f64 = 0;
+        if (!slot_fn(self.cSel(), core.c.PIER_PPROP_XP_EARNED_AT_LEVEL, &out_value)) return error.NoAnswer;
+        return out_value;
+    }
+
+    /// PIER_PPROP_CAN_FLY: (G) Actor::canFly
+    pub fn canFly(self: Player) core.Error!bool {
+        const slot_fn = core.slot("player_get_num") orelse return error.NotProvided;
+        var out_value: f64 = 0;
+        if (!slot_fn(self.cSel(), core.c.PIER_PPROP_CAN_FLY, &out_value)) return error.NoAnswer;
+        return out_value != 0;
+    }
+
     /// PIER_PSTR_REAL_NAME: Player::getRealName
     pub fn realName(self: Player, allocator: std.mem.Allocator) core.Error![]u8 {
         const slot_fn = core.slot("player_get_str") orelse return error.NotProvided;
@@ -458,6 +498,24 @@ pub const Player = struct {
         var col = core.Collector.init(allocator);
         defer col.deinit();
         if (!slot_fn(self.cSel(), core.c.PIER_PSTR_RESPAWN_POS, &col, &core.Collector.sink)) return error.NoAnswer;
+        return col.take();
+    }
+
+    /// PIER_PSTR_SELECTED_ITEM: Player::getSelectedItem as item SNBT
+    pub fn selectedItem(self: Player, allocator: std.mem.Allocator) core.Error![]u8 {
+        const slot_fn = core.slot("player_get_str") orelse return error.NotProvided;
+        var col = core.Collector.init(allocator);
+        defer col.deinit();
+        if (!slot_fn(self.cSel(), core.c.PIER_PSTR_SELECTED_ITEM, &col, &core.Collector.sink)) return error.NoAnswer;
+        return col.take();
+    }
+
+    /// PIER_PSTR_DEVICE_MODEL: ConnectionRequest::getDeviceModel; fails for a player with no connection request
+    pub fn deviceModel(self: Player, allocator: std.mem.Allocator) core.Error![]u8 {
+        const slot_fn = core.slot("player_get_str") orelse return error.NotProvided;
+        var col = core.Collector.init(allocator);
+        defer col.deinit();
+        if (!slot_fn(self.cSel(), core.c.PIER_PSTR_DEVICE_MODEL, &col, &core.Collector.sink)) return error.NoAnswer;
         return col.take();
     }
 
@@ -756,6 +814,194 @@ pub const Player = struct {
         defer col.deinit();
         if (!slot_fn(self.cSel(), core.c.PIER_PACT_SET_PERMISSION_LEVEL, core.str(s_arg), n_a, n_b, n_c, &col, &core.Collector.sink)) return error.Refused;
         return col.takeOrEmpty();
+    }
+
+    /// PIER_PACT_STOP_SLEEPING: a: non-zero wakes forcefully. Player::stopSleepInBed; false when not asleep
+    ///
+    /// The output, when the verb has one, is returned; abi.h names each argument.
+    pub fn stopSleeping(self: Player, allocator: std.mem.Allocator, s_arg: []const u8, n_a: f64, n_b: f64, n_c: f64) core.Error![]u8 {
+        const slot_fn = core.slot("player_action") orelse return error.NotProvided;
+        var col = core.Collector.init(allocator);
+        defer col.deinit();
+        if (!slot_fn(self.cSel(), core.c.PIER_PACT_STOP_SLEEPING, core.str(s_arg), n_a, n_b, n_c, &col, &core.Collector.sink)) return error.Refused;
+        return col.takeOrEmpty();
+    }
+
+    /// PIER_PACT_CAUSE_EXHAUSTION: a: amount, positive. Player::causeFoodExhaustion
+    ///
+    /// The output, when the verb has one, is returned; abi.h names each argument.
+    pub fn causeExhaustion(self: Player, allocator: std.mem.Allocator, s_arg: []const u8, n_a: f64, n_b: f64, n_c: f64) core.Error![]u8 {
+        const slot_fn = core.slot("player_action") orelse return error.NotProvided;
+        var col = core.Collector.init(allocator);
+        defer col.deinit();
+        if (!slot_fn(self.cSel(), core.c.PIER_PACT_CAUSE_EXHAUSTION, core.str(s_arg), n_a, n_b, n_c, &col, &core.Collector.sink)) return error.Refused;
+        return col.takeOrEmpty();
+    }
+
+    /// PIER_PACT_EAT: sarg: item SNBT. Player::eat, the food value of that item
+    ///
+    /// The output, when the verb has one, is returned; abi.h names each argument.
+    pub fn eat(self: Player, allocator: std.mem.Allocator, s_arg: []const u8, n_a: f64, n_b: f64, n_c: f64) core.Error![]u8 {
+        const slot_fn = core.slot("player_action") orelse return error.NotProvided;
+        var col = core.Collector.init(allocator);
+        defer col.deinit();
+        if (!slot_fn(self.cSel(), core.c.PIER_PACT_EAT, core.str(s_arg), n_a, n_b, n_c, &col, &core.Collector.sink)) return error.Refused;
+        return col.takeOrEmpty();
+    }
+
+    const internal = @import("internal.zig");
+    const types = @import("types.zig");
+    const container = @import("container.zig");
+
+    /// Resolves the selector to the player's actor, which gives the calls of `Entity`. NoAnswer when the player is offline.
+    pub fn asEntity(self: Player) core.Error!Entity {
+        const f = core.slot("player_resolve") orelse return error.NotProvided;
+        var out: i64 = 0;
+        if (!f(self.cSel(), &out)) return error.NoAnswer;
+        return Entity.of(out);
+    }
+
+    /// Whether the selector resolves to anyone online now.
+    pub fn isOnline(self: Player) bool {
+        _ = self.asEntity() catch return false;
+        return true;
+    }
+
+    /// The connection id of this player, the same number a packet handler sees. NoAnswer when the player is offline or has no network identity.
+    pub fn connId(self: Player) core.Error!u64 {
+        const f = core.slot("player_conn_id") orelse return error.NotProvided;
+        const id = f(self.cSel());
+        if (id == 0) return error.NoAnswer;
+        return id;
+    }
+
+    /// Teleports. A custom dimension, with an id of 3 or above, goes through here too, and the host refuses a dimension whose engine instance does not match.
+    pub fn teleport(self: Player, dim: i32, x: f64, y: f64, z: f64) core.Error!void {
+        const f = core.slot("player_teleport") orelse return error.NotProvided;
+        try core.expect(f(self.cSel(), dim, x, y, z));
+    }
+
+    pub fn sendMessage(self: Player, msg: []const u8) core.Error!void {
+        const f = core.slot("player_send_message") orelse return error.NotProvided;
+        try core.expect(f(self.cSel(), core.str(msg)));
+    }
+
+    /// Sends one message with a given `TextPacketType`.
+    pub fn tell(self: Player, msg: []const u8, kind: types.MessageType) core.Error!void {
+        const f = core.slot("player_send_message_typed") orelse return error.NotProvided;
+        try core.expect(f(self.cSel(), core.str(msg), @intFromEnum(kind)));
+    }
+
+    /// Sends one title. Only a title, a subtitle or an action bar carries text. `times` of null leaves the durations to the host.
+    pub fn sendTitle(self: Player, kind: types.TitleKind, text: []const u8, times: ?types.TitleTimes) core.Error!void {
+        const f = core.slot("player_send_title") orelse return error.NotProvided;
+        const t = times orelse types.TitleTimes{ .fade_in = -1, .stay = -1, .fade_out = -1 };
+        try core.expect(f(self.cSel(), @intFromEnum(kind), core.str(if (kind.usesText()) text else ""), t.fade_in, t.stay, t.fade_out));
+    }
+
+    pub fn setGameMode(self: Player, mode: types.GameMode) core.Error!void {
+        const f = core.slot("player_set_gamemode") orelse return error.NotProvided;
+        try core.expect(f(self.cSel(), @intFromEnum(mode)));
+    }
+
+    /// Disconnects the player with a reason the client shows.
+    pub fn disconnect(self: Player, reason: []const u8) core.Error!void {
+        const f = core.slot("player_disconnect") orelse return error.NotProvided;
+        try core.expect(f(self.cSel(), core.str(reason)));
+    }
+
+    /// One inventory slot as item SNBT, owned by the caller.
+    pub fn item(self: Player, allocator: std.mem.Allocator, slot: i32) core.Error![]u8 {
+        const f = core.slot("player_get_item") orelse return error.NotProvided;
+        return core.sinkOne(allocator, f, .{ self.cSel(), slot });
+    }
+
+    /// Writes one inventory slot. Refresh the container afterwards, or the client keeps showing the old item.
+    pub fn setItem(self: Player, slot: i32, item_snbt: []const u8) core.Error!void {
+        const f = core.slot("player_set_item") orelse return error.NotProvided;
+        try core.expect(f(self.cSel(), slot, core.str(item_snbt)));
+    }
+
+    /// The item in hand as item SNBT, owned by the caller.
+    pub fn carriedItem(self: Player, allocator: std.mem.Allocator) core.Error![]u8 {
+        const f = core.slot("player_get_carried_item") orelse return error.NotProvided;
+        return core.sinkOne(allocator, f, .{self.cSel()});
+    }
+
+    /// The full equipment set. For the `slot` numbering see `types.EquipSlot`.
+    pub fn equipment(self: Player, allocator: std.mem.Allocator) core.Error!types.Owned(types.EquipmentEntry) {
+        const f = core.slot("player_get_equipment") orelse return error.NotProvided;
+        const text = try core.sinkOne(allocator, f, .{self.cSel()});
+        defer allocator.free(text);
+        var arena = std.heap.ArenaAllocator.init(allocator);
+        errdefer arena.deinit();
+        const a = arena.allocator();
+        const root = try internal.parse(a, text);
+        const items = switch (root) {
+            .list => |list| list,
+            else => return error.NoAnswer,
+        };
+        var out: std.ArrayList(types.EquipmentEntry) = .empty;
+        for (items) |entry| {
+            const slot = std.math.cast(i32, entry.getInt("slot") orelse continue) orelse continue;
+            const snbt = entry.getString("item_snbt") orelse continue;
+            try out.append(a, .{ .slot = slot, .item_snbt = snbt });
+        }
+        return .{ .arena = arena, .items = try out.toOwnedSlice(a) };
+    }
+
+    /// How many ticks of cooldown one item has left; null when it is not on cooldown.
+    pub fn cooldown(self: Player, item_name: []const u8) core.Error!?i32 {
+        const f = core.slot("player_get_cooldown") orelse return error.NotProvided;
+        const ticks = f(self.cSel(), core.str(item_name));
+        return if (ticks < 0) null else ticks;
+    }
+
+    pub fn setCooldown(self: Player, item_name: []const u8, ticks: i32) core.Error!void {
+        const f = core.slot("player_start_cooldown") orelse return error.NotProvided;
+        try core.expect(f(self.cSel(), core.str(item_name), ticks));
+    }
+
+    /// The network status in detail.
+    pub fn networkDetail(self: Player, allocator: std.mem.Allocator) core.Error!types.NetworkStatus {
+        const f = core.slot("player_get_network_status") orelse return error.NotProvided;
+        const text = try core.sinkOne(allocator, f, .{self.cSel()});
+        defer allocator.free(text);
+        var arena = std.heap.ArenaAllocator.init(allocator);
+        defer arena.deinit();
+        const v = try internal.parse(arena.allocator(), text);
+        return .{
+            .ping = std.math.cast(i32, v.getInt("ping") orelse -1) orelse -1,
+            .avg_ping = std.math.cast(i32, v.getInt("avg_ping") orelse -1) orelse -1,
+            .max_ping = std.math.cast(i32, v.getInt("max_ping") orelse -1) orelse -1,
+            .packet_loss = std.math.cast(i32, v.getInt("packet_loss") orelse -1) orelse -1,
+        };
+    }
+
+    /// The feet position and the dimension. It goes through a dedicated slot and not a property number, because a position needs three numbers and an id at once.
+    pub fn position(self: Player, allocator: std.mem.Allocator) core.Error!types.PlayerPosition {
+        const f = core.slot("get_player_position") orelse return error.NotProvided;
+        const name = try self.realName(allocator);
+        defer allocator.free(name);
+        const p = f(core.str(name));
+        if (!p.found) return error.NoAnswer;
+        return .{ .pos = .{ .x = p.x, .y = p.y, .z = p.z }, .dim = p.dimension };
+    }
+
+    pub fn inventory(self: Player) container.Container {
+        return container.Container.ofPlayer(self, .inventory);
+    }
+
+    pub fn enderChest(self: Player) container.Container {
+        return container.Container.ofPlayer(self, .ender_chest);
+    }
+
+    pub fn armor(self: Player) container.Container {
+        return container.Container.ofPlayer(self, .armor);
+    }
+
+    pub fn offhandContainer(self: Player) container.Container {
+        return container.Container.ofPlayer(self, .off_hand);
     }
 };
 
@@ -1151,6 +1397,86 @@ pub const Entity = struct {
         return out_value != 0;
     }
 
+    /// PIER_APROP_IS_SPRINTING: Actor::isSprinting
+    pub fn isSprinting(self: Entity) core.Error!bool {
+        const slot_fn = core.slot("actor_get_num") orelse return error.NotProvided;
+        var out_value: f64 = 0;
+        if (!slot_fn(self.actor_id, core.c.PIER_APROP_IS_SPRINTING, &out_value)) return error.NoAnswer;
+        return out_value != 0;
+    }
+
+    /// PIER_APROP_IS_SWIMMING: Actor::isSwimming
+    pub fn isSwimming(self: Entity) core.Error!bool {
+        const slot_fn = core.slot("actor_get_num") orelse return error.NotProvided;
+        var out_value: f64 = 0;
+        if (!slot_fn(self.actor_id, core.c.PIER_APROP_IS_SWIMMING, &out_value)) return error.NoAnswer;
+        return out_value != 0;
+    }
+
+    /// PIER_APROP_IS_SLEEPING: Actor::isSleeping
+    pub fn isSleeping(self: Entity) core.Error!bool {
+        const slot_fn = core.slot("actor_get_num") orelse return error.NotProvided;
+        var out_value: f64 = 0;
+        if (!slot_fn(self.actor_id, core.c.PIER_APROP_IS_SLEEPING, &out_value)) return error.NoAnswer;
+        return out_value != 0;
+    }
+
+    /// PIER_APROP_IS_SITTING: Actor::isSitting
+    pub fn isSitting(self: Entity) core.Error!bool {
+        const slot_fn = core.slot("actor_get_num") orelse return error.NotProvided;
+        var out_value: f64 = 0;
+        if (!slot_fn(self.actor_id, core.c.PIER_APROP_IS_SITTING, &out_value)) return error.NoAnswer;
+        return out_value != 0;
+    }
+
+    /// PIER_APROP_IS_ANGRY: Actor::isAngry
+    pub fn isAngry(self: Entity) core.Error!bool {
+        const slot_fn = core.slot("actor_get_num") orelse return error.NotProvided;
+        var out_value: f64 = 0;
+        if (!slot_fn(self.actor_id, core.c.PIER_APROP_IS_ANGRY, &out_value)) return error.NoAnswer;
+        return out_value != 0;
+    }
+
+    /// PIER_APROP_STRENGTH: Actor::getStrength
+    pub fn strength(self: Entity) core.Error!f64 {
+        const slot_fn = core.slot("actor_get_num") orelse return error.NotProvided;
+        var out_value: f64 = 0;
+        if (!slot_fn(self.actor_id, core.c.PIER_APROP_STRENGTH, &out_value)) return error.NoAnswer;
+        return out_value;
+    }
+
+    /// PIER_APROP_IS_PLAYER: Actor::isPlayer
+    pub fn isPlayer(self: Entity) core.Error!bool {
+        const slot_fn = core.slot("actor_get_num") orelse return error.NotProvided;
+        var out_value: f64 = 0;
+        if (!slot_fn(self.actor_id, core.c.PIER_APROP_IS_PLAYER, &out_value)) return error.NoAnswer;
+        return out_value != 0;
+    }
+
+    /// PIER_APROP_IS_SIMULATED_PLAYER: Actor::isSimulatedPlayer
+    pub fn isSimulatedPlayer(self: Entity) core.Error!bool {
+        const slot_fn = core.slot("actor_get_num") orelse return error.NotProvided;
+        var out_value: f64 = 0;
+        if (!slot_fn(self.actor_id, core.c.PIER_APROP_IS_SIMULATED_PLAYER, &out_value)) return error.NoAnswer;
+        return out_value != 0;
+    }
+
+    /// PIER_APROP_ENTITY_TYPE: Actor::getEntityTypeId, the bits of an entity entry of registry_list
+    pub fn entityType(self: Entity) core.Error!f64 {
+        const slot_fn = core.slot("actor_get_num") orelse return error.NotProvided;
+        var out_value: f64 = 0;
+        if (!slot_fn(self.actor_id, core.c.PIER_APROP_ENTITY_TYPE, &out_value)) return error.NoAnswer;
+        return out_value;
+    }
+
+    /// PIER_APROP_CAN_FLY: Actor::canFly
+    pub fn canFly(self: Entity) core.Error!bool {
+        const slot_fn = core.slot("actor_get_num") orelse return error.NotProvided;
+        var out_value: f64 = 0;
+        if (!slot_fn(self.actor_id, core.c.PIER_APROP_CAN_FLY, &out_value)) return error.NoAnswer;
+        return out_value != 0;
+    }
+
     /// PIER_ASTR_TYPE_NAME: Actor::getTypeName
     pub fn typeName(self: Entity, allocator: std.mem.Allocator) core.Error![]u8 {
         const slot_fn = core.slot("actor_get_str") orelse return error.NotProvided;
@@ -1184,6 +1510,24 @@ pub const Entity = struct {
         var col = core.Collector.init(allocator);
         defer col.deinit();
         if (!slot_fn(self.actor_id, core.c.PIER_ASTR_FILTERED_NAME, &col, &core.Collector.sink)) return error.NoAnswer;
+        return col.take();
+    }
+
+    /// PIER_ASTR_TAGS: Actor::getTags as a JSON array of strings
+    pub fn tags(self: Entity, allocator: std.mem.Allocator) core.Error![]u8 {
+        const slot_fn = core.slot("actor_get_str") orelse return error.NotProvided;
+        var col = core.Collector.init(allocator);
+        defer col.deinit();
+        if (!slot_fn(self.actor_id, core.c.PIER_ASTR_TAGS, &col, &core.Collector.sink)) return error.NoAnswer;
+        return col.take();
+    }
+
+    /// PIER_ASTR_OWNER_ID: Actor::getOwnerId as a decimal actor id, -1 when it has none
+    pub fn ownerId(self: Entity, allocator: std.mem.Allocator) core.Error![]u8 {
+        const slot_fn = core.slot("actor_get_str") orelse return error.NotProvided;
+        var col = core.Collector.init(allocator);
+        defer col.deinit();
+        if (!slot_fn(self.actor_id, core.c.PIER_ASTR_OWNER_ID, &col, &core.Collector.sink)) return error.NoAnswer;
         return col.take();
     }
 
@@ -1549,6 +1893,239 @@ pub const Entity = struct {
         if (!slot_fn(self.actor_id, core.c.PIER_AACT_SET_ROTATION, core.str(s_arg), n_a, n_b, n_c, &col, &core.Collector.sink)) return error.Refused;
         return col.takeOrEmpty();
     }
+
+    /// PIER_AACT_SET_SITTING: a: non-zero sits. Actor::setSitting
+    ///
+    /// The output, when the verb has one, is returned; abi.h names each argument.
+    pub fn setSitting(self: Entity, allocator: std.mem.Allocator, s_arg: []const u8, n_a: f64, n_b: f64, n_c: f64) core.Error![]u8 {
+        const slot_fn = core.slot("actor_action") orelse return error.NotProvided;
+        var col = core.Collector.init(allocator);
+        defer col.deinit();
+        if (!slot_fn(self.actor_id, core.c.PIER_AACT_SET_SITTING, core.str(s_arg), n_a, n_b, n_c, &col, &core.Collector.sink)) return error.Refused;
+        return col.takeOrEmpty();
+    }
+
+    /// PIER_AACT_START_RIDING: sarg: the vehicle actor id in decimal, a: non-zero forces. Actor::startRiding
+    ///
+    /// The output, when the verb has one, is returned; abi.h names each argument.
+    pub fn startRiding(self: Entity, allocator: std.mem.Allocator, s_arg: []const u8, n_a: f64, n_b: f64, n_c: f64) core.Error![]u8 {
+        const slot_fn = core.slot("actor_action") orelse return error.NotProvided;
+        var col = core.Collector.init(allocator);
+        defer col.deinit();
+        if (!slot_fn(self.actor_id, core.c.PIER_AACT_START_RIDING, core.str(s_arg), n_a, n_b, n_c, &col, &core.Collector.sink)) return error.Refused;
+        return col.takeOrEmpty();
+    }
+
+    /// PIER_AACT_ATTRIBUTE_SET: sarg: attribute name, a: value. BaseAttributeMap::setCurrentValue
+    ///
+    /// The output, when the verb has one, is returned; abi.h names each argument.
+    pub fn attributeSet(self: Entity, allocator: std.mem.Allocator, s_arg: []const u8, n_a: f64, n_b: f64, n_c: f64) core.Error![]u8 {
+        const slot_fn = core.slot("actor_action") orelse return error.NotProvided;
+        var col = core.Collector.init(allocator);
+        defer col.deinit();
+        if (!slot_fn(self.actor_id, core.c.PIER_AACT_ATTRIBUTE_SET, core.str(s_arg), n_a, n_b, n_c, &col, &core.Collector.sink)) return error.Refused;
+        return col.takeOrEmpty();
+    }
+
+    /// PIER_AACT_ATTRIBUTE_SET_MAX: sarg: attribute name, a: maximum. BaseAttributeMap::setMaxValue
+    ///
+    /// The output, when the verb has one, is returned; abi.h names each argument.
+    pub fn attributeSetMax(self: Entity, allocator: std.mem.Allocator, s_arg: []const u8, n_a: f64, n_b: f64, n_c: f64) core.Error![]u8 {
+        const slot_fn = core.slot("actor_action") orelse return error.NotProvided;
+        var col = core.Collector.init(allocator);
+        defer col.deinit();
+        if (!slot_fn(self.actor_id, core.c.PIER_AACT_ATTRIBUTE_SET_MAX, core.str(s_arg), n_a, n_b, n_c, &col, &core.Collector.sink)) return error.Refused;
+        return col.takeOrEmpty();
+    }
+
+    /// PIER_AACT_ATTRIBUTE_SET_DEFAULT: sarg: attribute name, a: default. BaseAttributeMap::setDefaultValue
+    ///
+    /// The output, when the verb has one, is returned; abi.h names each argument.
+    pub fn attributeSetDefault(self: Entity, allocator: std.mem.Allocator, s_arg: []const u8, n_a: f64, n_b: f64, n_c: f64) core.Error![]u8 {
+        const slot_fn = core.slot("actor_action") orelse return error.NotProvided;
+        var col = core.Collector.init(allocator);
+        defer col.deinit();
+        if (!slot_fn(self.actor_id, core.c.PIER_AACT_ATTRIBUTE_SET_DEFAULT, core.str(s_arg), n_a, n_b, n_c, &col, &core.Collector.sink)) return error.Refused;
+        return col.takeOrEmpty();
+    }
+
+    /// PIER_AACT_ATTRIBUTE_LIST: out: a JSON array of the attribute names this actor has, of the ones the attribute verbs know
+    ///
+    /// The output, when the verb has one, is returned; abi.h names each argument.
+    pub fn attributeList(self: Entity, allocator: std.mem.Allocator, s_arg: []const u8, n_a: f64, n_b: f64, n_c: f64) core.Error![]u8 {
+        const slot_fn = core.slot("actor_action") orelse return error.NotProvided;
+        var col = core.Collector.init(allocator);
+        defer col.deinit();
+        if (!slot_fn(self.actor_id, core.c.PIER_AACT_ATTRIBUTE_LIST, core.str(s_arg), n_a, n_b, n_c, &col, &core.Collector.sink)) return error.Refused;
+        return col.takeOrEmpty();
+    }
+
+    /// PIER_AACT_ATTRIBUTE_INFO: sarg: attribute name; out: JSON {current, min, max, default}
+    ///
+    /// The output, when the verb has one, is returned; abi.h names each argument.
+    pub fn attributeInfo(self: Entity, allocator: std.mem.Allocator, s_arg: []const u8, n_a: f64, n_b: f64, n_c: f64) core.Error![]u8 {
+        const slot_fn = core.slot("actor_action") orelse return error.NotProvided;
+        var col = core.Collector.init(allocator);
+        defer col.deinit();
+        if (!slot_fn(self.actor_id, core.c.PIER_AACT_ATTRIBUTE_INFO, core.str(s_arg), n_a, n_b, n_c, &col, &core.Collector.sink)) return error.Refused;
+        return col.takeOrEmpty();
+    }
+
+    const internal = @import("internal.zig");
+    const types = @import("types.zig");
+
+    /// The whole actor as SNBT, owned by the caller.
+    pub fn snapshot(self: Entity, allocator: std.mem.Allocator) core.Error![]u8 {
+        const f = core.slot("actor_snapshot") orelse return error.NotProvided;
+        return core.sinkOne(allocator, f, .{self.actor_id});
+    }
+
+    /// Clones this actor to a given position.
+    pub fn cloneAt(self: Entity, dim: i32, x: f64, y: f64, z: f64) core.Error!Entity {
+        const f = core.slot("actor_clone") orelse return error.NotProvided;
+        var out: i64 = 0;
+        if (!f(self.actor_id, dim, x, y, z, &out)) return error.Refused;
+        return Entity.of(out);
+    }
+
+    /// The distance between two actors. The host refuses across dimensions.
+    pub fn distanceTo(self: Entity, other: Entity) core.Error!f64 {
+        const f = core.slot("actor_distance_to") orelse return error.NotProvided;
+        var out: f64 = 0;
+        if (!f(self.actor_id, other.actor_id, &out)) return error.NoAnswer;
+        return out;
+    }
+
+    /// The bounding box.
+    pub fn aabb(self: Entity, allocator: std.mem.Allocator) core.Error!types.Aabb {
+        const f = core.slot("actor_get_aabb") orelse return error.NotProvided;
+        const text = try core.sinkOne(allocator, f, .{self.actor_id});
+        defer allocator.free(text);
+        var arena = std.heap.ArenaAllocator.init(allocator);
+        defer arena.deinit();
+        const v = try internal.parse(arena.allocator(), text);
+        return .{
+            .min = internal.vecOf(v.get("min") orelse return error.NoAnswer) orelse return error.NoAnswer,
+            .max = internal.vecOf(v.get("max") orelse return error.NoAnswer) orelse return error.NoAnswer,
+        };
+    }
+
+    /// Every status effect on this actor.
+    pub fn effects(self: Entity, allocator: std.mem.Allocator) core.Error!types.Owned(types.Effect) {
+        const f = core.slot("actor_get_effects") orelse return error.NotProvided;
+        const text = try core.sinkOne(allocator, f, .{self.actor_id});
+        defer allocator.free(text);
+        var arena = std.heap.ArenaAllocator.init(allocator);
+        errdefer arena.deinit();
+        const a = arena.allocator();
+        const root = try internal.parse(a, text);
+        const items = switch (root) {
+            .list => |list| list,
+            else => return error.NoAnswer,
+        };
+        var out: std.ArrayList(types.Effect) = .empty;
+        for (items) |entry| {
+            const id: []const u8 = if (entry.get("id")) |v| switch (v) {
+                .string => |s| try a.dupe(u8, s),
+                else => if (internal.intOf(v)) |n| try std.fmt.allocPrint(a, "{d}", .{n}) else "",
+            } else "";
+            try out.append(a, .{
+                .id = id,
+                .ticks = std.math.cast(i32, entry.getInt("ticks") orelse 0) orelse 0,
+                .amplifier = std.math.cast(i32, entry.getInt("amplifier") orelse 0) orelse 0,
+                .visible = entry.getBool("visible") orelse true,
+            });
+        }
+        return .{ .arena = arena, .items = try out.toOwnedSlice(a) };
+    }
+
+    /// What is equipped in one slot, as item SNBT owned by the caller.
+    pub fn equippedItem(self: Entity, allocator: std.mem.Allocator, slot: types.EquipSlot) core.Error![]u8 {
+        const f = core.slot("actor_get_equipped_item") orelse return error.NotProvided;
+        return core.sinkOne(allocator, f, .{ self.actor_id, @intFromEnum(slot) });
+    }
+
+    pub fn setEquippedItem(self: Entity, slot: types.EquipSlot, item_snbt: []const u8) core.Error!void {
+        const f = core.slot("actor_set_equipped_item") orelse return error.NotProvided;
+        try core.expect(f(self.actor_id, @intFromEnum(slot), core.str(item_snbt)));
+    }
+
+    fn related(comptime slot_name: []const u8, self: Entity) core.Error!?Entity {
+        const f = core.slot(slot_name) orelse return error.NotProvided;
+        var out: i64 = 0;
+        if (!f(self.actor_id, &out) or out == 0) return null;
+        return Entity.of(out);
+    }
+
+    /// The vehicle being ridden. Riding nothing gives null and only a missing slot is an error.
+    pub fn vehicle(self: Entity) core.Error!?Entity {
+        return related("actor_get_vehicle", self);
+    }
+
+    pub fn firstPassenger(self: Entity) core.Error!?Entity {
+        return related("actor_get_first_passenger", self);
+    }
+
+    pub fn owner(self: Entity) core.Error!?Entity {
+        return related("actor_get_owner", self);
+    }
+
+    pub fn target(self: Entity) core.Error!?Entity {
+        return related("actor_get_target", self);
+    }
+
+    /// Reads one bit of `ActorFlags`.
+    pub fn statusFlag(self: Entity, flag_index: i32) core.Error!bool {
+        const f = core.slot("actor_get_status_flag") orelse return error.NotProvided;
+        return f(self.actor_id, flag_index);
+    }
+
+    pub fn setStatusFlag(self: Entity, flag_index: i32, value: bool) core.Error!void {
+        const f = core.slot("actor_set_status_flag") orelse return error.NotProvided;
+        try core.expect(f(self.actor_id, flag_index, value));
+    }
+
+    fn rayHit(allocator: std.mem.Allocator, text: []const u8) core.Error!types.RayHit {
+        var arena = std.heap.ArenaAllocator.init(allocator);
+        defer arena.deinit();
+        const v = try internal.parse(arena.allocator(), text);
+        const kind = v.getString("type") orelse "none";
+        const zero = types.Vec3{ .x = 0, .y = 0, .z = 0 };
+        const pos = if (v.get("pos")) |p| internal.vecOf(p) orelse zero else zero;
+        if (std.mem.eql(u8, kind, "entity")) {
+            const id = v.getInt("entity_id") orelse v.getInt("entity") orelse return error.NoAnswer;
+            return .{ .entity = .{ .id = id, .pos = pos } };
+        }
+        if (std.mem.eql(u8, kind, "block")) {
+            const cell = if (v.get("block")) |b| internal.posOf(b) else null;
+            const block = cell orelse types.Pos3{ .x = @intFromFloat(@floor(pos.x)), .y = @intFromFloat(@floor(pos.y)), .z = @intFromFloat(@floor(pos.z)) };
+            return .{ .block = .{
+                .block = block,
+                .facing = std.math.cast(i32, v.getInt("facing") orelse -1) orelse -1,
+                .name = try allocator.dupe(u8, v.getString("block_name") orelse ""),
+                .pos = pos,
+            } };
+        }
+        if (std.mem.eql(u8, kind, "none")) return .none;
+        return error.NoAnswer;
+    }
+
+    /// Casts a ray along the line of sight of this actor and reports what it hits. A block hit
+    /// carries a name owned by `allocator`; `RayHit.deinit` frees it.
+    pub fn traceRay(self: Entity, allocator: std.mem.Allocator, max_dist: f32, include_actors: bool, include_blocks: bool) core.Error!types.RayHit {
+        const f = core.slot("actor_trace_ray") orelse return error.NotProvided;
+        const text = try core.sinkOne(allocator, f, .{ self.actor_id, max_dist, include_actors, include_blocks });
+        defer allocator.free(text);
+        return rayHit(allocator, text);
+    }
+
+    /// As `traceRay`, reporting the hit as a block cell and carrying the face that was hit.
+    pub fn traceRayBlocks(self: Entity, allocator: std.mem.Allocator, max_dist: f32, include_actors: bool, include_blocks: bool) core.Error!types.RayHit {
+        const f = core.slot("edit_trace_ray") orelse return error.NotProvided;
+        const text = try core.sinkOne(allocator, f, .{ self.actor_id, max_dist, include_actors, include_blocks });
+        defer allocator.free(text);
+        return rayHit(allocator, text);
+    }
 };
 
 /// One block cell of a dimension.
@@ -1794,6 +2371,46 @@ pub const BlockAt = struct {
         return out_value;
     }
 
+    /// PIER_BPROP_IS_THIN_FENCE: BlockType::isThinFenceBlock
+    pub fn isThinFence(self: BlockAt) core.Error!bool {
+        const slot_fn = core.slot("block_get_num") orelse return error.NotProvided;
+        var out_value: f64 = 0;
+        if (!slot_fn(self.dim_id, self.pos_x, self.pos_y, self.pos_z, core.c.PIER_BPROP_IS_THIN_FENCE, &out_value)) return error.NoAnswer;
+        return out_value != 0;
+    }
+
+    /// PIER_BPROP_IS_LEVER: BlockType::isLeverBlock
+    pub fn isLever(self: BlockAt) core.Error!bool {
+        const slot_fn = core.slot("block_get_num") orelse return error.NotProvided;
+        var out_value: f64 = 0;
+        if (!slot_fn(self.dim_id, self.pos_x, self.pos_y, self.pos_z, core.c.PIER_BPROP_IS_LEVER, &out_value)) return error.NoAnswer;
+        return out_value != 0;
+    }
+
+    /// PIER_BPROP_IS_STEM: BlockType::isStemBlock
+    pub fn isStem(self: BlockAt) core.Error!bool {
+        const slot_fn = core.slot("block_get_num") orelse return error.NotProvided;
+        var out_value: f64 = 0;
+        if (!slot_fn(self.dim_id, self.pos_x, self.pos_y, self.pos_z, core.c.PIER_BPROP_IS_STEM, &out_value)) return error.NoAnswer;
+        return out_value != 0;
+    }
+
+    /// PIER_BPROP_CAN_INSTATICK: BlockType::canInstatick
+    pub fn canInstatick(self: BlockAt) core.Error!bool {
+        const slot_fn = core.slot("block_get_num") orelse return error.NotProvided;
+        var out_value: f64 = 0;
+        if (!slot_fn(self.dim_id, self.pos_x, self.pos_y, self.pos_z, core.c.PIER_BPROP_CAN_INSTATICK, &out_value)) return error.NoAnswer;
+        return out_value != 0;
+    }
+
+    /// PIER_BPROP_MAP_COLOR: BlockType::getMapColor as 0xRRGGBB
+    pub fn mapColor(self: BlockAt) core.Error!f64 {
+        const slot_fn = core.slot("block_get_num") orelse return error.NotProvided;
+        var out_value: f64 = 0;
+        if (!slot_fn(self.dim_id, self.pos_x, self.pos_y, self.pos_z, core.c.PIER_BPROP_MAP_COLOR, &out_value)) return error.NoAnswer;
+        return out_value;
+    }
+
     /// PIER_BSTR_TYPE_NAME: Block::getTypeName
     pub fn typeName(self: BlockAt, allocator: std.mem.Allocator) core.Error![]u8 {
         const slot_fn = core.slot("block_get_str") orelse return error.NotProvided;
@@ -1917,6 +2534,30 @@ pub const BlockAt = struct {
         defer col.deinit();
         if (!slot_fn(self.dim_id, self.pos_x, self.pos_y, self.pos_z, core.c.PIER_BACT_AS_ITEM, core.str(s_arg), &col, &core.Collector.sink)) return error.Refused;
         return col.takeOrEmpty();
+    }
+
+    /// One block state value by its name, owned by the caller.
+    pub fn getStateValue(self: BlockAt, allocator: std.mem.Allocator, state_name: []const u8) core.Error![]u8 {
+        const f = core.slot("block_get_state") orelse return error.NotProvided;
+        return core.sinkOne(allocator, f, .{ self.dim_id, self.pos_x, self.pos_y, self.pos_z, core.str(state_name) });
+    }
+
+    /// Writes one block state value, given as text.
+    pub fn setStateValue(self: BlockAt, state_name: []const u8, value: []const u8) core.Error!void {
+        const f = core.slot("block_set_state") orelse return error.NotProvided;
+        try core.expect(f(self.dim_id, self.pos_x, self.pos_y, self.pos_z, core.str(state_name), core.str(value)));
+    }
+
+    /// The block entity as SNBT, owned by the caller. NoAnswer when the cell holds none.
+    pub fn blockEntity(self: BlockAt, allocator: std.mem.Allocator) core.Error![]u8 {
+        const f = core.slot("block_entity_snbt") orelse return error.NotProvided;
+        return core.sinkOne(allocator, f, .{ self.dim_id, self.pos_x, self.pos_y, self.pos_z });
+    }
+
+    /// The collision shape as the host writes it, owned by the caller.
+    pub fn collisionBox(self: BlockAt, allocator: std.mem.Allocator) core.Error![]u8 {
+        const f = core.slot("block_get_collision_shape") orelse return error.NotProvided;
+        return core.sinkOne(allocator, f, .{ self.dim_id, self.pos_x, self.pos_y, self.pos_z });
     }
 };
 
@@ -2152,6 +2793,110 @@ pub const Item = struct {
         return out_value != 0;
     }
 
+    /// PIER_IPROP_IS_FOOD: Item::isFood
+    pub fn isFood(self: Item) core.Error!bool {
+        const slot_fn = core.slot("item_get_num") orelse return error.NotProvided;
+        var out_value: f64 = 0;
+        if (!slot_fn(core.str(self.item_snbt), core.c.PIER_IPROP_IS_FOOD, &out_value)) return error.NoAnswer;
+        return out_value != 0;
+    }
+
+    /// PIER_IPROP_IS_DYEABLE: Item::isDyeable
+    pub fn isDyeable(self: Item) core.Error!bool {
+        const slot_fn = core.slot("item_get_num") orelse return error.NotProvided;
+        var out_value: f64 = 0;
+        if (!slot_fn(core.str(self.item_snbt), core.c.PIER_IPROP_IS_DYEABLE, &out_value)) return error.NoAnswer;
+        return out_value != 0;
+    }
+
+    /// PIER_IPROP_IS_HAND_EQUIPPED: Item::isHandEquipped
+    pub fn isHandEquipped(self: Item) core.Error!bool {
+        const slot_fn = core.slot("item_get_num") orelse return error.NotProvided;
+        var out_value: f64 = 0;
+        if (!slot_fn(core.str(self.item_snbt), core.c.PIER_IPROP_IS_HAND_EQUIPPED, &out_value)) return error.NoAnswer;
+        return out_value != 0;
+    }
+
+    /// PIER_IPROP_IS_LIQUID_CLIP: Item::isLiquidClipItem
+    pub fn isLiquidClip(self: Item) core.Error!bool {
+        const slot_fn = core.slot("item_get_num") orelse return error.NotProvided;
+        var out_value: f64 = 0;
+        if (!slot_fn(core.str(self.item_snbt), core.c.PIER_IPROP_IS_LIQUID_CLIP, &out_value)) return error.NoAnswer;
+        return out_value != 0;
+    }
+
+    /// PIER_IPROP_IS_STACKED_BY_DATA: Item::isStackedByData
+    pub fn isStackedByData(self: Item) core.Error!bool {
+        const slot_fn = core.slot("item_get_num") orelse return error.NotProvided;
+        var out_value: f64 = 0;
+        if (!slot_fn(core.str(self.item_snbt), core.c.PIER_IPROP_IS_STACKED_BY_DATA, &out_value)) return error.NoAnswer;
+        return out_value != 0;
+    }
+
+    /// PIER_IPROP_COOLDOWN_DURATION: Item::getCooldownDuration, in ticks
+    pub fn cooldownDuration(self: Item) core.Error!f64 {
+        const slot_fn = core.slot("item_get_num") orelse return error.NotProvided;
+        var out_value: f64 = 0;
+        if (!slot_fn(core.str(self.item_snbt), core.c.PIER_IPROP_COOLDOWN_DURATION, &out_value)) return error.NoAnswer;
+        return out_value;
+    }
+
+    /// PIER_IPROP_IS_COMPONENT_BASED: Item::isComponentBased
+    pub fn isComponentBased(self: Item) core.Error!bool {
+        const slot_fn = core.slot("item_get_num") orelse return error.NotProvided;
+        var out_value: f64 = 0;
+        if (!slot_fn(core.str(self.item_snbt), core.c.PIER_IPROP_IS_COMPONENT_BASED, &out_value)) return error.NoAnswer;
+        return out_value != 0;
+    }
+
+    /// PIER_IPROP_IS_HUMANOID_ARMOR: Item::isHumanoidArmor
+    pub fn isHumanoidArmor(self: Item) core.Error!bool {
+        const slot_fn = core.slot("item_get_num") orelse return error.NotProvided;
+        var out_value: f64 = 0;
+        if (!slot_fn(core.str(self.item_snbt), core.c.PIER_IPROP_IS_HUMANOID_ARMOR, &out_value)) return error.NoAnswer;
+        return out_value != 0;
+    }
+
+    /// PIER_IPROP_ARMOR_VALUE: Item::getArmorValue
+    pub fn armorValue(self: Item) core.Error!f64 {
+        const slot_fn = core.slot("item_get_num") orelse return error.NotProvided;
+        var out_value: f64 = 0;
+        if (!slot_fn(core.str(self.item_snbt), core.c.PIER_IPROP_ARMOR_VALUE, &out_value)) return error.NoAnswer;
+        return out_value;
+    }
+
+    /// PIER_IPROP_CAN_BE_DEPLETED: Item::canBeDepleted
+    pub fn canBeDepleted(self: Item) core.Error!bool {
+        const slot_fn = core.slot("item_get_num") orelse return error.NotProvided;
+        var out_value: f64 = 0;
+        if (!slot_fn(core.str(self.item_snbt), core.c.PIER_IPROP_CAN_BE_DEPLETED, &out_value)) return error.NoAnswer;
+        return out_value != 0;
+    }
+
+    /// PIER_IPROP_IS_USEABLE: Item::isUseable
+    pub fn isUseable(self: Item) core.Error!bool {
+        const slot_fn = core.slot("item_get_num") orelse return error.NotProvided;
+        var out_value: f64 = 0;
+        if (!slot_fn(core.str(self.item_snbt), core.c.PIER_IPROP_IS_USEABLE, &out_value)) return error.NoAnswer;
+        return out_value != 0;
+    }
+
+    /// PIER_IPROP_CAN_DESTROY_IN_CREATIVE: Item::canDestroyInCreative
+    pub fn canDestroyInCreative(self: Item) core.Error!bool {
+        const slot_fn = core.slot("item_get_num") orelse return error.NotProvided;
+        var out_value: f64 = 0;
+        if (!slot_fn(core.str(self.item_snbt), core.c.PIER_IPROP_CAN_DESTROY_IN_CREATIVE, &out_value)) return error.NoAnswer;
+        return out_value != 0;
+    }
+
+    /// PIER_IPROP_SHOWS_DURABILITY_IN_CREATIVE: Item::showsDurabilityInCreative
+    pub fn showsDurabilityInCreative(self: Item) core.Error!f64 {
+        const slot_fn = core.slot("item_get_num") orelse return error.NotProvided;
+        var out_value: f64 = 0;
+        if (!slot_fn(core.str(self.item_snbt), core.c.PIER_IPROP_SHOWS_DURABILITY_IN_CREATIVE, &out_value)) return error.NoAnswer;
+        return out_value;
+    }
+
     /// PIER_ISTR_TYPE_NAME: ItemStackBase::getTypeName ("minecraft:apple")
     pub fn typeName(self: Item, allocator: std.mem.Allocator) core.Error![]u8 {
         const slot_fn = core.slot("item_get_str") orelse return error.NotProvided;
@@ -2250,6 +2995,159 @@ pub const Item = struct {
         if (!slot_fn(core.str(self.item_snbt), core.c.PIER_ISTR_COLOR, &col, &core.Collector.sink)) return error.NoAnswer;
         return col.take();
     }
+
+    const internal = @import("internal.zig");
+    const types = @import("types.zig");
+    const nbt = @import("nbt.zig");
+
+    /// Builds an item from a type name and a count, as SNBT owned by the caller.
+    pub fn create(allocator: std.mem.Allocator, type_name: []const u8, amount: u8) std.mem.Allocator.Error![]u8 {
+        var w = nbt.Writer.init(allocator);
+        errdefer w.deinit();
+        try w.beginCompound();
+        try w.key("Name");
+        try w.string(type_name);
+        try w.key("Count");
+        try w.byte(@intCast(@min(amount, 127)));
+        try w.endCompound();
+        return w.toOwnedSlice();
+    }
+
+    /// Whether two items are the same kind of thing.
+    pub fn matches(self: Item, other: Item) core.Error!bool {
+        const f = core.slot("item_matches") orelse return error.NotProvided;
+        return f(core.str(self.item_snbt), core.str(other.item_snbt));
+    }
+
+    /// Runs one transform and returns the new item as SNBT, owned by the caller. This item is unchanged.
+    pub fn transform(self: Item, allocator: std.mem.Allocator, op: types.ItemOp, sarg: []const u8, narg: f64) core.Error![]u8 {
+        const f = core.slot("item_transform") orelse return error.NotProvided;
+        return core.sinkOne(allocator, f, .{ core.str(self.item_snbt), @intFromEnum(op), core.str(sarg), narg });
+    }
+
+    pub fn withCustomName(self: Item, allocator: std.mem.Allocator, new_name: []const u8) core.Error![]u8 {
+        return self.transform(allocator, .set_custom_name, new_name, 0);
+    }
+
+    pub fn withoutCustomName(self: Item, allocator: std.mem.Allocator) core.Error![]u8 {
+        return self.transform(allocator, .reset_name, "", 0);
+    }
+
+    pub fn withDamage(self: Item, allocator: std.mem.Allocator, value: i32) core.Error![]u8 {
+        return self.transform(allocator, .set_damage, "", @floatFromInt(value));
+    }
+
+    pub fn withCount(self: Item, allocator: std.mem.Allocator, amount: u8) core.Error![]u8 {
+        return self.transform(allocator, .set_count, "", @floatFromInt(amount));
+    }
+
+    pub fn withUnbreakable(self: Item, allocator: std.mem.Allocator, on: bool) core.Error![]u8 {
+        return self.transform(allocator, .set_unbreakable, "", if (on) 1 else 0);
+    }
+
+    /// Wears the item down by `wear`, breaking it when it runs out.
+    pub fn hurtAndBreak(self: Item, allocator: std.mem.Allocator, wear: i32) core.Error![]u8 {
+        return self.transform(allocator, .hurt_and_break, "", @floatFromInt(wear));
+    }
+
+    pub fn withRepairCost(self: Item, allocator: std.mem.Allocator, cost: i32) core.Error![]u8 {
+        return self.transform(allocator, .set_repair_cost, "", @floatFromInt(cost));
+    }
+
+    fn listText(allocator: std.mem.Allocator, lines: []const []const u8) std.mem.Allocator.Error![]u8 {
+        var w = nbt.Writer.init(allocator);
+        errdefer w.deinit();
+        try w.beginList();
+        for (lines) |line| try w.string(line);
+        try w.endList();
+        return w.toOwnedSlice();
+    }
+
+    /// Sets the lore, one string per line.
+    pub fn withLore(self: Item, allocator: std.mem.Allocator, lines: []const []const u8) core.Error![]u8 {
+        const text = try listText(allocator, lines);
+        defer allocator.free(text);
+        return self.transform(allocator, .set_lore, text, 0);
+    }
+
+    pub fn withoutLore(self: Item, allocator: std.mem.Allocator) core.Error![]u8 {
+        return self.transform(allocator, .clear_lore, "", 0);
+    }
+
+    /// Adds an enchantment. A level of 0 removes it, as far as the engine is concerned.
+    pub fn withEnchant(self: Item, allocator: std.mem.Allocator, enchant_id: []const u8, level: i32) core.Error![]u8 {
+        const spec = try std.fmt.allocPrint(allocator, "{s}:{d}", .{ enchant_id, level });
+        defer allocator.free(spec);
+        return self.transform(allocator, .add_enchant, spec, 0);
+    }
+
+    pub fn withoutEnchants(self: Item, allocator: std.mem.Allocator) core.Error![]u8 {
+        return self.transform(allocator, .remove_enchants, "", 0);
+    }
+
+    /// The blocks the item may break in adventure mode.
+    pub fn withCanDestroy(self: Item, allocator: std.mem.Allocator, blocks: []const []const u8) core.Error![]u8 {
+        const text = try listText(allocator, blocks);
+        defer allocator.free(text);
+        return self.transform(allocator, .set_can_destroy, text, 0);
+    }
+
+    /// The blocks the item may be placed on in adventure mode.
+    pub fn withCanPlaceOn(self: Item, allocator: std.mem.Allocator, blocks: []const []const u8) core.Error![]u8 {
+        const text = try listText(allocator, blocks);
+        defer allocator.free(text);
+        return self.transform(allocator, .set_can_place_on, text, 0);
+    }
+
+    /// The enchantments on the item.
+    pub fn enchants(self: Item, allocator: std.mem.Allocator) core.Error!types.Owned(types.Enchant) {
+        const f = core.slot("item_get_enchants") orelse return error.NotProvided;
+        const text = try core.sinkOne(allocator, f, .{core.str(self.item_snbt)});
+        defer allocator.free(text);
+        var arena = std.heap.ArenaAllocator.init(allocator);
+        errdefer arena.deinit();
+        const a = arena.allocator();
+        const root = try internal.parse(a, text);
+        const items = switch (root) {
+            .list => |list| list,
+            else => return error.NoAnswer,
+        };
+        var out: std.ArrayList(types.Enchant) = .empty;
+        for (items) |entry| {
+            const enchant_id: []const u8 = switch (entry.get("id") orelse continue) {
+                .string => |s| try a.dupe(u8, s),
+                else => |v| try std.fmt.allocPrint(a, "{d}", .{internal.intOf(v) orelse continue}),
+            };
+            try out.append(a, .{ .id = enchant_id, .level = std.math.cast(i32, entry.getInt("level") orelse 1) orelse 1 });
+        }
+        return .{ .arena = arena, .items = try out.toOwnedSlice(a) };
+    }
+
+    /// Replaces the whole enchantment set and returns the new item as SNBT, owned by the caller.
+    /// Every current host answers NotProvided: writing enchantments is not implemented, and
+    /// `withEnchant` is the way to add one.
+    pub fn withEnchants(self: Item, allocator: std.mem.Allocator, set: []const types.Enchant) core.Error![]u8 {
+        const f = core.slot("item_set_enchants") orelse return error.NotProvided;
+        var w = nbt.Writer.init(allocator);
+        defer w.deinit();
+        try w.beginList();
+        for (set) |e| {
+            try w.beginCompound();
+            try w.key("id");
+            try w.string(e.id);
+            try w.key("level");
+            try w.int(e.level);
+            try w.endCompound();
+        }
+        try w.endList();
+        return core.sinkOne(allocator, f, .{ core.str(self.item_snbt), core.str(w.text()) });
+    }
+
+    /// The custom NBT of the item, the `tag` section, as SNBT owned by the caller. It goes through a dedicated slot and not a string property.
+    pub fn userDataSnbt(self: Item, allocator: std.mem.Allocator) core.Error![]u8 {
+        const f = core.slot("item_get_user_data") orelse return error.NotProvided;
+        return core.sinkOne(allocator, f, .{core.str(self.item_snbt)});
+    }
 };
 
 /// PIER_SRV_BDS_VERSION: Common::getGameVersionString
@@ -2288,6 +3186,51 @@ pub fn srvGameSemVersion(allocator: std.mem.Allocator) core.Error![]u8 {
     return col.take();
 }
 
+/// PIER_SRV_LOADER_VERSION: ll::getLoaderVersion, the running LeviLamina
+pub fn srvLoaderVersion(allocator: std.mem.Allocator) core.Error![]u8 {
+    const slot_fn = core.slot("server_info_str") orelse return error.NotProvided;
+    var col = core.Collector.init(allocator);
+    defer col.deinit();
+    if (!slot_fn(core.c.PIER_SRV_LOADER_VERSION, &col, &core.Collector.sink)) return error.NoAnswer;
+    return col.take();
+}
+
+/// PIER_SRV_LEVEL_NAME: LevelData::mLevelName, the world name
+pub fn srvLevelName(allocator: std.mem.Allocator) core.Error![]u8 {
+    const slot_fn = core.slot("server_info_str") orelse return error.NotProvided;
+    var col = core.Collector.init(allocator);
+    defer col.deinit();
+    if (!slot_fn(core.c.PIER_SRV_LEVEL_NAME, &col, &core.Collector.sink)) return error.NoAnswer;
+    return col.take();
+}
+
+/// PIER_SRV_IS_HARDCORE: LevelData::mIsHardcore, "1" or "0"
+pub fn srvIsHardcore(allocator: std.mem.Allocator) core.Error![]u8 {
+    const slot_fn = core.slot("server_info_str") orelse return error.NotProvided;
+    var col = core.Collector.init(allocator);
+    defer col.deinit();
+    if (!slot_fn(core.c.PIER_SRV_IS_HARDCORE, &col, &core.Collector.sink)) return error.NoAnswer;
+    return col.take();
+}
+
+/// PIER_SRV_WORLD_START_COUNT: LevelData::mWorldStartCount, how many times the world was opened
+pub fn srvWorldStartCount(allocator: std.mem.Allocator) core.Error![]u8 {
+    const slot_fn = core.slot("server_info_str") orelse return error.NotProvided;
+    var col = core.Collector.init(allocator);
+    defer col.deinit();
+    if (!slot_fn(core.c.PIER_SRV_WORLD_START_COUNT, &col, &core.Collector.sink)) return error.NoAnswer;
+    return col.take();
+}
+
+/// PIER_SRV_EDUCATION_FEATURES: LevelData::mEducationFeaturesEnabled, "1" or "0"
+pub fn srvEducationFeatures(allocator: std.mem.Allocator) core.Error![]u8 {
+    const slot_fn = core.slot("server_info_str") orelse return error.NotProvided;
+    var col = core.Collector.init(allocator);
+    defer col.deinit();
+    if (!slot_fn(core.c.PIER_SRV_EDUCATION_FEATURES, &col, &core.Collector.sink)) return error.NoAnswer;
+    return col.take();
+}
+
 /// PIER_SYS_OS_NAME: sys_utils::getSystemName
 pub fn sysOsName(allocator: std.mem.Allocator) core.Error![]u8 {
     const slot_fn = core.slot("sys_info_str") orelse return error.NotProvided;
@@ -2321,5 +3264,14 @@ pub fn sysLocalTime(allocator: std.mem.Allocator) core.Error![]u8 {
     var col = core.Collector.init(allocator);
     defer col.deinit();
     if (!slot_fn(core.c.PIER_SYS_LOCAL_TIME, &col, &core.Collector.sink)) return error.NoAnswer;
+    return col.take();
+}
+
+/// PIER_SYS_PROCESS_ID: the id of the server process
+pub fn sysProcessId(allocator: std.mem.Allocator) core.Error![]u8 {
+    const slot_fn = core.slot("sys_info_str") orelse return error.NotProvided;
+    var col = core.Collector.init(allocator);
+    defer col.deinit();
+    if (!slot_fn(core.c.PIER_SYS_PROCESS_ID, &col, &core.Collector.sink)) return error.NoAnswer;
     return col.take();
 }
