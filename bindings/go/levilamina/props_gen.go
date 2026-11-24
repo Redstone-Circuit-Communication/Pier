@@ -113,6 +113,21 @@ const PPropDimension int32 = 35
 // PPropIsInitialized is PIER_PPROP_IS_INITIALIZED: (G) Player::isPlayerInitialized; 1 for a simulated player
 const PPropIsInitialized int32 = 36
 
+// PPropIsSleeping is PIER_PPROP_IS_SLEEPING: (G) Player::isSleeping
+const PPropIsSleeping int32 = 37
+
+// PPropIsSimulated is PIER_PPROP_IS_SIMULATED: (G) Actor::isSimulatedPlayer
+const PPropIsSimulated int32 = 38
+
+// PPropItemUseDuration is PIER_PPROP_ITEM_USE_DURATION: (G) Player::getItemUseDuration, in ticks
+const PPropItemUseDuration int32 = 39
+
+// PPropXpEarnedAtLevel is PIER_PPROP_XP_EARNED_AT_LEVEL: (G) Player::getXpEarnedAtCurrentLevel
+const PPropXpEarnedAtLevel int32 = 40
+
+// PPropCanFly is PIER_PPROP_CAN_FLY: (G) Actor::canFly
+const PPropCanFly int32 = 41
+
 // PStrRealName is PIER_PSTR_REAL_NAME: Player::getRealName
 const PStrRealName int32 = 0
 
@@ -145,6 +160,12 @@ const PStrPlatformOnlineId int32 = 9
 
 // PStrRespawnPos is PIER_PSTR_RESPAWN_POS: SNBT {x,y,z,dim}: where this player would respawn. Never empty; a player with no bed reports the world spawn, and the two are not distinguishable.
 const PStrRespawnPos int32 = 10
+
+// PStrSelectedItem is PIER_PSTR_SELECTED_ITEM: Player::getSelectedItem as item SNBT
+const PStrSelectedItem int32 = 11
+
+// PStrDeviceModel is PIER_PSTR_DEVICE_MODEL: ConnectionRequest::getDeviceModel; fails for a player with no connection request
+const PStrDeviceModel int32 = 12
 
 // PActSetAbility is PIER_PACT_SET_ABILITY: a=AbilitiesIndex, b=0/1 (bool slots) or float (FlySpeed etc.). Restores PlayerPermissionLevel to its pre-write value afterwards: the engine's LayeredAbilities::setAbility is the "switch to custom permissions" path and pushes the player to Custom, and that level ships to the client inside UpdateAbilitiesPacket together with the ability layer. To change the level, use PIER_PACT_SET_PERMISSION_LEVEL. Refused (false) until the player has finished joining (Player::isPlayerInitialized): an ability written while the client is still loading desynchronizes until the player rejoins. Simulated players are exempt.
 const PActSetAbility int32 = 0
@@ -226,6 +247,15 @@ const PActSidebarClear int32 = 25
 
 // PActSetPermissionLevel is PIER_PACT_SET_PERMISSION_LEVEL: a=PlayerPermissionLevel (0 Visitor, 1 Member, 2 Operator, 3 Custom). LayeredAbilities::setPlayerPermissions plus UpdateAbilitiesPacket. The read side is PIER_PPROP_PERMISSION_LEVEL. Refused until the player has finished joining, like PIER_PACT_SET_ABILITY.
 const PActSetPermissionLevel int32 = 26
+
+// PActStopSleeping is PIER_PACT_STOP_SLEEPING: a: non-zero wakes forcefully. Player::stopSleepInBed; false when not asleep
+const PActStopSleeping int32 = 27
+
+// PActCauseExhaustion is PIER_PACT_CAUSE_EXHAUSTION: a: amount, positive. Player::causeFoodExhaustion
+const PActCauseExhaustion int32 = 28
+
+// PActEat is PIER_PACT_EAT: sarg: item SNBT. Player::eat, the food value of that item
+const PActEat int32 = 29
 
 // APropPosX is PIER_APROP_POS_X: (G) Actor::getPosition().x (feet: getFeetPos for players; POS_* uses getPosition)
 const APropPosX int32 = 0
@@ -371,6 +401,36 @@ const APropDeathTime int32 = 46
 // APropHasPassenger is PIER_APROP_HAS_PASSENGER: (G) Actor::hasPassenger
 const APropHasPassenger int32 = 47
 
+// APropIsSprinting is PIER_APROP_IS_SPRINTING: Actor::isSprinting
+const APropIsSprinting int32 = 48
+
+// APropIsSwimming is PIER_APROP_IS_SWIMMING: Actor::isSwimming
+const APropIsSwimming int32 = 49
+
+// APropIsSleeping is PIER_APROP_IS_SLEEPING: Actor::isSleeping
+const APropIsSleeping int32 = 50
+
+// APropIsSitting is PIER_APROP_IS_SITTING: Actor::isSitting
+const APropIsSitting int32 = 51
+
+// APropIsAngry is PIER_APROP_IS_ANGRY: Actor::isAngry
+const APropIsAngry int32 = 52
+
+// APropStrength is PIER_APROP_STRENGTH: Actor::getStrength
+const APropStrength int32 = 53
+
+// APropIsPlayer is PIER_APROP_IS_PLAYER: Actor::isPlayer
+const APropIsPlayer int32 = 54
+
+// APropIsSimulatedPlayer is PIER_APROP_IS_SIMULATED_PLAYER: Actor::isSimulatedPlayer
+const APropIsSimulatedPlayer int32 = 55
+
+// APropEntityType is PIER_APROP_ENTITY_TYPE: Actor::getEntityTypeId, the bits of an entity entry of registry_list
+const APropEntityType int32 = 56
+
+// APropCanFly is PIER_APROP_CAN_FLY: Actor::canFly
+const APropCanFly int32 = 57
+
 // AStrTypeName is PIER_ASTR_TYPE_NAME: Actor::getTypeName
 const AStrTypeName int32 = 0
 
@@ -382,6 +442,12 @@ const AStrScoreTag int32 = 2
 
 // AStrFilteredName is PIER_ASTR_FILTERED_NAME: Actor::getFilteredNameTag
 const AStrFilteredName int32 = 3
+
+// AStrTags is PIER_ASTR_TAGS: Actor::getTags as a JSON array of strings
+const AStrTags int32 = 4
+
+// AStrOwnerId is PIER_ASTR_OWNER_ID: Actor::getOwnerId as a decimal actor id, -1 when it has none
+const AStrOwnerId int32 = 5
 
 // AActKill is PIER_AACT_KILL: Actor::kill
 const AActKill int32 = 0
@@ -482,6 +548,27 @@ const AActExecuteEvent int32 = 31
 // AActSetRotation is PIER_AACT_SET_ROTATION: a=pitch b=yaw Actor::setRotationWrapped
 const AActSetRotation int32 = 32
 
+// AActSetSitting is PIER_AACT_SET_SITTING: a: non-zero sits. Actor::setSitting
+const AActSetSitting int32 = 33
+
+// AActStartRiding is PIER_AACT_START_RIDING: sarg: the vehicle actor id in decimal, a: non-zero forces. Actor::startRiding
+const AActStartRiding int32 = 34
+
+// AActAttributeSet is PIER_AACT_ATTRIBUTE_SET: sarg: attribute name, a: value. BaseAttributeMap::setCurrentValue
+const AActAttributeSet int32 = 35
+
+// AActAttributeSetMax is PIER_AACT_ATTRIBUTE_SET_MAX: sarg: attribute name, a: maximum. BaseAttributeMap::setMaxValue
+const AActAttributeSetMax int32 = 36
+
+// AActAttributeSetDefault is PIER_AACT_ATTRIBUTE_SET_DEFAULT: sarg: attribute name, a: default. BaseAttributeMap::setDefaultValue
+const AActAttributeSetDefault int32 = 37
+
+// AActAttributeList is PIER_AACT_ATTRIBUTE_LIST: out: a JSON array of the attribute names this actor has, of the ones the attribute verbs know
+const AActAttributeList int32 = 38
+
+// AActAttributeInfo is PIER_AACT_ATTRIBUTE_INFO: sarg: attribute name; out: JSON {current, min, max, default}
+const AActAttributeInfo int32 = 39
+
 // BPropIsAir is PIER_BPROP_IS_AIR: Block::isAir
 const BPropIsAir int32 = 0
 
@@ -568,6 +655,21 @@ const BPropIsSolid int32 = 27
 
 // BPropRequiresTool is PIER_BPROP_REQUIRES_TOOL: Block::requiresCorrectToolForDrops
 const BPropRequiresTool int32 = 28
+
+// BPropIsThinFence is PIER_BPROP_IS_THIN_FENCE: BlockType::isThinFenceBlock
+const BPropIsThinFence int32 = 29
+
+// BPropIsLever is PIER_BPROP_IS_LEVER: BlockType::isLeverBlock
+const BPropIsLever int32 = 30
+
+// BPropIsStem is PIER_BPROP_IS_STEM: BlockType::isStemBlock
+const BPropIsStem int32 = 31
+
+// BPropCanInstatick is PIER_BPROP_CAN_INSTATICK: BlockType::canInstatick
+const BPropCanInstatick int32 = 32
+
+// BPropMapColor is PIER_BPROP_MAP_COLOR: BlockType::getMapColor as 0xRRGGBB
+const BPropMapColor int32 = 33
 
 // BStrTypeName is PIER_BSTR_TYPE_NAME: Block::getTypeName
 const BStrTypeName int32 = 0
@@ -692,6 +794,45 @@ const IPropHasUserData int32 = 26
 // IPropHasCustomName is PIER_IPROP_HAS_CUSTOM_NAME: ItemStackBase::hasCustomHoverName
 const IPropHasCustomName int32 = 27
 
+// IPropIsFood is PIER_IPROP_IS_FOOD: Item::isFood
+const IPropIsFood int32 = 28
+
+// IPropIsDyeable is PIER_IPROP_IS_DYEABLE: Item::isDyeable
+const IPropIsDyeable int32 = 29
+
+// IPropIsHandEquipped is PIER_IPROP_IS_HAND_EQUIPPED: Item::isHandEquipped
+const IPropIsHandEquipped int32 = 30
+
+// IPropIsLiquidClip is PIER_IPROP_IS_LIQUID_CLIP: Item::isLiquidClipItem
+const IPropIsLiquidClip int32 = 31
+
+// IPropIsStackedByData is PIER_IPROP_IS_STACKED_BY_DATA: Item::isStackedByData
+const IPropIsStackedByData int32 = 32
+
+// IPropCooldownDuration is PIER_IPROP_COOLDOWN_DURATION: Item::getCooldownDuration, in ticks
+const IPropCooldownDuration int32 = 33
+
+// IPropIsComponentBased is PIER_IPROP_IS_COMPONENT_BASED: Item::isComponentBased
+const IPropIsComponentBased int32 = 34
+
+// IPropIsHumanoidArmor is PIER_IPROP_IS_HUMANOID_ARMOR: Item::isHumanoidArmor
+const IPropIsHumanoidArmor int32 = 35
+
+// IPropArmorValue is PIER_IPROP_ARMOR_VALUE: Item::getArmorValue
+const IPropArmorValue int32 = 36
+
+// IPropCanBeDepleted is PIER_IPROP_CAN_BE_DEPLETED: Item::canBeDepleted
+const IPropCanBeDepleted int32 = 37
+
+// IPropIsUseable is PIER_IPROP_IS_USEABLE: Item::isUseable
+const IPropIsUseable int32 = 38
+
+// IPropCanDestroyInCreative is PIER_IPROP_CAN_DESTROY_IN_CREATIVE: Item::canDestroyInCreative
+const IPropCanDestroyInCreative int32 = 39
+
+// IPropShowsDurabilityInCreative is PIER_IPROP_SHOWS_DURABILITY_IN_CREATIVE: Item::showsDurabilityInCreative
+const IPropShowsDurabilityInCreative int32 = 40
+
 // IStrTypeName is PIER_ISTR_TYPE_NAME: ItemStackBase::getTypeName ("minecraft:apple")
 const IStrTypeName int32 = 0
 
@@ -737,6 +878,21 @@ const SrvLevelProtocolVersion int32 = 2
 // SrvGameSemVersion is PIER_SRV_GAME_SEM_VERSION: PIER_SRV_GAME_SEM_VERSION
 const SrvGameSemVersion int32 = 3
 
+// SrvLoaderVersion is PIER_SRV_LOADER_VERSION: ll::getLoaderVersion, the running LeviLamina
+const SrvLoaderVersion int32 = 4
+
+// SrvLevelName is PIER_SRV_LEVEL_NAME: LevelData::mLevelName, the world name
+const SrvLevelName int32 = 5
+
+// SrvIsHardcore is PIER_SRV_IS_HARDCORE: LevelData::mIsHardcore, "1" or "0"
+const SrvIsHardcore int32 = 6
+
+// SrvWorldStartCount is PIER_SRV_WORLD_START_COUNT: LevelData::mWorldStartCount, how many times the world was opened
+const SrvWorldStartCount int32 = 7
+
+// SrvEducationFeatures is PIER_SRV_EDUCATION_FEATURES: LevelData::mEducationFeaturesEnabled, "1" or "0"
+const SrvEducationFeatures int32 = 8
+
 // SysOsName is PIER_SYS_OS_NAME: sys_utils::getSystemName
 const SysOsName int32 = 0
 
@@ -748,6 +904,315 @@ const SysLocale int32 = 2
 
 // SysLocalTime is PIER_SYS_LOCAL_TIME: sys_utils::getLocalTime → SNBT {year,month,day,hour,minute,second,ms}
 const SysLocalTime int32 = 3
+
+// SysProcessId is PIER_SYS_PROCESS_ID: the id of the server process
+const SysProcessId int32 = 4
+
+// CPropPosX is PIER_CPROP_POS_X: Actor::getFeetPos of the local player
+const CPropPosX int32 = 0
+
+// CPropPosY is PIER_CPROP_POS_Y: feet height, the same point get_player_position reports
+const CPropPosY int32 = 1
+
+// CPropPosZ is PIER_CPROP_POS_Z: PIER_CPROP_POS_Z
+const CPropPosZ int32 = 2
+
+// CPropPitch is PIER_CPROP_PITCH: Actor::getRotation, degrees; negative looks up
+const CPropPitch int32 = 3
+
+// CPropYaw is PIER_CPROP_YAW: Actor::getRotation, degrees
+const CPropYaw int32 = 4
+
+// CPropDimension is PIER_CPROP_DIMENSION: Actor::getDimensionId of the local player
+const CPropDimension int32 = 5
+
+// CPropGuiScale is PIER_CPROP_GUI_SCALE: IClientInstance::getGuiScale
+const CPropGuiScale int32 = 6
+
+// CPropServerPingMs is PIER_CPROP_SERVER_PING_MS: IClientInstance::getServerPingTime
+const CPropServerPingMs int32 = 7
+
+// CPropIsShowingMenu is PIER_CPROP_IS_SHOWING_MENU: IClientInstance::isShowingMenu, 1 or 0
+const CPropIsShowingMenu int32 = 8
+
+// CPropIsShowingPauseScreen is PIER_CPROP_IS_SHOWING_PAUSE_SCREEN: IClientInstance::isShowingPauseScreen
+const CPropIsShowingPauseScreen int32 = 9
+
+// CPropIsPlaying is PIER_CPROP_IS_PLAYING: IClientInstance::isPlaying
+const CPropIsPlaying int32 = 10
+
+// CPropIsInRealm is PIER_CPROP_IS_IN_REALM: IClientInstance::isInRealm
+const CPropIsInRealm int32 = 11
+
+// CPropIsGameInputEnabled is PIER_CPROP_IS_GAME_INPUT_ENABLED: IClientInstance::isInGameInputEnabled
+const CPropIsGameInputEnabled int32 = 12
+
+// CPropHealth is PIER_CPROP_HEALTH: Actor::getHealth of the local player
+const CPropHealth int32 = 13
+
+// CPropMaxHealth is PIER_CPROP_MAX_HEALTH: Actor::getMaxHealth of the local player
+const CPropMaxHealth int32 = 14
+
+// CPropIsOnGround is PIER_CPROP_IS_ON_GROUND: Actor::isOnGround of the local player
+const CPropIsOnGround int32 = 15
+
+// CPropIsInWater is PIER_CPROP_IS_IN_WATER: Actor::isInWater of the local player
+const CPropIsInWater int32 = 16
+
+// CPropIsSneaking is PIER_CPROP_IS_SNEAKING: Actor::isSneaking of the local player
+const CPropIsSneaking int32 = 17
+
+// CPropIsSprinting is PIER_CPROP_IS_SPRINTING: Actor::isSprinting of the local player
+const CPropIsSprinting int32 = 18
+
+// CPropIsSwimming is PIER_CPROP_IS_SWIMMING: Actor::isSwimming of the local player
+const CPropIsSwimming int32 = 19
+
+// CPropIsOnFire is PIER_CPROP_IS_ON_FIRE: Actor::isOnFire of the local player
+const CPropIsOnFire int32 = 20
+
+// CPropIsFlying is PIER_CPROP_IS_FLYING: Player::isFlying of the local player
+const CPropIsFlying int32 = 21
+
+// CPropGameType is PIER_CPROP_GAME_TYPE: Player::getPlayerGameType of the local player
+const CPropGameType int32 = 22
+
+// CPropSelectedSlot is PIER_CPROP_SELECTED_SLOT: Player::getSelectedItemSlot of the local player
+const CPropSelectedSlot int32 = 23
+
+// CPropVelX is PIER_CPROP_VEL_X: Actor::getPosDelta of the local player, blocks per tick
+const CPropVelX int32 = 24
+
+// CPropVelY is PIER_CPROP_VEL_Y: Actor::getPosDelta, the vertical part
+const CPropVelY int32 = 25
+
+// CPropVelZ is PIER_CPROP_VEL_Z: Actor::getPosDelta, the z part
+const CPropVelZ int32 = 26
+
+// CPropXpNeededNextLevel is PIER_CPROP_XP_NEEDED_NEXT_LEVEL: Player::getXpNeededForNextLevel of the local player
+const CPropXpNeededNextLevel int32 = 27
+
+// CPropIsLeavingGame is PIER_CPROP_IS_LEAVING_GAME: IClientInstance::isLeavingGame
+const CPropIsLeavingGame int32 = 28
+
+// CPropIsExitingLevel is PIER_CPROP_IS_EXITING_LEVEL: IClientInstance::isExitingLevel
+const CPropIsExitingLevel int32 = 29
+
+// CPropIsInBedScreen is PIER_CPROP_IS_IN_BED_SCREEN: IClientInstance::isInBedScreen
+const CPropIsInBedScreen int32 = 30
+
+// CPropIsInDeathScreen is PIER_CPROP_IS_IN_DEATH_SCREEN: IClientInstance::isInDeathScreen
+const CPropIsInDeathScreen int32 = 31
+
+// CPropIsShowingLoadingScreen is PIER_CPROP_IS_SHOWING_LOADING_SCREEN: IClientInstance::isShowingLoadingScreen
+const CPropIsShowingLoadingScreen int32 = 32
+
+// CPropIsShowingProgressScreen is PIER_CPROP_IS_SHOWING_PROGRESS_SCREEN: IClientInstance::isShowingProgressScreen
+const CPropIsShowingProgressScreen int32 = 33
+
+// CPropIsShowingWorldProgressScreen is PIER_CPROP_IS_SHOWING_WORLD_PROGRESS_SCREEN: IClientInstance::isShowingWorldProgressScreen
+const CPropIsShowingWorldProgressScreen int32 = 34
+
+// CPropIsShowingDeathScreen is PIER_CPROP_IS_SHOWING_DEATH_SCREEN: IClientInstance::isShowingDeathScreen
+const CPropIsShowingDeathScreen int32 = 35
+
+// CPropIsShowingServerForm is PIER_CPROP_IS_SHOWING_SERVER_FORM: IClientInstance::isShowingServerForm
+const CPropIsShowingServerForm int32 = 36
+
+// CPropIsInWorldWithoutMenu is PIER_CPROP_IS_IN_WORLD_WITHOUT_MENU: IClientInstance::isInWorldAndNotShowingAnyMenuScreens
+const CPropIsInWorldWithoutMenu int32 = 37
+
+// CPropIsWorldActive is PIER_CPROP_IS_WORLD_ACTIVE: IClientInstance::isWorldActive
+const CPropIsWorldActive int32 = 38
+
+// CPropHasLevel is PIER_CPROP_HAS_LEVEL: IClientInstance::hasLevel
+const CPropHasLevel int32 = 39
+
+// CPropIsPreGame is PIER_CPROP_IS_PRE_GAME: IClientInstance::isPreGame
+const CPropIsPreGame int32 = 40
+
+// CPropIsInMultiplayerGame is PIER_CPROP_IS_IN_MULTIPLAYER_GAME: IClientInstance::isInMultiplayerGame
+const CPropIsInMultiplayerGame int32 = 41
+
+// CPropIsMultiplayerClient is PIER_CPROP_IS_MULTIPLAYER_CLIENT: IClientInstance::isMultiPlayerClient
+const CPropIsMultiplayerClient int32 = 42
+
+// CPropIsPrimaryLevelMultiplayer is PIER_CPROP_IS_PRIMARY_LEVEL_MULTIPLAYER: IClientInstance::isPrimaryLevelMultiplayer
+const CPropIsPrimaryLevelMultiplayer int32 = 43
+
+// CPropIsPrimaryLevelCrossPlatform is PIER_CPROP_IS_PRIMARY_LEVEL_CROSS_PLATFORM: IClientInstance::isPrimaryLevelCrossPlatformMultiplayer
+const CPropIsPrimaryLevelCrossPlatform int32 = 44
+
+// CPropIsKeyboardEnabled is PIER_CPROP_IS_KEYBOARD_ENABLED: IClientInstance::isKeyboardEnabled
+const CPropIsKeyboardEnabled int32 = 45
+
+// CPropIsUsingController is PIER_CPROP_IS_USING_CONTROLLER: IClientInstance::useController
+const CPropIsUsingController int32 = 46
+
+// CPropIsUsingTouchscreen is PIER_CPROP_IS_USING_TOUCHSCREEN: IClientInstance::useTouchscreen
+const CPropIsUsingTouchscreen int32 = 47
+
+// CPropIsMouseGrabbed is PIER_CPROP_IS_MOUSE_GRABBED: IClientInstance::getMouseGrabbed
+const CPropIsMouseGrabbed int32 = 48
+
+// CPropIsMouseAndKeyboard is PIER_CPROP_IS_MOUSE_AND_KEYBOARD: IClientInstance::currentInputModeIsMouseAndKeyboard
+const CPropIsMouseAndKeyboard int32 = 49
+
+// CPropHasConnectedController is PIER_CPROP_HAS_CONNECTED_CONTROLLER: IClientInstance::hasConnectedController
+const CPropHasConnectedController int32 = 50
+
+// CPropControllerId is PIER_CPROP_CONTROLLER_ID: IClientInstance::getControllerId
+const CPropControllerId int32 = 51
+
+// CPropIsTouchGameplayAllowed is PIER_CPROP_IS_TOUCH_GAMEPLAY_ALLOWED: IClientInstance::isTouchGameplayAllowed
+const CPropIsTouchGameplayAllowed int32 = 52
+
+// CPropIsSplitScreenActive is PIER_CPROP_IS_SPLIT_SCREEN_ACTIVE: IClientInstance::isSplitScreenActive
+const CPropIsSplitScreenActive int32 = 53
+
+// CPropSplitScreenCount is PIER_CPROP_SPLIT_SCREEN_COUNT: IClientInstance::getSplitScreenCount
+const CPropSplitScreenCount int32 = 54
+
+// CPropGuiScaleOffset is PIER_CPROP_GUI_SCALE_OFFSET: IClientInstance::getGuiScaleOffset
+const CPropGuiScaleOffset int32 = 55
+
+// CPropIsEduMode is PIER_CPROP_IS_EDU_MODE: IClientInstance::isEduMode
+const CPropIsEduMode int32 = 56
+
+// CPropIsInEditor is PIER_CPROP_IS_IN_EDITOR: IClientInstance::isPlayerInEditor
+const CPropIsInEditor int32 = 57
+
+// CPropIsReadyToRender is PIER_CPROP_IS_READY_TO_RENDER: IClientInstance::isReadyToRender
+const CPropIsReadyToRender int32 = 58
+
+// CPropIsFullVanillaPackOnStack is PIER_CPROP_IS_FULL_VANILLA_PACK_ON_STACK: IClientInstance::isFullVanillaPackOnStack
+const CPropIsFullVanillaPackOnStack int32 = 59
+
+// CPropServerConnectionTime is PIER_CPROP_SERVER_CONNECTION_TIME: IClientInstance::getServerConnectionTime
+const CPropServerConnectionTime int32 = 60
+
+// CPropRemoteServerTimeMs is PIER_CPROP_REMOTE_SERVER_TIME_MS: IClientInstance::getRemoteServerTimeMs
+const CPropRemoteServerTimeMs int32 = 61
+
+// CPropRemoteServerNetworkTimeMs is PIER_CPROP_REMOTE_SERVER_NETWORK_TIME_MS: IClientInstance::getRemoteServerNetworkTimeMs
+const CPropRemoteServerNetworkTimeMs int32 = 62
+
+// CPropFrameAlpha is PIER_CPROP_FRAME_ALPHA: IClientInstance::getFrameAlpha, how far the frame is between two ticks
+const CPropFrameAlpha int32 = 63
+
+// CPropGameUpdateSeconds is PIER_CPROP_GAME_UPDATE_SECONDS: IClientInstance::getGameUpdateDurationInSeconds
+const CPropGameUpdateSeconds int32 = 64
+
+// CPropIsPrimaryClient is PIER_CPROP_IS_PRIMARY_CLIENT: IClientInstance::isPrimaryClient
+const CPropIsPrimaryClient int32 = 65
+
+// CPropUserId is PIER_CPROP_USER_ID: IClientInstance::getUserId
+const CPropUserId int32 = 66
+
+// CPropIsGameplayTipsEnabled is PIER_CPROP_IS_GAMEPLAY_TIPS_ENABLED: IClientInstance::isGamePlayTipsEnabled
+const CPropIsGameplayTipsEnabled int32 = 67
+
+// CPropHasCommands is PIER_CPROP_HAS_COMMANDS: IClientInstance::hasCommands
+const CPropHasCommands int32 = 68
+
+// CStrScreenName is PIER_CSTR_SCREEN_NAME: IClientInstance::getScreenName, as client_get_screen_name
+const CStrScreenName int32 = 0
+
+// CStrTopScreenName is PIER_CSTR_TOP_SCREEN_NAME: IClientInstance::getTopScreenName
+const CStrTopScreenName int32 = 1
+
+// CStrPlatformId is PIER_CSTR_PLATFORM_ID: IClientInstance::getPlatformId
+const CStrPlatformId int32 = 2
+
+// CStrPlatformOnlineId is PIER_CSTR_PLATFORM_ONLINE_ID: IClientInstance::getPlatformOnlineId
+const CStrPlatformOnlineId int32 = 3
+
+// CStrLocalXuid is PIER_CSTR_LOCAL_XUID: Player::getXuid of the local player; fails outside a world
+const CStrLocalXuid int32 = 4
+
+// CStrLocalUuid is PIER_CSTR_LOCAL_UUID: Player::getUuid of the local player in its canonical form
+const CStrLocalUuid int32 = 5
+
+// CStrLocalNameTag is PIER_CSTR_LOCAL_NAME_TAG: Actor::getNameTag of the local player
+const CStrLocalNameTag int32 = 6
+
+// CStrClipboard is PIER_CSTR_CLIPBOARD: AppPlatform::getClipboardText, the system clipboard
+const CStrClipboard int32 = 7
+
+// CActShowMessage is PIER_CACT_SHOW_MESSAGE: sarg: text. GuiData::displayClientMessage
+const CActShowMessage int32 = 0
+
+// CActSetTitle is PIER_CACT_SET_TITLE: sarg: text. GuiData::setTitle
+const CActSetTitle int32 = 1
+
+// CActSetSubtitle is PIER_CACT_SET_SUBTITLE: sarg: text. GuiData::setSubtitle
+const CActSetSubtitle int32 = 2
+
+// CActSetActionBar is PIER_CACT_SET_ACTION_BAR: sarg: text. GuiData::setActionBarMessage
+const CActSetActionBar int32 = 3
+
+// CActShowTip is PIER_CACT_SHOW_TIP: sarg: text. GuiData::showTipMessage
+const CActShowTip int32 = 4
+
+// CActPlayUiSound is PIER_CACT_PLAY_UI_SOUND: sarg: sound name, a: volume, b: pitch. IClientInstance::playUI
+const CActPlayUiSound int32 = 5
+
+// CActGrabMouse is PIER_CACT_GRAB_MOUSE: IClientInstance::grabMouse
+const CActGrabMouse int32 = 6
+
+// CActReleaseMouse is PIER_CACT_RELEASE_MOUSE: IClientInstance::releaseMouse
+const CActReleaseMouse int32 = 7
+
+// CActSetInputDisabled is PIER_CACT_SET_INPUT_DISABLED: a: non-zero disables game input. IClientInstance::setDisableInput
+const CActSetInputDisabled int32 = 8
+
+// CActLeaveLevel is PIER_CACT_LEAVE_LEVEL: IClientInstance::requestLeaveGame(true, false): leaves the world for the menus, asynchronously
+const CActLeaveLevel int32 = 9
+
+// CActShowPopup is PIER_CACT_SHOW_POPUP: sarg: message, or message and subtitle split at the first newline. GuiData::showPopupNotice
+const CActShowPopup int32 = 10
+
+// CActShowDevConsoleMessage is PIER_CACT_SHOW_DEV_CONSOLE_MESSAGE: sarg: text. GuiData::displayDevConsoleMessage
+const CActShowDevConsoleMessage int32 = 11
+
+// CActSetSuspendInput is PIER_CACT_SET_SUSPEND_INPUT: a: non-zero suspends input. IClientInstance::setSuspendInput
+const CActSetSuspendInput int32 = 12
+
+// CActSetSuspendDirectionalInput is PIER_CACT_SET_SUSPEND_DIRECTIONAL_INPUT: a: non-zero suspends movement input. IClientInstance::setSuspendDirectionalInput
+const CActSetSuspendDirectionalInput int32 = 13
+
+// CActSetGameInputEnabled is PIER_CACT_SET_GAME_INPUT_ENABLED: a: non-zero enables. IClientInstance::setInGameInputEnabled
+const CActSetGameInputEnabled int32 = 14
+
+// CActRefocusMouse is PIER_CACT_REFOCUS_MOUSE: a: non-zero when the mouse was lost. IClientInstance::refocusMouse
+const CActRefocusMouse int32 = 15
+
+// CActMuteAudio is PIER_CACT_MUTE_AUDIO: IClientInstance::muteAudio
+const CActMuteAudio int32 = 16
+
+// CActUnmuteAudio is PIER_CACT_UNMUTE_AUDIO: IClientInstance::unMuteAudio
+const CActUnmuteAudio int32 = 17
+
+// CActFadeOutMusic is PIER_CACT_FADE_OUT_MUSIC: IClientInstance::fadeOutMusic
+const CActFadeOutMusic int32 = 18
+
+// CActSetGuiScaleOffset is PIER_CACT_SET_GUI_SCALE_OFFSET: a: the offset. IClientInstance::setGuiScaleOffset
+const CActSetGuiScaleOffset int32 = 19
+
+// CActResetPlayerMovement is PIER_CACT_RESET_PLAYER_MOVEMENT: IClientInstance::resetPlayerMovement
+const CActResetPlayerMovement int32 = 20
+
+// CActPushLeaveGameScreen is PIER_CACT_PUSH_LEAVE_GAME_SCREEN: IClientInstance::tryPushLeaveGameScreen
+const CActPushLeaveGameScreen int32 = 21
+
+// CActOpenContentLogHistory is PIER_CACT_OPEN_CONTENT_LOG_HISTORY: IClientInstance::openContentLogHistory
+const CActOpenContentLogHistory int32 = 22
+
+// CActSetClipboard is PIER_CACT_SET_CLIPBOARD: sarg: text, empty allowed. AppPlatform::setClipboard
+const CActSetClipboard int32 = 23
+
+// CActNavigateHowToPlay is PIER_CACT_NAVIGATE_HOW_TO_PLAY: sarg: the topic, empty allowed. IClientInstance::navigateToHowToPlayScreen
+const CActNavigateHowToPlay int32 = 24
 
 // GameType reads PIER_PPROP_GAME_TYPE: (G) Player::getPlayerGameType; write via player_set_gamemode
 func (p Player) GameType() (float64, error) {
@@ -1253,6 +1718,66 @@ func (p Player) IsInitialized() (bool, error) {
 	return v != 0, nil
 }
 
+// IsSleeping reads PIER_PPROP_IS_SLEEPING: (G) Player::isSleeping
+func (p Player) IsSleeping() (bool, error) {
+	v, ok, err := Raw.PlayerGetNum(p.Sel, PPropIsSleeping)
+	if err != nil {
+		return false, err
+	}
+	if !ok {
+		return false, noAnswer("PIER_PPROP_IS_SLEEPING")
+	}
+	return v != 0, nil
+}
+
+// IsSimulated reads PIER_PPROP_IS_SIMULATED: (G) Actor::isSimulatedPlayer
+func (p Player) IsSimulated() (bool, error) {
+	v, ok, err := Raw.PlayerGetNum(p.Sel, PPropIsSimulated)
+	if err != nil {
+		return false, err
+	}
+	if !ok {
+		return false, noAnswer("PIER_PPROP_IS_SIMULATED")
+	}
+	return v != 0, nil
+}
+
+// ItemUseDuration reads PIER_PPROP_ITEM_USE_DURATION: (G) Player::getItemUseDuration, in ticks
+func (p Player) ItemUseDuration() (float64, error) {
+	v, ok, err := Raw.PlayerGetNum(p.Sel, PPropItemUseDuration)
+	if err != nil {
+		return 0, err
+	}
+	if !ok {
+		return 0, noAnswer("PIER_PPROP_ITEM_USE_DURATION")
+	}
+	return v, nil
+}
+
+// XpEarnedAtLevel reads PIER_PPROP_XP_EARNED_AT_LEVEL: (G) Player::getXpEarnedAtCurrentLevel
+func (p Player) XpEarnedAtLevel() (float64, error) {
+	v, ok, err := Raw.PlayerGetNum(p.Sel, PPropXpEarnedAtLevel)
+	if err != nil {
+		return 0, err
+	}
+	if !ok {
+		return 0, noAnswer("PIER_PPROP_XP_EARNED_AT_LEVEL")
+	}
+	return v, nil
+}
+
+// CanFly reads PIER_PPROP_CAN_FLY: (G) Actor::canFly
+func (p Player) CanFly() (bool, error) {
+	v, ok, err := Raw.PlayerGetNum(p.Sel, PPropCanFly)
+	if err != nil {
+		return false, err
+	}
+	if !ok {
+		return false, noAnswer("PIER_PPROP_CAN_FLY")
+	}
+	return v != 0, nil
+}
+
 // RealName reads PIER_PSTR_REAL_NAME: Player::getRealName
 func (p Player) RealName() (string, error) {
 	out, ok, err := Raw.PlayerGetStr(p.Sel, PStrRealName)
@@ -1381,6 +1906,30 @@ func (p Player) RespawnPos() (string, error) {
 	}
 	if !ok || len(out) == 0 {
 		return "", noAnswer("PIER_PSTR_RESPAWN_POS")
+	}
+	return out[len(out)-1], nil
+}
+
+// SelectedItem reads PIER_PSTR_SELECTED_ITEM: Player::getSelectedItem as item SNBT
+func (p Player) SelectedItem() (string, error) {
+	out, ok, err := Raw.PlayerGetStr(p.Sel, PStrSelectedItem)
+	if err != nil {
+		return "", err
+	}
+	if !ok || len(out) == 0 {
+		return "", noAnswer("PIER_PSTR_SELECTED_ITEM")
+	}
+	return out[len(out)-1], nil
+}
+
+// DeviceModel reads PIER_PSTR_DEVICE_MODEL: ConnectionRequest::getDeviceModel; fails for a player with no connection request
+func (p Player) DeviceModel() (string, error) {
+	out, ok, err := Raw.PlayerGetStr(p.Sel, PStrDeviceModel)
+	if err != nil {
+		return "", err
+	}
+	if !ok || len(out) == 0 {
+		return "", noAnswer("PIER_PSTR_DEVICE_MODEL")
 	}
 	return out[len(out)-1], nil
 }
@@ -1837,6 +2386,57 @@ func (p Player) SetPermissionLevel(sarg string, a, b, c float64) (string, error)
 	}
 	if !ok {
 		return "", refused("PIER_PACT_SET_PERMISSION_LEVEL")
+	}
+	if len(out) == 0 {
+		return "", nil
+	}
+	return out[len(out)-1], nil
+}
+
+// StopSleeping runs PIER_PACT_STOP_SLEEPING: a: non-zero wakes forcefully. Player::stopSleepInBed; false when not asleep
+//
+// The output, when the verb has one, is returned; abi.h names each argument.
+func (p Player) StopSleeping(sarg string, a, b, c float64) (string, error) {
+	out, ok, err := Raw.PlayerAction(p.Sel, PActStopSleeping, sarg, a, b, c)
+	if err != nil {
+		return "", err
+	}
+	if !ok {
+		return "", refused("PIER_PACT_STOP_SLEEPING")
+	}
+	if len(out) == 0 {
+		return "", nil
+	}
+	return out[len(out)-1], nil
+}
+
+// CauseExhaustion runs PIER_PACT_CAUSE_EXHAUSTION: a: amount, positive. Player::causeFoodExhaustion
+//
+// The output, when the verb has one, is returned; abi.h names each argument.
+func (p Player) CauseExhaustion(sarg string, a, b, c float64) (string, error) {
+	out, ok, err := Raw.PlayerAction(p.Sel, PActCauseExhaustion, sarg, a, b, c)
+	if err != nil {
+		return "", err
+	}
+	if !ok {
+		return "", refused("PIER_PACT_CAUSE_EXHAUSTION")
+	}
+	if len(out) == 0 {
+		return "", nil
+	}
+	return out[len(out)-1], nil
+}
+
+// Eat runs PIER_PACT_EAT: sarg: item SNBT. Player::eat, the food value of that item
+//
+// The output, when the verb has one, is returned; abi.h names each argument.
+func (p Player) Eat(sarg string, a, b, c float64) (string, error) {
+	out, ok, err := Raw.PlayerAction(p.Sel, PActEat, sarg, a, b, c)
+	if err != nil {
+		return "", err
+	}
+	if !ok {
+		return "", refused("PIER_PACT_EAT")
 	}
 	if len(out) == 0 {
 		return "", nil
@@ -2422,6 +3022,126 @@ func (e Entity) HasPassenger() (bool, error) {
 	return v != 0, nil
 }
 
+// IsSprinting reads PIER_APROP_IS_SPRINTING: Actor::isSprinting
+func (e Entity) IsSprinting() (bool, error) {
+	v, ok, err := Raw.ActorGetNum(e.ID, APropIsSprinting)
+	if err != nil {
+		return false, err
+	}
+	if !ok {
+		return false, noAnswer("PIER_APROP_IS_SPRINTING")
+	}
+	return v != 0, nil
+}
+
+// IsSwimming reads PIER_APROP_IS_SWIMMING: Actor::isSwimming
+func (e Entity) IsSwimming() (bool, error) {
+	v, ok, err := Raw.ActorGetNum(e.ID, APropIsSwimming)
+	if err != nil {
+		return false, err
+	}
+	if !ok {
+		return false, noAnswer("PIER_APROP_IS_SWIMMING")
+	}
+	return v != 0, nil
+}
+
+// IsSleeping reads PIER_APROP_IS_SLEEPING: Actor::isSleeping
+func (e Entity) IsSleeping() (bool, error) {
+	v, ok, err := Raw.ActorGetNum(e.ID, APropIsSleeping)
+	if err != nil {
+		return false, err
+	}
+	if !ok {
+		return false, noAnswer("PIER_APROP_IS_SLEEPING")
+	}
+	return v != 0, nil
+}
+
+// IsSitting reads PIER_APROP_IS_SITTING: Actor::isSitting
+func (e Entity) IsSitting() (bool, error) {
+	v, ok, err := Raw.ActorGetNum(e.ID, APropIsSitting)
+	if err != nil {
+		return false, err
+	}
+	if !ok {
+		return false, noAnswer("PIER_APROP_IS_SITTING")
+	}
+	return v != 0, nil
+}
+
+// IsAngry reads PIER_APROP_IS_ANGRY: Actor::isAngry
+func (e Entity) IsAngry() (bool, error) {
+	v, ok, err := Raw.ActorGetNum(e.ID, APropIsAngry)
+	if err != nil {
+		return false, err
+	}
+	if !ok {
+		return false, noAnswer("PIER_APROP_IS_ANGRY")
+	}
+	return v != 0, nil
+}
+
+// Strength reads PIER_APROP_STRENGTH: Actor::getStrength
+func (e Entity) Strength() (float64, error) {
+	v, ok, err := Raw.ActorGetNum(e.ID, APropStrength)
+	if err != nil {
+		return 0, err
+	}
+	if !ok {
+		return 0, noAnswer("PIER_APROP_STRENGTH")
+	}
+	return v, nil
+}
+
+// IsPlayer reads PIER_APROP_IS_PLAYER: Actor::isPlayer
+func (e Entity) IsPlayer() (bool, error) {
+	v, ok, err := Raw.ActorGetNum(e.ID, APropIsPlayer)
+	if err != nil {
+		return false, err
+	}
+	if !ok {
+		return false, noAnswer("PIER_APROP_IS_PLAYER")
+	}
+	return v != 0, nil
+}
+
+// IsSimulatedPlayer reads PIER_APROP_IS_SIMULATED_PLAYER: Actor::isSimulatedPlayer
+func (e Entity) IsSimulatedPlayer() (bool, error) {
+	v, ok, err := Raw.ActorGetNum(e.ID, APropIsSimulatedPlayer)
+	if err != nil {
+		return false, err
+	}
+	if !ok {
+		return false, noAnswer("PIER_APROP_IS_SIMULATED_PLAYER")
+	}
+	return v != 0, nil
+}
+
+// EntityType reads PIER_APROP_ENTITY_TYPE: Actor::getEntityTypeId, the bits of an entity entry of registry_list
+func (e Entity) EntityType() (float64, error) {
+	v, ok, err := Raw.ActorGetNum(e.ID, APropEntityType)
+	if err != nil {
+		return 0, err
+	}
+	if !ok {
+		return 0, noAnswer("PIER_APROP_ENTITY_TYPE")
+	}
+	return v, nil
+}
+
+// CanFly reads PIER_APROP_CAN_FLY: Actor::canFly
+func (e Entity) CanFly() (bool, error) {
+	v, ok, err := Raw.ActorGetNum(e.ID, APropCanFly)
+	if err != nil {
+		return false, err
+	}
+	if !ok {
+		return false, noAnswer("PIER_APROP_CAN_FLY")
+	}
+	return v != 0, nil
+}
+
 // TypeName reads PIER_ASTR_TYPE_NAME: Actor::getTypeName
 func (e Entity) TypeName() (string, error) {
 	out, ok, err := Raw.ActorGetStr(e.ID, AStrTypeName)
@@ -2466,6 +3186,30 @@ func (e Entity) FilteredName() (string, error) {
 	}
 	if !ok || len(out) == 0 {
 		return "", noAnswer("PIER_ASTR_FILTERED_NAME")
+	}
+	return out[len(out)-1], nil
+}
+
+// Tags reads PIER_ASTR_TAGS: Actor::getTags as a JSON array of strings
+func (e Entity) Tags() (string, error) {
+	out, ok, err := Raw.ActorGetStr(e.ID, AStrTags)
+	if err != nil {
+		return "", err
+	}
+	if !ok || len(out) == 0 {
+		return "", noAnswer("PIER_ASTR_TAGS")
+	}
+	return out[len(out)-1], nil
+}
+
+// OwnerId reads PIER_ASTR_OWNER_ID: Actor::getOwnerId as a decimal actor id, -1 when it has none
+func (e Entity) OwnerId() (string, error) {
+	out, ok, err := Raw.ActorGetStr(e.ID, AStrOwnerId)
+	if err != nil {
+		return "", err
+	}
+	if !ok || len(out) == 0 {
+		return "", noAnswer("PIER_ASTR_OWNER_ID")
 	}
 	return out[len(out)-1], nil
 }
@@ -3031,6 +3775,125 @@ func (e Entity) SetRotation(sarg string, a, b, c float64) (string, error) {
 	return out[len(out)-1], nil
 }
 
+// SetSitting runs PIER_AACT_SET_SITTING: a: non-zero sits. Actor::setSitting
+//
+// The output, when the verb has one, is returned; abi.h names each argument.
+func (e Entity) SetSitting(sarg string, a, b, c float64) (string, error) {
+	out, ok, err := Raw.ActorAction(e.ID, AActSetSitting, sarg, a, b, c)
+	if err != nil {
+		return "", err
+	}
+	if !ok {
+		return "", refused("PIER_AACT_SET_SITTING")
+	}
+	if len(out) == 0 {
+		return "", nil
+	}
+	return out[len(out)-1], nil
+}
+
+// StartRiding runs PIER_AACT_START_RIDING: sarg: the vehicle actor id in decimal, a: non-zero forces. Actor::startRiding
+//
+// The output, when the verb has one, is returned; abi.h names each argument.
+func (e Entity) StartRiding(sarg string, a, b, c float64) (string, error) {
+	out, ok, err := Raw.ActorAction(e.ID, AActStartRiding, sarg, a, b, c)
+	if err != nil {
+		return "", err
+	}
+	if !ok {
+		return "", refused("PIER_AACT_START_RIDING")
+	}
+	if len(out) == 0 {
+		return "", nil
+	}
+	return out[len(out)-1], nil
+}
+
+// AttributeSet runs PIER_AACT_ATTRIBUTE_SET: sarg: attribute name, a: value. BaseAttributeMap::setCurrentValue
+//
+// The output, when the verb has one, is returned; abi.h names each argument.
+func (e Entity) AttributeSet(sarg string, a, b, c float64) (string, error) {
+	out, ok, err := Raw.ActorAction(e.ID, AActAttributeSet, sarg, a, b, c)
+	if err != nil {
+		return "", err
+	}
+	if !ok {
+		return "", refused("PIER_AACT_ATTRIBUTE_SET")
+	}
+	if len(out) == 0 {
+		return "", nil
+	}
+	return out[len(out)-1], nil
+}
+
+// AttributeSetMax runs PIER_AACT_ATTRIBUTE_SET_MAX: sarg: attribute name, a: maximum. BaseAttributeMap::setMaxValue
+//
+// The output, when the verb has one, is returned; abi.h names each argument.
+func (e Entity) AttributeSetMax(sarg string, a, b, c float64) (string, error) {
+	out, ok, err := Raw.ActorAction(e.ID, AActAttributeSetMax, sarg, a, b, c)
+	if err != nil {
+		return "", err
+	}
+	if !ok {
+		return "", refused("PIER_AACT_ATTRIBUTE_SET_MAX")
+	}
+	if len(out) == 0 {
+		return "", nil
+	}
+	return out[len(out)-1], nil
+}
+
+// AttributeSetDefault runs PIER_AACT_ATTRIBUTE_SET_DEFAULT: sarg: attribute name, a: default. BaseAttributeMap::setDefaultValue
+//
+// The output, when the verb has one, is returned; abi.h names each argument.
+func (e Entity) AttributeSetDefault(sarg string, a, b, c float64) (string, error) {
+	out, ok, err := Raw.ActorAction(e.ID, AActAttributeSetDefault, sarg, a, b, c)
+	if err != nil {
+		return "", err
+	}
+	if !ok {
+		return "", refused("PIER_AACT_ATTRIBUTE_SET_DEFAULT")
+	}
+	if len(out) == 0 {
+		return "", nil
+	}
+	return out[len(out)-1], nil
+}
+
+// AttributeList runs PIER_AACT_ATTRIBUTE_LIST: out: a JSON array of the attribute names this actor has, of the ones the attribute verbs know
+//
+// The output, when the verb has one, is returned; abi.h names each argument.
+func (e Entity) AttributeList(sarg string, a, b, c float64) (string, error) {
+	out, ok, err := Raw.ActorAction(e.ID, AActAttributeList, sarg, a, b, c)
+	if err != nil {
+		return "", err
+	}
+	if !ok {
+		return "", refused("PIER_AACT_ATTRIBUTE_LIST")
+	}
+	if len(out) == 0 {
+		return "", nil
+	}
+	return out[len(out)-1], nil
+}
+
+// AttributeInfo runs PIER_AACT_ATTRIBUTE_INFO: sarg: attribute name; out: JSON {current, min, max, default}
+//
+// The output, when the verb has one, is returned; abi.h names each argument.
+func (e Entity) AttributeInfo(sarg string, a, b, c float64) (string, error) {
+	out, ok, err := Raw.ActorAction(e.ID, AActAttributeInfo, sarg, a, b, c)
+	if err != nil {
+		return "", err
+	}
+	if !ok {
+		return "", refused("PIER_AACT_ATTRIBUTE_INFO")
+	}
+	if len(out) == 0 {
+		return "", nil
+	}
+	return out[len(out)-1], nil
+}
+
 // IsAir reads PIER_BPROP_IS_AIR: Block::isAir
 func (b BlockAt) IsAir() (bool, error) {
 	v, ok, err := Raw.BlockGetNum(b.Dim, b.X, b.Y, b.Z, BPropIsAir)
@@ -3379,6 +4242,66 @@ func (b BlockAt) RequiresTool() (float64, error) {
 	}
 	if !ok {
 		return 0, noAnswer("PIER_BPROP_REQUIRES_TOOL")
+	}
+	return v, nil
+}
+
+// IsThinFence reads PIER_BPROP_IS_THIN_FENCE: BlockType::isThinFenceBlock
+func (b BlockAt) IsThinFence() (bool, error) {
+	v, ok, err := Raw.BlockGetNum(b.Dim, b.X, b.Y, b.Z, BPropIsThinFence)
+	if err != nil {
+		return false, err
+	}
+	if !ok {
+		return false, noAnswer("PIER_BPROP_IS_THIN_FENCE")
+	}
+	return v != 0, nil
+}
+
+// IsLever reads PIER_BPROP_IS_LEVER: BlockType::isLeverBlock
+func (b BlockAt) IsLever() (bool, error) {
+	v, ok, err := Raw.BlockGetNum(b.Dim, b.X, b.Y, b.Z, BPropIsLever)
+	if err != nil {
+		return false, err
+	}
+	if !ok {
+		return false, noAnswer("PIER_BPROP_IS_LEVER")
+	}
+	return v != 0, nil
+}
+
+// IsStem reads PIER_BPROP_IS_STEM: BlockType::isStemBlock
+func (b BlockAt) IsStem() (bool, error) {
+	v, ok, err := Raw.BlockGetNum(b.Dim, b.X, b.Y, b.Z, BPropIsStem)
+	if err != nil {
+		return false, err
+	}
+	if !ok {
+		return false, noAnswer("PIER_BPROP_IS_STEM")
+	}
+	return v != 0, nil
+}
+
+// CanInstatick reads PIER_BPROP_CAN_INSTATICK: BlockType::canInstatick
+func (b BlockAt) CanInstatick() (bool, error) {
+	v, ok, err := Raw.BlockGetNum(b.Dim, b.X, b.Y, b.Z, BPropCanInstatick)
+	if err != nil {
+		return false, err
+	}
+	if !ok {
+		return false, noAnswer("PIER_BPROP_CAN_INSTATICK")
+	}
+	return v != 0, nil
+}
+
+// MapColor reads PIER_BPROP_MAP_COLOR: BlockType::getMapColor as 0xRRGGBB
+func (b BlockAt) MapColor() (float64, error) {
+	v, ok, err := Raw.BlockGetNum(b.Dim, b.X, b.Y, b.Z, BPropMapColor)
+	if err != nil {
+		return 0, err
+	}
+	if !ok {
+		return 0, noAnswer("PIER_BPROP_MAP_COLOR")
 	}
 	return v, nil
 }
@@ -3895,6 +4818,162 @@ func (i Item) HasCustomName() (bool, error) {
 	return v != 0, nil
 }
 
+// IsFood reads PIER_IPROP_IS_FOOD: Item::isFood
+func (i Item) IsFood() (bool, error) {
+	v, ok, err := Raw.ItemGetNum(i.SNBT, IPropIsFood)
+	if err != nil {
+		return false, err
+	}
+	if !ok {
+		return false, noAnswer("PIER_IPROP_IS_FOOD")
+	}
+	return v != 0, nil
+}
+
+// IsDyeable reads PIER_IPROP_IS_DYEABLE: Item::isDyeable
+func (i Item) IsDyeable() (bool, error) {
+	v, ok, err := Raw.ItemGetNum(i.SNBT, IPropIsDyeable)
+	if err != nil {
+		return false, err
+	}
+	if !ok {
+		return false, noAnswer("PIER_IPROP_IS_DYEABLE")
+	}
+	return v != 0, nil
+}
+
+// IsHandEquipped reads PIER_IPROP_IS_HAND_EQUIPPED: Item::isHandEquipped
+func (i Item) IsHandEquipped() (bool, error) {
+	v, ok, err := Raw.ItemGetNum(i.SNBT, IPropIsHandEquipped)
+	if err != nil {
+		return false, err
+	}
+	if !ok {
+		return false, noAnswer("PIER_IPROP_IS_HAND_EQUIPPED")
+	}
+	return v != 0, nil
+}
+
+// IsLiquidClip reads PIER_IPROP_IS_LIQUID_CLIP: Item::isLiquidClipItem
+func (i Item) IsLiquidClip() (bool, error) {
+	v, ok, err := Raw.ItemGetNum(i.SNBT, IPropIsLiquidClip)
+	if err != nil {
+		return false, err
+	}
+	if !ok {
+		return false, noAnswer("PIER_IPROP_IS_LIQUID_CLIP")
+	}
+	return v != 0, nil
+}
+
+// IsStackedByData reads PIER_IPROP_IS_STACKED_BY_DATA: Item::isStackedByData
+func (i Item) IsStackedByData() (bool, error) {
+	v, ok, err := Raw.ItemGetNum(i.SNBT, IPropIsStackedByData)
+	if err != nil {
+		return false, err
+	}
+	if !ok {
+		return false, noAnswer("PIER_IPROP_IS_STACKED_BY_DATA")
+	}
+	return v != 0, nil
+}
+
+// CooldownDuration reads PIER_IPROP_COOLDOWN_DURATION: Item::getCooldownDuration, in ticks
+func (i Item) CooldownDuration() (float64, error) {
+	v, ok, err := Raw.ItemGetNum(i.SNBT, IPropCooldownDuration)
+	if err != nil {
+		return 0, err
+	}
+	if !ok {
+		return 0, noAnswer("PIER_IPROP_COOLDOWN_DURATION")
+	}
+	return v, nil
+}
+
+// IsComponentBased reads PIER_IPROP_IS_COMPONENT_BASED: Item::isComponentBased
+func (i Item) IsComponentBased() (bool, error) {
+	v, ok, err := Raw.ItemGetNum(i.SNBT, IPropIsComponentBased)
+	if err != nil {
+		return false, err
+	}
+	if !ok {
+		return false, noAnswer("PIER_IPROP_IS_COMPONENT_BASED")
+	}
+	return v != 0, nil
+}
+
+// IsHumanoidArmor reads PIER_IPROP_IS_HUMANOID_ARMOR: Item::isHumanoidArmor
+func (i Item) IsHumanoidArmor() (bool, error) {
+	v, ok, err := Raw.ItemGetNum(i.SNBT, IPropIsHumanoidArmor)
+	if err != nil {
+		return false, err
+	}
+	if !ok {
+		return false, noAnswer("PIER_IPROP_IS_HUMANOID_ARMOR")
+	}
+	return v != 0, nil
+}
+
+// ArmorValue reads PIER_IPROP_ARMOR_VALUE: Item::getArmorValue
+func (i Item) ArmorValue() (float64, error) {
+	v, ok, err := Raw.ItemGetNum(i.SNBT, IPropArmorValue)
+	if err != nil {
+		return 0, err
+	}
+	if !ok {
+		return 0, noAnswer("PIER_IPROP_ARMOR_VALUE")
+	}
+	return v, nil
+}
+
+// CanBeDepleted reads PIER_IPROP_CAN_BE_DEPLETED: Item::canBeDepleted
+func (i Item) CanBeDepleted() (bool, error) {
+	v, ok, err := Raw.ItemGetNum(i.SNBT, IPropCanBeDepleted)
+	if err != nil {
+		return false, err
+	}
+	if !ok {
+		return false, noAnswer("PIER_IPROP_CAN_BE_DEPLETED")
+	}
+	return v != 0, nil
+}
+
+// IsUseable reads PIER_IPROP_IS_USEABLE: Item::isUseable
+func (i Item) IsUseable() (bool, error) {
+	v, ok, err := Raw.ItemGetNum(i.SNBT, IPropIsUseable)
+	if err != nil {
+		return false, err
+	}
+	if !ok {
+		return false, noAnswer("PIER_IPROP_IS_USEABLE")
+	}
+	return v != 0, nil
+}
+
+// CanDestroyInCreative reads PIER_IPROP_CAN_DESTROY_IN_CREATIVE: Item::canDestroyInCreative
+func (i Item) CanDestroyInCreative() (bool, error) {
+	v, ok, err := Raw.ItemGetNum(i.SNBT, IPropCanDestroyInCreative)
+	if err != nil {
+		return false, err
+	}
+	if !ok {
+		return false, noAnswer("PIER_IPROP_CAN_DESTROY_IN_CREATIVE")
+	}
+	return v != 0, nil
+}
+
+// ShowsDurabilityInCreative reads PIER_IPROP_SHOWS_DURABILITY_IN_CREATIVE: Item::showsDurabilityInCreative
+func (i Item) ShowsDurabilityInCreative() (float64, error) {
+	v, ok, err := Raw.ItemGetNum(i.SNBT, IPropShowsDurabilityInCreative)
+	if err != nil {
+		return 0, err
+	}
+	if !ok {
+		return 0, noAnswer("PIER_IPROP_SHOWS_DURABILITY_IN_CREATIVE")
+	}
+	return v, nil
+}
+
 // TypeName reads PIER_ISTR_TYPE_NAME: ItemStackBase::getTypeName ("minecraft:apple")
 func (i Item) TypeName() (string, error) {
 	out, ok, err := Raw.ItemGetStr(i.SNBT, IStrTypeName)
@@ -4075,6 +5154,66 @@ func ServerGameSemVersion() (string, error) {
 	return out[len(out)-1], nil
 }
 
+// ServerLoaderVersion reads PIER_SRV_LOADER_VERSION: ll::getLoaderVersion, the running LeviLamina
+func ServerLoaderVersion() (string, error) {
+	out, ok, err := Raw.ServerInfoStr(SrvLoaderVersion)
+	if err != nil {
+		return "", err
+	}
+	if !ok || len(out) == 0 {
+		return "", noAnswer("PIER_SRV_LOADER_VERSION")
+	}
+	return out[len(out)-1], nil
+}
+
+// ServerLevelName reads PIER_SRV_LEVEL_NAME: LevelData::mLevelName, the world name
+func ServerLevelName() (string, error) {
+	out, ok, err := Raw.ServerInfoStr(SrvLevelName)
+	if err != nil {
+		return "", err
+	}
+	if !ok || len(out) == 0 {
+		return "", noAnswer("PIER_SRV_LEVEL_NAME")
+	}
+	return out[len(out)-1], nil
+}
+
+// ServerIsHardcore reads PIER_SRV_IS_HARDCORE: LevelData::mIsHardcore, "1" or "0"
+func ServerIsHardcore() (string, error) {
+	out, ok, err := Raw.ServerInfoStr(SrvIsHardcore)
+	if err != nil {
+		return "", err
+	}
+	if !ok || len(out) == 0 {
+		return "", noAnswer("PIER_SRV_IS_HARDCORE")
+	}
+	return out[len(out)-1], nil
+}
+
+// ServerWorldStartCount reads PIER_SRV_WORLD_START_COUNT: LevelData::mWorldStartCount, how many times the world was opened
+func ServerWorldStartCount() (string, error) {
+	out, ok, err := Raw.ServerInfoStr(SrvWorldStartCount)
+	if err != nil {
+		return "", err
+	}
+	if !ok || len(out) == 0 {
+		return "", noAnswer("PIER_SRV_WORLD_START_COUNT")
+	}
+	return out[len(out)-1], nil
+}
+
+// ServerEducationFeatures reads PIER_SRV_EDUCATION_FEATURES: LevelData::mEducationFeaturesEnabled, "1" or "0"
+func ServerEducationFeatures() (string, error) {
+	out, ok, err := Raw.ServerInfoStr(SrvEducationFeatures)
+	if err != nil {
+		return "", err
+	}
+	if !ok || len(out) == 0 {
+		return "", noAnswer("PIER_SRV_EDUCATION_FEATURES")
+	}
+	return out[len(out)-1], nil
+}
+
 // SystemOsName reads PIER_SYS_OS_NAME: sys_utils::getSystemName
 func SystemOsName() (string, error) {
 	out, ok, err := Raw.SysInfoStr(SysOsName)
@@ -4121,4 +5260,1290 @@ func SystemLocalTime() (string, error) {
 		return "", noAnswer("PIER_SYS_LOCAL_TIME")
 	}
 	return out[len(out)-1], nil
+}
+
+// SystemProcessId reads PIER_SYS_PROCESS_ID: the id of the server process
+func SystemProcessId() (string, error) {
+	out, ok, err := Raw.SysInfoStr(SysProcessId)
+	if err != nil {
+		return "", err
+	}
+	if !ok || len(out) == 0 {
+		return "", noAnswer("PIER_SYS_PROCESS_ID")
+	}
+	return out[len(out)-1], nil
+}
+
+// ClientPosX reads PIER_CPROP_POS_X: Actor::getFeetPos of the local player
+func ClientPosX() (float64, error) {
+	v, ok, err := Raw.ClientGetNum(CPropPosX)
+	if err != nil {
+		return 0, err
+	}
+	if !ok {
+		return 0, noAnswer("PIER_CPROP_POS_X")
+	}
+	return v, nil
+}
+
+// ClientPosY reads PIER_CPROP_POS_Y: feet height, the same point get_player_position reports
+func ClientPosY() (float64, error) {
+	v, ok, err := Raw.ClientGetNum(CPropPosY)
+	if err != nil {
+		return 0, err
+	}
+	if !ok {
+		return 0, noAnswer("PIER_CPROP_POS_Y")
+	}
+	return v, nil
+}
+
+// ClientPosZ reads PIER_CPROP_POS_Z: PIER_CPROP_POS_Z
+func ClientPosZ() (float64, error) {
+	v, ok, err := Raw.ClientGetNum(CPropPosZ)
+	if err != nil {
+		return 0, err
+	}
+	if !ok {
+		return 0, noAnswer("PIER_CPROP_POS_Z")
+	}
+	return v, nil
+}
+
+// ClientPitch reads PIER_CPROP_PITCH: Actor::getRotation, degrees; negative looks up
+func ClientPitch() (float64, error) {
+	v, ok, err := Raw.ClientGetNum(CPropPitch)
+	if err != nil {
+		return 0, err
+	}
+	if !ok {
+		return 0, noAnswer("PIER_CPROP_PITCH")
+	}
+	return v, nil
+}
+
+// ClientYaw reads PIER_CPROP_YAW: Actor::getRotation, degrees
+func ClientYaw() (float64, error) {
+	v, ok, err := Raw.ClientGetNum(CPropYaw)
+	if err != nil {
+		return 0, err
+	}
+	if !ok {
+		return 0, noAnswer("PIER_CPROP_YAW")
+	}
+	return v, nil
+}
+
+// ClientDimension reads PIER_CPROP_DIMENSION: Actor::getDimensionId of the local player
+func ClientDimension() (float64, error) {
+	v, ok, err := Raw.ClientGetNum(CPropDimension)
+	if err != nil {
+		return 0, err
+	}
+	if !ok {
+		return 0, noAnswer("PIER_CPROP_DIMENSION")
+	}
+	return v, nil
+}
+
+// ClientGuiScale reads PIER_CPROP_GUI_SCALE: IClientInstance::getGuiScale
+func ClientGuiScale() (float64, error) {
+	v, ok, err := Raw.ClientGetNum(CPropGuiScale)
+	if err != nil {
+		return 0, err
+	}
+	if !ok {
+		return 0, noAnswer("PIER_CPROP_GUI_SCALE")
+	}
+	return v, nil
+}
+
+// ClientServerPingMs reads PIER_CPROP_SERVER_PING_MS: IClientInstance::getServerPingTime
+func ClientServerPingMs() (float64, error) {
+	v, ok, err := Raw.ClientGetNum(CPropServerPingMs)
+	if err != nil {
+		return 0, err
+	}
+	if !ok {
+		return 0, noAnswer("PIER_CPROP_SERVER_PING_MS")
+	}
+	return v, nil
+}
+
+// ClientIsShowingMenu reads PIER_CPROP_IS_SHOWING_MENU: IClientInstance::isShowingMenu, 1 or 0
+func ClientIsShowingMenu() (bool, error) {
+	v, ok, err := Raw.ClientGetNum(CPropIsShowingMenu)
+	if err != nil {
+		return false, err
+	}
+	if !ok {
+		return false, noAnswer("PIER_CPROP_IS_SHOWING_MENU")
+	}
+	return v != 0, nil
+}
+
+// ClientIsShowingPauseScreen reads PIER_CPROP_IS_SHOWING_PAUSE_SCREEN: IClientInstance::isShowingPauseScreen
+func ClientIsShowingPauseScreen() (bool, error) {
+	v, ok, err := Raw.ClientGetNum(CPropIsShowingPauseScreen)
+	if err != nil {
+		return false, err
+	}
+	if !ok {
+		return false, noAnswer("PIER_CPROP_IS_SHOWING_PAUSE_SCREEN")
+	}
+	return v != 0, nil
+}
+
+// ClientIsPlaying reads PIER_CPROP_IS_PLAYING: IClientInstance::isPlaying
+func ClientIsPlaying() (bool, error) {
+	v, ok, err := Raw.ClientGetNum(CPropIsPlaying)
+	if err != nil {
+		return false, err
+	}
+	if !ok {
+		return false, noAnswer("PIER_CPROP_IS_PLAYING")
+	}
+	return v != 0, nil
+}
+
+// ClientIsInRealm reads PIER_CPROP_IS_IN_REALM: IClientInstance::isInRealm
+func ClientIsInRealm() (bool, error) {
+	v, ok, err := Raw.ClientGetNum(CPropIsInRealm)
+	if err != nil {
+		return false, err
+	}
+	if !ok {
+		return false, noAnswer("PIER_CPROP_IS_IN_REALM")
+	}
+	return v != 0, nil
+}
+
+// ClientIsGameInputEnabled reads PIER_CPROP_IS_GAME_INPUT_ENABLED: IClientInstance::isInGameInputEnabled
+func ClientIsGameInputEnabled() (bool, error) {
+	v, ok, err := Raw.ClientGetNum(CPropIsGameInputEnabled)
+	if err != nil {
+		return false, err
+	}
+	if !ok {
+		return false, noAnswer("PIER_CPROP_IS_GAME_INPUT_ENABLED")
+	}
+	return v != 0, nil
+}
+
+// ClientHealth reads PIER_CPROP_HEALTH: Actor::getHealth of the local player
+func ClientHealth() (float64, error) {
+	v, ok, err := Raw.ClientGetNum(CPropHealth)
+	if err != nil {
+		return 0, err
+	}
+	if !ok {
+		return 0, noAnswer("PIER_CPROP_HEALTH")
+	}
+	return v, nil
+}
+
+// ClientMaxHealth reads PIER_CPROP_MAX_HEALTH: Actor::getMaxHealth of the local player
+func ClientMaxHealth() (float64, error) {
+	v, ok, err := Raw.ClientGetNum(CPropMaxHealth)
+	if err != nil {
+		return 0, err
+	}
+	if !ok {
+		return 0, noAnswer("PIER_CPROP_MAX_HEALTH")
+	}
+	return v, nil
+}
+
+// ClientIsOnGround reads PIER_CPROP_IS_ON_GROUND: Actor::isOnGround of the local player
+func ClientIsOnGround() (bool, error) {
+	v, ok, err := Raw.ClientGetNum(CPropIsOnGround)
+	if err != nil {
+		return false, err
+	}
+	if !ok {
+		return false, noAnswer("PIER_CPROP_IS_ON_GROUND")
+	}
+	return v != 0, nil
+}
+
+// ClientIsInWater reads PIER_CPROP_IS_IN_WATER: Actor::isInWater of the local player
+func ClientIsInWater() (bool, error) {
+	v, ok, err := Raw.ClientGetNum(CPropIsInWater)
+	if err != nil {
+		return false, err
+	}
+	if !ok {
+		return false, noAnswer("PIER_CPROP_IS_IN_WATER")
+	}
+	return v != 0, nil
+}
+
+// ClientIsSneaking reads PIER_CPROP_IS_SNEAKING: Actor::isSneaking of the local player
+func ClientIsSneaking() (bool, error) {
+	v, ok, err := Raw.ClientGetNum(CPropIsSneaking)
+	if err != nil {
+		return false, err
+	}
+	if !ok {
+		return false, noAnswer("PIER_CPROP_IS_SNEAKING")
+	}
+	return v != 0, nil
+}
+
+// ClientIsSprinting reads PIER_CPROP_IS_SPRINTING: Actor::isSprinting of the local player
+func ClientIsSprinting() (bool, error) {
+	v, ok, err := Raw.ClientGetNum(CPropIsSprinting)
+	if err != nil {
+		return false, err
+	}
+	if !ok {
+		return false, noAnswer("PIER_CPROP_IS_SPRINTING")
+	}
+	return v != 0, nil
+}
+
+// ClientIsSwimming reads PIER_CPROP_IS_SWIMMING: Actor::isSwimming of the local player
+func ClientIsSwimming() (bool, error) {
+	v, ok, err := Raw.ClientGetNum(CPropIsSwimming)
+	if err != nil {
+		return false, err
+	}
+	if !ok {
+		return false, noAnswer("PIER_CPROP_IS_SWIMMING")
+	}
+	return v != 0, nil
+}
+
+// ClientIsOnFire reads PIER_CPROP_IS_ON_FIRE: Actor::isOnFire of the local player
+func ClientIsOnFire() (bool, error) {
+	v, ok, err := Raw.ClientGetNum(CPropIsOnFire)
+	if err != nil {
+		return false, err
+	}
+	if !ok {
+		return false, noAnswer("PIER_CPROP_IS_ON_FIRE")
+	}
+	return v != 0, nil
+}
+
+// ClientIsFlying reads PIER_CPROP_IS_FLYING: Player::isFlying of the local player
+func ClientIsFlying() (bool, error) {
+	v, ok, err := Raw.ClientGetNum(CPropIsFlying)
+	if err != nil {
+		return false, err
+	}
+	if !ok {
+		return false, noAnswer("PIER_CPROP_IS_FLYING")
+	}
+	return v != 0, nil
+}
+
+// ClientGameType reads PIER_CPROP_GAME_TYPE: Player::getPlayerGameType of the local player
+func ClientGameType() (float64, error) {
+	v, ok, err := Raw.ClientGetNum(CPropGameType)
+	if err != nil {
+		return 0, err
+	}
+	if !ok {
+		return 0, noAnswer("PIER_CPROP_GAME_TYPE")
+	}
+	return v, nil
+}
+
+// ClientSelectedSlot reads PIER_CPROP_SELECTED_SLOT: Player::getSelectedItemSlot of the local player
+func ClientSelectedSlot() (float64, error) {
+	v, ok, err := Raw.ClientGetNum(CPropSelectedSlot)
+	if err != nil {
+		return 0, err
+	}
+	if !ok {
+		return 0, noAnswer("PIER_CPROP_SELECTED_SLOT")
+	}
+	return v, nil
+}
+
+// ClientVelX reads PIER_CPROP_VEL_X: Actor::getPosDelta of the local player, blocks per tick
+func ClientVelX() (float64, error) {
+	v, ok, err := Raw.ClientGetNum(CPropVelX)
+	if err != nil {
+		return 0, err
+	}
+	if !ok {
+		return 0, noAnswer("PIER_CPROP_VEL_X")
+	}
+	return v, nil
+}
+
+// ClientVelY reads PIER_CPROP_VEL_Y: Actor::getPosDelta, the vertical part
+func ClientVelY() (float64, error) {
+	v, ok, err := Raw.ClientGetNum(CPropVelY)
+	if err != nil {
+		return 0, err
+	}
+	if !ok {
+		return 0, noAnswer("PIER_CPROP_VEL_Y")
+	}
+	return v, nil
+}
+
+// ClientVelZ reads PIER_CPROP_VEL_Z: Actor::getPosDelta, the z part
+func ClientVelZ() (float64, error) {
+	v, ok, err := Raw.ClientGetNum(CPropVelZ)
+	if err != nil {
+		return 0, err
+	}
+	if !ok {
+		return 0, noAnswer("PIER_CPROP_VEL_Z")
+	}
+	return v, nil
+}
+
+// ClientXpNeededNextLevel reads PIER_CPROP_XP_NEEDED_NEXT_LEVEL: Player::getXpNeededForNextLevel of the local player
+func ClientXpNeededNextLevel() (float64, error) {
+	v, ok, err := Raw.ClientGetNum(CPropXpNeededNextLevel)
+	if err != nil {
+		return 0, err
+	}
+	if !ok {
+		return 0, noAnswer("PIER_CPROP_XP_NEEDED_NEXT_LEVEL")
+	}
+	return v, nil
+}
+
+// ClientIsLeavingGame reads PIER_CPROP_IS_LEAVING_GAME: IClientInstance::isLeavingGame
+func ClientIsLeavingGame() (bool, error) {
+	v, ok, err := Raw.ClientGetNum(CPropIsLeavingGame)
+	if err != nil {
+		return false, err
+	}
+	if !ok {
+		return false, noAnswer("PIER_CPROP_IS_LEAVING_GAME")
+	}
+	return v != 0, nil
+}
+
+// ClientIsExitingLevel reads PIER_CPROP_IS_EXITING_LEVEL: IClientInstance::isExitingLevel
+func ClientIsExitingLevel() (bool, error) {
+	v, ok, err := Raw.ClientGetNum(CPropIsExitingLevel)
+	if err != nil {
+		return false, err
+	}
+	if !ok {
+		return false, noAnswer("PIER_CPROP_IS_EXITING_LEVEL")
+	}
+	return v != 0, nil
+}
+
+// ClientIsInBedScreen reads PIER_CPROP_IS_IN_BED_SCREEN: IClientInstance::isInBedScreen
+func ClientIsInBedScreen() (bool, error) {
+	v, ok, err := Raw.ClientGetNum(CPropIsInBedScreen)
+	if err != nil {
+		return false, err
+	}
+	if !ok {
+		return false, noAnswer("PIER_CPROP_IS_IN_BED_SCREEN")
+	}
+	return v != 0, nil
+}
+
+// ClientIsInDeathScreen reads PIER_CPROP_IS_IN_DEATH_SCREEN: IClientInstance::isInDeathScreen
+func ClientIsInDeathScreen() (bool, error) {
+	v, ok, err := Raw.ClientGetNum(CPropIsInDeathScreen)
+	if err != nil {
+		return false, err
+	}
+	if !ok {
+		return false, noAnswer("PIER_CPROP_IS_IN_DEATH_SCREEN")
+	}
+	return v != 0, nil
+}
+
+// ClientIsShowingLoadingScreen reads PIER_CPROP_IS_SHOWING_LOADING_SCREEN: IClientInstance::isShowingLoadingScreen
+func ClientIsShowingLoadingScreen() (bool, error) {
+	v, ok, err := Raw.ClientGetNum(CPropIsShowingLoadingScreen)
+	if err != nil {
+		return false, err
+	}
+	if !ok {
+		return false, noAnswer("PIER_CPROP_IS_SHOWING_LOADING_SCREEN")
+	}
+	return v != 0, nil
+}
+
+// ClientIsShowingProgressScreen reads PIER_CPROP_IS_SHOWING_PROGRESS_SCREEN: IClientInstance::isShowingProgressScreen
+func ClientIsShowingProgressScreen() (bool, error) {
+	v, ok, err := Raw.ClientGetNum(CPropIsShowingProgressScreen)
+	if err != nil {
+		return false, err
+	}
+	if !ok {
+		return false, noAnswer("PIER_CPROP_IS_SHOWING_PROGRESS_SCREEN")
+	}
+	return v != 0, nil
+}
+
+// ClientIsShowingWorldProgressScreen reads PIER_CPROP_IS_SHOWING_WORLD_PROGRESS_SCREEN: IClientInstance::isShowingWorldProgressScreen
+func ClientIsShowingWorldProgressScreen() (bool, error) {
+	v, ok, err := Raw.ClientGetNum(CPropIsShowingWorldProgressScreen)
+	if err != nil {
+		return false, err
+	}
+	if !ok {
+		return false, noAnswer("PIER_CPROP_IS_SHOWING_WORLD_PROGRESS_SCREEN")
+	}
+	return v != 0, nil
+}
+
+// ClientIsShowingDeathScreen reads PIER_CPROP_IS_SHOWING_DEATH_SCREEN: IClientInstance::isShowingDeathScreen
+func ClientIsShowingDeathScreen() (bool, error) {
+	v, ok, err := Raw.ClientGetNum(CPropIsShowingDeathScreen)
+	if err != nil {
+		return false, err
+	}
+	if !ok {
+		return false, noAnswer("PIER_CPROP_IS_SHOWING_DEATH_SCREEN")
+	}
+	return v != 0, nil
+}
+
+// ClientIsShowingServerForm reads PIER_CPROP_IS_SHOWING_SERVER_FORM: IClientInstance::isShowingServerForm
+func ClientIsShowingServerForm() (bool, error) {
+	v, ok, err := Raw.ClientGetNum(CPropIsShowingServerForm)
+	if err != nil {
+		return false, err
+	}
+	if !ok {
+		return false, noAnswer("PIER_CPROP_IS_SHOWING_SERVER_FORM")
+	}
+	return v != 0, nil
+}
+
+// ClientIsInWorldWithoutMenu reads PIER_CPROP_IS_IN_WORLD_WITHOUT_MENU: IClientInstance::isInWorldAndNotShowingAnyMenuScreens
+func ClientIsInWorldWithoutMenu() (bool, error) {
+	v, ok, err := Raw.ClientGetNum(CPropIsInWorldWithoutMenu)
+	if err != nil {
+		return false, err
+	}
+	if !ok {
+		return false, noAnswer("PIER_CPROP_IS_IN_WORLD_WITHOUT_MENU")
+	}
+	return v != 0, nil
+}
+
+// ClientIsWorldActive reads PIER_CPROP_IS_WORLD_ACTIVE: IClientInstance::isWorldActive
+func ClientIsWorldActive() (bool, error) {
+	v, ok, err := Raw.ClientGetNum(CPropIsWorldActive)
+	if err != nil {
+		return false, err
+	}
+	if !ok {
+		return false, noAnswer("PIER_CPROP_IS_WORLD_ACTIVE")
+	}
+	return v != 0, nil
+}
+
+// ClientHasLevel reads PIER_CPROP_HAS_LEVEL: IClientInstance::hasLevel
+func ClientHasLevel() (bool, error) {
+	v, ok, err := Raw.ClientGetNum(CPropHasLevel)
+	if err != nil {
+		return false, err
+	}
+	if !ok {
+		return false, noAnswer("PIER_CPROP_HAS_LEVEL")
+	}
+	return v != 0, nil
+}
+
+// ClientIsPreGame reads PIER_CPROP_IS_PRE_GAME: IClientInstance::isPreGame
+func ClientIsPreGame() (bool, error) {
+	v, ok, err := Raw.ClientGetNum(CPropIsPreGame)
+	if err != nil {
+		return false, err
+	}
+	if !ok {
+		return false, noAnswer("PIER_CPROP_IS_PRE_GAME")
+	}
+	return v != 0, nil
+}
+
+// ClientIsInMultiplayerGame reads PIER_CPROP_IS_IN_MULTIPLAYER_GAME: IClientInstance::isInMultiplayerGame
+func ClientIsInMultiplayerGame() (bool, error) {
+	v, ok, err := Raw.ClientGetNum(CPropIsInMultiplayerGame)
+	if err != nil {
+		return false, err
+	}
+	if !ok {
+		return false, noAnswer("PIER_CPROP_IS_IN_MULTIPLAYER_GAME")
+	}
+	return v != 0, nil
+}
+
+// ClientIsMultiplayerClient reads PIER_CPROP_IS_MULTIPLAYER_CLIENT: IClientInstance::isMultiPlayerClient
+func ClientIsMultiplayerClient() (bool, error) {
+	v, ok, err := Raw.ClientGetNum(CPropIsMultiplayerClient)
+	if err != nil {
+		return false, err
+	}
+	if !ok {
+		return false, noAnswer("PIER_CPROP_IS_MULTIPLAYER_CLIENT")
+	}
+	return v != 0, nil
+}
+
+// ClientIsPrimaryLevelMultiplayer reads PIER_CPROP_IS_PRIMARY_LEVEL_MULTIPLAYER: IClientInstance::isPrimaryLevelMultiplayer
+func ClientIsPrimaryLevelMultiplayer() (bool, error) {
+	v, ok, err := Raw.ClientGetNum(CPropIsPrimaryLevelMultiplayer)
+	if err != nil {
+		return false, err
+	}
+	if !ok {
+		return false, noAnswer("PIER_CPROP_IS_PRIMARY_LEVEL_MULTIPLAYER")
+	}
+	return v != 0, nil
+}
+
+// ClientIsPrimaryLevelCrossPlatform reads PIER_CPROP_IS_PRIMARY_LEVEL_CROSS_PLATFORM: IClientInstance::isPrimaryLevelCrossPlatformMultiplayer
+func ClientIsPrimaryLevelCrossPlatform() (bool, error) {
+	v, ok, err := Raw.ClientGetNum(CPropIsPrimaryLevelCrossPlatform)
+	if err != nil {
+		return false, err
+	}
+	if !ok {
+		return false, noAnswer("PIER_CPROP_IS_PRIMARY_LEVEL_CROSS_PLATFORM")
+	}
+	return v != 0, nil
+}
+
+// ClientIsKeyboardEnabled reads PIER_CPROP_IS_KEYBOARD_ENABLED: IClientInstance::isKeyboardEnabled
+func ClientIsKeyboardEnabled() (bool, error) {
+	v, ok, err := Raw.ClientGetNum(CPropIsKeyboardEnabled)
+	if err != nil {
+		return false, err
+	}
+	if !ok {
+		return false, noAnswer("PIER_CPROP_IS_KEYBOARD_ENABLED")
+	}
+	return v != 0, nil
+}
+
+// ClientIsUsingController reads PIER_CPROP_IS_USING_CONTROLLER: IClientInstance::useController
+func ClientIsUsingController() (bool, error) {
+	v, ok, err := Raw.ClientGetNum(CPropIsUsingController)
+	if err != nil {
+		return false, err
+	}
+	if !ok {
+		return false, noAnswer("PIER_CPROP_IS_USING_CONTROLLER")
+	}
+	return v != 0, nil
+}
+
+// ClientIsUsingTouchscreen reads PIER_CPROP_IS_USING_TOUCHSCREEN: IClientInstance::useTouchscreen
+func ClientIsUsingTouchscreen() (bool, error) {
+	v, ok, err := Raw.ClientGetNum(CPropIsUsingTouchscreen)
+	if err != nil {
+		return false, err
+	}
+	if !ok {
+		return false, noAnswer("PIER_CPROP_IS_USING_TOUCHSCREEN")
+	}
+	return v != 0, nil
+}
+
+// ClientIsMouseGrabbed reads PIER_CPROP_IS_MOUSE_GRABBED: IClientInstance::getMouseGrabbed
+func ClientIsMouseGrabbed() (bool, error) {
+	v, ok, err := Raw.ClientGetNum(CPropIsMouseGrabbed)
+	if err != nil {
+		return false, err
+	}
+	if !ok {
+		return false, noAnswer("PIER_CPROP_IS_MOUSE_GRABBED")
+	}
+	return v != 0, nil
+}
+
+// ClientIsMouseAndKeyboard reads PIER_CPROP_IS_MOUSE_AND_KEYBOARD: IClientInstance::currentInputModeIsMouseAndKeyboard
+func ClientIsMouseAndKeyboard() (bool, error) {
+	v, ok, err := Raw.ClientGetNum(CPropIsMouseAndKeyboard)
+	if err != nil {
+		return false, err
+	}
+	if !ok {
+		return false, noAnswer("PIER_CPROP_IS_MOUSE_AND_KEYBOARD")
+	}
+	return v != 0, nil
+}
+
+// ClientHasConnectedController reads PIER_CPROP_HAS_CONNECTED_CONTROLLER: IClientInstance::hasConnectedController
+func ClientHasConnectedController() (bool, error) {
+	v, ok, err := Raw.ClientGetNum(CPropHasConnectedController)
+	if err != nil {
+		return false, err
+	}
+	if !ok {
+		return false, noAnswer("PIER_CPROP_HAS_CONNECTED_CONTROLLER")
+	}
+	return v != 0, nil
+}
+
+// ClientControllerId reads PIER_CPROP_CONTROLLER_ID: IClientInstance::getControllerId
+func ClientControllerId() (float64, error) {
+	v, ok, err := Raw.ClientGetNum(CPropControllerId)
+	if err != nil {
+		return 0, err
+	}
+	if !ok {
+		return 0, noAnswer("PIER_CPROP_CONTROLLER_ID")
+	}
+	return v, nil
+}
+
+// ClientIsTouchGameplayAllowed reads PIER_CPROP_IS_TOUCH_GAMEPLAY_ALLOWED: IClientInstance::isTouchGameplayAllowed
+func ClientIsTouchGameplayAllowed() (bool, error) {
+	v, ok, err := Raw.ClientGetNum(CPropIsTouchGameplayAllowed)
+	if err != nil {
+		return false, err
+	}
+	if !ok {
+		return false, noAnswer("PIER_CPROP_IS_TOUCH_GAMEPLAY_ALLOWED")
+	}
+	return v != 0, nil
+}
+
+// ClientIsSplitScreenActive reads PIER_CPROP_IS_SPLIT_SCREEN_ACTIVE: IClientInstance::isSplitScreenActive
+func ClientIsSplitScreenActive() (bool, error) {
+	v, ok, err := Raw.ClientGetNum(CPropIsSplitScreenActive)
+	if err != nil {
+		return false, err
+	}
+	if !ok {
+		return false, noAnswer("PIER_CPROP_IS_SPLIT_SCREEN_ACTIVE")
+	}
+	return v != 0, nil
+}
+
+// ClientSplitScreenCount reads PIER_CPROP_SPLIT_SCREEN_COUNT: IClientInstance::getSplitScreenCount
+func ClientSplitScreenCount() (float64, error) {
+	v, ok, err := Raw.ClientGetNum(CPropSplitScreenCount)
+	if err != nil {
+		return 0, err
+	}
+	if !ok {
+		return 0, noAnswer("PIER_CPROP_SPLIT_SCREEN_COUNT")
+	}
+	return v, nil
+}
+
+// ClientGuiScaleOffset reads PIER_CPROP_GUI_SCALE_OFFSET: IClientInstance::getGuiScaleOffset
+func ClientGuiScaleOffset() (float64, error) {
+	v, ok, err := Raw.ClientGetNum(CPropGuiScaleOffset)
+	if err != nil {
+		return 0, err
+	}
+	if !ok {
+		return 0, noAnswer("PIER_CPROP_GUI_SCALE_OFFSET")
+	}
+	return v, nil
+}
+
+// ClientIsEduMode reads PIER_CPROP_IS_EDU_MODE: IClientInstance::isEduMode
+func ClientIsEduMode() (bool, error) {
+	v, ok, err := Raw.ClientGetNum(CPropIsEduMode)
+	if err != nil {
+		return false, err
+	}
+	if !ok {
+		return false, noAnswer("PIER_CPROP_IS_EDU_MODE")
+	}
+	return v != 0, nil
+}
+
+// ClientIsInEditor reads PIER_CPROP_IS_IN_EDITOR: IClientInstance::isPlayerInEditor
+func ClientIsInEditor() (bool, error) {
+	v, ok, err := Raw.ClientGetNum(CPropIsInEditor)
+	if err != nil {
+		return false, err
+	}
+	if !ok {
+		return false, noAnswer("PIER_CPROP_IS_IN_EDITOR")
+	}
+	return v != 0, nil
+}
+
+// ClientIsReadyToRender reads PIER_CPROP_IS_READY_TO_RENDER: IClientInstance::isReadyToRender
+func ClientIsReadyToRender() (bool, error) {
+	v, ok, err := Raw.ClientGetNum(CPropIsReadyToRender)
+	if err != nil {
+		return false, err
+	}
+	if !ok {
+		return false, noAnswer("PIER_CPROP_IS_READY_TO_RENDER")
+	}
+	return v != 0, nil
+}
+
+// ClientIsFullVanillaPackOnStack reads PIER_CPROP_IS_FULL_VANILLA_PACK_ON_STACK: IClientInstance::isFullVanillaPackOnStack
+func ClientIsFullVanillaPackOnStack() (bool, error) {
+	v, ok, err := Raw.ClientGetNum(CPropIsFullVanillaPackOnStack)
+	if err != nil {
+		return false, err
+	}
+	if !ok {
+		return false, noAnswer("PIER_CPROP_IS_FULL_VANILLA_PACK_ON_STACK")
+	}
+	return v != 0, nil
+}
+
+// ClientServerConnectionTime reads PIER_CPROP_SERVER_CONNECTION_TIME: IClientInstance::getServerConnectionTime
+func ClientServerConnectionTime() (float64, error) {
+	v, ok, err := Raw.ClientGetNum(CPropServerConnectionTime)
+	if err != nil {
+		return 0, err
+	}
+	if !ok {
+		return 0, noAnswer("PIER_CPROP_SERVER_CONNECTION_TIME")
+	}
+	return v, nil
+}
+
+// ClientRemoteServerTimeMs reads PIER_CPROP_REMOTE_SERVER_TIME_MS: IClientInstance::getRemoteServerTimeMs
+func ClientRemoteServerTimeMs() (float64, error) {
+	v, ok, err := Raw.ClientGetNum(CPropRemoteServerTimeMs)
+	if err != nil {
+		return 0, err
+	}
+	if !ok {
+		return 0, noAnswer("PIER_CPROP_REMOTE_SERVER_TIME_MS")
+	}
+	return v, nil
+}
+
+// ClientRemoteServerNetworkTimeMs reads PIER_CPROP_REMOTE_SERVER_NETWORK_TIME_MS: IClientInstance::getRemoteServerNetworkTimeMs
+func ClientRemoteServerNetworkTimeMs() (float64, error) {
+	v, ok, err := Raw.ClientGetNum(CPropRemoteServerNetworkTimeMs)
+	if err != nil {
+		return 0, err
+	}
+	if !ok {
+		return 0, noAnswer("PIER_CPROP_REMOTE_SERVER_NETWORK_TIME_MS")
+	}
+	return v, nil
+}
+
+// ClientFrameAlpha reads PIER_CPROP_FRAME_ALPHA: IClientInstance::getFrameAlpha, how far the frame is between two ticks
+func ClientFrameAlpha() (float64, error) {
+	v, ok, err := Raw.ClientGetNum(CPropFrameAlpha)
+	if err != nil {
+		return 0, err
+	}
+	if !ok {
+		return 0, noAnswer("PIER_CPROP_FRAME_ALPHA")
+	}
+	return v, nil
+}
+
+// ClientGameUpdateSeconds reads PIER_CPROP_GAME_UPDATE_SECONDS: IClientInstance::getGameUpdateDurationInSeconds
+func ClientGameUpdateSeconds() (float64, error) {
+	v, ok, err := Raw.ClientGetNum(CPropGameUpdateSeconds)
+	if err != nil {
+		return 0, err
+	}
+	if !ok {
+		return 0, noAnswer("PIER_CPROP_GAME_UPDATE_SECONDS")
+	}
+	return v, nil
+}
+
+// ClientIsPrimaryClient reads PIER_CPROP_IS_PRIMARY_CLIENT: IClientInstance::isPrimaryClient
+func ClientIsPrimaryClient() (bool, error) {
+	v, ok, err := Raw.ClientGetNum(CPropIsPrimaryClient)
+	if err != nil {
+		return false, err
+	}
+	if !ok {
+		return false, noAnswer("PIER_CPROP_IS_PRIMARY_CLIENT")
+	}
+	return v != 0, nil
+}
+
+// ClientUserId reads PIER_CPROP_USER_ID: IClientInstance::getUserId
+func ClientUserId() (float64, error) {
+	v, ok, err := Raw.ClientGetNum(CPropUserId)
+	if err != nil {
+		return 0, err
+	}
+	if !ok {
+		return 0, noAnswer("PIER_CPROP_USER_ID")
+	}
+	return v, nil
+}
+
+// ClientIsGameplayTipsEnabled reads PIER_CPROP_IS_GAMEPLAY_TIPS_ENABLED: IClientInstance::isGamePlayTipsEnabled
+func ClientIsGameplayTipsEnabled() (bool, error) {
+	v, ok, err := Raw.ClientGetNum(CPropIsGameplayTipsEnabled)
+	if err != nil {
+		return false, err
+	}
+	if !ok {
+		return false, noAnswer("PIER_CPROP_IS_GAMEPLAY_TIPS_ENABLED")
+	}
+	return v != 0, nil
+}
+
+// ClientHasCommands reads PIER_CPROP_HAS_COMMANDS: IClientInstance::hasCommands
+func ClientHasCommands() (bool, error) {
+	v, ok, err := Raw.ClientGetNum(CPropHasCommands)
+	if err != nil {
+		return false, err
+	}
+	if !ok {
+		return false, noAnswer("PIER_CPROP_HAS_COMMANDS")
+	}
+	return v != 0, nil
+}
+
+// ClientScreenName reads PIER_CSTR_SCREEN_NAME: IClientInstance::getScreenName, as client_get_screen_name
+func ClientScreenName() (string, error) {
+	out, ok, err := Raw.ClientGetStr(CStrScreenName)
+	if err != nil {
+		return "", err
+	}
+	if !ok || len(out) == 0 {
+		return "", noAnswer("PIER_CSTR_SCREEN_NAME")
+	}
+	return out[len(out)-1], nil
+}
+
+// ClientTopScreenName reads PIER_CSTR_TOP_SCREEN_NAME: IClientInstance::getTopScreenName
+func ClientTopScreenName() (string, error) {
+	out, ok, err := Raw.ClientGetStr(CStrTopScreenName)
+	if err != nil {
+		return "", err
+	}
+	if !ok || len(out) == 0 {
+		return "", noAnswer("PIER_CSTR_TOP_SCREEN_NAME")
+	}
+	return out[len(out)-1], nil
+}
+
+// ClientPlatformId reads PIER_CSTR_PLATFORM_ID: IClientInstance::getPlatformId
+func ClientPlatformId() (string, error) {
+	out, ok, err := Raw.ClientGetStr(CStrPlatformId)
+	if err != nil {
+		return "", err
+	}
+	if !ok || len(out) == 0 {
+		return "", noAnswer("PIER_CSTR_PLATFORM_ID")
+	}
+	return out[len(out)-1], nil
+}
+
+// ClientPlatformOnlineId reads PIER_CSTR_PLATFORM_ONLINE_ID: IClientInstance::getPlatformOnlineId
+func ClientPlatformOnlineId() (string, error) {
+	out, ok, err := Raw.ClientGetStr(CStrPlatformOnlineId)
+	if err != nil {
+		return "", err
+	}
+	if !ok || len(out) == 0 {
+		return "", noAnswer("PIER_CSTR_PLATFORM_ONLINE_ID")
+	}
+	return out[len(out)-1], nil
+}
+
+// ClientLocalXuid reads PIER_CSTR_LOCAL_XUID: Player::getXuid of the local player; fails outside a world
+func ClientLocalXuid() (string, error) {
+	out, ok, err := Raw.ClientGetStr(CStrLocalXuid)
+	if err != nil {
+		return "", err
+	}
+	if !ok || len(out) == 0 {
+		return "", noAnswer("PIER_CSTR_LOCAL_XUID")
+	}
+	return out[len(out)-1], nil
+}
+
+// ClientLocalUuid reads PIER_CSTR_LOCAL_UUID: Player::getUuid of the local player in its canonical form
+func ClientLocalUuid() (string, error) {
+	out, ok, err := Raw.ClientGetStr(CStrLocalUuid)
+	if err != nil {
+		return "", err
+	}
+	if !ok || len(out) == 0 {
+		return "", noAnswer("PIER_CSTR_LOCAL_UUID")
+	}
+	return out[len(out)-1], nil
+}
+
+// ClientLocalNameTag reads PIER_CSTR_LOCAL_NAME_TAG: Actor::getNameTag of the local player
+func ClientLocalNameTag() (string, error) {
+	out, ok, err := Raw.ClientGetStr(CStrLocalNameTag)
+	if err != nil {
+		return "", err
+	}
+	if !ok || len(out) == 0 {
+		return "", noAnswer("PIER_CSTR_LOCAL_NAME_TAG")
+	}
+	return out[len(out)-1], nil
+}
+
+// ClientClipboard reads PIER_CSTR_CLIPBOARD: AppPlatform::getClipboardText, the system clipboard
+func ClientClipboard() (string, error) {
+	out, ok, err := Raw.ClientGetStr(CStrClipboard)
+	if err != nil {
+		return "", err
+	}
+	if !ok || len(out) == 0 {
+		return "", noAnswer("PIER_CSTR_CLIPBOARD")
+	}
+	return out[len(out)-1], nil
+}
+
+// ClientShowMessage runs PIER_CACT_SHOW_MESSAGE: sarg: text. GuiData::displayClientMessage
+//
+// abi.h names each argument; an unused one is ignored.
+func ClientShowMessage(sarg string, a, b, c float64) error {
+	ok, err := Raw.ClientAction(CActShowMessage, sarg, a, b, c)
+	if err != nil {
+		return err
+	}
+	if !ok {
+		return refused("PIER_CACT_SHOW_MESSAGE")
+	}
+	return nil
+}
+
+// ClientSetTitle runs PIER_CACT_SET_TITLE: sarg: text. GuiData::setTitle
+//
+// abi.h names each argument; an unused one is ignored.
+func ClientSetTitle(sarg string, a, b, c float64) error {
+	ok, err := Raw.ClientAction(CActSetTitle, sarg, a, b, c)
+	if err != nil {
+		return err
+	}
+	if !ok {
+		return refused("PIER_CACT_SET_TITLE")
+	}
+	return nil
+}
+
+// ClientSetSubtitle runs PIER_CACT_SET_SUBTITLE: sarg: text. GuiData::setSubtitle
+//
+// abi.h names each argument; an unused one is ignored.
+func ClientSetSubtitle(sarg string, a, b, c float64) error {
+	ok, err := Raw.ClientAction(CActSetSubtitle, sarg, a, b, c)
+	if err != nil {
+		return err
+	}
+	if !ok {
+		return refused("PIER_CACT_SET_SUBTITLE")
+	}
+	return nil
+}
+
+// ClientSetActionBar runs PIER_CACT_SET_ACTION_BAR: sarg: text. GuiData::setActionBarMessage
+//
+// abi.h names each argument; an unused one is ignored.
+func ClientSetActionBar(sarg string, a, b, c float64) error {
+	ok, err := Raw.ClientAction(CActSetActionBar, sarg, a, b, c)
+	if err != nil {
+		return err
+	}
+	if !ok {
+		return refused("PIER_CACT_SET_ACTION_BAR")
+	}
+	return nil
+}
+
+// ClientShowTip runs PIER_CACT_SHOW_TIP: sarg: text. GuiData::showTipMessage
+//
+// abi.h names each argument; an unused one is ignored.
+func ClientShowTip(sarg string, a, b, c float64) error {
+	ok, err := Raw.ClientAction(CActShowTip, sarg, a, b, c)
+	if err != nil {
+		return err
+	}
+	if !ok {
+		return refused("PIER_CACT_SHOW_TIP")
+	}
+	return nil
+}
+
+// ClientPlayUiSound runs PIER_CACT_PLAY_UI_SOUND: sarg: sound name, a: volume, b: pitch. IClientInstance::playUI
+//
+// abi.h names each argument; an unused one is ignored.
+func ClientPlayUiSound(sarg string, a, b, c float64) error {
+	ok, err := Raw.ClientAction(CActPlayUiSound, sarg, a, b, c)
+	if err != nil {
+		return err
+	}
+	if !ok {
+		return refused("PIER_CACT_PLAY_UI_SOUND")
+	}
+	return nil
+}
+
+// ClientGrabMouse runs PIER_CACT_GRAB_MOUSE: IClientInstance::grabMouse
+//
+// abi.h names each argument; an unused one is ignored.
+func ClientGrabMouse(sarg string, a, b, c float64) error {
+	ok, err := Raw.ClientAction(CActGrabMouse, sarg, a, b, c)
+	if err != nil {
+		return err
+	}
+	if !ok {
+		return refused("PIER_CACT_GRAB_MOUSE")
+	}
+	return nil
+}
+
+// ClientReleaseMouse runs PIER_CACT_RELEASE_MOUSE: IClientInstance::releaseMouse
+//
+// abi.h names each argument; an unused one is ignored.
+func ClientReleaseMouse(sarg string, a, b, c float64) error {
+	ok, err := Raw.ClientAction(CActReleaseMouse, sarg, a, b, c)
+	if err != nil {
+		return err
+	}
+	if !ok {
+		return refused("PIER_CACT_RELEASE_MOUSE")
+	}
+	return nil
+}
+
+// ClientSetInputDisabled runs PIER_CACT_SET_INPUT_DISABLED: a: non-zero disables game input. IClientInstance::setDisableInput
+//
+// abi.h names each argument; an unused one is ignored.
+func ClientSetInputDisabled(sarg string, a, b, c float64) error {
+	ok, err := Raw.ClientAction(CActSetInputDisabled, sarg, a, b, c)
+	if err != nil {
+		return err
+	}
+	if !ok {
+		return refused("PIER_CACT_SET_INPUT_DISABLED")
+	}
+	return nil
+}
+
+// ClientLeaveLevel runs PIER_CACT_LEAVE_LEVEL: IClientInstance::requestLeaveGame(true, false): leaves the world for the menus, asynchronously
+//
+// abi.h names each argument; an unused one is ignored.
+func ClientLeaveLevel(sarg string, a, b, c float64) error {
+	ok, err := Raw.ClientAction(CActLeaveLevel, sarg, a, b, c)
+	if err != nil {
+		return err
+	}
+	if !ok {
+		return refused("PIER_CACT_LEAVE_LEVEL")
+	}
+	return nil
+}
+
+// ClientShowPopup runs PIER_CACT_SHOW_POPUP: sarg: message, or message and subtitle split at the first newline. GuiData::showPopupNotice
+//
+// abi.h names each argument; an unused one is ignored.
+func ClientShowPopup(sarg string, a, b, c float64) error {
+	ok, err := Raw.ClientAction(CActShowPopup, sarg, a, b, c)
+	if err != nil {
+		return err
+	}
+	if !ok {
+		return refused("PIER_CACT_SHOW_POPUP")
+	}
+	return nil
+}
+
+// ClientShowDevConsoleMessage runs PIER_CACT_SHOW_DEV_CONSOLE_MESSAGE: sarg: text. GuiData::displayDevConsoleMessage
+//
+// abi.h names each argument; an unused one is ignored.
+func ClientShowDevConsoleMessage(sarg string, a, b, c float64) error {
+	ok, err := Raw.ClientAction(CActShowDevConsoleMessage, sarg, a, b, c)
+	if err != nil {
+		return err
+	}
+	if !ok {
+		return refused("PIER_CACT_SHOW_DEV_CONSOLE_MESSAGE")
+	}
+	return nil
+}
+
+// ClientSetSuspendInput runs PIER_CACT_SET_SUSPEND_INPUT: a: non-zero suspends input. IClientInstance::setSuspendInput
+//
+// abi.h names each argument; an unused one is ignored.
+func ClientSetSuspendInput(sarg string, a, b, c float64) error {
+	ok, err := Raw.ClientAction(CActSetSuspendInput, sarg, a, b, c)
+	if err != nil {
+		return err
+	}
+	if !ok {
+		return refused("PIER_CACT_SET_SUSPEND_INPUT")
+	}
+	return nil
+}
+
+// ClientSetSuspendDirectionalInput runs PIER_CACT_SET_SUSPEND_DIRECTIONAL_INPUT: a: non-zero suspends movement input. IClientInstance::setSuspendDirectionalInput
+//
+// abi.h names each argument; an unused one is ignored.
+func ClientSetSuspendDirectionalInput(sarg string, a, b, c float64) error {
+	ok, err := Raw.ClientAction(CActSetSuspendDirectionalInput, sarg, a, b, c)
+	if err != nil {
+		return err
+	}
+	if !ok {
+		return refused("PIER_CACT_SET_SUSPEND_DIRECTIONAL_INPUT")
+	}
+	return nil
+}
+
+// ClientSetGameInputEnabled runs PIER_CACT_SET_GAME_INPUT_ENABLED: a: non-zero enables. IClientInstance::setInGameInputEnabled
+//
+// abi.h names each argument; an unused one is ignored.
+func ClientSetGameInputEnabled(sarg string, a, b, c float64) error {
+	ok, err := Raw.ClientAction(CActSetGameInputEnabled, sarg, a, b, c)
+	if err != nil {
+		return err
+	}
+	if !ok {
+		return refused("PIER_CACT_SET_GAME_INPUT_ENABLED")
+	}
+	return nil
+}
+
+// ClientRefocusMouse runs PIER_CACT_REFOCUS_MOUSE: a: non-zero when the mouse was lost. IClientInstance::refocusMouse
+//
+// abi.h names each argument; an unused one is ignored.
+func ClientRefocusMouse(sarg string, a, b, c float64) error {
+	ok, err := Raw.ClientAction(CActRefocusMouse, sarg, a, b, c)
+	if err != nil {
+		return err
+	}
+	if !ok {
+		return refused("PIER_CACT_REFOCUS_MOUSE")
+	}
+	return nil
+}
+
+// ClientMuteAudio runs PIER_CACT_MUTE_AUDIO: IClientInstance::muteAudio
+//
+// abi.h names each argument; an unused one is ignored.
+func ClientMuteAudio(sarg string, a, b, c float64) error {
+	ok, err := Raw.ClientAction(CActMuteAudio, sarg, a, b, c)
+	if err != nil {
+		return err
+	}
+	if !ok {
+		return refused("PIER_CACT_MUTE_AUDIO")
+	}
+	return nil
+}
+
+// ClientUnmuteAudio runs PIER_CACT_UNMUTE_AUDIO: IClientInstance::unMuteAudio
+//
+// abi.h names each argument; an unused one is ignored.
+func ClientUnmuteAudio(sarg string, a, b, c float64) error {
+	ok, err := Raw.ClientAction(CActUnmuteAudio, sarg, a, b, c)
+	if err != nil {
+		return err
+	}
+	if !ok {
+		return refused("PIER_CACT_UNMUTE_AUDIO")
+	}
+	return nil
+}
+
+// ClientFadeOutMusic runs PIER_CACT_FADE_OUT_MUSIC: IClientInstance::fadeOutMusic
+//
+// abi.h names each argument; an unused one is ignored.
+func ClientFadeOutMusic(sarg string, a, b, c float64) error {
+	ok, err := Raw.ClientAction(CActFadeOutMusic, sarg, a, b, c)
+	if err != nil {
+		return err
+	}
+	if !ok {
+		return refused("PIER_CACT_FADE_OUT_MUSIC")
+	}
+	return nil
+}
+
+// ClientSetGuiScaleOffset runs PIER_CACT_SET_GUI_SCALE_OFFSET: a: the offset. IClientInstance::setGuiScaleOffset
+//
+// abi.h names each argument; an unused one is ignored.
+func ClientSetGuiScaleOffset(sarg string, a, b, c float64) error {
+	ok, err := Raw.ClientAction(CActSetGuiScaleOffset, sarg, a, b, c)
+	if err != nil {
+		return err
+	}
+	if !ok {
+		return refused("PIER_CACT_SET_GUI_SCALE_OFFSET")
+	}
+	return nil
+}
+
+// ClientResetPlayerMovement runs PIER_CACT_RESET_PLAYER_MOVEMENT: IClientInstance::resetPlayerMovement
+//
+// abi.h names each argument; an unused one is ignored.
+func ClientResetPlayerMovement(sarg string, a, b, c float64) error {
+	ok, err := Raw.ClientAction(CActResetPlayerMovement, sarg, a, b, c)
+	if err != nil {
+		return err
+	}
+	if !ok {
+		return refused("PIER_CACT_RESET_PLAYER_MOVEMENT")
+	}
+	return nil
+}
+
+// ClientPushLeaveGameScreen runs PIER_CACT_PUSH_LEAVE_GAME_SCREEN: IClientInstance::tryPushLeaveGameScreen
+//
+// abi.h names each argument; an unused one is ignored.
+func ClientPushLeaveGameScreen(sarg string, a, b, c float64) error {
+	ok, err := Raw.ClientAction(CActPushLeaveGameScreen, sarg, a, b, c)
+	if err != nil {
+		return err
+	}
+	if !ok {
+		return refused("PIER_CACT_PUSH_LEAVE_GAME_SCREEN")
+	}
+	return nil
+}
+
+// ClientOpenContentLogHistory runs PIER_CACT_OPEN_CONTENT_LOG_HISTORY: IClientInstance::openContentLogHistory
+//
+// abi.h names each argument; an unused one is ignored.
+func ClientOpenContentLogHistory(sarg string, a, b, c float64) error {
+	ok, err := Raw.ClientAction(CActOpenContentLogHistory, sarg, a, b, c)
+	if err != nil {
+		return err
+	}
+	if !ok {
+		return refused("PIER_CACT_OPEN_CONTENT_LOG_HISTORY")
+	}
+	return nil
+}
+
+// ClientSetClipboard runs PIER_CACT_SET_CLIPBOARD: sarg: text, empty allowed. AppPlatform::setClipboard
+//
+// abi.h names each argument; an unused one is ignored.
+func ClientSetClipboard(sarg string, a, b, c float64) error {
+	ok, err := Raw.ClientAction(CActSetClipboard, sarg, a, b, c)
+	if err != nil {
+		return err
+	}
+	if !ok {
+		return refused("PIER_CACT_SET_CLIPBOARD")
+	}
+	return nil
+}
+
+// ClientNavigateHowToPlay runs PIER_CACT_NAVIGATE_HOW_TO_PLAY: sarg: the topic, empty allowed. IClientInstance::navigateToHowToPlayScreen
+//
+// abi.h names each argument; an unused one is ignored.
+func ClientNavigateHowToPlay(sarg string, a, b, c float64) error {
+	ok, err := Raw.ClientAction(CActNavigateHowToPlay, sarg, a, b, c)
+	if err != nil {
+		return err
+	}
+	if !ok {
+		return refused("PIER_CACT_NAVIGATE_HOW_TO_PLAY")
+	}
+	return nil
 }

@@ -355,6 +355,9 @@ FAMILIES = [
     ("PIER_ISTR_", "IStr", "Item", "i", "str", "Raw.ItemGetStr(i.SNBT, {c})", None),
     ("PIER_SRV_", "Srv", None, None, "str", "Raw.ServerInfoStr({c})", None),
     ("PIER_SYS_", "Sys", None, None, "str", "Raw.SysInfoStr({c})", None),
+    ("PIER_CPROP_", "CProp", None, None, "num", "Raw.ClientGetNum({c})", None),
+    ("PIER_CSTR_", "CStr", None, None, "str", "Raw.ClientGetStr({c})", None),
+    ("PIER_CACT_", "CAct", None, None, "cact", "Raw.ClientAction({c}, sarg, a, b, c)", None),
 ]
 
 
@@ -420,7 +423,8 @@ def render_props(src):
             if recv is None:
                 # Server and System, not Srv and Sys: the constants already have those names,
                 # and a function spelled like a constant is a redeclaration.
-                name = {"Srv": "Server", "Sys": "System"}[cprefix] + base
+                name = {"Srv": "Server", "Sys": "System", "CProp": "Client", "CStr": "Client",
+                        "CAct": "Client"}[cprefix] + base
             if name in mine:
                 raise SystemExit("%s.%s would be declared twice" % (recv, name))
             used.setdefault(recv, set()).add(name)
@@ -453,6 +457,14 @@ def render_props(src):
                 methods.append("\tif err != nil {\n\t\treturn \"\", err\n\t}")
                 methods.append("\tif !ok || len(out) == 0 {\n\t\treturn \"\", noAnswer(%s)\n\t}" % ('"%s"' % n))
                 methods.append("\treturn out[len(out)-1], nil\n}\n")
+            elif kind == "cact":
+                methods.append("// %s runs %s: %s%s" % (name, n, doc, note))
+                methods.append("//\n// abi.h names each argument; an unused one is ignored.")
+                methods.append("%s(sarg string, a, b, c float64) error {" % head)
+                methods.append("\tok, err := " + c)
+                methods.append("\tif err != nil {\n\t\treturn err\n\t}")
+                methods.append("\tif !ok {\n\t\treturn refused(%s)\n\t}" % ('"%s"' % n))
+                methods.append("\treturn nil\n}\n")
             else:
                 params = "sarg string" if kind == "bact" else "sarg string, a, b, c float64"
                 methods.append("// %s runs %s: %s%s" % (name, n, doc, note))

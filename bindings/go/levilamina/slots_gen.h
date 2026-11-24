@@ -2027,4 +2027,194 @@ static inline bool piergo_call_player_execute_command(const PierApi* api, PierPl
     return api->player_execute_command(a0, a1, a2, a3);
 }
 
+static inline bool piergo_has_client_get_num(const PierApi* api)
+{
+    return api != NULL && api->struct_size >= offsetof(PierApi, client_get_num) + sizeof(api->client_get_num)
+        && api->client_get_num != NULL;
+}
+static inline bool piergo_call_client_get_num(const PierApi* api, int32_t a0, double* a1)
+{
+    return api->client_get_num(a0, a1);
+}
+
+static inline bool piergo_has_client_get_str(const PierApi* api)
+{
+    return api != NULL && api->struct_size >= offsetof(PierApi, client_get_str) + sizeof(api->client_get_str)
+        && api->client_get_str != NULL;
+}
+static inline bool piergo_call_client_get_str(const PierApi* api, int32_t a0, void* a1, PierStrSink a2)
+{
+    return api->client_get_str(a0, a1, a2);
+}
+
+static inline bool piergo_has_client_action(const PierApi* api)
+{
+    return api != NULL && api->struct_size >= offsetof(PierApi, client_action) + sizeof(api->client_action)
+        && api->client_action != NULL;
+}
+static inline bool piergo_call_client_action(const PierApi* api, int32_t a0, PierStr a1, double a2, double a3, double a4)
+{
+    return api->client_action(a0, a1, a2, a3, a4);
+}
+
+static inline bool piergo_has_client_list_keys(const PierApi* api)
+{
+    return api != NULL && api->struct_size >= offsetof(PierApi, client_list_keys) + sizeof(api->client_list_keys)
+        && api->client_list_keys != NULL;
+}
+static inline bool piergo_call_client_list_keys(const PierApi* api, void* a0, PierStrSink a1)
+{
+    return api->client_list_keys(a0, a1);
+}
+
+static inline bool piergo_has_native_enabled(const PierApi* api)
+{
+    return api != NULL && api->struct_size >= offsetof(PierApi, native_enabled) + sizeof(api->native_enabled)
+        && api->native_enabled != NULL;
+}
+static inline bool piergo_call_native_enabled(const PierApi* api)
+{
+    return api->native_enabled();
+}
+
+static inline bool piergo_has_native_resolve_symbol(const PierApi* api)
+{
+    return api != NULL && api->struct_size >= offsetof(PierApi, native_resolve_symbol) + sizeof(api->native_resolve_symbol)
+        && api->native_resolve_symbol != NULL;
+}
+static inline int32_t piergo_call_native_resolve_symbol(const PierApi* api, PierModHandle a0, PierStr a1, void** a2)
+{
+    return api->native_resolve_symbol(a0, a1, a2);
+}
+
+static inline bool piergo_has_native_resolve_signature(const PierApi* api)
+{
+    return api != NULL && api->struct_size >= offsetof(PierApi, native_resolve_signature) + sizeof(api->native_resolve_signature)
+        && api->native_resolve_signature != NULL;
+}
+static inline int32_t piergo_call_native_resolve_signature(const PierApi* api, PierModHandle a0, PierStr a1, void** a2)
+{
+    return api->native_resolve_signature(a0, a1, a2);
+}
+
+static inline bool piergo_has_native_module_export(const PierApi* api)
+{
+    return api != NULL && api->struct_size >= offsetof(PierApi, native_module_export) + sizeof(api->native_module_export)
+        && api->native_module_export != NULL;
+}
+static inline int32_t piergo_call_native_module_export(const PierApi* api, PierModHandle a0, PierStr a1, PierStr a2, void** a3)
+{
+    return api->native_module_export(a0, a1, a2, a3);
+}
+
+static inline bool piergo_has_native_object(const PierApi* api)
+{
+    return api != NULL && api->struct_size >= offsetof(PierApi, native_object) + sizeof(api->native_object)
+        && api->native_object != NULL;
+}
+static inline int32_t piergo_call_native_object(const PierApi* api, PierModHandle a0, int32_t a1, void** a2)
+{
+    return api->native_object(a0, a1, a2);
+}
+
+static inline bool piergo_has_native_player(const PierApi* api)
+{
+    return api != NULL && api->struct_size >= offsetof(PierApi, native_player) + sizeof(api->native_player)
+        && api->native_player != NULL;
+}
+static inline int32_t piergo_call_native_player(const PierApi* api, PierModHandle a0, PierPlayerSel a1, void** a2)
+{
+    return api->native_player(a0, a1, a2);
+}
+
+static inline bool piergo_has_native_actor(const PierApi* api)
+{
+    return api != NULL && api->struct_size >= offsetof(PierApi, native_actor) + sizeof(api->native_actor)
+        && api->native_actor != NULL;
+}
+static inline int32_t piergo_call_native_actor(const PierApi* api, PierModHandle a0, PierActorId a1, void** a2)
+{
+    return api->native_actor(a0, a1, a2);
+}
+
+static inline bool piergo_has_native_dimension(const PierApi* api)
+{
+    return api != NULL && api->struct_size >= offsetof(PierApi, native_dimension) + sizeof(api->native_dimension)
+        && api->native_dimension != NULL;
+}
+static inline int32_t piergo_call_native_dimension(const PierApi* api, PierModHandle a0, int32_t a1, void** a2)
+{
+    return api->native_dimension(a0, a1, a2);
+}
+
+static inline bool piergo_has_native_block_source(const PierApi* api)
+{
+    return api != NULL && api->struct_size >= offsetof(PierApi, native_block_source) + sizeof(api->native_block_source)
+        && api->native_block_source != NULL;
+}
+static inline int32_t piergo_call_native_block_source(const PierApi* api, PierModHandle a0, int32_t a1, void** a2)
+{
+    return api->native_block_source(a0, a1, a2);
+}
+
+static inline bool piergo_has_native_hook_install(const PierApi* api)
+{
+    return api != NULL && api->struct_size >= offsetof(PierApi, native_hook_install) + sizeof(api->native_hook_install)
+        && api->native_hook_install != NULL;
+}
+static inline int32_t piergo_call_native_hook_install(const PierApi* api, PierModHandle a0, void* a1, void* a2, int32_t a3, void** a4, uint64_t* a5)
+{
+    return api->native_hook_install(a0, a1, a2, a3, a4, a5);
+}
+
+static inline bool piergo_has_native_hook_remove(const PierApi* api)
+{
+    return api != NULL && api->struct_size >= offsetof(PierApi, native_hook_remove) + sizeof(api->native_hook_remove)
+        && api->native_hook_remove != NULL;
+}
+static inline int32_t piergo_call_native_hook_remove(const PierApi* api, PierModHandle a0, uint64_t a1)
+{
+    return api->native_hook_remove(a0, a1);
+}
+
+static inline bool piergo_has_client_option_list(const PierApi* api)
+{
+    return api != NULL && api->struct_size >= offsetof(PierApi, client_option_list) + sizeof(api->client_option_list)
+        && api->client_option_list != NULL;
+}
+static inline bool piergo_call_client_option_list(const PierApi* api, void* a0, PierKvSink a1)
+{
+    return api->client_option_list(a0, a1);
+}
+
+static inline bool piergo_has_client_option_get(const PierApi* api)
+{
+    return api != NULL && api->struct_size >= offsetof(PierApi, client_option_get) + sizeof(api->client_option_get)
+        && api->client_option_get != NULL;
+}
+static inline bool piergo_call_client_option_get(const PierApi* api, PierStr a0, void* a1, PierStrSink a2)
+{
+    return api->client_option_get(a0, a1, a2);
+}
+
+static inline bool piergo_has_client_option_set(const PierApi* api)
+{
+    return api != NULL && api->struct_size >= offsetof(PierApi, client_option_set) + sizeof(api->client_option_set)
+        && api->client_option_set != NULL;
+}
+static inline bool piergo_call_client_option_set(const PierApi* api, PierStr a0, PierStr a1)
+{
+    return api->client_option_set(a0, a1);
+}
+
+static inline bool piergo_has_world_get_num(const PierApi* api)
+{
+    return api != NULL && api->struct_size >= offsetof(PierApi, world_get_num) + sizeof(api->world_get_num)
+        && api->world_get_num != NULL;
+}
+static inline bool piergo_call_world_get_num(const PierApi* api, int32_t a0, int32_t a1, double* a2)
+{
+    return api->world_get_num(a0, a1, a2);
+}
+
 #endif /* PIERGO_SLOTS_GEN_H */

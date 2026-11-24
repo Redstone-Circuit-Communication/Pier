@@ -1534,9 +1534,10 @@ func (RawAPI) ClientIsInLevel() (bool, error) {
 
 // ClientGetScreenName calls the client_get_screen_name slot.
 //
-// Current screen / UI name (e.g. "hud_screen", "pause_screen"). NULL on
-// every current host, client builds included: the engine exposes no
-// stable accessor for it.
+// Current screen name through IClientInstance::getScreenName, such as
+// "hud_screen" or "pause_screen". Returns false, sinking nothing, before the
+// client has an instance. PIER_CSTR_TOP_SCREEN_NAME of client_get_str reads the
+// topmost screen of the stack instead.
 func (RawAPI) ClientGetScreenName() ([]string, bool, error) {
 	if api == nil || !bool(C.piergo_has_client_get_screen_name(api)) {
 		return nil, false, notProvided("client_get_screen_name")
@@ -2193,4 +2194,133 @@ func (RawAPI) RegistryList(kind int32) ([]string, bool, error) {
 	defer h.Delete()
 	r := C.piergo_call_registry_list(api, C.int32_t(kind), handle(uintptr(h)), C.piergo_str_sink())
 	return col.items, bool(r), nil
+}
+
+// ClientGetNum calls the client_get_num slot.
+//
+// Reads one PIER_CPROP_* value into *out. Returns false, leaving *out alone, for an
+// unknown key, a null `out`, a client that has no instance yet, or a key about the
+// local player while the client is not in a world. A flag reads 1 or 0.
+func (RawAPI) ClientGetNum(prop int32) (float64, bool, error) {
+	if api == nil || !bool(C.piergo_has_client_get_num(api)) {
+		return 0, false, notProvided("client_get_num")
+	}
+	var o0 C.double
+	r := C.piergo_call_client_get_num(api, C.int32_t(prop), &o0)
+	return float64(o0), bool(r), nil
+}
+
+// ClientGetStr calls the client_get_str slot.
+//
+// Reads one PIER_CSTR_* value through `sink`, called once. Returns false, sinking
+// nothing, for an unknown key, a null sink, or a client that has no instance yet.
+func (RawAPI) ClientGetStr(prop int32) ([]string, bool, error) {
+	if api == nil || !bool(C.piergo_has_client_get_str(api)) {
+		return nil, false, notProvided("client_get_str")
+	}
+	col := &collector{}
+	h := cgo.NewHandle(col)
+	defer h.Delete()
+	r := C.piergo_call_client_get_str(api, C.int32_t(prop), handle(uintptr(h)), C.piergo_str_sink())
+	return col.items, bool(r), nil
+}
+
+// ClientAction calls the client_action slot.
+//
+// Performs one PIER_CACT_* verb on this client. Returns false for an unknown verb, a
+// text verb given empty text, or a client that has no instance yet. The text verbs
+// need the HUD, which exists once a world is loaded, and return false before that.
+// True means the call reached the engine, which reports nothing back.
+func (RawAPI) ClientAction(action int32, sarg string, a float64, b float64, c float64) (bool, error) {
+	if api == nil || !bool(C.piergo_has_client_action(api)) {
+		return false, notProvided("client_action")
+	}
+	r := C.piergo_call_client_action(api, C.int32_t(action), str(sarg), C.double(a), C.double(b), C.double(c))
+	return bool(r), nil
+}
+
+// ClientListKeys calls the client_list_keys slot.
+//
+// Feeds the name of every binding ll::input::KeyRegistry holds to `sink`, one call
+// each, whichever mod registered it. Returns false only for a null sink.
+func (RawAPI) ClientListKeys() ([]string, bool, error) {
+	if api == nil || !bool(C.piergo_has_client_list_keys(api)) {
+		return nil, false, notProvided("client_list_keys")
+	}
+	col := &collector{}
+	h := cgo.NewHandle(col)
+	defer h.Delete()
+	r := C.piergo_call_client_list_keys(api, handle(uintptr(h)), C.piergo_str_sink())
+	return col.items, bool(r), nil
+}
+
+// NativeEnabled calls the native_enabled slot.
+//
+// Whether native_detour is on, so the other native_* slots can answer. Logs
+// nothing.
+func (RawAPI) NativeEnabled() (bool, error) {
+	if api == nil || !bool(C.piergo_has_native_enabled(api)) {
+		return false, notProvided("native_enabled")
+	}
+	r := C.piergo_call_native_enabled(api)
+	return bool(r), nil
+}
+
+// NativeHookRemove calls the native_hook_remove slot.
+//
+// Removes a detour this mod installed. PIER_NATIVE_NOT_FOUND for an id this mod does
+// not hold, one already removed included. PIER_NATIVE_FAILED when the engine-side
+// removal fails; the detour then stays recorded and is tried again at unload.
+func (RawAPI) NativeHookRemove(id uint64) (int32, error) {
+	if api == nil || !bool(C.piergo_has_native_hook_remove(api)) {
+		return 0, notProvided("native_hook_remove")
+	}
+	r := C.piergo_call_native_hook_remove(api, self, C.uint64_t(id))
+	return int32(r), nil
+}
+
+// ClientOptionGet calls the client_option_get slot.
+//
+// Reads one option by its options.txt key through `sink`, called once. Returns false,
+// sinking nothing, for an unknown key, a null sink, or a client that has no instance
+// yet.
+func (RawAPI) ClientOptionGet(key string) ([]string, bool, error) {
+	if api == nil || !bool(C.piergo_has_client_option_get(api)) {
+		return nil, false, notProvided("client_option_get")
+	}
+	col := &collector{}
+	h := cgo.NewHandle(col)
+	defer h.Delete()
+	r := C.piergo_call_client_option_get(api, str(key), handle(uintptr(h)), C.piergo_str_sink())
+	return col.items, bool(r), nil
+}
+
+// ClientOptionSet calls the client_option_set slot.
+//
+// Writes the option that stores `key`, passing `value` to Option::load, the parser
+// options.txt is read with. Returns false for an unknown key, an option the engine
+// marks as not modifiable now, or a client that has no instance yet. The engine keeps
+// what it can parse and reports nothing, so a caller that needs to know reads the key
+// back. The host does not write options.txt itself.
+func (RawAPI) ClientOptionSet(key string, value string) (bool, error) {
+	if api == nil || !bool(C.piergo_has_client_option_set(api)) {
+		return false, notProvided("client_option_set")
+	}
+	r := C.piergo_call_client_option_set(api, str(key), str(value))
+	return bool(r), nil
+}
+
+// WorldGetNum calls the world_get_num slot.
+//
+// Reads one PIER_WPROP_* value of dimension `dim` into *out. Returns false, leaving *out
+// alone, for an unknown key, a null `out`, a dimension that does not exist, or a level
+// that is not ready. A custom dimension not built yet is built by this call, the same as
+// a block read from it would build it.
+func (RawAPI) WorldGetNum(dim int32, prop int32) (float64, bool, error) {
+	if api == nil || !bool(C.piergo_has_world_get_num(api)) {
+		return 0, false, notProvided("world_get_num")
+	}
+	var o0 C.double
+	r := C.piergo_call_world_get_num(api, C.int32_t(dim), C.int32_t(prop), &o0)
+	return float64(o0), bool(r), nil
 }

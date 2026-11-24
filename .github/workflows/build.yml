@@ -155,6 +155,9 @@ jobs:
       - name: Vet it for the client target
         working-directory: bindings/go
         run: go vet -tags pier_client ./...
+      - name: Test the binding
+        working-directory: bindings/go
+        run: go test ./...
       - name: Build the example as a mod DLL
         working-directory: examples/hello-pier-go
         run: go build -buildmode=c-shared -trimpath -o hello_pier_go.dll .
