@@ -82,6 +82,7 @@ int32_t (*gaming_status)(void);
 - 各绑定里的调用方：
     - Rust：[`Host::gaming_status`](../rust/host.md#Host.gaming_status)
     - Go：[`Status`](../go/core.md#Status)、[`Raw.GamingStatus`](../go/raw.md#Raw.GamingStatus)
+    - Zig：[`server.gamingStatus`](../zig/server.md#server.gamingStatus)
 
 ### `schedule` {#schedule}
 

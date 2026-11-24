@@ -837,6 +837,22 @@ Write the liquid layer. `block_spec` takes a bare block name or full SNBT; write
 - Return type: `(bool, error)`
 - Slots: [`set_extra_block`](../cpp/world.md#set_extra_block)
 
+### `Raw.WorldGetNum` {#Raw.WorldGetNum}
+
+```go
+func (RawAPI) WorldGetNum(dim int32, prop int32) (float64, bool, error)
+```
+
+WorldGetNum calls the `world_get_num` slot.
+
+Reads one PIER\_WPROP\_\* value of dimension `dim` into \*out. Returns false, leaving \*out alone, for an unknown key, a null `out`, a dimension that does not exist, or a level that is not ready. A custom dimension not built yet is built by this call, the same as a block read from it would build it.
+
+- Parameters:
+    - dim : `int32`
+    - prop : `int32`
+- Return type: `(float64, bool, error)`
+- Slots: [`world_get_num`](../cpp/world.md#world_get_num)
+
 ## Bulk world editing {#raw-edit}
 
 ### `Raw.EditSetBlockNbt` {#Raw.EditSetBlockNbt}
@@ -2317,7 +2333,7 @@ func (RawAPI) ClientGetScreenName() ([]string, bool, error)
 
 ClientGetScreenName calls the `client_get_screen_name` slot.
 
-Current screen / UI name (e.g. "`hud_screen`", "`pause_screen`"). NULL on every current host, client builds included: the engine exposes no stable accessor for it.
+Current screen name through `IClientInstance::getScreenName`, such as "`hud_screen`" or "`pause_screen`". Returns false, sinking nothing, before the client has an instance. `PIER_CSTR_TOP_SCREEN_NAME` of `client_get_str` reads the topmost screen of the stack instead.
 
 - Return type: `([]string, bool, error)`
 - Slots: [`client_get_screen_name`](../cpp/client.md#client_get_screen_name)
@@ -2351,6 +2367,267 @@ Currently assigned key codes (may differ from defaults if remapped). sink receiv
     - handleArg : `KeyHandle`
 - Return type: `([]string, bool, error)`
 - Slots: [`client_get_key_codes`](../cpp/client.md#client_get_key_codes)
+
+### `Raw.ClientGetNum` {#Raw.ClientGetNum}
+
+```go
+func (RawAPI) ClientGetNum(prop int32) (float64, bool, error)
+```
+
+ClientGetNum calls the `client_get_num` slot.
+
+Reads one PIER\_CPROP\_\* value into \*out. Returns false, leaving \*out alone, for an unknown key, a null `out`, a client that has no instance yet, or a key about the local player while the client is not in a world. A flag reads 1 or 0.
+
+- Parameters:
+    - prop : `int32`
+- Return type: `(float64, bool, error)`
+- Slots: [`client_get_num`](../cpp/client.md#client_get_num)
+
+### `Raw.ClientGetStr` {#Raw.ClientGetStr}
+
+```go
+func (RawAPI) ClientGetStr(prop int32) ([]string, bool, error)
+```
+
+ClientGetStr calls the `client_get_str` slot.
+
+Reads one PIER\_CSTR\_\* value through `sink`, called once. Returns false, sinking nothing, for an unknown key, a null sink, or a client that has no instance yet.
+
+- Parameters:
+    - prop : `int32`
+- Return type: `([]string, bool, error)`
+- Slots: [`client_get_str`](../cpp/client.md#client_get_str)
+
+### `Raw.ClientAction` {#Raw.ClientAction}
+
+```go
+func (RawAPI) ClientAction(action int32, sarg string, a float64, b float64, c float64) (bool, error)
+```
+
+ClientAction calls the `client_action` slot.
+
+Performs one PIER\_CACT\_\* verb on this client. Returns false for an unknown verb, a text verb given empty text, or a client that has no instance yet. The text verbs need the HUD, which exists once a world is loaded, and return false before that. True means the call reached the engine, which reports nothing back.
+
+- Parameters:
+    - action : `int32`
+    - sarg : `string`
+    - a : `float64`
+    - b : `float64`
+    - c : `float64`
+- Return type: `(bool, error)`
+- Slots: [`client_action`](../cpp/client.md#client_action)
+
+### `Raw.ClientListKeys` {#Raw.ClientListKeys}
+
+```go
+func (RawAPI) ClientListKeys() ([]string, bool, error)
+```
+
+ClientListKeys calls the `client_list_keys` slot.
+
+Feeds the name of every binding `ll::input::KeyRegistry` holds to `sink`, one call each, whichever mod registered it. Returns false only for a null sink.
+
+- Return type: `([]string, bool, error)`
+- Slots: [`client_list_keys`](../cpp/client.md#client_list_keys)
+
+### `Raw.ClientOptionGet` {#Raw.ClientOptionGet}
+
+```go
+func (RawAPI) ClientOptionGet(key string) ([]string, bool, error)
+```
+
+ClientOptionGet calls the `client_option_get` slot.
+
+Reads one option by its options.txt key through `sink`, called once. Returns false, sinking nothing, for an unknown key, a null sink, or a client that has no instance yet.
+
+- Parameters:
+    - key : `string`
+- Return type: `([]string, bool, error)`
+- Slots: [`client_option_get`](../cpp/client.md#client_option_get)
+
+### `Raw.ClientOptionSet` {#Raw.ClientOptionSet}
+
+```go
+func (RawAPI) ClientOptionSet(key string, value string) (bool, error)
+```
+
+ClientOptionSet calls the `client_option_set` slot.
+
+Writes the option that stores `key`, passing `value` to `Option::load`, the parser options.txt is read with. Returns false for an unknown key, an option the engine marks as not modifiable now, or a client that has no instance yet. The engine keeps what it can parse and reports nothing, so a caller that needs to know reads the key back. The host does not write options.txt itself.
+
+- Parameters:
+    - key : `string`
+    - value : `string`
+- Return type: `(bool, error)`
+- Slots: [`client_option_set`](../cpp/client.md#client_option_set)
+
+## Native escape hatch {#raw-native}
+
+### `Raw.NativeResolveSymbol` {#Raw.NativeResolveSymbol}
+
+```go
+func (RawAPI) NativeResolveSymbol(symbol string) (unsafe.Pointer, int32, error)
+```
+
+NativeResolveSymbol calls the `native_resolve_symbol` slot.
+
+The address of an engine function by its decorated symbol name.
+
+- Parameters:
+    - symbol : `string`
+- Return type: `(unsafe.Pointer, int32, error)`
+- Slots: [`native_resolve_symbol`](../cpp/native.md#native_resolve_symbol)
+
+### `Raw.NativeResolveSignature` {#Raw.NativeResolveSignature}
+
+```go
+func (RawAPI) NativeResolveSignature(pattern string) (unsafe.Pointer, int32, error)
+```
+
+NativeResolveSignature calls the `native_resolve_signature` slot.
+
+The first match of a byte pattern in the engine executable.
+
+- Parameters:
+    - pattern : `string`
+- Return type: `(unsafe.Pointer, int32, error)`
+- Slots: [`native_resolve_signature`](../cpp/native.md#native_resolve_signature)
+
+### `Raw.NativeModuleExport` {#Raw.NativeModuleExport}
+
+```go
+func (RawAPI) NativeModuleExport(module, name string) (unsafe.Pointer, int32, error)
+```
+
+NativeModuleExport calls the `native_module_export` slot.
+
+An export of a module already loaded into the process.
+
+- Parameters:
+    - module : `string`
+    - name : `string`
+- Return type: `(unsafe.Pointer, int32, error)`
+- Slots: [`native_module_export`](../cpp/native.md#native_module_export)
+
+### `Raw.NativeObject` {#Raw.NativeObject}
+
+```go
+func (RawAPI) NativeObject(kind int32) (unsafe.Pointer, int32, error)
+```
+
+NativeObject calls the `native_object` slot.
+
+The address of one engine service object.
+
+- Parameters:
+    - kind : `int32`
+- Return type: `(unsafe.Pointer, int32, error)`
+- Slots: [`native_object`](../cpp/native.md#native_object)
+
+### `Raw.NativePlayer` {#Raw.NativePlayer}
+
+```go
+func (RawAPI) NativePlayer(p Player) (unsafe.Pointer, int32, error)
+```
+
+NativePlayer calls the `native_player` slot.
+
+The Player object of an online player.
+
+- Parameters:
+    - p : `Player`
+- Return type: `(unsafe.Pointer, int32, error)`
+- Slots: [`native_player`](../cpp/native.md#native_player)
+
+### `Raw.NativeActor` {#Raw.NativeActor}
+
+```go
+func (RawAPI) NativeActor(id ActorID) (unsafe.Pointer, int32, error)
+```
+
+NativeActor calls the `native_actor` slot.
+
+The Actor object of a loaded actor.
+
+- Parameters:
+    - id : `ActorID`
+- Return type: `(unsafe.Pointer, int32, error)`
+- Slots: [`native_actor`](../cpp/native.md#native_actor)
+
+### `Raw.NativeDimension` {#Raw.NativeDimension}
+
+```go
+func (RawAPI) NativeDimension(dim int32) (unsafe.Pointer, int32, error)
+```
+
+NativeDimension calls the `native_dimension` slot.
+
+The Dimension object of a dimension id.
+
+- Parameters:
+    - dim : `int32`
+- Return type: `(unsafe.Pointer, int32, error)`
+- Slots: [`native_dimension`](../cpp/native.md#native_dimension)
+
+### `Raw.NativeBlockSource` {#Raw.NativeBlockSource}
+
+```go
+func (RawAPI) NativeBlockSource(dim int32) (unsafe.Pointer, int32, error)
+```
+
+NativeBlockSource calls the `native_block_source` slot.
+
+The BlockSource of a dimension id.
+
+- Parameters:
+    - dim : `int32`
+- Return type: `(unsafe.Pointer, int32, error)`
+- Slots: [`native_block_source`](../cpp/native.md#native_block_source)
+
+### `Raw.NativeHookInstall` {#Raw.NativeHookInstall}
+
+```go
+func (RawAPI) NativeHookInstall(target, detour unsafe.Pointer, priority int32) (unsafe.Pointer, uint64, int32, error)
+```
+
+NativeHookInstall calls the `native_hook_install` slot.
+
+Installs a native detour on target through `ll::memory::hook`.
+
+- Parameters:
+    - target : `unsafe.Pointer`
+    - detour : `unsafe.Pointer`
+    - priority : `int32`
+- Return type: `(unsafe.Pointer, uint64, int32, error)`
+- Slots: [`native_hook_install`](../cpp/native.md#native_hook_install)
+
+### `Raw.NativeEnabled` {#Raw.NativeEnabled}
+
+```go
+func (RawAPI) NativeEnabled() (bool, error)
+```
+
+NativeEnabled calls the `native_enabled` slot.
+
+Whether `native_detour` is on, so the other native\_\* slots can answer. Logs nothing.
+
+- Return type: `(bool, error)`
+- Slots: [`native_enabled`](../cpp/native.md#native_enabled)
+
+### `Raw.NativeHookRemove` {#Raw.NativeHookRemove}
+
+```go
+func (RawAPI) NativeHookRemove(id uint64) (int32, error)
+```
+
+NativeHookRemove calls the `native_hook_remove` slot.
+
+Removes a detour this mod installed. `PIER_NATIVE_NOT_FOUND` for an id this mod does not hold, one already removed included. `PIER_NATIVE_FAILED` when the engine-side removal fails; the detour then stays recorded and is tried again at unload.
+
+- Parameters:
+    - id : `uint64`
+- Return type: `(int32, error)`
+- Slots: [`native_hook_remove`](../cpp/native.md#native_hook_remove)
 
 ## Custom dimensions {#raw-dimensions}
 

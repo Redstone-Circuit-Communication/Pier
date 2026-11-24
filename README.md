@@ -73,7 +73,7 @@ bits of the version number, and the patches that maintained it, have been remove
 
 ### Capability packages register themselves
 
-Pier is eight C++ packages. `pier-host` owns the table and the mod lifecycle and does not
+Pier is nine C++ packages. `pier-host` owns the table and the mod lifecycle and does not
 know what fills the table. Each capability package registers four things with the host
 through a service provider interface: the slot pack it fills, the teardown steps it needs,
 whether it vetoes an unload, and the events it provides.
@@ -93,6 +93,10 @@ it was still broken once, in four packages, and the check came after that.
 
 No pointer into the server crosses the ABI. A player is a selector, an actor an id, a block a
 dimension and a coordinate, and the host looks each up again on every call.
+
+The one exception is the `native_*` group, for a call this table does not wrap. It is off
+unless the operator sets `native_detour` in `config.json`, and `abi.h` says what a mod using
+it answers for.
 
 A handle can therefore be kept across ticks. Once the actor is gone, the host cannot find it
 and the call returns an error; it does not land in freed memory. Each call costs a lookup.

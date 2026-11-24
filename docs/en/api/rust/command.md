@@ -112,6 +112,8 @@ pub struct Invocation<'a> {
 
 One command invocation.
 
+- Implements: `Debug`
+
 ### `Invocation::raw` {#Invocation.raw}
 
 ```rust
@@ -370,6 +372,8 @@ command::builder("plot", "Plots", CommandPermission::Any)
     .overload(|o| o.text("verb", "rate").required("score", ParamType::Int))
     .register(handler)?;
 ```
+
+- Implements: `Debug`
 
 ### `CommandBuilder::overload` {#CommandBuilder.overload}
 

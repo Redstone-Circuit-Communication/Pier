@@ -246,6 +246,8 @@ uint64_t (*lane_publish)(PierModHandle mod, PierStr name, PierLaneDesc const* de
 - 表内序号：第 172 个槽位（从 0 数起）
 - 各绑定里的调用方：
     - Rust：[`lane::publish`](../rust/lane.md#fn.publish)
+    - Go：[`PublishLane`](../go/crossmod.md#PublishLane)
+    - Zig：[`lane.publish`](../zig/crossmod.md#lane.publish)
 
 ### `lane_unpublish` {#lane_unpublish}
 
@@ -263,7 +265,8 @@ bool (*lane_unpublish)(PierModHandle mod, uint64_t pub_id);
 - 所在分节：同工具链快速通道，追加的槽位，受 `struct_size` 约束（`Same-toolchain fast lane, appended and struct_size-gated.`）
 - 表内序号：第 173 个槽位（从 0 数起）
 - 各绑定里的调用方：
-    - Go：[`Raw.LaneUnpublish`](../go/raw.md#Raw.LaneUnpublish)
+    - Go：[`LanePublication.Withdraw`](../go/crossmod.md#LanePublication.Withdraw)、[`Raw.LaneUnpublish`](../go/raw.md#Raw.LaneUnpublish)
+    - Zig：[`lane.Publication.withdraw`](../zig/crossmod.md#lane.Publication.withdraw)
 
 ### `lane_acquire` {#lane_acquire}
 
@@ -289,6 +292,8 @@ int32_t (*lane_acquire)(
 - 表内序号：第 174 个槽位（从 0 数起）
 - 各绑定里的调用方：
     - Rust：[`lane::acquire`](../rust/lane.md#fn.acquire)、[`lane::acquire`](../rust/lane.md#fn.acquire)
+    - Go：[`AcquireLane`](../go/crossmod.md#AcquireLane)
+    - Zig：[`lane.acquire`](../zig/crossmod.md#lane.acquire)
 
 ### `lane_release` {#lane_release}
 
@@ -306,7 +311,8 @@ bool (*lane_release)(PierModHandle mod, uint64_t lease);
 - 所在分节：同工具链快速通道，追加的槽位，受 `struct_size` 约束（`Same-toolchain fast lane, appended and struct_size-gated.`）
 - 表内序号：第 175 个槽位（从 0 数起）
 - 各绑定里的调用方：
-    - Go：[`Raw.LaneRelease`](../go/raw.md#Raw.LaneRelease)
+    - Go：[`LaneLease.Release`](../go/crossmod.md#LaneLease.Release)、[`Raw.LaneRelease`](../go/raw.md#Raw.LaneRelease)
+    - Zig：[`lane.Lease.release`](../zig/crossmod.md#lane.Lease.release)
 
 ### `lane_list` {#lane_list}
 
@@ -324,7 +330,8 @@ void (*lane_list)(void* ctx, PierStrSink sink);
 - 表内序号：第 176 个槽位（从 0 数起）
 - 各绑定里的调用方：
     - Rust：[`lane::list`](../rust/lane.md#fn.list)、[`lane::list`](../rust/lane.md#fn.list)、[`lane::list_json`](../rust/lane.md#fn.list_json)、[`lane::list_json`](../rust/lane.md#fn.list_json)
-    - Go：[`Raw.LaneList`](../go/raw.md#Raw.LaneList)
+    - Go：[`Lanes`](../go/crossmod.md#Lanes)、[`Raw.LaneList`](../go/raw.md#Raw.LaneList)
+    - Zig：[`lane.list`](../zig/crossmod.md#lane.list)、[`lane.listJson`](../zig/crossmod.md#lane.listJson)
 
 ### `service_caller` {#service_caller}
 

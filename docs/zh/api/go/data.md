@@ -30,6 +30,20 @@ func OpenKvDb(path string, createIfMissing bool) (*KvDb, error)
 - 返回值类型：`(*KvDb, error)`
 - 对应槽位：[`kvdb_open`](../cpp/data.md#kvdb_open)
 
+### `BinaryToSnbt` {#BinaryToSnbt}
+
+```go
+func BinaryToSnbt(data []byte, format int32) (string, error)
+```
+
+BinaryToSnbt 把二进制 NBT 解码成 SNBT。format 为 0 表示小端的磁盘布局，为 1 表示网络编码。
+
+- 参数：
+    - data : `[]byte`
+    - format : `int32`
+- 返回值类型：`(string, error)`
+- 对应槽位：[`nbt_binary_to_snbt`](../cpp/data.md#nbt_binary_to_snbt)
+
 ## `KvDb` {#KvDb}
 
 ```go

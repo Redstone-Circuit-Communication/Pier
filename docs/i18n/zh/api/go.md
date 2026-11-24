@@ -491,6 +491,44 @@ Go 模组要实现的生命周期。两步都在服务器线程上运行；返�
 
 设置服务器进程的一个环境变量。
 
+## ed0b255e27
+
+> SetTickFreeze freezes or unfreezes the world.
+
+SetTickFreeze 冻结或解冻世界。
+
+## 64faa67986
+
+> StepTicks lets n more frames through while the world is frozen.
+
+StepTicks 在世界被冻结时多放行 n 帧。
+
+## 335e25d555
+
+> SetTickWarp sets the time warp: 0 < factor <= 100, below 1 is slow motion and 1 is normal.
+
+SetTickWarp 设置时间扭曲：0 < factor <= 100，小于 1 是慢动作，1 是正常速度。
+
+## 99690a3951
+
+> BeginProfile opens a sampling window of ticks frames, from 1 to 12000. Only one window is
+> open at a time.
+
+BeginProfile 打开一个 ticks 帧的采样窗口，取值 1 到 12000。同一时间只能开一个窗口。
+
+## 9c5c6fbb8f
+
+> TakeProfile takes the sampling report as SNBT. ready is false while the window is still open
+> or none was armed. The report is handed out once per window.
+
+TakeProfile 取出采样报告，SNBT 形式。窗口还没结束、或根本没有开启采样时 ready 为 false。报告在每个窗口里只交出一次。
+
+## 8c9b5b07fd
+
+> IsWine reports whether this host runs under Wine.
+
+IsWine 报告这个宿主是否运行在 Wine 下。
+
 ## c391f84636
 
 > ScanRegion reads every block and entity in a box. Server thread only.
@@ -594,6 +632,107 @@ Go 模组要实现的生命周期。两步都在服务器线程上运行；返�
 
 设置一个矩形内每一列的生物群系，返回改变了多少列。
 
+## f96833c4af
+
+> FindPath computes a path for an actor to a target cell, as the host's SNBT. Every current
+> host answers not provided.
+
+FindPath 为一个实体计算前往目标格子的路径，结果是宿主的 SNBT。目前所有宿主都回答 not provided。
+
+## 363cff2bca
+
+> UpdateWeather sets the level and the remaining ticks of rain and of lightning.
+
+UpdateWeather 设置雨和雷各自的强度与剩余 tick 数。
+
+## e51d23618f
+
+> LevelSleepStatus reads the sleep status of the players.
+
+LevelSleepStatus 读取玩家们的睡眠状态。
+
+## 672128c329
+
+> Villages lists the villages of one dimension.
+
+Villages 列出一个维度里的村庄。
+
+## eab3ee57e0
+
+> StructuresNear lists the hardcoded generation areas of the loaded chunks within a radius.
+
+StructuresNear 列出一个半径内、已加载区块里的硬编码生成区域。
+
+## dd59d3ea7f
+
+> ChunksLoaded reports whether every chunk covered by the region is in memory.
+
+ChunksLoaded 报告区域覆盖的每个区块是否都在内存里。
+
+## 0f4f117753
+
+> DeleteChunkKeys deletes every save key of a chunk, so the engine regenerates it from the
+> generator on its next load, and returns how many keys went. Only an unloaded chunk can be
+> restored this way.
+
+DeleteChunkKeys 删除一个区块的全部存档键，引擎会在下次加载它时从生成器重新生成，并返回删掉了多少个键。只有未加载的区块可以这样还原。
+
+## 1e1569b591
+
+> ChunkKeys lists every save key of a chunk. A key is binary, and a Go string holds it as it
+> is.
+
+ChunkKeys 列出一个区块的全部存档键。键是二进制的，Go 字符串原样保存它。
+
+## ada5820ad6
+
+> DeleteSaveKey deletes one save key byte for byte. The content is not interpreted.
+
+DeleteSaveKey 逐字节删除一个存档键。内容不会被解释。
+
+## 1f0fb44a8c
+
+> WorldWeather reads one PIER_WPROP_* value of dimension dim. The error covers an unknown key,
+> a dimension that does not exist and a level that is not ready.
+
+WorldWeather 读取维度 dim 的一个 PIER_WPROP_* 值。键未知、维度不存在、或者 level 尚未就绪时返回错误。
+
+## 8be363cf44
+
+> WorldRainLevel is the rain level of a dimension, 0 for none to 1 for full rain.
+
+WorldRainLevel 是一个维度的降雨强度，0 表示无雨，1 表示满雨。
+
+## c8a5dcbd41
+
+> WorldTargetRainLevel reads PIER_WPROP_TARGET_RAIN_LEVEL of dimension dim.
+
+WorldTargetRainLevel 读取维度 dim 的 PIER_WPROP_TARGET_RAIN_LEVEL。
+
+## faa9b1ed87
+
+> WorldLightningLevel is the lightning level of a dimension, 0 for none to 1 for a storm.
+
+WorldLightningLevel 是一个维度的雷暴强度，0 表示无雷暴，1 表示雷暴。
+
+## 733d4c3803
+
+> WorldTargetLightningLevel reads PIER_WPROP_TARGET_LIGHTNING_LEVEL of dimension dim.
+
+WorldTargetLightningLevel 读取维度 dim 的 PIER_WPROP_TARGET_LIGHTNING_LEVEL。
+
+## f182399e85
+
+> WorldFogLevel reads PIER_WPROP_FOG_LEVEL of dimension dim.
+
+WorldFogLevel 读取维度 dim 的 PIER_WPROP_FOG_LEVEL。
+
+## c906d2ce22
+
+> WorldSkyFlashTime reads PIER_WPROP_SKY_FLASH_TIME of dimension dim.
+
+WorldSkyFlashTime 读取维度 dim 的 PIER_WPROP_SKY_FLASH_TIME。
+
 ## cf152758a4
 
 > EntityInfo is one entity a region scan found: the cell holding it, its type and its SNBT.
@@ -618,6 +757,25 @@ Go 模组要实现的生命周期。两步都在服务器线程上运行；返�
 
 爆炸的可选部分。
 
+## e3068db8da
+
+> SleepStatus is how many players sleep.
+
+SleepStatus 表示有多少玩家在睡觉。
+
+## 24b365af6c
+
+> Village is one village.
+
+Village 是一个村庄。
+
+## 8d201552e2
+
+> Structure is one hardcoded generation area: a stronghold, a witch hut, an ocean monument
+> or a similar structure.
+
+Structure 是一个硬编码的生成区域：要塞、女巫小屋、海底神殿或类似的结构。
+
 ## 0c47c14664
 
 > SetBlocks writes many blocks in one call: palette holds block specs and each cell names one
@@ -630,6 +788,13 @@ Go 模组要实现的生命周期。两步都在服务器线程上运行；返�
 > FillRegion fills a box with one block and returns how many cells changed.
 
 用一种方块填满一个长方体，返回改变了多少格。
+
+## 06ff93d9b5
+
+> SpawnEntityNBT spawns an actor from full NBT, the inverse of Snapshot. A non-nil pos
+> overrides the Pos tag. Every current host answers not provided.
+
+SpawnEntityNBT 用完整的 NBT 生成一个实体，是 Snapshot 的逆操作。pos 不为 nil 时会覆盖 Pos 标签。目前所有宿主都回答 not provided。
 
 ## 15cef79797
 
@@ -662,6 +827,12 @@ Go 模组要实现的生命周期。两步都在服务器线程上运行；返�
 > warning, so one bad entry does not make who is online unanswerable.
 
 列出在线玩家。解析不了的条目会被跳过，并记一条警告，所以一条坏数据不会让「谁在线」变得答不上来。
+
+## 7b62af50ec
+
+> PositionOf looks up the feet position and the dimension of a connected player by name.
+
+PositionOf 按名字查找一名已连接玩家的脚下位置和所在维度。
 
 ## f74986ce4b
 
@@ -793,12 +964,61 @@ Go 模组要实现的生命周期。两步都在服务器线程上运行；返�
 
 把这名玩家的副手栏当作容器。
 
+## 9b07d6655a
+
+> Position is the player's feet position and dimension.
+
+Position 是玩家脚下的位置和所在维度。
+
+## b63763bfaa
+
+> Cooldown is how many ticks of cooldown the item has left, and -1 when it is not on cooldown.
+
+Cooldown 是物品还剩多少 tick 的冷却，不在冷却中时为 -1。
+
+## e94610b5ee
+
+> SetCooldown puts the item on cooldown for the player.
+
+SetCooldown 让这名玩家的这个物品进入冷却。
+
+## c7b460e745
+
+> Equipment lists the equipment of the player, one entry per slot of the engine's numbering.
+
+Equipment 列出玩家的装备，按引擎的槽位编号每个槽位一项。
+
+## ca79e73ba5
+
+> NetworkDetail reads the network status of the player.
+
+NetworkDetail 读取玩家的网络状态。
+
+## a51ac567d3
+
+> SendPacket pushes one raw packet onto the connection of the player: the id and the body,
+> without the header.
+
+SendPacket 把一个原始数据包推到这名玩家的连接上：id 和包体，不含包头。
+
+## 3d7a9621c8
+
+> ShowParticle spawns a particle that only this player sees.
+
+ShowParticle 生成一个只有这名玩家能看到的粒子。
+
 ## 90bb5463a0
 
 > PlayerInfo is one online player as ListPlayers reports it. Dim and the position are
 > read only when present, and HasDim and HasPos say whether they were.
 
 `ListPlayers` 报告的一名在线玩家。`Dim` 和位置只在有的时候才读取，`HasDim` 和 `HasPos` 说明它们有没有。
+
+## 1304dc9c36
+
+> NetworkStatus is the network status of a player. A value the host could not measure is -1.
+
+NetworkStatus 是一名玩家的网络状态。宿主测不出来的值是 -1。
 
 ## b0d2ae5078
 
@@ -878,17 +1098,101 @@ Go 模组要实现的生命周期。两步都在服务器线程上运行；返�
 
 把这个实体复制到一个位置，返回复制出来的实体。
 
+## 0755d25e6c
+
+> AABB reads the bounding box of the actor.
+
+AABB 读取这个实体的包围盒。
+
+## c40e5fddc3
+
+> Effects lists every status effect on the actor.
+
+Effects 列出这个实体身上的每一个状态效果。
+
+## 120671454d
+
+> EquippedItem is what the actor wears or holds in one equipment slot.
+
+EquippedItem 是这个实体在某个装备槽里穿戴或手持的东西。
+
+## 8383463ddf
+
+> SetEquippedItem puts an item into one equipment slot.
+
+SetEquippedItem 把一个物品放进一个装备槽。
+
+## 6207d77eaa
+
+> FirstPassenger is the first actor riding this one.
+
+FirstPassenger 是骑在这个实体上的第一个实体。
+
+## 158af7e722
+
+> StatusFlag reads one bit of the engine's ActorFlags.
+
+StatusFlag 读取引擎 ActorFlags 的一位。
+
+## 2d70c0a963
+
+> SetStatusFlag writes one bit of the engine's ActorFlags.
+
+SetStatusFlag 写入引擎 ActorFlags 的一位。
+
+## 414ddf8172
+
+> TraceRay casts a ray along the line of sight of the actor and reports what it hits.
+
+TraceRay 沿着这个实体的视线射出一条射线，报告它撞到了什么。
+
+## 40a12487ea
+
+> TraceRayBlocks is TraceRay reporting the hit as a block cell, with the face that was hit.
+
+TraceRayBlocks 同 TraceRay，但把命中结果报告为一个方块格子，并带上被击中的那一面。
+
 ## d8cd334936
 
 > ActorInfo is one actor of a dimension: its unique id and its type name.
 
 一个维度里的一个实体：它的唯一 id 和类型名。
 
+## ee15bb6787
+
+> AABB is the axis-aligned bounding box of an actor.
+
+AABB 是一个实体的轴对齐包围盒。
+
+## bd6b16bdfb
+
+> Effect is one status effect of an actor.
+
+Effect 是一个实体的一个状态效果。
+
+## 4a7fb2b930
+
+> RayKind says what a ray trace hit.
+
+RayKind 表示一次射线追踪撞到了什么。
+
+## 07624886fb
+
+> RayHit is the result of one ray trace.
+
+RayHit 是一次射线追踪的结果。
+
 ## 37ebaf28f6
 
 > ActorID is an actor's unique id, the `uid` of event payloads. 0 never resolves.
 
 实体的唯一 id，即事件载荷里的 `uid`。0 永远解析不到。
+
+## 9fbd7ea1c5
+
+> The equipment slots of EquippedItem and SetEquippedItem.
+
+EquippedItem 和 SetEquippedItem 使用的装备槽。
 
 ## f0c58acba7
 
@@ -944,6 +1248,44 @@ Go 模组要实现的生命周期。两步都在服务器线程上运行；返�
 
 这一格的方块容器，比如箱子。
 
+## e8966ff826
+
+> CollisionBox is the block's collision shape as the host writes it.
+
+CollisionBox 是方块的碰撞形状，按宿主写出的形式。
+
+## 7454738934
+
+> ExtraBlock is the liquid layer of the cell, as a block name; an empty layer is air.
+
+ExtraBlock 是这个格子的液体层，以方块名的形式；空的液体层是空气。
+
+## 8e38267263
+
+> SetExtraBlock writes the liquid layer of the cell; write minecraft:air to clear it.
+
+SetExtraBlock 写入这个格子的液体层；写 minecraft:air 可清除它。
+
+## 0fff49b3f7
+
+> SetNBT writes a block from serialized NBT, the shape Info produces.
+
+SetNBT 用序列化的 NBT 写入一个方块，格式就是 Info 产生的那种。
+
+## 4c446b91f8
+
+> SetStates writes a block from a name and optional partial states; an empty statesSNBT means
+> every state at its default.
+
+SetStates 用一个名字加可选的部分状态写入一个方块；statesSNBT 为空表示每个状态都取默认值。
+
+## 58b0d1396a
+
+> SetEntitySNBT writes the NBT of the block entity of the cell, which must already hold the
+> matching block.
+
+SetEntitySNBT 写入这个格子的方块实体的 NBT，该格子里必须已经是对应的方块。
+
 ## 26cabcea9f
 
 > BlockInfo is one block: its cell, its type name and its block state as SNBT.
@@ -993,6 +1335,26 @@ Go 模组要实现的生命周期。两步都在服务器线程上运行；返�
 
 执行 abi.h 里的某一个 `PIER_IOP_*` 操作，返回新的物品。
 
+## 9bb00e5079
+
+> UserDataSNBT is the custom NBT of the item, its tag section, as SNBT.
+
+UserDataSNBT 是物品的自定义 NBT，也就是它的 tag 部分，SNBT 形式。
+
+## 5e8a647e77
+
+> EnchantList lists the enchantments of the item.
+
+EnchantList 列出物品上的附魔。
+
+## 53e82c660e
+
+> WithEnchants replaces the whole enchantment set and returns the new item. Every current
+> host answers not provided: writing enchantments is not implemented, and Transform with the
+> add-enchant operation is the way to add one.
+
+WithEnchants 替换整套附魔，并返回新物品。目前所有宿主都回答 not provided：写入附魔没有实现，要添加一个附魔请用 Transform 的添加附魔操作。
+
 ## 9e29dc9206
 
 > Container is a player's or a block's container.
@@ -1041,11 +1403,24 @@ Go 模组要实现的生命周期。两步都在服务器线程上运行；返�
 
 列出有东西的格子。
 
+## 75234b5b7d
+
+> Refresh resends the whole container to its owner. A block container has no owner to resend
+> to, and the host refuses it.
+
+Refresh 把整个容器重新发给它的主人。方块容器没有主人可发，宿主会拒绝。
+
 ## 7f900dbcd2
 
 > SlotItem is one occupied slot of a container and its item as SNBT.
 
 容器里一个有东西的格子，以及以 SNBT 表示的物品。
+
+## 5e0c35e715
+
+> Enchant is one enchantment.
+
+Enchant 是一个附魔。
 
 ## 92150044f2
 
@@ -1085,6 +1460,13 @@ Go 模组要实现的生命周期。两步都在服务器线程上运行；返�
 > OpenKvDb opens the store at path, creating it when createIfMissing is set.
 
 打开 `path` 处的存储；设置了 `createIfMissing` 时，不存在就创建。
+
+## 555fa1dbd8
+
+> BinaryToSnbt decodes binary NBT as SNBT. format is 0 for the little-endian disk layout and
+> 1 for the network encoding.
+
+BinaryToSnbt 把二进制 NBT 解码成 SNBT。format 为 0 表示小端的磁盘布局，为 1 表示网络编码。
 
 ## abcbad88a9
 
@@ -1195,6 +1577,24 @@ Go 模组要实现的生命周期。两步都在服务器线程上运行；返�
 > TransferMoney moves value between two balances; the recipient receives it taxed.
 
 在两个余额之间转移 `value`；收款方收到的是扣税后的金额。
+
+## 0aa9abe8ec
+
+> MoneyHistory lists the transactions of the last seconds seconds, one per line.
+
+MoneyHistory 列出最近 seconds 秒的交易，每行一条。
+
+## 431826bdf0
+
+> ClearMoneyHistory clears the transactions older than seconds seconds.
+
+ClearMoneyHistory 清除早于 seconds 秒的交易。
+
+## 138f1adab8
+
+> MoneyRanking lists the top of the rich list, one per line.
+
+MoneyRanking 列出富豪榜的前几名，每行一条。
 
 ## 2ea0580adb
 
@@ -1319,6 +1719,78 @@ Go 模组要实现的生命周期。两步都在服务器线程上运行；返�
 
 在客户端上绑定按键：按下时以 `pressed` 为 true 调用 `fn`，松开时为 false，同时传入当前的焦点影响。只有客户端宿主支持；服务器会回答「没有提供」。
 
+## 93c6667907
+
+> ClientProperty reads one numeric client property by its PIER_CPROP_* key. The error
+> covers a key this host does not know and a key about the local player read while the
+> client is not in a world.
+
+ClientProperty 按 PIER_CPROP_* 键读取一个数值型的客户端属性。宿主不认识这个键、或者客户端不在世界里时读取关于本地玩家的键，都会返回错误。
+
+## 3cf5467a8d
+
+> ClientLocalPosition is the local player's feet position, x, y and z.
+
+ClientLocalPosition 是本地玩家脚下的位置 x、y、z。
+
+## 31545314c5
+
+> ClientLocalRotation is the local player's pitch and yaw in degrees; a negative pitch
+> looks up.
+
+ClientLocalRotation 是本地玩家的 pitch 和 yaw，单位为度；pitch 为负表示向上看。
+
+## 349b2bc92d
+
+> ClientRegisteredKeys lists every key binding name the key registry holds, whichever mod
+> registered it.
+
+ClientRegisteredKeys 列出按键注册表里所有按键绑定的名字，不论是哪个模组注册的。
+
+## 60b44e6be6
+
+> ClientHasKey reports whether a key binding of this name is registered.
+
+ClientHasKey 报告是否注册了这个名字的按键绑定。
+
+## 1828f08e23
+
+> ClientOptions lists every client option as key and value, in the text form options.txt
+> stores.
+
+ClientOptions 列出全部客户端选项的键和值，值是 options.txt 保存时用的文本形式。
+
+## 8776e658e5
+
+> ClientOption reads one client option by its options.txt key, such as "gfx_field_of_view".
+
+ClientOption 按 options.txt 里的键读取一个客户端选项，例如 "gfx_field_of_view"。
+
+## 7232e55aee
+
+> SetClientOption writes one client option from its options.txt text form. The engine keeps
+> what it can parse and reports nothing, so a caller that needs to know reads the key back.
+
+SetClientOption 用 options.txt 的文本形式写入一个客户端选项。引擎保留它能解析的部分，不报告任何结果，所以需要确认的调用方要把这个键读回来。
+
+## b7ace9fd26
+
+> ClientIsInLevel reports whether the client is inside a level, which means a world is loaded.
+
+ClientIsInLevel 报告客户端是否在一个 level 里，也就是是否已经加载了世界。
+
+## b0fce7e6df
+
+> ClientLocalPlayerName is the name of the local player. The host has no answer outside a level.
+
+ClientLocalPlayerName 是本地玩家的名字。不在 level 里时宿主没有答案。
+
+## 719caf648a
+
+> abi.h names each argument; an unused one is ignored.
+
+每个参数的含义见 abi.h；用不到的参数会被忽略。
+
 ## 4c022e700c
 
 > KeyBinding is a registered client key binding.
@@ -1331,11 +1803,122 @@ Go 模组要实现的生命周期。两步都在服务器线程上运行；返�
 
 停止这个绑定的回调。
 
+## 4d81175d8b
+
+> KeyCodes lists the key codes now assigned to the binding, which differ from the defaults when
+> the player remapped the key.
+
+KeyCodes 列出现在分配给这个绑定的按键码；玩家重新映射过按键时，它和默认值不同。
+
 ## 0d7672ef42
 
 > KeyHandle is a registered client key binding.
 
 一个已注册的客户端按键绑定。
+
+## 82588d5dc2
+
+> NativeEnabledNow reports whether the host answers the native calls, which its
+> config.json decides.
+
+NativeEnabledNow 报告宿主是否响应原生调用，由它的 config.json 决定。
+
+## ad566a3941
+
+> NativeSymbol is the address of an engine function by its decorated symbol name.
+
+NativeSymbol 是按修饰后的符号名找到的引擎函数地址。
+
+## 7d604a5bc0
+
+> NativeSignature is the first match of a byte pattern such as "48 8B ?? 08" in the engine
+> executable.
+
+NativeSignature 是字节特征码（例如 "48 8B ?? 08"）在引擎可执行文件中的第一个匹配。
+
+## 5cc6438bd6
+
+> NativeExport is an export of a module already loaded into the process; an empty module
+> names the engine executable. LeviLamina's API is an export of LeviLamina.dll.
+
+NativeExport 是进程中已加载模块的一个导出；module 为空表示引擎可执行文件。LeviLamina 的 API 是 LeviLamina.dll 的导出。
+
+## 177d2b7345
+
+> NativeObjectOf is the address of one engine service object.
+
+NativeObjectOf 是一个引擎服务对象的地址。
+
+## beff92bf9b
+
+> NativePlayerOf is the engine's Player object of an online player, valid while the player
+> stays online.
+
+NativePlayerOf 是在线玩家对应的引擎 Player 对象，玩家在线期间有效。
+
+## 7ce605d9f8
+
+> NativeActorOf is the engine's Actor object of a loaded actor.
+
+NativeActorOf 是已加载实体对应的引擎 Actor 对象。
+
+## eb14c7d110
+
+> NativeDimensionOf is the engine's Dimension object of a dimension id.
+
+NativeDimensionOf 是维度 id 对应的引擎 Dimension 对象。
+
+## c8179818a0
+
+> NativeBlockSourceOf is the engine's BlockSource of a dimension id.
+
+NativeBlockSourceOf 是维度 id 对应的引擎 BlockSource。
+
+## 761e01349a
+
+> InstallNativeHook installs detour on target at a HookPriority value. detour must be a C
+> function with the exact signature and calling convention of target, and it reaches the
+> engine through Original only. The host removes a detour this mod still holds when the
+> mod unloads, and does not wait for a call already inside it on another thread.
+
+InstallNativeHook 以一个 HookPriority 值在 target 上安装 detour。detour 必须是与 target 签名和调用约定完全一致的 C 函数，并且只能通过 Original 调用引擎。模组卸载时，宿主会移除它仍持有的 detour，已经在其他线程上进入 detour 的调用不会被等待。
+
+## fd117270f4
+
+> RemoveNativeHook removes a detour this mod installed.
+
+RemoveNativeHook 移除这个模组安装的一个 detour。
+
+## eb35e4cf4f
+
+> NativeError is the answer of a native slot other than PIER_NATIVE_OK.
+
+NativeError 是原生槽位返回 PIER_NATIVE_OK 以外的结果时的错误。
+
+## bacbcb4a9e
+
+> Disabled reports whether the host's config.json leaves native_detour off.
+
+Disabled 报告宿主的 config.json 是否没有打开 native_detour。
+
+## ab848b7695
+
+> NativeObjectKind names one engine service object for NativeObjectOf.
+
+NativeObjectKind 为 NativeObjectOf 指定一个引擎服务对象。
+
+## 87205fb458
+
+> NativeHook is one installed detour: the id RemoveNativeHook takes, and the address
+> through which the detour calls the next detour or the engine.
+
+NativeHook 是一个已安装的 detour：RemoveNativeHook 使用的 id，以及 detour 用来调用下一个 detour 或引擎的地址。
+
+## 70a46d5703
+
+> The priorities of ll::memory::HookPriority, for InstallNativeHook.
+
+ll::memory::HookPriority 的各个优先级，供 InstallNativeHook 使用。
 
 ## e57950d965
 
@@ -1387,6 +1970,69 @@ Go 模组要实现的生命周期。两步都在服务器线程上运行；返�
 
 读取一条规则；这个维度在这条规则上沿用原版行为时 `set` 为 false，比这条规则更旧的宿主也这样回答。
 
+## a391af7b6a
+
+> ExistingDimensions lists every registered custom dimension.
+
+ExistingDimensions 列出每个已注册的自定义维度。
+
+## a746359961
+
+> AddDimensionPack adds a custom dimension whose terrain is a terrain pack: a directory with a
+> config file and a binary built by tools/pier-pack. configPath is relative to the server
+> root, with forward slashes, no .. and not absolute. A refusal is a *PackError.
+
+AddDimensionPack 添加一个地形来自地形包的自定义维度：地形包是一个目录，里面有一个配置文件和一个由 tools/pier-pack 生成的二进制文件。configPath 相对于服务器根目录，使用正斜杠，不含 ..，也不是绝对路径。被拒绝时错误是 *PackError。
+
+## 905fb87d3f
+
+> InspectPack reads what a terrain pack asks for, as a JSON document, without registering
+> anything. A refusal is a *PackError.
+
+InspectPack 以 JSON 文档的形式读取一个地形包提出的要求，不会注册任何东西。被拒绝时错误是 *PackError。
+
+## e1e31ca30b
+
+> RetireDimension retires a custom dimension: it is dropped from the host's tables and from
+> dimension_config.json, so nothing registers it on the next boot. The chunks it wrote stay.
+> It reports whether one by that name was registered.
+
+RetireDimension 注销一个自定义维度：把它从宿主的表和 dimension_config.json 里去掉，下次启动时就不会再有东西注册它。它写出的区块保留。返回是否存在这个名字的已注册维度。
+
+## 042f683a07
+
+> ClearDimensionRules clears every rule of a dimension, for when its world was deleted.
+
+ClearDimensionRules 清除一个维度的全部规则，用于它的世界被删除之后。
+
+## b1ca082363
+
+> SetDimensionCells gives a generated dimension the cell geometry its confinement rules use:
+> cell is the edge of a cell and gap the space between cells, both in blocks. A cell of 0
+> removes the geometry.
+
+SetDimensionCells 给一个生成出来的维度设置它的限制规则所用的单元几何：cell 是单元的边长，gap 是单元之间的间隔，单位都是方块。cell 为 0 表示去掉这个几何。
+
+## ab6f9025d9
+
+> NewPlotMerge assembles a mask from the four directions in the order north, east, south, west.
+
+NewPlotMerge 按北、东、南、西的顺序，用四个方向拼出一个掩码。
+
+## c8292d8352
+
+> SetPlotMerges replaces the merge marks of a dimension as a whole. Only plots that carry a
+> marker need to be listed.
+
+SetPlotMerges 整体替换一个维度的合并标记。只需要列出带标记的地块。
+
+## 298befc219
+
+> PackError is the refusal of a terrain pack: the PIER_PACK_* status the host gave and, when
+> it wrote one, its reasons.
+
+PackError 是对一个地形包的拒绝：宿主给出的 PIER_PACK_* 状态，以及它写了原因的话，它的原因。
+
 ## c7c52eb82c
 
 > ChunkRequest is one chunk a supplied-terrain generator fills. Materials has 256*Height
@@ -1394,6 +2040,18 @@ Go 模组要实现的生命周期。两步都在服务器线程上运行；返�
 > indices into the palettes given at registration, and material 0 is air.
 
 自供地形的生成器要填充的一个区块。`Materials` 有 `256*Height` 项，下标是 `(x*16+z)*Height + (y-MinY)`；`Biomes` 有 256 项，每列一项；两者存的都是注册时给出的调色板里的索引，材料 0 是空气。
+
+## 9f80828f8d
+
+> ExistingDimension is one custom dimension that has been registered.
+
+ExistingDimension 是一个已注册的自定义维度。
+
+## dfa05fff20
+
+> PlotMerge holds the merge marks of one plot.
+
+PlotMerge 保存一个地块的合并标记。
 
 ## 78faf67c55
 
@@ -1467,6 +2125,32 @@ Go 模组要实现的生命周期。两步都在服务器线程上运行；返�
 
 在提供方内部调用时，返回正在调用它的模组。在提供方之外，或者调用方没有模组（比如经 bridge 调用的原生插件）时为 false：提供方由此知道它无法确定请求来自谁。
 
+## 7c19e6848b
+
+> Lanes lists every published lane. It passes no pointer at all, so it suits looking at what
+> exists first.
+
+Lanes 列出每条已发布的快速通道。它不传任何指针，所以适合先看看有什么。
+
+## 179812d2cc
+
+> PublishLane publishes a lane, exclusively under name. fingerprint is the value of the
+> contract and must not be 0, which means anyone may connect and which the host refuses.
+> table is the provider's table of function pointers and data the pointer each of them
+> receives; both must point into C memory, since the consumer reaches them from outside Go.
+> retain and release, when not nil, are C functions that count leases on data. The lane is
+> withdrawn automatically at unload.
+
+PublishLane 以 name 独占地发布一条快速通道。fingerprint 是契约的值，不能是 0：0 表示任何人都可以连接，宿主会拒绝。table 是提供方的函数指针表，data 是每个函数收到的指针；两者都必须指向 C 内存，因为消费方是从 Go 之外访问它们的。retain 和 release 不为 nil 时是统计 data 上租约的 C 函数。卸载时这条通道会被自动撤回。
+
+## 4b1ceee745
+
+> AcquireLane acquires a lane. fingerprint must be the value the consumer computed itself
+> from the contract; 0 is not valid and always fails. A missing lane is a *LaneNotFoundError
+> and a contract that differs is a *LaneFingerprintError.
+
+AcquireLane 获取一条快速通道。fingerprint 必须是消费方自己根据契约算出来的值；0 无效，总是失败。通道不存在时错误是 *LaneNotFoundError，契约不一致时是 *LaneFingerprintError。
+
 ## ba2a908ea4
 
 > Subscription is one bus subscription, kept to end it.
@@ -1515,6 +2199,33 @@ Go 模组要实现的生命周期。两步都在服务器线程上运行；返�
 
 撤回这项服务。调用两次也没有问题。
 
+## 7fafdd563e
+
+> LaneLease is a lease on a published lane, kept to return it.
+
+LaneLease 是对一条已发布通道的租约，留着它是为了归还。
+
+## 4b97b8c279
+
+> IsAlive reports whether the provider is still there.
+
+IsAlive 报告提供方是否还在。
+
+## 884c182331
+
+> Enter enters the provider for one call and returns the provider's table and data pointers.
+> ok is false when the provider is gone. Call leave when the call is over, so the provider
+> cannot unload underneath a call that is running.
+
+Enter 为一次调用进入提供方，并返回提供方的函数表和 data 指针。提供方已经不在时 ok 为 false。调用结束后要调用 leave，这样提供方就不会在调用进行时被卸载。
+
+## 3090d29544
+
+> Release returns the lease. It reports false when the provider is already gone, since the
+> loader has released it by then and releasing again would be a double free.
+
+Release 归还租约。提供方已经不在时报告 false，因为加载器那时已经释放过它，再释放一次就是重复释放。
+
 ## 990a7904d7
 
 > CallError is why a service call failed: nobody provides the name, the provider said no
@@ -1522,6 +2233,31 @@ Go 模组要实现的生命周期。两步都在服务器线程上运行；返�
 > cycle), or the host has no service capability.
 
 服务调用失败的原因：没有模组提供这个名字；提供方拒绝了，`Message` 是它给的理由；宿主拒绝了这次调用（名字不合法、调用自己，或者形成了循环）；或者宿主没有服务这项能力。
+
+## c03b11603c
+
+> LanePublication is one published lane.
+
+LanePublication 是一条已发布的快速通道。
+
+## 84fb3359da
+
+> Withdraw takes the lane back; calling it twice is harmless. Every outstanding lease is
+> released.
+
+Withdraw 把通道收回来；调用两次也没有害处。所有未归还的租约都会被释放。
+
+## 443ae8bc47
+
+> LaneNotFoundError means no lane by that name is published.
+
+LaneNotFoundError 表示没有发布过这个名字的快速通道。
+
+## 26a9b6054c
+
+> LaneFingerprintError means the provider's contract is not the one the consumer asked for.
+
+LaneFingerprintError 表示提供方的契约不是消费方要的那一个。
 
 ## f8e6f9ff3c
 
@@ -1540,6 +2276,12 @@ Go 模组要实现的生命周期。两步都在服务器线程上运行；返�
 > ServiceInfo is one registered service and the mod providing it.
 
 一项已注册的服务，以及提供它的模组。
+
+## 9fc1128dbe
+
+> LaneInfo is the registration record of a published lane.
+
+LaneInfo 是一条已发布快速通道的登记记录。
 
 ## 99bd7578fd
 
@@ -1742,6 +2484,48 @@ Go 模组要实现的生命周期。两步都在服务器线程上运行；返�
 > in the packet context.
 
 这名玩家的连接 id，和数据包拦截器在数据包上下文里看到的是同一个数。
+
+## 9d07e4d8f9
+
+> The first match of a byte pattern in the engine executable.
+
+字节特征码在引擎可执行文件中的第一个匹配。
+
+## 4f147b06e3
+
+> An export of a module already loaded into the process.
+
+进程中已加载模块的一个导出。
+
+## 8328013268
+
+> The address of one engine service object.
+
+一个引擎服务对象的地址。
+
+## f8241e8b0d
+
+> The Player object of an online player.
+
+在线玩家的 Player 对象。
+
+## a8f1aa5e26
+
+> The Dimension object of a dimension id.
+
+维度 id 对应的 Dimension 对象。
+
+## d905df4d0e
+
+> The BlockSource of a dimension id.
+
+维度 id 对应的 BlockSource。
+
+## a869e786b8
+
+> Installs a native detour on target through ll::memory::hook.
+
+通过 ll::memory::hook 在 target 上安装一个原生 detour。
 
 ## b43d952fd4
 

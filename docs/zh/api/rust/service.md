@@ -196,7 +196,7 @@ pub struct Registration {
 
 [`Registration::forget`](service.md#Registration.forget) 让它一直存活到模组卸载，卸载时宿主会清掉剩下的注册。
 
-- 实现的 trait：`Drop`
+- 实现的 trait：`Drop`、`Debug`
 
 ### `Registration::id` {#Registration.id}
 

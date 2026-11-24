@@ -27,6 +27,8 @@ pub struct Packet<'a> {
 
 The packet a callback receives. Valid only during the callback.
 
+- Implements: `Debug`
+
 ### `Packet::direction` {#Packet.direction}
 
 ```rust
@@ -143,7 +145,7 @@ pub struct Packets(/* private */);
 
 The packet facade.
 
-- Implements: `Clone`, `Copy`
+- Implements: `Clone`, `Copy`, `Debug`
 
 ### `Packets::get` {#Packets.get}
 
@@ -230,7 +232,7 @@ explicit because registering and discarding looks identical in code to registeri
 forgetting to keep the returned value, and the latter is a bug. The host clears what
 remains when the mod unloads, at teardown stage 90.
 
-- Implements: `Drop`
+- Implements: `Drop`, `Debug`
 
 ### `PacketHook::forget` {#PacketHook.forget}
 

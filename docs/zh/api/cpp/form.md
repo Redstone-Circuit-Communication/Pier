@@ -35,6 +35,7 @@ bool (*form_send)(
 - 各绑定里的调用方：
     - Rust：[`SimpleForm::send`](../rust/gui.md#SimpleForm.send)、[`ModalForm::send`](../rust/gui.md#ModalForm.send)、[`CustomForm::send`](../rust/gui.md#CustomForm.send)
     - Go：[`SendForm`](../go/form.md#SendForm)
+    - Zig：[`gui.SimpleForm.send`](../zig/form.md#gui.SimpleForm.send)、[`gui.ModalForm.send`](../zig/form.md#gui.ModalForm.send)、[`gui.CustomForm.send`](../zig/form.md#gui.CustomForm.send)
 
 ## 类型 {#types}
 

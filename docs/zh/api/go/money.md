@@ -99,6 +99,46 @@ func TransferMoney(from, to string, value int64, note string) error
 - 返回值类型：`error`
 - 对应槽位：[`trans_money`](../cpp/money.md#trans_money)
 
+### `MoneyHistory` {#MoneyHistory}
+
+```go
+func MoneyHistory(xuid string, seconds int32) ([]string, error)
+```
+
+MoneyHistory 列出最近 seconds 秒的交易，每行一条。
+
+- 参数：
+    - xuid : `string`
+    - seconds : `int32`
+- 返回值类型：`([]string, error)`
+- 对应槽位：[`money_get_hist`](../cpp/money.md#money_get_hist)
+
+### `ClearMoneyHistory` {#ClearMoneyHistory}
+
+```go
+func ClearMoneyHistory(seconds int32) error
+```
+
+ClearMoneyHistory 清除早于 seconds 秒的交易。
+
+- 参数：
+    - seconds : `int32`
+- 返回值类型：`error`
+- 对应槽位：[`money_clear_hist`](../cpp/money.md#money_clear_hist)
+
+### `MoneyRanking` {#MoneyRanking}
+
+```go
+func MoneyRanking(top uint16) ([]string, error)
+```
+
+MoneyRanking 列出富豪榜的前几名，每行一条。
+
+- 参数：
+    - top : `uint16`
+- 返回值类型：`([]string, error)`
+- 对应槽位：[`money_ranking`](../cpp/money.md#money_ranking)
+
 ## `MoneyKind` {#MoneyKind}
 
 ```go

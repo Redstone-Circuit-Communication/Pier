@@ -45,7 +45,8 @@ bool (*send_packet)(PierPlayerSel sel, int32_t packet_id, uint8_t const* body, s
 - 表内序号：第 79 个槽位（从 0 数起）
 - 各绑定里的调用方：
     - Rust：[`Player::send_packet`](../rust/player.md#Player.send_packet)
-    - Go：[`Raw.SendPacket`](../go/raw.md#Raw.SendPacket)
+    - Go：[`Player.SendPacket`](../go/player.md#Player.SendPacket)、[`Raw.SendPacket`](../go/raw.md#Raw.SendPacket)
+    - Zig：[`packet.send`](../zig/packet.md#packet.send)
 
 ### `packet_hook_register` {#packet_hook_register}
 
@@ -72,6 +73,7 @@ PierPacketHookHandle (*packet_hook_register)(
 - 各绑定里的调用方：
     - Rust：[`Packets::intercept`](../rust/packet.md#Packets.intercept)、[`Packets::intercept_ids`](../rust/packet.md#Packets.intercept_ids)
     - Go：[`RegisterPacketHook`](../go/packet.md#RegisterPacketHook)
+    - Zig：[`packet.intercept`](../zig/packet.md#packet.intercept)
 
 ### `packet_hook_unregister` {#packet_hook_unregister}
 
@@ -91,6 +93,7 @@ bool (*packet_hook_unregister)(PierModHandle mod, PierPacketHookHandle handle);
 - 各绑定里的调用方：
     - Rust：[`Packets::intercept`](../rust/packet.md#Packets.intercept)、[`Packets::intercept_ids`](../rust/packet.md#Packets.intercept_ids)
     - Go：[`PacketHook.Unregister`](../go/packet.md#PacketHook.Unregister)、[`Raw.PacketHookUnregister`](../go/raw.md#Raw.PacketHookUnregister)
+    - Zig：[`packet.Hook.unregister`](../zig/packet.md#packet.Hook.unregister)
 
 ### `packet_conn_hook_register` {#packet_conn_hook_register}
 
@@ -111,6 +114,7 @@ PierPacketHookHandle (*packet_conn_hook_register)(PierModHandle mod, PierConnCb 
 - 各绑定里的调用方：
     - Rust：[`Packets::on_connection`](../rust/packet.md#Packets.on_connection)
     - Go：[`RegisterConnHook`](../go/packet.md#RegisterConnHook)
+    - Zig：[`packet.onConnection`](../zig/packet.md#packet.onConnection)
 
 ### `packet_conn_hook_unregister` {#packet_conn_hook_unregister}
 
@@ -130,6 +134,7 @@ bool (*packet_conn_hook_unregister)(PierModHandle mod, PierPacketHookHandle hand
 - 各绑定里的调用方：
     - Rust：[`Packets::on_connection`](../rust/packet.md#Packets.on_connection)
     - Go：[`PacketHook.Unregister`](../go/packet.md#PacketHook.Unregister)、[`Raw.PacketConnHookUnregister`](../go/raw.md#Raw.PacketConnHookUnregister)
+    - Zig：[`packet.Hook.unregister`](../zig/packet.md#packet.Hook.unregister)
 
 ### `packet_hook_register_ids` {#packet_hook_register_ids}
 
@@ -155,6 +160,7 @@ PierPacketHookHandle (*packet_hook_register_ids)(
 - 各绑定里的调用方：
     - Rust：[`Packets::intercept_ids`](../rust/packet.md#Packets.intercept_ids)
     - Go：[`RegisterPacketHookIDs`](../go/packet.md#RegisterPacketHookIDs)
+    - Zig：[`packet.interceptIds`](../zig/packet.md#packet.interceptIds)
 
 ## 类型 {#types}
 

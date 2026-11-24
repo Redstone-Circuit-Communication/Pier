@@ -38,7 +38,7 @@ One `use levilamina::prelude::*;` brings in what writing a mod needs most.
 pub struct Logger(/* private */);
 ```
 
-- Implements: `Clone`, `Copy`
+- Implements: `Clone`, `Copy`, `Debug`
 
 ### `Logger::get` {#Logger.get}
 
@@ -123,6 +123,8 @@ The context handed to a mod's lifecycle callbacks.
 It carries no state of its own, since the real state lives in `RUNTIME`. It exists to
 give the facades one common entry point, and to make a signature such as
 `on_load(ctx)` read sensibly.
+
+- Implements: `Debug`
 
 ### `ModContext::logger` {#ModContext.logger}
 

@@ -1,5 +1,21 @@
 # Zig: Cross-mod: bus, services and lanes
 
+## Declarations {#declarations}
+
+### `lane.protocol` {#lane.protocol}
+
+```zig
+pub const protocol: u32 = c.PIER_LANE_PROTOCOL;
+```
+
+The lane protocol version this binding speaks.
+
+### `lane.LaneInfo.json_keys` {#lane.LaneInfo.json_keys}
+
+```zig
+pub const json_keys = .{ .owner = "mod" };
+```
+
 ## Functions {#functions}
 
 ### `busSubscribe` {#busSubscribe}
@@ -112,6 +128,159 @@ Inside a provider, the mod whose call is running; null outside one and for a cal
 - Return type: `Error!?[]u8`
 - Slots: [`service_caller`](../cpp/crossmod.md#service_caller)
 
+### `lane.publish` {#lane.publish}
+
+```zig
+pub fn publish(name: []const u8, fingerprint: u64, data: ?*anyopaque, table: *const anyopaque, retain: c.PierLaneRefFn, release: c.PierLaneRefFn) core.Error!Publication
+```
+
+Publishes a lane, exclusively under `name`. `fingerprint` is the value of the contract and must not be 0, which means anyone may connect and which the host refuses. `table` is the provider's table of function pointers, `data` the pointer each of them receives; `retain` and `release` count leases on `data`. The lane is withdrawn automatically at unload. A name that is taken is Refused, and the host log names the holder.
+
+- Parameters:
+    - name : `[]const u8`
+    - fingerprint : `u64`
+    - data : `?*anyopaque`
+    - table : `*const anyopaque`
+    - retain : `c.PierLaneRefFn`
+    - release : `c.PierLaneRefFn`
+- Return type: `core.Error!Publication`
+- Slots: [`lane_publish`](../cpp/crossmod.md#lane_publish)
+
+### `lane.acquire` {#lane.acquire}
+
+```zig
+pub fn acquire(name: []const u8, fingerprint: u64) core.Error!Outcome
+```
+
+Acquires a lane. `fingerprint` must be the value the consumer computed itself from the contract; 0 is not valid and always yields `fingerprint`.
+
+- Parameters:
+    - name : `[]const u8`
+    - fingerprint : `u64`
+- Return type: `core.Error!Outcome`
+- Slots: [`lane_acquire`](../cpp/crossmod.md#lane_acquire)
+
+### `lane.list` {#lane.list}
+
+```zig
+pub fn list(allocator: Allocator) core.Error!types.Owned(LaneInfo)
+```
+
+Every lane. It passes no pointer at all, so it suits looking at what exists first.
+
+- Parameters:
+    - allocator : `Allocator`
+- Return type: `core.Error!types.Owned(LaneInfo)`
+- Slots: [`lane_list`](../cpp/crossmod.md#lane_list)
+
+### `lane.listJson` {#lane.listJson}
+
+```zig
+pub fn listJson(allocator: Allocator) core.Error![]u8
+```
+
+The raw JSON of the lane listing, unparsed, owned by the caller.
+
+- Parameters:
+    - allocator : `Allocator`
+- Return type: `core.Error![]u8`
+- Slots: [`lane_list`](../cpp/crossmod.md#lane_list)
+
+## `lane.Lease` {#lane.Lease}
+
+```zig
+pub const Lease = struct {
+    lease: u64,
+    fingerprint: u64,
+    data: ?*anyopaque,
+    table: ?*const anyopaque,
+    alive: ?*const u32,
+    busy: ?*u32,
+    // ...
+};
+```
+
+A lease on a published lane, kept to return it.
+
+### `lane.Lease.isAlive` {#lane.Lease.isAlive}
+
+```zig
+pub fn isAlive(self: Lease) bool
+```
+
+Whether the provider is still there.
+
+- Return type: `bool`
+
+### `lane.Lease.enter` {#lane.Lease.enter}
+
+```zig
+pub fn enter(self: Lease) ?Guard
+```
+
+Enters the provider for one call. Null when the provider is gone. The caller makes its calls through the guard and then `leave`s, so the provider cannot unload underneath a call that is running:
+
+```text
+if (lease.enter()) |inside| {
+    defer inside.leave();
+    inside.table(MyTable).hello(inside.data);
+}
+```
+
+- Return type: `?Guard`
+
+### `lane.Lease.release` {#lane.Lease.release}
+
+```zig
+pub fn release(self: *Lease) core.Error!bool
+```
+
+Returns the lease. Only a lease this mod holds. False when the provider is already gone, since the loader has released it by then and releasing again would be a double free.
+
+- Return type: `core.Error!bool`
+- Slots: [`lane_release`](../cpp/crossmod.md#lane_release)
+
+## `lane.Guard` {#lane.Guard}
+
+```zig
+pub const Guard = struct {
+    lease: Lease,
+    // ...
+};
+```
+
+One call inside a provider. `leave` ends it.
+
+### `lane.Guard.table` {#lane.Guard.table}
+
+```zig
+pub fn table(self: Guard, comptime Table: type) *const Table
+```
+
+The provider's table, which the contract names the type of.
+
+- Parameters:
+    - Table : `comptime type`
+- Return type: `*const Table`
+
+### `lane.Guard.data` {#lane.Guard.data}
+
+```zig
+pub fn data(self: Guard) ?*anyopaque
+```
+
+The pointer each function of the table receives.
+
+- Return type: `?*anyopaque`
+
+### `lane.Guard.leave` {#lane.Guard.leave}
+
+```zig
+pub fn leave(self: Guard) void
+```
+
+- Return type: `void`
+
 ## `Subscription` {#Subscription}
 
 ```zig
@@ -178,6 +347,28 @@ Withdraws the service; calling it twice is harmless.
 - Return type: `Error!void`
 - Slots: [`service_unregister`](../cpp/crossmod.md#service_unregister)
 
+## `lane.Publication` {#lane.Publication}
+
+```zig
+pub const Publication = struct {
+    id: u64,
+    // ...
+};
+```
+
+One publication. `withdraw` takes the lane back.
+
+### `lane.Publication.withdraw` {#lane.Publication.withdraw}
+
+```zig
+pub fn withdraw(self: *Publication) core.Error!void
+```
+
+Withdraws the lane; calling it twice is harmless. Every outstanding lease is released and a consumer's next liveness check sees the lane gone.
+
+- Return type: `core.Error!void`
+- Slots: [`lane_unpublish`](../cpp/crossmod.md#lane_unpublish)
+
 ## `Vetoable` {#Vetoable}
 
 ```zig
@@ -209,3 +400,35 @@ pub const CallOutcome = struct {
 ```
 
 One service call's outcome. body is the reply for ok and the provider's message for `provider_error`, owned by the caller.
+
+## `lane.Outcome` {#lane.Outcome}
+
+```zig
+pub const Outcome = union(enum) {
+    lease: Lease,
+    /// No lane by that name is published.
+    not_found,
+    /// The provider's fingerprint, which differs from the one asked for.
+    fingerprint: u64,
+    refused,
+    // ...
+};
+```
+
+How acquiring a lane ended.
+
+## `lane.LaneInfo` {#lane.LaneInfo}
+
+```zig
+pub const LaneInfo = struct {
+    name: []const u8 = "",
+    owner: []const u8 = "",
+    fingerprint: []const u8 = "",
+    protocol: u32 = 0,
+    leases: u32 = 0,
+    alive: bool = false,
+    // ...
+};
+```
+
+The registration record of a published lane.

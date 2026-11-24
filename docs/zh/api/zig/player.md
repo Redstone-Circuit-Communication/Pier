@@ -535,6 +535,61 @@ pub fn isInitialized(self: Player) core.Error!bool
 - 返回值类型：`core.Error!bool`
 - 对应槽位：[`player_get_num`](../cpp/player.md#player_get_num)
 
+### `Player.isSleeping` {#Player.isSleeping}
+
+```zig
+pub fn isSleeping(self: Player) core.Error!bool
+```
+
+`PIER_PPROP_IS_SLEEPING`：(G) `Player::isSleeping`
+
+- 返回值类型：`core.Error!bool`
+- 对应槽位：[`player_get_num`](../cpp/player.md#player_get_num)
+
+### `Player.isSimulated` {#Player.isSimulated}
+
+```zig
+pub fn isSimulated(self: Player) core.Error!bool
+```
+
+`PIER_PPROP_IS_SIMULATED`：(G) `Actor::isSimulatedPlayer`
+
+- 返回值类型：`core.Error!bool`
+- 对应槽位：[`player_get_num`](../cpp/player.md#player_get_num)
+
+### `Player.itemUseDuration` {#Player.itemUseDuration}
+
+```zig
+pub fn itemUseDuration(self: Player) core.Error!f64
+```
+
+`PIER_PPROP_ITEM_USE_DURATION`：(G) `Player::getItemUseDuration`，单位为刻
+
+- 返回值类型：`core.Error!f64`
+- 对应槽位：[`player_get_num`](../cpp/player.md#player_get_num)
+
+### `Player.xpEarnedAtLevel` {#Player.xpEarnedAtLevel}
+
+```zig
+pub fn xpEarnedAtLevel(self: Player) core.Error!f64
+```
+
+`PIER_PPROP_XP_EARNED_AT_LEVEL`：(G) `Player::getXpEarnedAtCurrentLevel`
+
+- 返回值类型：`core.Error!f64`
+- 对应槽位：[`player_get_num`](../cpp/player.md#player_get_num)
+
+### `Player.canFly` {#Player.canFly}
+
+```zig
+pub fn canFly(self: Player) core.Error!bool
+```
+
+`PIER_PPROP_CAN_FLY`：(G) `Actor::canFly`
+
+- 返回值类型：`core.Error!bool`
+- 对应槽位：[`player_get_num`](../cpp/player.md#player_get_num)
+
 ### `Player.realName` {#Player.realName}
 
 ```zig
@@ -672,6 +727,32 @@ pub fn respawnPos(self: Player, allocator: std.mem.Allocator) core.Error![]u8
 ```
 
 `PIER_PSTR_RESPAWN_POS`：SNBT `{x,y,z,dim}`：这名玩家会在哪里重生。不会为空：没有床的玩家报告的是世界出生点，这两种情况区分不开。
+
+- 参数：
+    - allocator : `std.mem.Allocator`
+- 返回值类型：`core.Error![]u8`
+- 对应槽位：[`player_get_str`](../cpp/player.md#player_get_str)
+
+### `Player.selectedItem` {#Player.selectedItem}
+
+```zig
+pub fn selectedItem(self: Player, allocator: std.mem.Allocator) core.Error![]u8
+```
+
+`PIER_PSTR_SELECTED_ITEM`：`Player::getSelectedItem`，物品 SNBT
+
+- 参数：
+    - allocator : `std.mem.Allocator`
+- 返回值类型：`core.Error![]u8`
+- 对应槽位：[`player_get_str`](../cpp/player.md#player_get_str)
+
+### `Player.deviceModel` {#Player.deviceModel}
+
+```zig
+pub fn deviceModel(self: Player, allocator: std.mem.Allocator) core.Error![]u8
+```
+
+`PIER_PSTR_DEVICE_MODEL`：`ConnectionRequest::getDeviceModel`；没有连接请求的玩家读取失败
 
 - 参数：
     - allocator : `std.mem.Allocator`
@@ -1190,6 +1271,313 @@ pub fn setPermissionLevel(self: Player, allocator: std.mem.Allocator, s_arg: []c
     - n_c : `f64`
 - 返回值类型：`core.Error![]u8`
 - 对应槽位：[`player_action`](../cpp/player.md#player_action)
+
+### `Player.stopSleeping` {#Player.stopSleeping}
+
+```zig
+pub fn stopSleeping(self: Player, allocator: std.mem.Allocator, s_arg: []const u8, n_a: f64, n_b: f64, n_c: f64) core.Error![]u8
+```
+
+`PIER_PACT_STOP_SLEEPING`：a：非零时强制唤醒。`Player::stopSleepInBed`；没在睡觉时返回 false
+
+这个动作有输出时，输出就是返回值；每个参数的含义写在 abi.h 里这个常量的注释中。
+
+- 参数：
+    - allocator : `std.mem.Allocator`
+    - s_arg : `[]const u8`
+    - n_a : `f64`
+    - n_b : `f64`
+    - n_c : `f64`
+- 返回值类型：`core.Error![]u8`
+- 对应槽位：[`player_action`](../cpp/player.md#player_action)
+
+### `Player.causeExhaustion` {#Player.causeExhaustion}
+
+```zig
+pub fn causeExhaustion(self: Player, allocator: std.mem.Allocator, s_arg: []const u8, n_a: f64, n_b: f64, n_c: f64) core.Error![]u8
+```
+
+`PIER_PACT_CAUSE_EXHAUSTION`：a：数量，必须为正。`Player::causeFoodExhaustion`
+
+这个动作有输出时，输出就是返回值；每个参数的含义写在 abi.h 里这个常量的注释中。
+
+- 参数：
+    - allocator : `std.mem.Allocator`
+    - s_arg : `[]const u8`
+    - n_a : `f64`
+    - n_b : `f64`
+    - n_c : `f64`
+- 返回值类型：`core.Error![]u8`
+- 对应槽位：[`player_action`](../cpp/player.md#player_action)
+
+### `Player.eat` {#Player.eat}
+
+```zig
+pub fn eat(self: Player, allocator: std.mem.Allocator, s_arg: []const u8, n_a: f64, n_b: f64, n_c: f64) core.Error![]u8
+```
+
+`PIER_PACT_EAT`：sarg：物品 SNBT。`Player::eat`，按这个物品的食物值进食
+
+这个动作有输出时，输出就是返回值；每个参数的含义写在 abi.h 里这个常量的注释中。
+
+- 参数：
+    - allocator : `std.mem.Allocator`
+    - s_arg : `[]const u8`
+    - n_a : `f64`
+    - n_b : `f64`
+    - n_c : `f64`
+- 返回值类型：`core.Error![]u8`
+- 对应槽位：[`player_action`](../cpp/player.md#player_action)
+
+### `Player.asEntity` {#Player.asEntity}
+
+```zig
+pub fn asEntity(self: Player) core.Error!Entity
+```
+
+把选择器解析成这名玩家对应的实体，这样就可以使用 `Entity` 的各个调用。玩家不在线时为 `NoAnswer`。
+
+- 返回值类型：`core.Error!Entity`
+- 对应槽位：[`player_resolve`](../cpp/player.md#player_resolve)
+
+### `Player.isOnline` {#Player.isOnline}
+
+```zig
+pub fn isOnline(self: Player) bool
+```
+
+这个选择器现在是否能解析到某名在线玩家。
+
+- 返回值类型：`bool`
+- 对应槽位：[`player_resolve`](../cpp/player.md#player_resolve)
+
+### `Player.connId` {#Player.connId}
+
+```zig
+pub fn connId(self: Player) core.Error!u64
+```
+
+这名玩家的连接 id，和数据包处理函数看到的是同一个数。玩家不在线、或者没有网络身份时为 `NoAnswer`。
+
+- 返回值类型：`core.Error!u64`
+- 对应槽位：[`player_conn_id`](../cpp/player.md#player_conn_id)
+
+### `Player.teleport` {#Player.teleport}
+
+```zig
+pub fn teleport(self: Player, dim: i32, x: f64, y: f64, z: f64) core.Error!void
+```
+
+传送。自定义维度（id 为 3 或更大）也走这里，宿主会拒绝引擎实例对不上的维度。
+
+- 参数：
+    - dim : `i32`
+    - x : `f64`
+    - y : `f64`
+    - z : `f64`
+- 返回值类型：`core.Error!void`
+- 对应槽位：[`player_teleport`](../cpp/player.md#player_teleport)
+
+### `Player.sendMessage` {#Player.sendMessage}
+
+```zig
+pub fn sendMessage(self: Player, msg: []const u8) core.Error!void
+```
+
+- 参数：
+    - msg : `[]const u8`
+- 返回值类型：`core.Error!void`
+- 对应槽位：[`player_send_message`](../cpp/player.md#player_send_message)
+
+### `Player.tell` {#Player.tell}
+
+```zig
+pub fn tell(self: Player, msg: []const u8, kind: types.MessageType) core.Error!void
+```
+
+以给定的 `TextPacketType` 发送一条消息。
+
+- 参数：
+    - msg : `[]const u8`
+    - kind : `types.MessageType`
+- 返回值类型：`core.Error!void`
+- 对应槽位：[`player_send_message_typed`](../cpp/player.md#player_send_message_typed)
+
+### `Player.sendTitle` {#Player.sendTitle}
+
+```zig
+pub fn sendTitle(self: Player, kind: types.TitleKind, text: []const u8, times: ?types.TitleTimes) core.Error!void
+```
+
+发送一个标题。只有标题、副标题和动作栏带文字。`times` 为 null 时持续时间交给宿主决定。
+
+- 参数：
+    - kind : `types.TitleKind`
+    - text : `[]const u8`
+    - times : `?types.TitleTimes`
+- 返回值类型：`core.Error!void`
+- 对应槽位：[`player_send_title`](../cpp/player.md#player_send_title)
+
+### `Player.setGameMode` {#Player.setGameMode}
+
+```zig
+pub fn setGameMode(self: Player, mode: types.GameMode) core.Error!void
+```
+
+- 参数：
+    - mode : `types.GameMode`
+- 返回值类型：`core.Error!void`
+- 对应槽位：[`player_set_gamemode`](../cpp/player.md#player_set_gamemode)
+
+### `Player.disconnect` {#Player.disconnect}
+
+```zig
+pub fn disconnect(self: Player, reason: []const u8) core.Error!void
+```
+
+把玩家踢下线，原因会显示在客户端上。
+
+- 参数：
+    - reason : `[]const u8`
+- 返回值类型：`core.Error!void`
+- 对应槽位：[`player_disconnect`](../cpp/player.md#player_disconnect)
+
+### `Player.item` {#Player.item}
+
+```zig
+pub fn item(self: Player, allocator: std.mem.Allocator, slot: i32) core.Error![]u8
+```
+
+一个背包格子，物品 SNBT 形式，由调用方持有。
+
+- 参数：
+    - allocator : `std.mem.Allocator`
+    - slot : `i32`
+- 返回值类型：`core.Error![]u8`
+- 对应槽位：[`player_get_item`](../cpp/player.md#player_get_item)
+
+### `Player.setItem` {#Player.setItem}
+
+```zig
+pub fn setItem(self: Player, slot: i32, item_snbt: []const u8) core.Error!void
+```
+
+写入一个背包格子。之后要刷新容器，否则客户端还会继续显示旧物品。
+
+- 参数：
+    - slot : `i32`
+    - item_snbt : `[]const u8`
+- 返回值类型：`core.Error!void`
+- 对应槽位：[`player_set_item`](../cpp/player.md#player_set_item)
+
+### `Player.carriedItem` {#Player.carriedItem}
+
+```zig
+pub fn carriedItem(self: Player, allocator: std.mem.Allocator) core.Error![]u8
+```
+
+手里的物品，物品 SNBT 形式，由调用方持有。
+
+- 参数：
+    - allocator : `std.mem.Allocator`
+- 返回值类型：`core.Error![]u8`
+- 对应槽位：[`player_get_carried_item`](../cpp/player.md#player_get_carried_item)
+
+### `Player.equipment` {#Player.equipment}
+
+```zig
+pub fn equipment(self: Player, allocator: std.mem.Allocator) core.Error!types.Owned(types.EquipmentEntry)
+```
+
+完整的装备。`slot` 的编号见 `types.EquipSlot`。
+
+- 参数：
+    - allocator : `std.mem.Allocator`
+- 返回值类型：`core.Error!types.Owned(types.EquipmentEntry)`
+- 对应槽位：[`player_get_equipment`](../cpp/player.md#player_get_equipment)
+
+### `Player.cooldown` {#Player.cooldown}
+
+```zig
+pub fn cooldown(self: Player, item_name: []const u8) core.Error!?i32
+```
+
+一个物品还剩多少 tick 的冷却；不在冷却中时为 null。
+
+- 参数：
+    - item_name : `[]const u8`
+- 返回值类型：`core.Error!?i32`
+- 对应槽位：[`player_get_cooldown`](../cpp/player.md#player_get_cooldown)
+
+### `Player.setCooldown` {#Player.setCooldown}
+
+```zig
+pub fn setCooldown(self: Player, item_name: []const u8, ticks: i32) core.Error!void
+```
+
+- 参数：
+    - item_name : `[]const u8`
+    - ticks : `i32`
+- 返回值类型：`core.Error!void`
+- 对应槽位：[`player_start_cooldown`](../cpp/player.md#player_start_cooldown)
+
+### `Player.networkDetail` {#Player.networkDetail}
+
+```zig
+pub fn networkDetail(self: Player, allocator: std.mem.Allocator) core.Error!types.NetworkStatus
+```
+
+详细的网络状态。
+
+- 参数：
+    - allocator : `std.mem.Allocator`
+- 返回值类型：`core.Error!types.NetworkStatus`
+- 对应槽位：[`player_get_network_status`](../cpp/player.md#player_get_network_status)
+
+### `Player.position` {#Player.position}
+
+```zig
+pub fn position(self: Player, allocator: std.mem.Allocator) core.Error!types.PlayerPosition
+```
+
+脚下位置和所在维度。它走专用槽位而不是属性编号，因为位置要同时给出三个数和一个 id。
+
+- 参数：
+    - allocator : `std.mem.Allocator`
+- 返回值类型：`core.Error!types.PlayerPosition`
+- 对应槽位：[`get_player_position`](../cpp/player.md#get_player_position)、[`player_get_str`](../cpp/player.md#player_get_str)
+
+### `Player.inventory` {#Player.inventory}
+
+```zig
+pub fn inventory(self: Player) container.Container
+```
+
+- 返回值类型：`container.Container`
+
+### `Player.enderChest` {#Player.enderChest}
+
+```zig
+pub fn enderChest(self: Player) container.Container
+```
+
+- 返回值类型：`container.Container`
+
+### `Player.armor` {#Player.armor}
+
+```zig
+pub fn armor(self: Player) container.Container
+```
+
+- 返回值类型：`container.Container`
+
+### `Player.offhandContainer` {#Player.offhandContainer}
+
+```zig
+pub fn offhandContainer(self: Player) container.Container
+```
+
+- 返回值类型：`container.Container`
 
 ## `SelKind` {#SelKind}
 

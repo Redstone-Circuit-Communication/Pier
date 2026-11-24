@@ -47,6 +47,7 @@ bool (*md_is_available)(void);
 - 各绑定里的调用方：
     - Rust：[`dimensions::is_available`](../rust/dimensions.md#fn.is_available)、[`dimensions::is_available`](../rust/dimensions.md#fn.is_available)
     - Go：[`DimensionsAvailable`](../go/dimensions.md#DimensionsAvailable)、[`Raw.MdIsAvailable`](../go/raw.md#Raw.MdIsAvailable)
+    - Zig：[`dimensions.isAvailable`](../zig/dimensions.md#dimensions.isAvailable)
 
 ### `md_set_dimension_rule` {#md_set_dimension_rule}
 
@@ -72,6 +73,7 @@ void (*md_set_dimension_rule)(int32_t dimension, int32_t rule, bool allow);
 - 各绑定里的调用方：
     - Rust：[`dimensions::set_rule`](../rust/dimensions.md#fn.set_rule)
     - Go：[`SetDimensionRule`](../go/dimensions.md#SetDimensionRule)、[`Raw.MdSetDimensionRule`](../go/raw.md#Raw.MdSetDimensionRule)
+    - Zig：[`dimensions.setRule`](../zig/dimensions.md#dimensions.setRule)
 
 ### `md_get_dimension_rule` {#md_get_dimension_rule}
 
@@ -92,6 +94,7 @@ bool (*md_get_dimension_rule)(int32_t dimension, int32_t rule, bool* outAllow);
 - 各绑定里的调用方：
     - Rust：[`dimensions::rule`](../rust/dimensions.md#fn.rule)
     - Go：[`DimensionRule`](../go/dimensions.md#DimensionRule)、[`Raw.MdGetDimensionRule`](../go/raw.md#Raw.MdGetDimensionRule)
+    - Zig：[`dimensions.rule`](../zig/dimensions.md#dimensions.rule)
 
 ### `md_clear_dimension_rules` {#md_clear_dimension_rules}
 
@@ -108,7 +111,8 @@ void (*md_clear_dimension_rules)(int32_t dimension);
 - 表内序号：第 149 个槽位（从 0 数起）
 - 各绑定里的调用方：
     - Rust：[`dimensions::clear_rules`](../rust/dimensions.md#fn.clear_rules)
-    - Go：[`Raw.MdClearDimensionRules`](../go/raw.md#Raw.MdClearDimensionRules)
+    - Go：[`ClearDimensionRules`](../go/dimensions.md#ClearDimensionRules)、[`Raw.MdClearDimensionRules`](../go/raw.md#Raw.MdClearDimensionRules)
+    - Zig：[`dimensions.clearRules`](../zig/dimensions.md#dimensions.clearRules)
 
 ### `md_get_dimension_id` {#md_get_dimension_id}
 
@@ -131,6 +135,7 @@ int32_t (*md_get_dimension_id)(PierStr name);
 - 各绑定里的调用方：
     - Rust：[`dimensions::dimension_id`](../rust/dimensions.md#fn.dimension_id)、[`dimensions::dimension_id`](../rust/dimensions.md#fn.dimension_id)
     - Go：[`DimensionID`](../go/dimensions.md#DimensionID)、[`Raw.MdGetDimensionId`](../go/raw.md#Raw.MdGetDimensionId)
+    - Zig：[`dimensions.dimensionId`](../zig/dimensions.md#dimensions.dimensionId)
 
 ### `md_set_plot_merges` {#md_set_plot_merges}
 
@@ -151,7 +156,8 @@ void (*md_set_plot_merges)(int32_t dimension, int32_t const* entries, int32_t co
 - 表内序号：第 162 个槽位（从 0 数起）
 - 各绑定里的调用方：
     - Rust：[`dimensions::set_plot_merges`](../rust/dimensions.md#fn.set_plot_merges)
-    - Go：[`Raw.MdSetPlotMerges`](../go/raw.md#Raw.MdSetPlotMerges)
+    - Go：[`SetPlotMerges`](../go/dimensions.md#SetPlotMerges)、[`Raw.MdSetPlotMerges`](../go/raw.md#Raw.MdSetPlotMerges)
+    - Zig：[`dimensions.setPlotMerges`](../zig/dimensions.md#dimensions.setPlotMerges)
 
 ### `md_list_dimensions` {#md_list_dimensions}
 
@@ -177,7 +183,8 @@ void (*md_list_dimensions)(void* ctx, PierStrSink sink);
 - 表内序号：第 177 个槽位（从 0 数起）
 - 各绑定里的调用方：
     - Rust：[`dimensions::list`](../rust/dimensions.md#fn.list)、[`dimensions::list`](../rust/dimensions.md#fn.list)、[`World::fill_blocks`](../rust/world.md#World.fill_blocks)、[`World::add_ticking_area`](../rust/world.md#World.add_ticking_area)、[`World::remove_ticking_area`](../rust/world.md#World.remove_ticking_area)、[`World::list_ticking_areas`](../rust/world.md#World.list_ticking_areas)
-    - Go：[`ListDimensions`](../go/dimensions.md#ListDimensions)、[`Raw.MdListDimensions`](../go/raw.md#Raw.MdListDimensions)
+    - Go：[`ListDimensions`](../go/dimensions.md#ListDimensions)、[`ExistingDimensions`](../go/dimensions.md#ExistingDimensions)、[`Raw.MdListDimensions`](../go/raw.md#Raw.MdListDimensions)
+    - Zig：[`dimensions.list`](../zig/dimensions.md#dimensions.list)
 
 ### `md_add_dimension` {#md_add_dimension}
 
@@ -219,6 +226,7 @@ int32_t (*md_add_dimension)(PierStr name, PierStr spec_snbt);
 - 各绑定里的调用方：
     - Rust：[`dimensions::add_dimension`](../rust/dimensions.md#fn.add_dimension)
     - Go：[`AddDimension`](../go/dimensions.md#AddDimension)、[`Raw.MdAddDimension`](../go/raw.md#Raw.MdAddDimension)
+    - Zig：[`dimensions.addDimension`](../zig/dimensions.md#dimensions.addDimension)
 
 ### `md_add_dimension_pack` {#md_add_dimension_pack}
 
@@ -265,7 +273,8 @@ terrain:{kind:"template"|"volume",
 - 表内序号：第 194 个槽位（从 0 数起）
 - 各绑定里的调用方：
     - Rust：[`dimensions::add_dimension_pack`](../rust/dimensions.md#fn.add_dimension_pack)
-    - Go：[`Raw.MdAddDimensionPack`](../go/raw.md#Raw.MdAddDimensionPack)
+    - Go：[`AddDimensionPack`](../go/dimensions.md#AddDimensionPack)、[`Raw.MdAddDimensionPack`](../go/raw.md#Raw.MdAddDimensionPack)
+    - Zig：[`dimensions.addDimensionPack`](../zig/dimensions.md#dimensions.addDimensionPack)
 
 ### `md_pack_inspect` {#md_pack_inspect}
 
@@ -301,7 +310,8 @@ int32_t (*md_pack_inspect)(PierStr config_path, void* ctx, PierStrSink sink);
 - 表内序号：第 195 个槽位（从 0 数起）
 - 各绑定里的调用方：
     - Rust：[`dimensions::pack_inspect`](../rust/dimensions.md#fn.pack_inspect)
-    - Go：[`Raw.MdPackInspect`](../go/raw.md#Raw.MdPackInspect)
+    - Go：[`InspectPack`](../go/dimensions.md#InspectPack)、[`Raw.MdPackInspect`](../go/raw.md#Raw.MdPackInspect)
+    - Zig：[`dimensions.packInspect`](../zig/dimensions.md#dimensions.packInspect)
 
 ### `md_retire_dimension` {#md_retire_dimension}
 
@@ -325,7 +335,8 @@ id 不会退回到池里。退役的名字再次注册时是一个新维度，�
 - 表内序号：第 196 个槽位（从 0 数起）
 - 各绑定里的调用方：
     - Rust：[`dimensions::retire_dimension`](../rust/dimensions.md#fn.retire_dimension)
-    - Go：[`Raw.MdRetireDimension`](../go/raw.md#Raw.MdRetireDimension)
+    - Go：[`RetireDimension`](../go/dimensions.md#RetireDimension)、[`Raw.MdRetireDimension`](../go/raw.md#Raw.MdRetireDimension)
+    - Zig：[`dimensions.retireDimension`](../zig/dimensions.md#dimensions.retireDimension)
 
 ### `md_add_dimension_generated` {#md_add_dimension_generated}
 
@@ -370,6 +381,7 @@ int32_t (*md_add_dimension_generated)(PierStr name, PierStr spec_snbt,
 - 各绑定里的调用方：
     - Rust：[`dimensions::add_dimension_generated`](../rust/dimensions.md#fn.add_dimension_generated)
     - Go：[`AddGeneratedDimension`](../go/dimensions.md#AddGeneratedDimension)
+    - Zig：[`dimensions.addDimensionGenerated`](../zig/dimensions.md#dimensions.addDimensionGenerated)
 
 ### `md_set_dimension_cells` {#md_set_dimension_cells}
 
@@ -393,7 +405,8 @@ id 不是这个宿主注册的维度时返回 false。
 - 表内序号：第 199 个槽位（从 0 数起）
 - 各绑定里的调用方：
     - Rust：[`dimensions::set_dimension_cells`](../rust/dimensions.md#fn.set_dimension_cells)
-    - Go：[`Raw.MdSetDimensionCells`](../go/raw.md#Raw.MdSetDimensionCells)
+    - Go：[`SetDimensionCells`](../go/dimensions.md#SetDimensionCells)、[`Raw.MdSetDimensionCells`](../go/raw.md#Raw.MdSetDimensionCells)
+    - Zig：[`dimensions.setDimensionCells`](../zig/dimensions.md#dimensions.setDimensionCells)
 
 ## 类型 {#types}
 

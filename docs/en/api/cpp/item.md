@@ -31,9 +31,9 @@ bool (*item_get_num)(PierStr item_snbt, int32_t prop, double* out);
 - Section of abi.h: §E items (SNBT value objects) & containers
 - Position in the table: slot 43, counting from 0
 - Callers in each binding:
-    - Rust: [`ItemStack::num`](../rust/item.md#ItemStack.num), [`ItemStack::count`](../rust/item.md#ItemStack.count), [`ItemStack::max_stack_size`](../rust/item.md#ItemStack.max_stack_size), [`ItemStack::aux_value`](../rust/item.md#ItemStack.aux_value), [`ItemStack::id`](../rust/item.md#ItemStack.id), [`ItemStack::damage`](../rust/item.md#ItemStack.damage) and more, 29 in all
-    - Go: [`Item.Count`](../go/item.md#Item.Count), [`Item.MaxStackSize`](../go/item.md#Item.MaxStackSize), [`Item.AuxValue`](../go/item.md#Item.AuxValue), [`Item.Id`](../go/item.md#Item.Id), [`Item.Damage`](../go/item.md#Item.Damage), [`Item.IsNull`](../go/item.md#Item.IsNull) and more, 29 in all
-    - Zig: [`Item.count`](../zig/item.md#Item.count), [`Item.maxStackSize`](../zig/item.md#Item.maxStackSize), [`Item.auxValue`](../zig/item.md#Item.auxValue), [`Item.id`](../zig/item.md#Item.id), [`Item.damage`](../zig/item.md#Item.damage), [`Item.isNull`](../zig/item.md#Item.isNull) and more, 28 in all
+    - Rust: [`ItemStack::num`](../rust/item.md#ItemStack.num), [`ItemStack::count`](../rust/item.md#ItemStack.count), [`ItemStack::max_stack_size`](../rust/item.md#ItemStack.max_stack_size), [`ItemStack::aux_value`](../rust/item.md#ItemStack.aux_value), [`ItemStack::id`](../rust/item.md#ItemStack.id), [`ItemStack::damage`](../rust/item.md#ItemStack.damage) and more, 42 in all
+    - Go: [`Item.Count`](../go/item.md#Item.Count), [`Item.MaxStackSize`](../go/item.md#Item.MaxStackSize), [`Item.AuxValue`](../go/item.md#Item.AuxValue), [`Item.Id`](../go/item.md#Item.Id), [`Item.Damage`](../go/item.md#Item.Damage), [`Item.IsNull`](../go/item.md#Item.IsNull) and more, 42 in all
+    - Zig: [`Item.count`](../zig/item.md#Item.count), [`Item.maxStackSize`](../zig/item.md#Item.maxStackSize), [`Item.auxValue`](../zig/item.md#Item.auxValue), [`Item.id`](../zig/item.md#Item.id), [`Item.damage`](../zig/item.md#Item.damage), [`Item.isNull`](../zig/item.md#Item.isNull) and more, 41 in all
 
 ### `item_get_str` {#item_get_str}
 
@@ -77,6 +77,7 @@ Rebuild → mutate → serialize; out receives the NEW item SNBT.
 - Callers in each binding:
     - Rust: [`ItemStack::transform`](../rust/item.md#ItemStack.transform), [`ItemStack::set_custom_name`](../rust/item.md#ItemStack.set_custom_name), [`ItemStack::reset_name`](../rust/item.md#ItemStack.reset_name), [`ItemStack::set_damage`](../rust/item.md#ItemStack.set_damage), [`ItemStack::set_count`](../rust/item.md#ItemStack.set_count), [`ItemStack::set_unbreakable`](../rust/item.md#ItemStack.set_unbreakable) and more, 14 in all
     - Go: [`Item.Transform`](../go/item.md#Item.Transform), [`Raw.ItemTransform`](../go/raw.md#Raw.ItemTransform)
+    - Zig: [`Item.transform`](../zig/item.md#Item.transform), [`Item.withCustomName`](../zig/item.md#Item.withCustomName), [`Item.withoutCustomName`](../zig/item.md#Item.withoutCustomName), [`Item.withDamage`](../zig/item.md#Item.withDamage), [`Item.withCount`](../zig/item.md#Item.withCount), [`Item.withUnbreakable`](../zig/item.md#Item.withUnbreakable) and more, 14 in all
 
 ### `container_size` {#container_size}
 
@@ -94,6 +95,7 @@ bool (*container_size)(PierContainerRef ref, int32_t* out);
 - Callers in each binding:
     - Rust: [`Container::size`](../rust/container.md#Container.size), [`Container::items`](../rust/container.md#Container.items)
     - Go: [`Container.Size`](../go/item.md#Container.Size), [`Raw.ContainerSize`](../go/raw.md#Raw.ContainerSize)
+    - Zig: [`container.Container.size`](../zig/item.md#container.Container.size)
 
 ### `container_get_item` {#container_get_item}
 
@@ -115,6 +117,7 @@ Slot content as item SNBT (empty slots yield the air item's SNBT).
 - Callers in each binding:
     - Rust: [`Container::item`](../rust/container.md#Container.item), [`Container::items`](../rust/container.md#Container.items)
     - Go: [`Container.Item`](../go/item.md#Container.Item), [`Raw.ContainerGetItem`](../go/raw.md#Raw.ContainerGetItem)
+    - Zig: [`container.Container.item`](../zig/item.md#container.Container.item)
 
 ### `container_set_item` {#container_set_item}
 
@@ -133,6 +136,7 @@ bool (*container_set_item)(PierContainerRef ref, int32_t slot, PierStr item_snbt
 - Callers in each binding:
     - Rust: [`Container::set_item`](../rust/container.md#Container.set_item)
     - Go: [`Container.SetItem`](../go/item.md#Container.SetItem), [`Raw.ContainerSetItem`](../go/raw.md#Raw.ContainerSetItem)
+    - Zig: [`container.Container.setItem`](../zig/item.md#container.Container.setItem)
 
 ### `container_add_item` {#container_add_item}
 
@@ -150,6 +154,7 @@ bool (*container_add_item)(PierContainerRef ref, PierStr item_snbt);
 - Callers in each binding:
     - Rust: [`Container::add_item`](../rust/container.md#Container.add_item)
     - Go: [`Container.AddItem`](../go/item.md#Container.AddItem), [`Raw.ContainerAddItem`](../go/raw.md#Raw.ContainerAddItem)
+    - Zig: [`container.Container.addItem`](../zig/item.md#container.Container.addItem)
 
 ### `container_remove_item` {#container_remove_item}
 
@@ -168,6 +173,7 @@ bool (*container_remove_item)(PierContainerRef ref, int32_t slot, int32_t count)
 - Callers in each binding:
     - Rust: [`Container::remove_item`](../rust/container.md#Container.remove_item)
     - Go: [`Container.RemoveItem`](../go/item.md#Container.RemoveItem), [`Raw.ContainerRemoveItem`](../go/raw.md#Raw.ContainerRemoveItem)
+    - Zig: [`container.Container.removeItem`](../zig/item.md#container.Container.removeItem)
 
 ### `container_clear` {#container_clear}
 
@@ -184,6 +190,7 @@ bool (*container_clear)(PierContainerRef ref);
 - Callers in each binding:
     - Rust: [`Container::clear`](../rust/container.md#Container.clear)
     - Go: [`Container.Clear`](../go/item.md#Container.Clear), [`Raw.ContainerClear`](../go/raw.md#Raw.ContainerClear)
+    - Zig: [`container.Container.clear`](../zig/item.md#container.Container.clear)
 
 ### `item_get_enchants` {#item_get_enchants}
 
@@ -203,7 +210,8 @@ SNBT \[{id, level},…\]
 - Position in the table: slot 125, counting from 0
 - Callers in each binding:
     - Rust: [`ItemStack::enchants`](../rust/item.md#ItemStack.enchants)
-    - Go: [`Item.Enchants`](../go/item.md#Item.Enchants), [`Raw.ItemGetEnchants`](../go/raw.md#Raw.ItemGetEnchants)
+    - Go: [`Item.Enchants`](../go/item.md#Item.Enchants), [`Item.EnchantList`](../go/item.md#Item.EnchantList), [`Raw.ItemGetEnchants`](../go/raw.md#Raw.ItemGetEnchants)
+    - Zig: [`Item.enchants`](../zig/item.md#Item.enchants)
 
 ### `item_set_enchants` {#item_set_enchants}
 
@@ -224,7 +232,8 @@ bool (*item_set_enchants)(PierStr item_snbt, PierStr enchants_snbt, void* ctx, P
 - Position in the table: slot 126, counting from 0
 - Callers in each binding:
     - Rust: [`ItemStack::with_enchants`](../rust/item.md#ItemStack.with_enchants)
-    - Go: [`Raw.ItemSetEnchants`](../go/raw.md#Raw.ItemSetEnchants)
+    - Go: [`Item.WithEnchants`](../go/item.md#Item.WithEnchants), [`Raw.ItemSetEnchants`](../go/raw.md#Raw.ItemSetEnchants)
+    - Zig: [`Item.withEnchants`](../zig/item.md#Item.withEnchants)
 
 ### `item_matches` {#item_matches}
 
@@ -242,6 +251,7 @@ bool (*item_matches)(PierStr a, PierStr b);
 - Callers in each binding:
     - Rust: [`ItemStack::matches`](../rust/item.md#ItemStack.matches)
     - Go: [`Item.Matches`](../go/item.md#Item.Matches), [`Raw.ItemMatches`](../go/raw.md#Raw.ItemMatches)
+    - Zig: [`Item.matches`](../zig/item.md#Item.matches)
 
 ### `item_get_user_data` {#item_get_user_data}
 
@@ -259,7 +269,8 @@ bool (*item_get_user_data)(PierStr item_snbt, void* ctx, PierStrSink sink);
 - Position in the table: slot 128, counting from 0
 - Callers in each binding:
     - Rust: [`ItemStack::user_data`](../rust/item.md#ItemStack.user_data)
-    - Go: [`Raw.ItemGetUserData`](../go/raw.md#Raw.ItemGetUserData)
+    - Go: [`Item.UserDataSNBT`](../go/item.md#Item.UserDataSNBT), [`Raw.ItemGetUserData`](../go/raw.md#Raw.ItemGetUserData)
+    - Zig: [`Item.userDataSnbt`](../zig/item.md#Item.userDataSnbt)
 
 ### `container_refresh` {#container_refresh}
 
@@ -277,7 +288,8 @@ Resend a player-owned container (which 0..3) to its owner. Returns false for blo
 - Position in the table: slot 155, counting from 0
 - Callers in each binding:
     - Rust: [`Container::refresh`](../rust/container.md#Container.refresh)
-    - Go: [`Raw.ContainerRefresh`](../go/raw.md#Raw.ContainerRefresh)
+    - Go: [`Container.Refresh`](../go/item.md#Container.Refresh), [`Raw.ContainerRefresh`](../go/raw.md#Raw.ContainerRefresh)
+    - Zig: [`container.Container.refresh`](../zig/item.md#container.Container.refresh)
 
 ### `container_get_items` {#container_get_items}
 
@@ -298,6 +310,7 @@ Every slot of a container in one call: the sink receives (slot, item SNBT) for e
 - Callers in each binding:
     - Rust: [`Container::items`](../rust/container.md#Container.items)
     - Go: [`ContainerItems`](../go/item.md#ContainerItems), [`Container.Items`](../go/item.md#Container.Items)
+    - Zig: [`container.Container.items`](../zig/item.md#container.Container.items)
 
 ## `PierItemNumProp` {#PierItemNumProp}
 
@@ -333,6 +346,19 @@ Every slot of a container in one call: the sink receives (slot, item SNBT) for e
 | <span id="PIER_IPROP_IS_BUNDLE"></span>`PIER_IPROP_IS_BUNDLE` | `25` | `ItemStackBase::isBundle` |
 | <span id="PIER_IPROP_HAS_USER_DATA"></span>`PIER_IPROP_HAS_USER_DATA` | `26` | `ItemStackBase::hasUserData` |
 | <span id="PIER_IPROP_HAS_CUSTOM_NAME"></span>`PIER_IPROP_HAS_CUSTOM_NAME` | `27` | `ItemStackBase::hasCustomHoverName` |
+| <span id="PIER_IPROP_IS_FOOD"></span>`PIER_IPROP_IS_FOOD` | `28` | `Item::isFood` |
+| <span id="PIER_IPROP_IS_DYEABLE"></span>`PIER_IPROP_IS_DYEABLE` | `29` | `Item::isDyeable` |
+| <span id="PIER_IPROP_IS_HAND_EQUIPPED"></span>`PIER_IPROP_IS_HAND_EQUIPPED` | `30` | `Item::isHandEquipped` |
+| <span id="PIER_IPROP_IS_LIQUID_CLIP"></span>`PIER_IPROP_IS_LIQUID_CLIP` | `31` | `Item::isLiquidClipItem` |
+| <span id="PIER_IPROP_IS_STACKED_BY_DATA"></span>`PIER_IPROP_IS_STACKED_BY_DATA` | `32` | `Item::isStackedByData` |
+| <span id="PIER_IPROP_COOLDOWN_DURATION"></span>`PIER_IPROP_COOLDOWN_DURATION` | `33` | `Item::getCooldownDuration`, in ticks |
+| <span id="PIER_IPROP_IS_COMPONENT_BASED"></span>`PIER_IPROP_IS_COMPONENT_BASED` | `34` | `Item::isComponentBased` |
+| <span id="PIER_IPROP_IS_HUMANOID_ARMOR"></span>`PIER_IPROP_IS_HUMANOID_ARMOR` | `35` | `Item::isHumanoidArmor` |
+| <span id="PIER_IPROP_ARMOR_VALUE"></span>`PIER_IPROP_ARMOR_VALUE` | `36` | `Item::getArmorValue` |
+| <span id="PIER_IPROP_CAN_BE_DEPLETED"></span>`PIER_IPROP_CAN_BE_DEPLETED` | `37` | `Item::canBeDepleted` |
+| <span id="PIER_IPROP_IS_USEABLE"></span>`PIER_IPROP_IS_USEABLE` | `38` | `Item::isUseable` |
+| <span id="PIER_IPROP_CAN_DESTROY_IN_CREATIVE"></span>`PIER_IPROP_CAN_DESTROY_IN_CREATIVE` | `39` | `Item::canDestroyInCreative` |
+| <span id="PIER_IPROP_SHOWS_DURABILITY_IN_CREATIVE"></span>`PIER_IPROP_SHOWS_DURABILITY_IN_CREATIVE` | `40` | `Item::showsDurabilityInCreative` |
 
 ## `PierItemStrProp` {#PierItemStrProp}
 

@@ -134,6 +134,49 @@ func ServiceCaller() (string, bool)
 - 返回值类型：`(string, bool)`
 - 对应槽位：[`service_caller`](../cpp/crossmod.md#service_caller)
 
+### `Lanes` {#Lanes}
+
+```go
+func Lanes() ([]LaneInfo, error)
+```
+
+Lanes 列出每条已发布的快速通道。它不传任何指针，所以适合先看看有什么。
+
+- 返回值类型：`([]LaneInfo, error)`
+- 对应槽位：[`lane_list`](../cpp/crossmod.md#lane_list)
+
+### `PublishLane` {#PublishLane}
+
+```go
+func PublishLane(name string, fingerprint uint64, data, table, retain, release unsafe.Pointer) (*LanePublication, error)
+```
+
+PublishLane 以 name 独占地发布一条快速通道。fingerprint 是契约的值，不能是 0：0 表示任何人都可以连接，宿主会拒绝。table 是提供方的函数指针表，data 是每个函数收到的指针；两者都必须指向 C 内存，因为消费方是从 Go 之外访问它们的。retain 和 release 不为 nil 时是统计 data 上租约的 C 函数。卸载时这条通道会被自动撤回。
+
+- 参数：
+    - name : `string`
+    - fingerprint : `uint64`
+    - data : `unsafe.Pointer`
+    - table : `unsafe.Pointer`
+    - retain : `unsafe.Pointer`
+    - release : `unsafe.Pointer`
+- 返回值类型：`(*LanePublication, error)`
+- 对应槽位：[`lane_publish`](../cpp/crossmod.md#lane_publish)
+
+### `AcquireLane` {#AcquireLane}
+
+```go
+func AcquireLane(name string, fingerprint uint64) (*LaneLease, error)
+```
+
+AcquireLane 获取一条快速通道。fingerprint 必须是消费方自己根据契约算出来的值；0 无效，总是失败。通道不存在时错误是 *LaneNotFoundError，契约不一致时是 *LaneFingerprintError。
+
+- 参数：
+    - name : `string`
+    - fingerprint : `uint64`
+- 返回值类型：`(*LaneLease, error)`
+- 对应槽位：[`lane_acquire`](../cpp/crossmod.md#lane_acquire)
+
 ## `Subscription` {#Subscription}
 
 ```go
@@ -216,6 +259,47 @@ func (r *ServiceRegistration) Unregister() error
 - 返回值类型：`error`
 - 对应槽位：[`service_unregister`](../cpp/crossmod.md#service_unregister)
 
+## `LaneLease` {#LaneLease}
+
+```go
+type LaneLease struct {
+    // unexported fields
+}
+```
+
+LaneLease 是对一条已发布通道的租约，留着它是为了归还。
+
+### `LaneLease.IsAlive` {#LaneLease.IsAlive}
+
+```go
+func (l *LaneLease) IsAlive() bool
+```
+
+IsAlive 报告提供方是否还在。
+
+- 返回值类型：`bool`
+
+### `LaneLease.Enter` {#LaneLease.Enter}
+
+```go
+func (l *LaneLease) Enter() (table, data unsafe.Pointer, leave func(), ok bool)
+```
+
+Enter 为一次调用进入提供方，并返回提供方的函数表和 data 指针。提供方已经不在时 ok 为 false。调用结束后要调用 leave，这样提供方就不会在调用进行时被卸载。
+
+- 返回值类型：`(table, data unsafe.Pointer, leave func(), ok bool)`
+
+### `LaneLease.Release` {#LaneLease.Release}
+
+```go
+func (l *LaneLease) Release() (bool, error)
+```
+
+Release 归还租约。提供方已经不在时报告 false，因为加载器那时已经释放过它，再释放一次就是重复释放。
+
+- 返回值类型：`(bool, error)`
+- 对应槽位：[`lane_release`](../cpp/crossmod.md#lane_release)
+
 ## `CallError` {#CallError}
 
 ```go
@@ -232,6 +316,62 @@ type CallError struct {
 
 ```go
 func (e *CallError) Error() string
+```
+
+- 返回值类型：`string`
+
+## `LanePublication` {#LanePublication}
+
+```go
+type LanePublication struct{ id uint64 }
+type LanePublication struct{ id uint64 }
+```
+
+LanePublication 是一条已发布的快速通道。
+
+### `LanePublication.Withdraw` {#LanePublication.Withdraw}
+
+```go
+func (p *LanePublication) Withdraw() error
+```
+
+Withdraw 把通道收回来；调用两次也没有害处。所有未归还的租约都会被释放。
+
+- 返回值类型：`error`
+- 对应槽位：[`lane_unpublish`](../cpp/crossmod.md#lane_unpublish)
+
+## `LaneNotFoundError` {#LaneNotFoundError}
+
+```go
+type LaneNotFoundError struct{ Name string }
+type LaneNotFoundError struct{ Name string }
+```
+
+LaneNotFoundError 表示没有发布过这个名字的快速通道。
+
+### `LaneNotFoundError.Error` {#LaneNotFoundError.Error}
+
+```go
+func (e *LaneNotFoundError) Error() string
+```
+
+- 返回值类型：`string`
+
+## `LaneFingerprintError` {#LaneFingerprintError}
+
+```go
+type LaneFingerprintError struct {
+    Name         string
+    Ours, Theirs uint64
+}
+```
+
+LaneFingerprintError 表示提供方的契约不是消费方要的那一个。
+
+### `LaneFingerprintError.Error` {#LaneFingerprintError.Error}
+
+```go
+func (e *LaneFingerprintError) Error() string
 ```
 
 - 返回值类型：`string`
@@ -275,3 +415,18 @@ type ServiceInfo struct {
 ```
 
 一项已注册的服务，以及提供它的模组。
+
+## `LaneInfo` {#LaneInfo}
+
+```go
+type LaneInfo struct {
+    Name        string `json:"name"`
+    Mod         string `json:"mod"`
+    Fingerprint string `json:"fingerprint"`
+    Protocol    uint32 `json:"protocol"`
+    Leases      uint32 `json:"leases"`
+    Alive       bool   `json:"alive"`
+}
+```
+
+LaneInfo 是一条已发布快速通道的登记记录。

@@ -1,5 +1,21 @@
 # Zig：跨模组：总线、服务与快速通道
 
+## 声明 {#declarations}
+
+### `lane.protocol` {#lane.protocol}
+
+```zig
+pub const protocol: u32 = c.PIER_LANE_PROTOCOL;
+```
+
+这个绑定使用的快速通道协议版本。
+
+### `lane.LaneInfo.json_keys` {#lane.LaneInfo.json_keys}
+
+```zig
+pub const json_keys = .{ .owner = "mod" };
+```
+
 ## 函数 {#functions}
 
 ### `busSubscribe` {#busSubscribe}
@@ -112,6 +128,152 @@ pub fn serviceCaller(allocator: std.mem.Allocator) Error!?[]u8
 - 返回值类型：`Error!?[]u8`
 - 对应槽位：[`service_caller`](../cpp/crossmod.md#service_caller)
 
+### `lane.publish` {#lane.publish}
+
+```zig
+pub fn publish(name: []const u8, fingerprint: u64, data: ?*anyopaque, table: *const anyopaque, retain: c.PierLaneRefFn, release: c.PierLaneRefFn) core.Error!Publication
+```
+
+以 `name` 独占地发布一条快速通道。`fingerprint` 是契约的值，不能是 0：0 表示任何人都可以连接，宿主会拒绝。`table` 是提供方的函数指针表，`data` 是每个函数收到的指针；`retain` 和 `release` 统计对 `data` 的租约。卸载时这条通道会被自动撤回。名字被占用时得到 `Refused`，宿主日志里会写出占用者。
+
+- 参数：
+    - name : `[]const u8`
+    - fingerprint : `u64`
+    - data : `?*anyopaque`
+    - table : `*const anyopaque`
+    - retain : `c.PierLaneRefFn`
+    - release : `c.PierLaneRefFn`
+- 返回值类型：`core.Error!Publication`
+- 对应槽位：[`lane_publish`](../cpp/crossmod.md#lane_publish)
+
+### `lane.acquire` {#lane.acquire}
+
+```zig
+pub fn acquire(name: []const u8, fingerprint: u64) core.Error!Outcome
+```
+
+获取一条快速通道。`fingerprint` 必须是消费方自己根据契约算出来的值；0 无效，总是得到 `fingerprint`。
+
+- 参数：
+    - name : `[]const u8`
+    - fingerprint : `u64`
+- 返回值类型：`core.Error!Outcome`
+- 对应槽位：[`lane_acquire`](../cpp/crossmod.md#lane_acquire)
+
+### `lane.list` {#lane.list}
+
+```zig
+pub fn list(allocator: Allocator) core.Error!types.Owned(LaneInfo)
+```
+
+所有快速通道。它不交出任何指针，所以适合先看看有什么。
+
+- 参数：
+    - allocator : `Allocator`
+- 返回值类型：`core.Error!types.Owned(LaneInfo)`
+- 对应槽位：[`lane_list`](../cpp/crossmod.md#lane_list)
+
+### `lane.listJson` {#lane.listJson}
+
+```zig
+pub fn listJson(allocator: Allocator) core.Error![]u8
+```
+
+快速通道列表的原始 JSON，未经解析，由调用方持有。
+
+- 参数：
+    - allocator : `Allocator`
+- 返回值类型：`core.Error![]u8`
+- 对应槽位：[`lane_list`](../cpp/crossmod.md#lane_list)
+
+## `lane.Lease` {#lane.Lease}
+
+```zig
+pub const Lease = struct {
+    lease: u64,
+    fingerprint: u64,
+    data: ?*anyopaque,
+    table: ?*const anyopaque,
+    alive: ?*const u32,
+    busy: ?*u32,
+    // ...
+};
+```
+
+对一条已发布通道的租约，留着它是为了归还。
+
+### `lane.Lease.isAlive` {#lane.Lease.isAlive}
+
+```zig
+pub fn isAlive(self: Lease) bool
+```
+
+提供方是否还在。
+
+- 返回值类型：`bool`
+
+### `lane.Lease.enter` {#lane.Lease.enter}
+
+```zig
+pub fn enter(self: Lease) ?Guard
+```
+
+为一次调用进入提供方。提供方已经不在时为 null。调用方通过这个守卫发起调用，之后 `leave`，这样提供方就不会在调用进行时被卸载：if (lease.enter()) |inside| { defer inside.leave(); inside.table(MyTable).hello(inside.data); }
+
+- 返回值类型：`?Guard`
+
+### `lane.Lease.release` {#lane.Lease.release}
+
+```zig
+pub fn release(self: *Lease) core.Error!bool
+```
+
+归还租约。只能是这个 mod 持有的租约。提供方已经不在时为 false，因为加载器那时已经释放过它，再释放一次就是重复释放。
+
+- 返回值类型：`core.Error!bool`
+- 对应槽位：[`lane_release`](../cpp/crossmod.md#lane_release)
+
+## `lane.Guard` {#lane.Guard}
+
+```zig
+pub const Guard = struct {
+    lease: Lease,
+    // ...
+};
+```
+
+提供方内部的一次调用。`leave` 结束它。
+
+### `lane.Guard.table` {#lane.Guard.table}
+
+```zig
+pub fn table(self: Guard, comptime Table: type) *const Table
+```
+
+提供方的函数表，它的类型由契约指定。
+
+- 参数：
+    - Table : `comptime type`
+- 返回值类型：`*const Table`
+
+### `lane.Guard.data` {#lane.Guard.data}
+
+```zig
+pub fn data(self: Guard) ?*anyopaque
+```
+
+函数表里每个函数收到的指针。
+
+- 返回值类型：`?*anyopaque`
+
+### `lane.Guard.leave` {#lane.Guard.leave}
+
+```zig
+pub fn leave(self: Guard) void
+```
+
+- 返回值类型：`void`
+
 ## `Subscription` {#Subscription}
 
 ```zig
@@ -178,6 +340,28 @@ pub fn unregister(self: *ServiceRegistration) Error!void
 - 返回值类型：`Error!void`
 - 对应槽位：[`service_unregister`](../cpp/crossmod.md#service_unregister)
 
+## `lane.Publication` {#lane.Publication}
+
+```zig
+pub const Publication = struct {
+    id: u64,
+    // ...
+};
+```
+
+一次发布。`withdraw` 把通道收回来。
+
+### `lane.Publication.withdraw` {#lane.Publication.withdraw}
+
+```zig
+pub fn withdraw(self: *Publication) core.Error!void
+```
+
+撤回这条通道；调用两次也没有害处。所有未归还的租约都会被释放，消费方下一次存活检查就会看到通道已经没了。
+
+- 返回值类型：`core.Error!void`
+- 对应槽位：[`lane_unpublish`](../cpp/crossmod.md#lane_unpublish)
+
 ## `Vetoable` {#Vetoable}
 
 ```zig
@@ -209,3 +393,35 @@ pub const CallOutcome = struct {
 ```
 
 一次服务调用的结果。`code` 为 ok 时 `body` 是回答，为 provider_error 时 `body` 是提供方的错误信息，归调用方所有。
+
+## `lane.Outcome` {#lane.Outcome}
+
+```zig
+pub const Outcome = union(enum) {
+    lease: Lease,
+    /// No lane by that name is published.
+    not_found,
+    /// The provider's fingerprint, which differs from the one asked for.
+    fingerprint: u64,
+    refused,
+    // ...
+};
+```
+
+获取一条快速通道的结果。
+
+## `lane.LaneInfo` {#lane.LaneInfo}
+
+```zig
+pub const LaneInfo = struct {
+    name: []const u8 = "",
+    owner: []const u8 = "",
+    fingerprint: []const u8 = "",
+    protocol: u32 = 0,
+    leases: u32 = 0,
+    alive: bool = false,
+    // ...
+};
+```
+
+已发布通道的注册记录。

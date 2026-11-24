@@ -86,6 +86,41 @@ Transform applies one of the PIER\_IOP\_\* operations of abi.h and returns the n
 - Return type: `(Item, error)`
 - Slots: [`item_transform`](../cpp/item.md#item_transform)
 
+### `Item.UserDataSNBT` {#Item.UserDataSNBT}
+
+```go
+func (i Item) UserDataSNBT() (string, error)
+```
+
+UserDataSNBT is the custom NBT of the item, its tag section, as SNBT.
+
+- Return type: `(string, error)`
+- Slots: [`item_get_user_data`](../cpp/item.md#item_get_user_data)
+
+### `Item.EnchantList` {#Item.EnchantList}
+
+```go
+func (i Item) EnchantList() ([]Enchant, error)
+```
+
+EnchantList lists the enchantments of the item.
+
+- Return type: `([]Enchant, error)`
+- Slots: [`item_get_enchants`](../cpp/item.md#item_get_enchants)
+
+### `Item.WithEnchants` {#Item.WithEnchants}
+
+```go
+func (i Item) WithEnchants(set []Enchant) (Item, error)
+```
+
+WithEnchants replaces the whole enchantment set and returns the new item. Every current host answers not provided: writing enchantments is not implemented, and Transform with the add-enchant operation is the way to add one.
+
+- Parameters:
+    - set : `[]Enchant`
+- Return type: `(Item, error)`
+- Slots: [`item_set_enchants`](../cpp/item.md#item_set_enchants)
+
 ### `Item.Count` {#Item.Count}
 
 ```go
@@ -394,6 +429,149 @@ HasCustomName reads `PIER_IPROP_HAS_CUSTOM_NAME`: `ItemStackBase::hasCustomHover
 - Return type: `(bool, error)`
 - Slots: [`item_get_num`](../cpp/item.md#item_get_num)
 
+### `Item.IsFood` {#Item.IsFood}
+
+```go
+func (i Item) IsFood() (bool, error)
+```
+
+IsFood reads `PIER_IPROP_IS_FOOD`: `Item::isFood`
+
+- Return type: `(bool, error)`
+- Slots: [`item_get_num`](../cpp/item.md#item_get_num)
+
+### `Item.IsDyeable` {#Item.IsDyeable}
+
+```go
+func (i Item) IsDyeable() (bool, error)
+```
+
+IsDyeable reads `PIER_IPROP_IS_DYEABLE`: `Item::isDyeable`
+
+- Return type: `(bool, error)`
+- Slots: [`item_get_num`](../cpp/item.md#item_get_num)
+
+### `Item.IsHandEquipped` {#Item.IsHandEquipped}
+
+```go
+func (i Item) IsHandEquipped() (bool, error)
+```
+
+IsHandEquipped reads `PIER_IPROP_IS_HAND_EQUIPPED`: `Item::isHandEquipped`
+
+- Return type: `(bool, error)`
+- Slots: [`item_get_num`](../cpp/item.md#item_get_num)
+
+### `Item.IsLiquidClip` {#Item.IsLiquidClip}
+
+```go
+func (i Item) IsLiquidClip() (bool, error)
+```
+
+IsLiquidClip reads `PIER_IPROP_IS_LIQUID_CLIP`: `Item::isLiquidClipItem`
+
+- Return type: `(bool, error)`
+- Slots: [`item_get_num`](../cpp/item.md#item_get_num)
+
+### `Item.IsStackedByData` {#Item.IsStackedByData}
+
+```go
+func (i Item) IsStackedByData() (bool, error)
+```
+
+IsStackedByData reads `PIER_IPROP_IS_STACKED_BY_DATA`: `Item::isStackedByData`
+
+- Return type: `(bool, error)`
+- Slots: [`item_get_num`](../cpp/item.md#item_get_num)
+
+### `Item.CooldownDuration` {#Item.CooldownDuration}
+
+```go
+func (i Item) CooldownDuration() (float64, error)
+```
+
+CooldownDuration reads `PIER_IPROP_COOLDOWN_DURATION`: `Item::getCooldownDuration`, in ticks
+
+- Return type: `(float64, error)`
+- Slots: [`item_get_num`](../cpp/item.md#item_get_num)
+
+### `Item.IsComponentBased` {#Item.IsComponentBased}
+
+```go
+func (i Item) IsComponentBased() (bool, error)
+```
+
+IsComponentBased reads `PIER_IPROP_IS_COMPONENT_BASED`: `Item::isComponentBased`
+
+- Return type: `(bool, error)`
+- Slots: [`item_get_num`](../cpp/item.md#item_get_num)
+
+### `Item.IsHumanoidArmor` {#Item.IsHumanoidArmor}
+
+```go
+func (i Item) IsHumanoidArmor() (bool, error)
+```
+
+IsHumanoidArmor reads `PIER_IPROP_IS_HUMANOID_ARMOR`: `Item::isHumanoidArmor`
+
+- Return type: `(bool, error)`
+- Slots: [`item_get_num`](../cpp/item.md#item_get_num)
+
+### `Item.ArmorValue` {#Item.ArmorValue}
+
+```go
+func (i Item) ArmorValue() (float64, error)
+```
+
+ArmorValue reads `PIER_IPROP_ARMOR_VALUE`: `Item::getArmorValue`
+
+- Return type: `(float64, error)`
+- Slots: [`item_get_num`](../cpp/item.md#item_get_num)
+
+### `Item.CanBeDepleted` {#Item.CanBeDepleted}
+
+```go
+func (i Item) CanBeDepleted() (bool, error)
+```
+
+CanBeDepleted reads `PIER_IPROP_CAN_BE_DEPLETED`: `Item::canBeDepleted`
+
+- Return type: `(bool, error)`
+- Slots: [`item_get_num`](../cpp/item.md#item_get_num)
+
+### `Item.IsUseable` {#Item.IsUseable}
+
+```go
+func (i Item) IsUseable() (bool, error)
+```
+
+IsUseable reads `PIER_IPROP_IS_USEABLE`: `Item::isUseable`
+
+- Return type: `(bool, error)`
+- Slots: [`item_get_num`](../cpp/item.md#item_get_num)
+
+### `Item.CanDestroyInCreative` {#Item.CanDestroyInCreative}
+
+```go
+func (i Item) CanDestroyInCreative() (bool, error)
+```
+
+CanDestroyInCreative reads `PIER_IPROP_CAN_DESTROY_IN_CREATIVE`: `Item::canDestroyInCreative`
+
+- Return type: `(bool, error)`
+- Slots: [`item_get_num`](../cpp/item.md#item_get_num)
+
+### `Item.ShowsDurabilityInCreative` {#Item.ShowsDurabilityInCreative}
+
+```go
+func (i Item) ShowsDurabilityInCreative() (float64, error)
+```
+
+ShowsDurabilityInCreative reads `PIER_IPROP_SHOWS_DURABILITY_IN_CREATIVE`: `Item::showsDurabilityInCreative`
+
+- Return type: `(float64, error)`
+- Slots: [`item_get_num`](../cpp/item.md#item_get_num)
+
 ### `Item.TypeName` {#Item.TypeName}
 
 ```go
@@ -612,6 +790,17 @@ Items lists the occupied slots.
 - Return type: `([]SlotItem, error)`
 - Slots: [`container_get_items`](../cpp/item.md#container_get_items)
 
+### `Container.Refresh` {#Container.Refresh}
+
+```go
+func (c Container) Refresh() error
+```
+
+Refresh resends the whole container to its owner. A block container has no owner to resend to, and the host refuses it.
+
+- Return type: `error`
+- Slots: [`container_refresh`](../cpp/item.md#container_refresh)
+
 ## `SlotItem` {#SlotItem}
 
 ```go
@@ -622,6 +811,17 @@ type SlotItem struct {
 ```
 
 SlotItem is one occupied slot of a container and its item as SNBT.
+
+## `Enchant` {#Enchant}
+
+```go
+type Enchant struct {
+    ID    string
+    Level int32
+}
+```
+
+Enchant is one enchantment.
 
 ## `ContainerRef` {#ContainerRef}
 
@@ -668,6 +868,19 @@ ContainerRef names a container: a player's inventory, ender chest, armor or offh
 | <span id="IPropIsBundle"></span>`IPropIsBundle` | `25` | IPropIsBundle is `PIER_IPROP_IS_BUNDLE`: `ItemStackBase::isBundle` |
 | <span id="IPropHasUserData"></span>`IPropHasUserData` | `26` | IPropHasUserData is `PIER_IPROP_HAS_USER_DATA`: `ItemStackBase::hasUserData` |
 | <span id="IPropHasCustomName"></span>`IPropHasCustomName` | `27` | IPropHasCustomName is `PIER_IPROP_HAS_CUSTOM_NAME`: `ItemStackBase::hasCustomHoverName` |
+| <span id="IPropIsFood"></span>`IPropIsFood` | `28` | IPropIsFood is `PIER_IPROP_IS_FOOD`: `Item::isFood` |
+| <span id="IPropIsDyeable"></span>`IPropIsDyeable` | `29` | IPropIsDyeable is `PIER_IPROP_IS_DYEABLE`: `Item::isDyeable` |
+| <span id="IPropIsHandEquipped"></span>`IPropIsHandEquipped` | `30` | IPropIsHandEquipped is `PIER_IPROP_IS_HAND_EQUIPPED`: `Item::isHandEquipped` |
+| <span id="IPropIsLiquidClip"></span>`IPropIsLiquidClip` | `31` | IPropIsLiquidClip is `PIER_IPROP_IS_LIQUID_CLIP`: `Item::isLiquidClipItem` |
+| <span id="IPropIsStackedByData"></span>`IPropIsStackedByData` | `32` | IPropIsStackedByData is `PIER_IPROP_IS_STACKED_BY_DATA`: `Item::isStackedByData` |
+| <span id="IPropCooldownDuration"></span>`IPropCooldownDuration` | `33` | IPropCooldownDuration is `PIER_IPROP_COOLDOWN_DURATION`: `Item::getCooldownDuration`, in ticks |
+| <span id="IPropIsComponentBased"></span>`IPropIsComponentBased` | `34` | IPropIsComponentBased is `PIER_IPROP_IS_COMPONENT_BASED`: `Item::isComponentBased` |
+| <span id="IPropIsHumanoidArmor"></span>`IPropIsHumanoidArmor` | `35` | IPropIsHumanoidArmor is `PIER_IPROP_IS_HUMANOID_ARMOR`: `Item::isHumanoidArmor` |
+| <span id="IPropArmorValue"></span>`IPropArmorValue` | `36` | IPropArmorValue is `PIER_IPROP_ARMOR_VALUE`: `Item::getArmorValue` |
+| <span id="IPropCanBeDepleted"></span>`IPropCanBeDepleted` | `37` | IPropCanBeDepleted is `PIER_IPROP_CAN_BE_DEPLETED`: `Item::canBeDepleted` |
+| <span id="IPropIsUseable"></span>`IPropIsUseable` | `38` | IPropIsUseable is `PIER_IPROP_IS_USEABLE`: `Item::isUseable` |
+| <span id="IPropCanDestroyInCreative"></span>`IPropCanDestroyInCreative` | `39` | IPropCanDestroyInCreative is `PIER_IPROP_CAN_DESTROY_IN_CREATIVE`: `Item::canDestroyInCreative` |
+| <span id="IPropShowsDurabilityInCreative"></span>`IPropShowsDurabilityInCreative` | `40` | IPropShowsDurabilityInCreative is `PIER_IPROP_SHOWS_DURABILITY_IN_CREATIVE`: `Item::showsDurabilityInCreative` |
 
 ## `IStr*` {#IStr}
 

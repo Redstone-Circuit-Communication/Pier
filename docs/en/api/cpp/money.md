@@ -36,6 +36,7 @@ Balance. Returns -1 on failure (empty xuid, database error, or absent backend); 
 - Callers in each binding:
     - Rust: [`money::balance`](../rust/money.md#fn.balance)
     - Go: [`Money`](../go/money.md#Money), [`Raw.GetMoney`](../go/raw.md#Raw.GetMoney)
+    - Zig: [`money.balance`](../zig/money.md#money.balance)
 
 ### `set_money` {#set_money}
 
@@ -55,6 +56,7 @@ Set to money, which is a target balance rather than a delta.
 - Callers in each binding:
     - Rust: [`money::set`](../rust/money.md#fn.set)
     - Go: [`SetMoney`](../go/money.md#SetMoney), [`Raw.SetMoney`](../go/raw.md#Raw.SetMoney)
+    - Zig: [`money.set`](../zig/money.md#money.set)
 
 ### `add_money` {#add_money}
 
@@ -72,6 +74,7 @@ bool (*add_money)(PierStr xuid, int64_t money);
 - Callers in each binding:
     - Rust: [`money::add`](../rust/money.md#fn.add)
     - Go: [`AddMoney`](../go/money.md#AddMoney), [`Raw.AddMoney`](../go/raw.md#Raw.AddMoney)
+    - Zig: [`money.add`](../zig/money.md#money.add)
 
 ### `reduce_money` {#reduce_money}
 
@@ -89,6 +92,7 @@ bool (*reduce_money)(PierStr xuid, int64_t money);
 - Callers in each binding:
     - Rust: [`money::reduce`](../rust/money.md#fn.reduce)
     - Go: [`ReduceMoney`](../go/money.md#ReduceMoney), [`Raw.ReduceMoney`](../go/raw.md#Raw.ReduceMoney)
+    - Zig: [`money.reduce`](../zig/money.md#money.reduce)
 
 ### `trans_money` {#trans_money}
 
@@ -110,6 +114,7 @@ An empty from or to means created from or destroyed into nothing. What the payee
 - Callers in each binding:
     - Rust: [`money::transfer`](../rust/money.md#fn.transfer)
     - Go: [`TransferMoney`](../go/money.md#TransferMoney), [`Raw.TransMoney`](../go/raw.md#Raw.TransMoney)
+    - Zig: [`money.transfer`](../zig/money.md#money.transfer)
 
 ### `money_get_hist` {#money_get_hist}
 
@@ -127,7 +132,8 @@ void (*money_get_hist)(PierStr xuid, int32_t timediff, void* ctx, PierStrSink si
 - Position in the table: slot 97, counting from 0
 - Callers in each binding:
     - Rust: [`money::try_history`](../rust/money.md#fn.try_history), [`money::history`](../rust/money.md#fn.history)
-    - Go: [`Raw.MoneyGetHist`](../go/raw.md#Raw.MoneyGetHist)
+    - Go: [`MoneyHistory`](../go/money.md#MoneyHistory), [`Raw.MoneyGetHist`](../go/raw.md#Raw.MoneyGetHist)
+    - Zig: [`money.history`](../zig/money.md#money.history)
 
 ### `money_clear_hist` {#money_clear_hist}
 
@@ -142,7 +148,8 @@ void (*money_clear_hist)(int32_t difftime);
 - Position in the table: slot 98, counting from 0
 - Callers in each binding:
     - Rust: [`money::try_clear_history`](../rust/money.md#fn.try_clear_history), [`money::clear_history`](../rust/money.md#fn.clear_history)
-    - Go: [`Raw.MoneyClearHist`](../go/raw.md#Raw.MoneyClearHist)
+    - Go: [`ClearMoneyHistory`](../go/money.md#ClearMoneyHistory), [`Raw.MoneyClearHist`](../go/raw.md#Raw.MoneyClearHist)
+    - Zig: [`money.clearHistory`](../zig/money.md#money.clearHistory)
 
 ### `money_listen_before_event` {#money_listen_before_event}
 
@@ -160,6 +167,7 @@ Register a before callback, which may veto. Several mods may each register one w
 - Callers in each binding:
     - Rust: [`money::on_before`](../rust/money.md#fn.on_before), [`money::on_before_with`](../rust/money.md#fn.on_before_with)
     - Go: [`OnMoneyBefore`](../go/money.md#OnMoneyBefore)
+    - Zig: [`money.onBefore`](../zig/money.md#money.onBefore)
 
 ### `money_listen_after_event` {#money_listen_after_event}
 
@@ -177,6 +185,7 @@ As above, but invoked after the change has happened; the return value is ignored
 - Callers in each binding:
     - Rust: [`money::on_after`](../rust/money.md#fn.on_after), [`money::on_after_with`](../rust/money.md#fn.on_after_with)
     - Go: [`OnMoneyAfter`](../go/money.md#OnMoneyAfter)
+    - Zig: [`money.onAfter`](../zig/money.md#money.onAfter)
 
 ### `money_ranking` {#money_ranking}
 
@@ -193,7 +202,8 @@ void (*money_ranking)(uint16_t num, void* ctx, PierStrSink sink);
 - Position in the table: slot 101, counting from 0
 - Callers in each binding:
     - Rust: [`money::try_ranking`](../rust/money.md#fn.try_ranking), [`money::ranking`](../rust/money.md#fn.ranking)
-    - Go: [`Raw.MoneyRanking`](../go/raw.md#Raw.MoneyRanking)
+    - Go: [`MoneyRanking`](../go/money.md#MoneyRanking), [`Raw.MoneyRanking`](../go/raw.md#Raw.MoneyRanking)
+    - Zig: [`money.ranking`](../zig/money.md#money.ranking)
 
 ## Types {#types}
 

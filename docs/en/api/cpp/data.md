@@ -26,6 +26,7 @@ fmt: 0=disk little-endian, 1=network.
 - Callers in each binding:
     - Rust: [`nbt::binary::to_binary`](../rust/nbt.md#fn.to_binary), [`NbtValue::to_binary`](../rust/nbt.md#NbtValue.to_binary)
     - Go: [`SnbtToBinary`](../go/data.md#SnbtToBinary)
+    - Zig: [`nbt.snbtToBinary`](../zig/nbt.md#nbt.snbtToBinary)
 
 ### `nbt_binary_to_snbt` {#nbt_binary_to_snbt}
 
@@ -45,7 +46,8 @@ bool (*nbt_binary_to_snbt)(uint8_t const* data, size_t len, int32_t fmt, void* c
 - Position in the table: slot 59, counting from 0
 - Callers in each binding:
     - Rust: [`nbt::binary::from_binary`](../rust/nbt.md#fn.from_binary), [`NbtValue::from_binary`](../rust/nbt.md#NbtValue.from_binary)
-    - Go: [`Raw.NbtBinaryToSnbt`](../go/raw.md#Raw.NbtBinaryToSnbt)
+    - Go: [`BinaryToSnbt`](../go/data.md#BinaryToSnbt), [`Raw.NbtBinaryToSnbt`](../go/raw.md#Raw.NbtBinaryToSnbt)
+    - Zig: [`nbt.binaryToSnbt`](../zig/nbt.md#nbt.binaryToSnbt)
 
 ### `kvdb_open` {#kvdb_open}
 
@@ -86,6 +88,7 @@ void (*kvdb_close)(PierKvDbHandle h);
 - Position in the table: slot 61, counting from 0
 - Callers in each binding:
     - Go: [`KvDb.Close`](../go/data.md#KvDb.Close), [`Raw.KvdbClose`](../go/raw.md#Raw.KvdbClose)
+    - Zig: [`kvdb.KvDb.close`](../zig/data.md#kvdb.KvDb.close)
 
 ### `kvdb_get` {#kvdb_get}
 
@@ -109,6 +112,7 @@ bool (*kvdb_get)(PierKvDbHandle h, PierStr key, void* ctx, PierStrSink sink);
 - Callers in each binding:
     - Rust: [`KvDb::try_get`](../rust/kvdb.md#KvDb.try_get), [`KvDb::get`](../rust/kvdb.md#KvDb.get)
     - Go: [`KvDb.Get`](../go/data.md#KvDb.Get), [`Raw.KvdbGet`](../go/raw.md#Raw.KvdbGet)
+    - Zig: [`kvdb.KvDb.get`](../zig/data.md#kvdb.KvDb.get)
 
 ### `kvdb_set` {#kvdb_set}
 
@@ -131,6 +135,7 @@ bool (*kvdb_set)(PierKvDbHandle h, PierStr key, PierStr value);
 - Callers in each binding:
     - Rust: [`KvDb::set`](../rust/kvdb.md#KvDb.set)
     - Go: [`KvDb.Set`](../go/data.md#KvDb.Set), [`Raw.KvdbSet`](../go/raw.md#Raw.KvdbSet)
+    - Zig: [`kvdb.KvDb.set`](../zig/data.md#kvdb.KvDb.set)
 
 ### `kvdb_del` {#kvdb_del}
 
@@ -152,6 +157,7 @@ bool (*kvdb_del)(PierKvDbHandle h, PierStr key);
 - Callers in each binding:
     - Rust: [`KvDb::del`](../rust/kvdb.md#KvDb.del)
     - Go: [`KvDb.Delete`](../go/data.md#KvDb.Delete), [`Raw.KvdbDel`](../go/raw.md#Raw.KvdbDel)
+    - Zig: [`kvdb.KvDb.del`](../zig/data.md#kvdb.KvDb.del)
 
 ### `kvdb_has` {#kvdb_has}
 
@@ -173,6 +179,7 @@ bool (*kvdb_has)(PierKvDbHandle h, PierStr key);
 - Callers in each binding:
     - Rust: [`KvDb::has`](../rust/kvdb.md#KvDb.has), [`KvDb::has`](../rust/kvdb.md#KvDb.has)
     - Go: [`KvDb.Has`](../go/data.md#KvDb.Has), [`Raw.KvdbHas`](../go/raw.md#Raw.KvdbHas)
+    - Zig: [`kvdb.KvDb.has`](../zig/data.md#kvdb.KvDb.has)
 
 ### `kvdb_is_empty` {#kvdb_is_empty}
 
@@ -193,6 +200,7 @@ bool (*kvdb_is_empty)(PierKvDbHandle h);
 - Callers in each binding:
     - Rust: [`KvDb::is_empty`](../rust/kvdb.md#KvDb.is_empty), [`KvDb::is_empty`](../rust/kvdb.md#KvDb.is_empty)
     - Go: [`KvDb.IsEmpty`](../go/data.md#KvDb.IsEmpty), [`Raw.KvdbIsEmpty`](../go/raw.md#Raw.KvdbIsEmpty)
+    - Zig: [`kvdb.KvDb.isEmpty`](../zig/data.md#kvdb.KvDb.isEmpty)
 
 ### `kvdb_iter` {#kvdb_iter}
 
@@ -214,6 +222,7 @@ void (*kvdb_iter)(PierKvDbHandle h, void* ctx, PierKvSink sink);
 - Callers in each binding:
     - Rust: [`KvDb::iter`](../rust/kvdb.md#KvDb.iter), [`KvDb::iter`](../rust/kvdb.md#KvDb.iter)
     - Go: [`KvDb.Iter`](../go/data.md#KvDb.Iter)
+    - Zig: [`kvdb.KvDb.pairs`](../zig/data.md#kvdb.KvDb.pairs)
 
 ## Types {#types}
 

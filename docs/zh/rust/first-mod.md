@@ -32,7 +32,7 @@ edition = "2021"
 crate-type = ["cdylib"]
 
 [dependencies]
-pier-rs = { git = "https://github.com/Maskviva/pier", tag = "26.51.3" }
+pier-rs = { git = "https://github.com/Maskviva/pier", tag = "26.51.4" }
 ```
 
 `crate-type = ["cdylib"]` 让 cargo 编出一个 DLL，服务器加载的就是它。
@@ -72,7 +72,7 @@ levilamina::register_mod!(MyMod);
   "entry": "my_mod.dll",
   "type": "pier",
   "version": "0.1.0",
-  "dependencies": [{ "name": "pier" }]
+  "dependencies": [{ "name": "Pier" }]
 }
 ```
 

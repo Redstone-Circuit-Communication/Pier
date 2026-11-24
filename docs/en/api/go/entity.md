@@ -127,6 +127,123 @@ Clone copies the actor to a position and returns the copy.
 - Return type: `(Entity, error)`
 - Slots: [`actor_clone`](../cpp/entity.md#actor_clone)
 
+### `Entity.AABB` {#Entity.AABB}
+
+```go
+func (e Entity) AABB() (AABB, error)
+```
+
+AABB reads the bounding box of the actor.
+
+- Return type: `(AABB, error)`
+- Slots: [`actor_get_aabb`](../cpp/entity.md#actor_get_aabb)
+
+### `Entity.Effects` {#Entity.Effects}
+
+```go
+func (e Entity) Effects() ([]Effect, error)
+```
+
+Effects lists every status effect on the actor.
+
+- Return type: `([]Effect, error)`
+- Slots: [`actor_get_effects`](../cpp/entity.md#actor_get_effects)
+
+### `Entity.EquippedItem` {#Entity.EquippedItem}
+
+```go
+func (e Entity) EquippedItem(slot int32) (Item, error)
+```
+
+EquippedItem is what the actor wears or holds in one equipment slot.
+
+- Parameters:
+    - slot : `int32`
+- Return type: `(Item, error)`
+- Slots: [`actor_get_equipped_item`](../cpp/entity.md#actor_get_equipped_item)
+
+### `Entity.SetEquippedItem` {#Entity.SetEquippedItem}
+
+```go
+func (e Entity) SetEquippedItem(slot int32, item Item) error
+```
+
+SetEquippedItem puts an item into one equipment slot.
+
+- Parameters:
+    - slot : `int32`
+    - item : `Item`
+- Return type: `error`
+- Slots: [`actor_set_equipped_item`](../cpp/entity.md#actor_set_equipped_item)
+
+### `Entity.FirstPassenger` {#Entity.FirstPassenger}
+
+```go
+func (e Entity) FirstPassenger() (Entity, error)
+```
+
+FirstPassenger is the first actor riding this one.
+
+- Return type: `(Entity, error)`
+- Slots: [`actor_get_first_passenger`](../cpp/entity.md#actor_get_first_passenger)
+
+### `Entity.StatusFlag` {#Entity.StatusFlag}
+
+```go
+func (e Entity) StatusFlag(flagIndex int32) (bool, error)
+```
+
+StatusFlag reads one bit of the engine's ActorFlags.
+
+- Parameters:
+    - flagIndex : `int32`
+- Return type: `(bool, error)`
+- Slots: [`actor_get_status_flag`](../cpp/entity.md#actor_get_status_flag)
+
+### `Entity.SetStatusFlag` {#Entity.SetStatusFlag}
+
+```go
+func (e Entity) SetStatusFlag(flagIndex int32, value bool) error
+```
+
+SetStatusFlag writes one bit of the engine's ActorFlags.
+
+- Parameters:
+    - flagIndex : `int32`
+    - value : `bool`
+- Return type: `error`
+- Slots: [`actor_set_status_flag`](../cpp/entity.md#actor_set_status_flag)
+
+### `Entity.TraceRay` {#Entity.TraceRay}
+
+```go
+func (e Entity) TraceRay(maxDist float32, includeActors, includeBlocks bool) (RayHit, error)
+```
+
+TraceRay casts a ray along the line of sight of the actor and reports what it hits.
+
+- Parameters:
+    - maxDist : `float32`
+    - includeActors : `bool`
+    - includeBlocks : `bool`
+- Return type: `(RayHit, error)`
+- Slots: [`actor_trace_ray`](../cpp/entity.md#actor_trace_ray)
+
+### `Entity.TraceRayBlocks` {#Entity.TraceRayBlocks}
+
+```go
+func (e Entity) TraceRayBlocks(maxDist float32, includeActors, includeBlocks bool) (RayHit, error)
+```
+
+TraceRayBlocks is TraceRay reporting the hit as a block cell, with the face that was hit.
+
+- Parameters:
+    - maxDist : `float32`
+    - includeActors : `bool`
+    - includeBlocks : `bool`
+- Return type: `(RayHit, error)`
+- Slots: [`edit_trace_ray`](../cpp/edit.md#edit_trace_ray)
+
 ### `Entity.PosX` {#Entity.PosX}
 
 ```go
@@ -657,6 +774,116 @@ HasPassenger reads `PIER_APROP_HAS_PASSENGER`: (G) `Actor::hasPassenger`
 - Return type: `(bool, error)`
 - Slots: [`actor_get_num`](../cpp/entity.md#actor_get_num)
 
+### `Entity.IsSprinting` {#Entity.IsSprinting}
+
+```go
+func (e Entity) IsSprinting() (bool, error)
+```
+
+IsSprinting reads `PIER_APROP_IS_SPRINTING`: `Actor::isSprinting`
+
+- Return type: `(bool, error)`
+- Slots: [`actor_get_num`](../cpp/entity.md#actor_get_num)
+
+### `Entity.IsSwimming` {#Entity.IsSwimming}
+
+```go
+func (e Entity) IsSwimming() (bool, error)
+```
+
+IsSwimming reads `PIER_APROP_IS_SWIMMING`: `Actor::isSwimming`
+
+- Return type: `(bool, error)`
+- Slots: [`actor_get_num`](../cpp/entity.md#actor_get_num)
+
+### `Entity.IsSleeping` {#Entity.IsSleeping}
+
+```go
+func (e Entity) IsSleeping() (bool, error)
+```
+
+IsSleeping reads `PIER_APROP_IS_SLEEPING`: `Actor::isSleeping`
+
+- Return type: `(bool, error)`
+- Slots: [`actor_get_num`](../cpp/entity.md#actor_get_num)
+
+### `Entity.IsSitting` {#Entity.IsSitting}
+
+```go
+func (e Entity) IsSitting() (bool, error)
+```
+
+IsSitting reads `PIER_APROP_IS_SITTING`: `Actor::isSitting`
+
+- Return type: `(bool, error)`
+- Slots: [`actor_get_num`](../cpp/entity.md#actor_get_num)
+
+### `Entity.IsAngry` {#Entity.IsAngry}
+
+```go
+func (e Entity) IsAngry() (bool, error)
+```
+
+IsAngry reads `PIER_APROP_IS_ANGRY`: `Actor::isAngry`
+
+- Return type: `(bool, error)`
+- Slots: [`actor_get_num`](../cpp/entity.md#actor_get_num)
+
+### `Entity.Strength` {#Entity.Strength}
+
+```go
+func (e Entity) Strength() (float64, error)
+```
+
+Strength reads `PIER_APROP_STRENGTH`: `Actor::getStrength`
+
+- Return type: `(float64, error)`
+- Slots: [`actor_get_num`](../cpp/entity.md#actor_get_num)
+
+### `Entity.IsPlayer` {#Entity.IsPlayer}
+
+```go
+func (e Entity) IsPlayer() (bool, error)
+```
+
+IsPlayer reads `PIER_APROP_IS_PLAYER`: `Actor::isPlayer`
+
+- Return type: `(bool, error)`
+- Slots: [`actor_get_num`](../cpp/entity.md#actor_get_num)
+
+### `Entity.IsSimulatedPlayer` {#Entity.IsSimulatedPlayer}
+
+```go
+func (e Entity) IsSimulatedPlayer() (bool, error)
+```
+
+IsSimulatedPlayer reads `PIER_APROP_IS_SIMULATED_PLAYER`: `Actor::isSimulatedPlayer`
+
+- Return type: `(bool, error)`
+- Slots: [`actor_get_num`](../cpp/entity.md#actor_get_num)
+
+### `Entity.EntityType` {#Entity.EntityType}
+
+```go
+func (e Entity) EntityType() (float64, error)
+```
+
+EntityType reads `PIER_APROP_ENTITY_TYPE`: `Actor::getEntityTypeId`, the bits of an entity entry of `registry_list`
+
+- Return type: `(float64, error)`
+- Slots: [`actor_get_num`](../cpp/entity.md#actor_get_num)
+
+### `Entity.CanFly` {#Entity.CanFly}
+
+```go
+func (e Entity) CanFly() (bool, error)
+```
+
+CanFly reads `PIER_APROP_CAN_FLY`: `Actor::canFly`
+
+- Return type: `(bool, error)`
+- Slots: [`actor_get_num`](../cpp/entity.md#actor_get_num)
+
 ### `Entity.TypeName` {#Entity.TypeName}
 
 ```go
@@ -697,6 +924,28 @@ func (e Entity) FilteredName() (string, error)
 ```
 
 FilteredName reads `PIER_ASTR_FILTERED_NAME`: `Actor::getFilteredNameTag`
+
+- Return type: `(string, error)`
+- Slots: [`actor_get_str`](../cpp/entity.md#actor_get_str)
+
+### `Entity.Tags` {#Entity.Tags}
+
+```go
+func (e Entity) Tags() (string, error)
+```
+
+Tags reads `PIER_ASTR_TAGS`: `Actor::getTags` as a JSON array of strings
+
+- Return type: `(string, error)`
+- Slots: [`actor_get_str`](../cpp/entity.md#actor_get_str)
+
+### `Entity.OwnerId` {#Entity.OwnerId}
+
+```go
+func (e Entity) OwnerId() (string, error)
+```
+
+OwnerId reads `PIER_ASTR_OWNER_ID`: `Actor::getOwnerId` as a decimal actor id, -1 when it has none
 
 - Return type: `(string, error)`
 - Slots: [`actor_get_str`](../cpp/entity.md#actor_get_str)
@@ -1295,6 +1544,132 @@ The output, when the verb has one, is returned; abi.h names each argument.
 - Return type: `(string, error)`
 - Slots: [`actor_action`](../cpp/entity.md#actor_action)
 
+### `Entity.SetSitting` {#Entity.SetSitting}
+
+```go
+func (e Entity) SetSitting(sarg string, a, b, c float64) (string, error)
+```
+
+SetSitting runs `PIER_AACT_SET_SITTING`: a: non-zero sits. `Actor::setSitting`
+
+The output, when the verb has one, is returned; abi.h names each argument.
+
+- Parameters:
+    - sarg : `string`
+    - a : `float64`
+    - b : `float64`
+    - c : `float64`
+- Return type: `(string, error)`
+- Slots: [`actor_action`](../cpp/entity.md#actor_action)
+
+### `Entity.StartRiding` {#Entity.StartRiding}
+
+```go
+func (e Entity) StartRiding(sarg string, a, b, c float64) (string, error)
+```
+
+StartRiding runs `PIER_AACT_START_RIDING`: sarg: the vehicle actor id in decimal, a: non-zero forces. `Actor::startRiding`
+
+The output, when the verb has one, is returned; abi.h names each argument.
+
+- Parameters:
+    - sarg : `string`
+    - a : `float64`
+    - b : `float64`
+    - c : `float64`
+- Return type: `(string, error)`
+- Slots: [`actor_action`](../cpp/entity.md#actor_action)
+
+### `Entity.AttributeSet` {#Entity.AttributeSet}
+
+```go
+func (e Entity) AttributeSet(sarg string, a, b, c float64) (string, error)
+```
+
+AttributeSet runs `PIER_AACT_ATTRIBUTE_SET`: sarg: attribute name, a: value. `BaseAttributeMap::setCurrentValue`
+
+The output, when the verb has one, is returned; abi.h names each argument.
+
+- Parameters:
+    - sarg : `string`
+    - a : `float64`
+    - b : `float64`
+    - c : `float64`
+- Return type: `(string, error)`
+- Slots: [`actor_action`](../cpp/entity.md#actor_action)
+
+### `Entity.AttributeSetMax` {#Entity.AttributeSetMax}
+
+```go
+func (e Entity) AttributeSetMax(sarg string, a, b, c float64) (string, error)
+```
+
+AttributeSetMax runs `PIER_AACT_ATTRIBUTE_SET_MAX`: sarg: attribute name, a: maximum. `BaseAttributeMap::setMaxValue`
+
+The output, when the verb has one, is returned; abi.h names each argument.
+
+- Parameters:
+    - sarg : `string`
+    - a : `float64`
+    - b : `float64`
+    - c : `float64`
+- Return type: `(string, error)`
+- Slots: [`actor_action`](../cpp/entity.md#actor_action)
+
+### `Entity.AttributeSetDefault` {#Entity.AttributeSetDefault}
+
+```go
+func (e Entity) AttributeSetDefault(sarg string, a, b, c float64) (string, error)
+```
+
+AttributeSetDefault runs `PIER_AACT_ATTRIBUTE_SET_DEFAULT`: sarg: attribute name, a: default. `BaseAttributeMap::setDefaultValue`
+
+The output, when the verb has one, is returned; abi.h names each argument.
+
+- Parameters:
+    - sarg : `string`
+    - a : `float64`
+    - b : `float64`
+    - c : `float64`
+- Return type: `(string, error)`
+- Slots: [`actor_action`](../cpp/entity.md#actor_action)
+
+### `Entity.AttributeList` {#Entity.AttributeList}
+
+```go
+func (e Entity) AttributeList(sarg string, a, b, c float64) (string, error)
+```
+
+AttributeList runs `PIER_AACT_ATTRIBUTE_LIST`: out: a JSON array of the attribute names this actor has, of the ones the attribute verbs know
+
+The output, when the verb has one, is returned; abi.h names each argument.
+
+- Parameters:
+    - sarg : `string`
+    - a : `float64`
+    - b : `float64`
+    - c : `float64`
+- Return type: `(string, error)`
+- Slots: [`actor_action`](../cpp/entity.md#actor_action)
+
+### `Entity.AttributeInfo` {#Entity.AttributeInfo}
+
+```go
+func (e Entity) AttributeInfo(sarg string, a, b, c float64) (string, error)
+```
+
+AttributeInfo runs `PIER_AACT_ATTRIBUTE_INFO`: sarg: attribute name; out: JSON {current, min, max, default}
+
+The output, when the verb has one, is returned; abi.h names each argument.
+
+- Parameters:
+    - sarg : `string`
+    - a : `float64`
+    - b : `float64`
+    - c : `float64`
+- Return type: `(string, error)`
+- Slots: [`actor_action`](../cpp/entity.md#actor_action)
+
 ## `ActorInfo` {#ActorInfo}
 
 ```go
@@ -1306,6 +1681,61 @@ type ActorInfo struct {
 
 ActorInfo is one actor of a dimension: its unique id and its type name.
 
+## `AABB` {#AABB}
+
+```go
+type AABB struct{ Min, Max [3]float64 }
+type AABB struct{ Min, Max [3]float64 }
+```
+
+AABB is the axis-aligned bounding box of an actor.
+
+## `Effect` {#Effect}
+
+```go
+type Effect struct {
+    ID        string
+    Ticks     int32
+    Amplifier int32
+    Visible   bool
+}
+```
+
+Effect is one status effect of an actor.
+
+## `RayKind` {#RayKind}
+
+```go
+type RayKind int32
+```
+
+RayKind says what a ray trace hit.
+
+| Name | Value | Description |
+|---|---|---|
+| <span id="RayNone"></span>`RayNone` | `0` |  |
+| <span id="RayEntity"></span>`RayEntity` | `1` |  |
+| <span id="RayBlock"></span>`RayBlock` | `2` |  |
+
+## `RayHit` {#RayHit}
+
+```go
+type RayHit struct {
+    Kind RayKind
+    // EntityID is the actor hit, for RayEntity.
+    EntityID ActorID
+    // Block is the cell hit, for RayBlock, with the face in Facing and the block's name in
+    // BlockName.
+    Block     [3]int32
+    Facing    int32
+    BlockName string
+    // Pos is the exact point of the hit.
+    Pos [3]float64
+}
+```
+
+RayHit is the result of one ray trace.
+
 ## `ActorID` {#ActorID}
 
 ```go
@@ -1313,6 +1743,19 @@ type ActorID int64
 ```
 
 ActorID is an actor's unique id, the `uid` of event payloads. 0 never resolves.
+
+## `Equip*` {#Equip}
+
+The equipment slots of EquippedItem and SetEquippedItem.
+
+| Name | Value | Description |
+|---|---|---|
+| <span id="EquipMainHand"></span>`EquipMainHand` | `0` |  |
+| <span id="EquipOffHand"></span>`EquipOffHand` | `1` |  |
+| <span id="EquipHelmet"></span>`EquipHelmet` | `2` |  |
+| <span id="EquipChestplate"></span>`EquipChestplate` | `3` |  |
+| <span id="EquipLeggings"></span>`EquipLeggings` | `4` |  |
+| <span id="EquipBoots"></span>`EquipBoots` | `5` |  |
 
 ## `AProp*` {#AProp}
 
@@ -1366,6 +1809,16 @@ ActorID is an actor's unique id, the `uid` of event payloads. 0 never resolves.
 | <span id="APropIsInLove"></span>`APropIsInLove` | `45` | **the current engine version gives no value for this constant**: APropIsInLove is `PIER_APROP_IS_IN_LOVE`: (G) unsupported since BDS 1.26.40: `Actor::isInLove` is gone |
 | <span id="APropDeathTime"></span>`APropDeathTime` | `46` | APropDeathTime is `PIER_APROP_DEATH_TIME`: (G) `Actor::getDeathTime` |
 | <span id="APropHasPassenger"></span>`APropHasPassenger` | `47` | APropHasPassenger is `PIER_APROP_HAS_PASSENGER`: (G) `Actor::hasPassenger` |
+| <span id="APropIsSprinting"></span>`APropIsSprinting` | `48` | APropIsSprinting is `PIER_APROP_IS_SPRINTING`: `Actor::isSprinting` |
+| <span id="APropIsSwimming"></span>`APropIsSwimming` | `49` | APropIsSwimming is `PIER_APROP_IS_SWIMMING`: `Actor::isSwimming` |
+| <span id="APropIsSleeping"></span>`APropIsSleeping` | `50` | APropIsSleeping is `PIER_APROP_IS_SLEEPING`: `Actor::isSleeping` |
+| <span id="APropIsSitting"></span>`APropIsSitting` | `51` | APropIsSitting is `PIER_APROP_IS_SITTING`: `Actor::isSitting` |
+| <span id="APropIsAngry"></span>`APropIsAngry` | `52` | APropIsAngry is `PIER_APROP_IS_ANGRY`: `Actor::isAngry` |
+| <span id="APropStrength"></span>`APropStrength` | `53` | APropStrength is `PIER_APROP_STRENGTH`: `Actor::getStrength` |
+| <span id="APropIsPlayer"></span>`APropIsPlayer` | `54` | APropIsPlayer is `PIER_APROP_IS_PLAYER`: `Actor::isPlayer` |
+| <span id="APropIsSimulatedPlayer"></span>`APropIsSimulatedPlayer` | `55` | APropIsSimulatedPlayer is `PIER_APROP_IS_SIMULATED_PLAYER`: `Actor::isSimulatedPlayer` |
+| <span id="APropEntityType"></span>`APropEntityType` | `56` | APropEntityType is `PIER_APROP_ENTITY_TYPE`: `Actor::getEntityTypeId`, the bits of an entity entry of `registry_list` |
+| <span id="APropCanFly"></span>`APropCanFly` | `57` | APropCanFly is `PIER_APROP_CAN_FLY`: `Actor::canFly` |
 
 ## `AStr*` {#AStr}
 
@@ -1375,6 +1828,8 @@ ActorID is an actor's unique id, the `uid` of event payloads. 0 never resolves.
 | <span id="AStrNameTag"></span>`AStrNameTag` | `1` | AStrNameTag is `PIER_ASTR_NAME_TAG`: `Actor::getNameTag` |
 | <span id="AStrScoreTag"></span>`AStrScoreTag` | `2` | AStrScoreTag is `PIER_ASTR_SCORE_TAG`: `Actor::getScoreTag` |
 | <span id="AStrFilteredName"></span>`AStrFilteredName` | `3` | AStrFilteredName is `PIER_ASTR_FILTERED_NAME`: `Actor::getFilteredNameTag` |
+| <span id="AStrTags"></span>`AStrTags` | `4` | AStrTags is `PIER_ASTR_TAGS`: `Actor::getTags` as a JSON array of strings |
+| <span id="AStrOwnerId"></span>`AStrOwnerId` | `5` | AStrOwnerId is `PIER_ASTR_OWNER_ID`: `Actor::getOwnerId` as a decimal actor id, -1 when it has none |
 
 ## `AAct*` {#AAct}
 
@@ -1413,3 +1868,10 @@ ActorID is an actor's unique id, the `uid` of event payloads. 0 never resolves.
 | <span id="AActRemoveAllPassengers"></span>`AActRemoveAllPassengers` | `30` | AActRemoveAllPassengers is `PIER_AACT_REMOVE_ALL_PASSENGERS`: `Actor::removeAllPassengers` |
 | <span id="AActExecuteEvent"></span>`AActExecuteEvent` | `31` | AActExecuteEvent is `PIER_AACT_EXECUTE_EVENT`: sarg=event name `Actor::executeEvent` |
 | <span id="AActSetRotation"></span>`AActSetRotation` | `32` | AActSetRotation is `PIER_AACT_SET_ROTATION`: a=pitch b=yaw `Actor::setRotationWrapped` |
+| <span id="AActSetSitting"></span>`AActSetSitting` | `33` | AActSetSitting is `PIER_AACT_SET_SITTING`: a: non-zero sits. `Actor::setSitting` |
+| <span id="AActStartRiding"></span>`AActStartRiding` | `34` | AActStartRiding is `PIER_AACT_START_RIDING`: sarg: the vehicle actor id in decimal, a: non-zero forces. `Actor::startRiding` |
+| <span id="AActAttributeSet"></span>`AActAttributeSet` | `35` | AActAttributeSet is `PIER_AACT_ATTRIBUTE_SET`: sarg: attribute name, a: value. `BaseAttributeMap::setCurrentValue` |
+| <span id="AActAttributeSetMax"></span>`AActAttributeSetMax` | `36` | AActAttributeSetMax is `PIER_AACT_ATTRIBUTE_SET_MAX`: sarg: attribute name, a: maximum. `BaseAttributeMap::setMaxValue` |
+| <span id="AActAttributeSetDefault"></span>`AActAttributeSetDefault` | `37` | AActAttributeSetDefault is `PIER_AACT_ATTRIBUTE_SET_DEFAULT`: sarg: attribute name, a: default. `BaseAttributeMap::setDefaultValue` |
+| <span id="AActAttributeList"></span>`AActAttributeList` | `38` | AActAttributeList is `PIER_AACT_ATTRIBUTE_LIST`: out: a JSON array of the attribute names this actor has, of the ones the attribute verbs know |
+| <span id="AActAttributeInfo"></span>`AActAttributeInfo` | `39` | AActAttributeInfo is `PIER_AACT_ATTRIBUTE_INFO`: sarg: attribute name; out: JSON {current, min, max, default} |

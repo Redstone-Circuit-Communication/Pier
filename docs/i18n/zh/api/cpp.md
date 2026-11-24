@@ -16,6 +16,36 @@
 
 正在运行的构建的版本号 `"major.minor.patch"`，取自 `CurrentGameSemVersion`。模组可以据此自带一张版本到协议的对照表，不必等 Pier 发新版。
 
+## 7b09f62488
+
+> ll::getLoaderVersion, the running LeviLamina
+
+`ll::getLoaderVersion`，正在运行的 LeviLamina 版本
+
+## 49593f4e09
+
+> LevelData::mLevelName, the world name
+
+`LevelData::mLevelName`，世界名
+
+## c4cbf679d8
+
+> LevelData::mIsHardcore, "1" or "0"
+
+`LevelData::mIsHardcore`，"1" 或 "0"
+
+## b17dbe7e2f
+
+> LevelData::mWorldStartCount, how many times the world was opened
+
+`LevelData::mWorldStartCount`，世界被打开过的次数
+
+## c74587e286
+
+> LevelData::mEducationFeaturesEnabled, "1" or "0"
+
+`LevelData::mEducationFeaturesEnabled`，"1" 或 "0"
+
 ## 78441d619e
 
 > sys_utils::getSystemName
@@ -39,6 +69,12 @@
 > sys_utils::getLocalTime → SNBT {year,month,day,hour,minute,second,ms}
 
 取自 `sys_utils::getLocalTime`，返回 SNBT `{year,month,day,hour,minute,second,ms}`
+
+## 1216edd301
+
+> the id of the server process
+
+服务端进程的 id
 
 ## 851480bb97
 
@@ -262,6 +298,36 @@
 
 (G) `Player::isPlayerInitialized`；模拟玩家读到 1
 
+## 958eae409b
+
+> (G) Player::isSleeping
+
+(G) `Player::isSleeping`
+
+## 5f443d960b
+
+> (G) Actor::isSimulatedPlayer
+
+(G) `Actor::isSimulatedPlayer`
+
+## 8331aca61b
+
+> (G) Player::getItemUseDuration, in ticks
+
+(G) `Player::getItemUseDuration`，单位为刻
+
+## b6a9f5e885
+
+> (G) Player::getXpEarnedAtCurrentLevel
+
+(G) `Player::getXpEarnedAtCurrentLevel`
+
+## 8a1cdd53ea
+
+> (G) Actor::canFly
+
+(G) `Actor::canFly`
+
 ## 51cceb0401
 
 > Player::getRealName
@@ -327,6 +393,18 @@ SNBT `{ping,avg_ping,packet_loss,max_ping}`
 > SNBT {x,y,z,dim}: where this player would respawn. Never empty; a player with no bed reports the world spawn, and the two are not distinguishable.
 
 SNBT `{x,y,z,dim}`：这名玩家会在哪里重生。不会为空：没有床的玩家报告的是世界出生点，这两种情况区分不开。
+
+## 237ea6a114
+
+> Player::getSelectedItem as item SNBT
+
+`Player::getSelectedItem`，物品 SNBT
+
+## a57e64b3fa
+
+> ConnectionRequest::getDeviceModel; fails for a player with no connection request
+
+`ConnectionRequest::getDeviceModel`；没有连接请求的玩家读取失败
 
 ## 8c9e518c80
 
@@ -489,6 +567,24 @@ SNBT `{x,y,z,dim}`：这名玩家会在哪里重生。不会为空：没有床�
 > a=PlayerPermissionLevel (0 Visitor, 1 Member, 2 Operator, 3 Custom). LayeredAbilities::setPlayerPermissions plus UpdateAbilitiesPacket. The read side is PIER_PPROP_PERMISSION_LEVEL. Refused until the player has finished joining, like PIER_PACT_SET_ABILITY.
 
 `a` 为 `PlayerPermissionLevel`（0 Visitor，1 Member，2 Operator，3 Custom）。调用 `LayeredAbilities::setPlayerPermissions` 并发送 `UpdateAbilitiesPacket`。读取一侧是 `PIER_PPROP_PERMISSION_LEVEL`。和 `PIER_PACT_SET_ABILITY` 一样，玩家加入完成之前调用会被拒绝。
+
+## d7fb37ceb0
+
+> a: non-zero wakes forcefully. Player::stopSleepInBed; false when not asleep
+
+a：非零时强制唤醒。`Player::stopSleepInBed`；没在睡觉时返回 false
+
+## 55cc751db1
+
+> a: amount, positive. Player::causeFoodExhaustion
+
+a：数量，必须为正。`Player::causeFoodExhaustion`
+
+## ecd1813b40
+
+> sarg: item SNBT. Player::eat, the food value of that item
+
+sarg：物品 SNBT。`Player::eat`，按这个物品的食物值进食
 
 ## 6435f2ec13
 
@@ -760,6 +856,66 @@ SNBT `{x,y,z,dim}`：这名玩家会在哪里重生。不会为空：没有床�
 
 (G) `Actor::hasPassenger`
 
+## da6b8461a2
+
+> Actor::isSprinting
+
+`Actor::isSprinting`
+
+## 67cfa137bd
+
+> Actor::isSwimming
+
+`Actor::isSwimming`
+
+## ce23483d0a
+
+> Actor::isSleeping
+
+`Actor::isSleeping`
+
+## f88e60a8de
+
+> Actor::isSitting
+
+`Actor::isSitting`
+
+## f42d67a7a1
+
+> Actor::isAngry
+
+`Actor::isAngry`
+
+## 4e3276bb9d
+
+> Actor::getStrength
+
+`Actor::getStrength`
+
+## 4da86a66bb
+
+> Actor::isPlayer
+
+`Actor::isPlayer`
+
+## 169d46dc1c
+
+> Actor::isSimulatedPlayer
+
+`Actor::isSimulatedPlayer`
+
+## b46536f6c9
+
+> Actor::getEntityTypeId, the bits of an entity entry of registry_list
+
+`Actor::getEntityTypeId`，含义与 registry_list 实体条目中的类型位相同
+
+## 9b8515284a
+
+> Actor::canFly
+
+`Actor::canFly`
+
 ## 86e2171377
 
 > Actor::getTypeName
@@ -783,6 +939,18 @@ SNBT `{x,y,z,dim}`：这名玩家会在哪里重生。不会为空：没有床�
 > Actor::getFilteredNameTag
 
 取自 `Actor::getFilteredNameTag`
+
+## de7c067759
+
+> Actor::getTags as a JSON array of strings
+
+`Actor::getTags`，字符串组成的 JSON 数组
+
+## 874dffa9bc
+
+> Actor::getOwnerId as a decimal actor id, -1 when it has none
+
+`Actor::getOwnerId`，十进制的实体 id，没有主人时为 -1
 
 ## d0e5337fb7
 
@@ -982,6 +1150,48 @@ SNBT `{x,y,z,dim}`：这名玩家会在哪里重生。不会为空：没有床�
 
 `a` 为俯仰角，`b` 为偏航角，调用 `Actor::setRotationWrapped`
 
+## 1b7dd272e4
+
+> a: non-zero sits. Actor::setSitting
+
+a：非零时坐下。`Actor::setSitting`
+
+## 6a84adcca5
+
+> sarg: the vehicle actor id in decimal, a: non-zero forces. Actor::startRiding
+
+sarg：载具的十进制实体 id，a：非零时强制。`Actor::startRiding`
+
+## 004fccb087
+
+> sarg: attribute name, a: value. BaseAttributeMap::setCurrentValue
+
+sarg：属性名，a：值。`BaseAttributeMap::setCurrentValue`
+
+## 88ee6a78a9
+
+> sarg: attribute name, a: maximum. BaseAttributeMap::setMaxValue
+
+sarg：属性名，a：最大值。`BaseAttributeMap::setMaxValue`
+
+## 3ed6fefa76
+
+> sarg: attribute name, a: default. BaseAttributeMap::setDefaultValue
+
+sarg：属性名，a：默认值。`BaseAttributeMap::setDefaultValue`
+
+## 1f5073e503
+
+> out: a JSON array of the attribute names this actor has, of the ones the attribute verbs know
+
+out：这个实体拥有的属性名组成的 JSON 数组，限于属性动作认识的那些
+
+## 4e2fb1a6bf
+
+> sarg: attribute name; out: JSON {current, min, max, default}
+
+sarg：属性名；out：JSON {current, min, max, default}
+
 ## 8f1aea6cbe
 
 > Block::isAir
@@ -1155,6 +1365,36 @@ SNBT `{x,y,z,dim}`：这名玩家会在哪里重生。不会为空：没有床�
 > Block::requiresCorrectToolForDrops
 
 取自 `Block::requiresCorrectToolForDrops`
+
+## 851ed48d0b
+
+> BlockType::isThinFenceBlock
+
+`BlockType::isThinFenceBlock`
+
+## 76223eef5d
+
+> BlockType::isLeverBlock
+
+`BlockType::isLeverBlock`
+
+## 3caa44dc40
+
+> BlockType::isStemBlock
+
+`BlockType::isStemBlock`
+
+## 231828fc28
+
+> BlockType::canInstatick
+
+`BlockType::canInstatick`
+
+## f55e5c23fc
+
+> BlockType::getMapColor as 0xRRGGBB
+
+`BlockType::getMapColor`，0xRRGGBB 形式
 
 ## 2e722f1422
 
@@ -1402,6 +1642,84 @@ SNBT `[{min,max}]`，渲染用的轮廓
 
 取自 `ItemStackBase::hasCustomHoverName`
 
+## a2b98f7493
+
+> Item::isFood
+
+`Item::isFood`
+
+## c60b4dad3d
+
+> Item::isDyeable
+
+`Item::isDyeable`
+
+## 2e331e5097
+
+> Item::isHandEquipped
+
+`Item::isHandEquipped`
+
+## f6e415b3ae
+
+> Item::isLiquidClipItem
+
+`Item::isLiquidClipItem`
+
+## 64c0e222be
+
+> Item::isStackedByData
+
+`Item::isStackedByData`
+
+## 9da58547c2
+
+> Item::getCooldownDuration, in ticks
+
+`Item::getCooldownDuration`，单位为刻
+
+## b4a6b61b89
+
+> Item::isComponentBased
+
+`Item::isComponentBased`
+
+## d4750f6fea
+
+> Item::isHumanoidArmor
+
+`Item::isHumanoidArmor`
+
+## d50beb9ac3
+
+> Item::getArmorValue
+
+`Item::getArmorValue`
+
+## b0fe9d660c
+
+> Item::canBeDepleted
+
+`Item::canBeDepleted`
+
+## 4fd3f3b5b1
+
+> Item::isUseable
+
+`Item::isUseable`
+
+## 2699e86a7d
+
+> Item::canDestroyInCreative
+
+`Item::canDestroyInCreative`
+
+## 8111fefeb7
+
+> Item::showsDurabilityInCreative
+
+`Item::showsDurabilityInCreative`
+
 ## 524f9e6b85
 
 > ItemStackBase::getTypeName ("minecraft:apple")
@@ -1467,6 +1785,612 @@ SNBT 列表
 > SNBT {r,g,b} ItemStackBase::getColor
 
 SNBT `{r,g,b}`，取自 `ItemStackBase::getColor`
+
+## 948f34fe93
+
+> Actor::getFeetPos of the local player
+
+本地玩家的 Actor::getFeetPos
+
+## 0f04576cd3
+
+> feet height, the same point get_player_position reports
+
+脚下的高度，与 get_player_position 报告的是同一个点
+
+## 46619cce5c
+
+> Actor::getRotation, degrees; negative looks up
+
+Actor::getRotation，单位为度；为负表示向上看
+
+## 370a2d61a2
+
+> Actor::getRotation, degrees
+
+Actor::getRotation，单位为度
+
+## 89245bda64
+
+> Actor::getDimensionId of the local player
+
+本地玩家的 Actor::getDimensionId
+
+## 70edb954d4
+
+> IClientInstance::getGuiScale
+
+IClientInstance::getGuiScale
+
+## 403c4c2d70
+
+> IClientInstance::getServerPingTime
+
+IClientInstance::getServerPingTime
+
+## dcb4d2adce
+
+> IClientInstance::isShowingMenu, 1 or 0
+
+IClientInstance::isShowingMenu，1 或 0
+
+## a03a4cf2ce
+
+> IClientInstance::isShowingPauseScreen
+
+IClientInstance::isShowingPauseScreen
+
+## 9cf6c9fed8
+
+> IClientInstance::isPlaying
+
+IClientInstance::isPlaying
+
+## 312b29181a
+
+> IClientInstance::isInRealm
+
+IClientInstance::isInRealm
+
+## 751167b4cb
+
+> IClientInstance::isInGameInputEnabled
+
+IClientInstance::isInGameInputEnabled
+
+## cc622ae65f
+
+> Actor::getHealth of the local player
+
+本地玩家的 `Actor::getHealth`
+
+## 563806efb9
+
+> Actor::getMaxHealth of the local player
+
+本地玩家的 `Actor::getMaxHealth`
+
+## de6376effd
+
+> Actor::isOnGround of the local player
+
+本地玩家的 `Actor::isOnGround`
+
+## 53a0c4f91a
+
+> Actor::isInWater of the local player
+
+本地玩家的 `Actor::isInWater`
+
+## 825c101b76
+
+> Actor::isSneaking of the local player
+
+本地玩家的 `Actor::isSneaking`
+
+## 746ae10c4b
+
+> Actor::isSprinting of the local player
+
+本地玩家的 `Actor::isSprinting`
+
+## 647a998180
+
+> Actor::isSwimming of the local player
+
+本地玩家的 `Actor::isSwimming`
+
+## 72e8f8fe55
+
+> Actor::isOnFire of the local player
+
+本地玩家的 `Actor::isOnFire`
+
+## 8ec6c81d4e
+
+> Player::isFlying of the local player
+
+本地玩家的 `Player::isFlying`
+
+## 1ee55f58b0
+
+> Player::getPlayerGameType of the local player
+
+本地玩家的 `Player::getPlayerGameType`
+
+## 885696a85c
+
+> Player::getSelectedItemSlot of the local player
+
+本地玩家的 `Player::getSelectedItemSlot`
+
+## 9cf82afbcd
+
+> Actor::getPosDelta of the local player, blocks per tick
+
+本地玩家的 `Actor::getPosDelta`，单位为方块每刻
+
+## 0509690b00
+
+> Actor::getPosDelta, the vertical part
+
+`Actor::getPosDelta` 的竖直分量
+
+## b21cf8ae3a
+
+> Actor::getPosDelta, the z part
+
+`Actor::getPosDelta` 的 z 分量
+
+## 063d628755
+
+> Player::getXpNeededForNextLevel of the local player
+
+本地玩家的 `Player::getXpNeededForNextLevel`
+
+## d7d5fb2362
+
+> IClientInstance::isLeavingGame
+
+`IClientInstance::isLeavingGame`
+
+## 8eaf693f91
+
+> IClientInstance::isExitingLevel
+
+`IClientInstance::isExitingLevel`
+
+## 387ed61547
+
+> IClientInstance::isInBedScreen
+
+`IClientInstance::isInBedScreen`
+
+## 70c83c19dc
+
+> IClientInstance::isInDeathScreen
+
+`IClientInstance::isInDeathScreen`
+
+## da51ed1566
+
+> IClientInstance::isShowingLoadingScreen
+
+`IClientInstance::isShowingLoadingScreen`
+
+## 6b66e93a7a
+
+> IClientInstance::isShowingProgressScreen
+
+`IClientInstance::isShowingProgressScreen`
+
+## e642afdf83
+
+> IClientInstance::isShowingWorldProgressScreen
+
+`IClientInstance::isShowingWorldProgressScreen`
+
+## 676c643498
+
+> IClientInstance::isShowingDeathScreen
+
+`IClientInstance::isShowingDeathScreen`
+
+## 332c73c4ed
+
+> IClientInstance::isShowingServerForm
+
+`IClientInstance::isShowingServerForm`
+
+## 015ac85cd8
+
+> IClientInstance::isInWorldAndNotShowingAnyMenuScreens
+
+`IClientInstance::isInWorldAndNotShowingAnyMenuScreens`
+
+## b90117f378
+
+> IClientInstance::isWorldActive
+
+`IClientInstance::isWorldActive`
+
+## 615b04fdc4
+
+> IClientInstance::hasLevel
+
+`IClientInstance::hasLevel`
+
+## e08ae2021a
+
+> IClientInstance::isPreGame
+
+`IClientInstance::isPreGame`
+
+## a1721027c5
+
+> IClientInstance::isInMultiplayerGame
+
+`IClientInstance::isInMultiplayerGame`
+
+## fe6706d059
+
+> IClientInstance::isMultiPlayerClient
+
+`IClientInstance::isMultiPlayerClient`
+
+## c356d1ffe9
+
+> IClientInstance::isPrimaryLevelMultiplayer
+
+`IClientInstance::isPrimaryLevelMultiplayer`
+
+## 27839a7d64
+
+> IClientInstance::isPrimaryLevelCrossPlatformMultiplayer
+
+`IClientInstance::isPrimaryLevelCrossPlatformMultiplayer`
+
+## 6c5e1163fc
+
+> IClientInstance::isKeyboardEnabled
+
+`IClientInstance::isKeyboardEnabled`
+
+## 7c78264700
+
+> IClientInstance::useController
+
+`IClientInstance::useController`
+
+## 30a5726d96
+
+> IClientInstance::useTouchscreen
+
+`IClientInstance::useTouchscreen`
+
+## 7292970e68
+
+> IClientInstance::getMouseGrabbed
+
+`IClientInstance::getMouseGrabbed`
+
+## a40e99f76e
+
+> IClientInstance::currentInputModeIsMouseAndKeyboard
+
+`IClientInstance::currentInputModeIsMouseAndKeyboard`
+
+## e1107a1a91
+
+> IClientInstance::hasConnectedController
+
+`IClientInstance::hasConnectedController`
+
+## b43818e3f3
+
+> IClientInstance::getControllerId
+
+`IClientInstance::getControllerId`
+
+## b8a265040d
+
+> IClientInstance::isTouchGameplayAllowed
+
+`IClientInstance::isTouchGameplayAllowed`
+
+## 0bac2acbb7
+
+> IClientInstance::isSplitScreenActive
+
+`IClientInstance::isSplitScreenActive`
+
+## 7b9f8d0d03
+
+> IClientInstance::getSplitScreenCount
+
+`IClientInstance::getSplitScreenCount`
+
+## b5e6f2c1c0
+
+> IClientInstance::getGuiScaleOffset
+
+`IClientInstance::getGuiScaleOffset`
+
+## 1c0c6acd75
+
+> IClientInstance::isEduMode
+
+`IClientInstance::isEduMode`
+
+## 6076815ef5
+
+> IClientInstance::isPlayerInEditor
+
+`IClientInstance::isPlayerInEditor`
+
+## dd620239fe
+
+> IClientInstance::isReadyToRender
+
+`IClientInstance::isReadyToRender`
+
+## c1ded4b14c
+
+> IClientInstance::isFullVanillaPackOnStack
+
+`IClientInstance::isFullVanillaPackOnStack`
+
+## 7a14598c38
+
+> IClientInstance::getServerConnectionTime
+
+`IClientInstance::getServerConnectionTime`
+
+## fb5a836d07
+
+> IClientInstance::getRemoteServerTimeMs
+
+`IClientInstance::getRemoteServerTimeMs`
+
+## db569fe7f2
+
+> IClientInstance::getRemoteServerNetworkTimeMs
+
+`IClientInstance::getRemoteServerNetworkTimeMs`
+
+## 6962e8c34d
+
+> IClientInstance::getFrameAlpha, how far the frame is between two ticks
+
+`IClientInstance::getFrameAlpha`，当前帧处在两刻之间的位置
+
+## 4ca7933dd2
+
+> IClientInstance::getGameUpdateDurationInSeconds
+
+`IClientInstance::getGameUpdateDurationInSeconds`
+
+## eda9106dd0
+
+> IClientInstance::isPrimaryClient
+
+`IClientInstance::isPrimaryClient`
+
+## 6e48f16856
+
+> IClientInstance::getUserId
+
+`IClientInstance::getUserId`
+
+## 6231149cc6
+
+> IClientInstance::isGamePlayTipsEnabled
+
+`IClientInstance::isGamePlayTipsEnabled`
+
+## bfa2a84656
+
+> IClientInstance::hasCommands
+
+`IClientInstance::hasCommands`
+
+## b5a181302a
+
+> IClientInstance::getScreenName, as client_get_screen_name
+
+IClientInstance::getScreenName，与 client_get_screen_name 相同
+
+## 5f0bb9195e
+
+> IClientInstance::getTopScreenName
+
+IClientInstance::getTopScreenName
+
+## 9c081818dd
+
+> IClientInstance::getPlatformId
+
+`IClientInstance::getPlatformId`
+
+## 5d784b3632
+
+> IClientInstance::getPlatformOnlineId
+
+`IClientInstance::getPlatformOnlineId`
+
+## db8cb0cff1
+
+> Player::getXuid of the local player; fails outside a world
+
+本地玩家的 `Player::getXuid`；不在世界里时失败
+
+## e9922a679c
+
+> Player::getUuid of the local player in its canonical form
+
+本地玩家的 `Player::getUuid`，规范字符串形式
+
+## e4a970fe7f
+
+> Actor::getNameTag of the local player
+
+本地玩家的 `Actor::getNameTag`
+
+## 0c1cdcd9db
+
+> AppPlatform::getClipboardText, the system clipboard
+
+`AppPlatform::getClipboardText`，系统剪贴板
+
+## f029888805
+
+> sarg: text. GuiData::displayClientMessage
+
+sarg：文本。GuiData::displayClientMessage
+
+## 2a111c5d27
+
+> sarg: text. GuiData::setTitle
+
+sarg：文本。GuiData::setTitle
+
+## c0bebe6f6e
+
+> sarg: text. GuiData::setSubtitle
+
+sarg：文本。GuiData::setSubtitle
+
+## 0bde63d220
+
+> sarg: text. GuiData::setActionBarMessage
+
+sarg：文本。GuiData::setActionBarMessage
+
+## 07dd98209f
+
+> sarg: text. GuiData::showTipMessage
+
+sarg：文本。GuiData::showTipMessage
+
+## 884340bffa
+
+> sarg: sound name, a: volume, b: pitch. IClientInstance::playUI
+
+sarg：音效名，a：音量，b：音调。IClientInstance::playUI
+
+## 543ffc9f54
+
+> IClientInstance::grabMouse
+
+IClientInstance::grabMouse
+
+## 2188d077cd
+
+> IClientInstance::releaseMouse
+
+IClientInstance::releaseMouse
+
+## 9c33efd527
+
+> a: non-zero disables game input. IClientInstance::setDisableInput
+
+a：非零时禁用游戏输入。IClientInstance::setDisableInput
+
+## dff6f73464
+
+> IClientInstance::requestLeaveGame(true, false): leaves the world for the menus, asynchronously
+
+IClientInstance::requestLeaveGame(true, false)：离开世界回到菜单，异步完成
+
+## 2fcabc9d25
+
+> sarg: message, or message and subtitle split at the first newline. GuiData::showPopupNotice
+
+sarg：消息，或者在第一个换行处分开的消息和副标题。`GuiData::showPopupNotice`
+
+## fd0c939d2f
+
+> sarg: text. GuiData::displayDevConsoleMessage
+
+sarg：文本。`GuiData::displayDevConsoleMessage`
+
+## a84fd30eda
+
+> a: non-zero suspends input. IClientInstance::setSuspendInput
+
+a：非零时暂停输入。`IClientInstance::setSuspendInput`
+
+## 819e4f9978
+
+> a: non-zero suspends movement input. IClientInstance::setSuspendDirectionalInput
+
+a：非零时暂停移动输入。`IClientInstance::setSuspendDirectionalInput`
+
+## 868c2e53cf
+
+> a: non-zero enables. IClientInstance::setInGameInputEnabled
+
+a：非零时启用。`IClientInstance::setInGameInputEnabled`
+
+## 23d8f34587
+
+> a: non-zero when the mouse was lost. IClientInstance::refocusMouse
+
+a：鼠标丢失时为非零。`IClientInstance::refocusMouse`
+
+## d2055d40e1
+
+> IClientInstance::muteAudio
+
+`IClientInstance::muteAudio`
+
+## 9960d2d925
+
+> IClientInstance::unMuteAudio
+
+`IClientInstance::unMuteAudio`
+
+## 5806e70574
+
+> IClientInstance::fadeOutMusic
+
+`IClientInstance::fadeOutMusic`
+
+## c807f227aa
+
+> a: the offset. IClientInstance::setGuiScaleOffset
+
+a：偏移量。`IClientInstance::setGuiScaleOffset`
+
+## f8739d40c4
+
+> IClientInstance::resetPlayerMovement
+
+`IClientInstance::resetPlayerMovement`
+
+## b723aaf07a
+
+> IClientInstance::tryPushLeaveGameScreen
+
+`IClientInstance::tryPushLeaveGameScreen`
+
+## 414873609f
+
+> IClientInstance::openContentLogHistory
+
+`IClientInstance::openContentLogHistory`
+
+## f7cbce14d3
+
+> sarg: text, empty allowed. AppPlatform::setClipboard
+
+sarg：文本，可以为空。`AppPlatform::setClipboard`
+
+## c52a859c42
+
+> sarg: the topic, empty allowed. IClientInstance::navigateToHowToPlayScreen
+
+sarg：主题，可以为空。`IClientInstance::navigateToHowToPlayScreen`
 
 ## 86b16f4019
 
@@ -1740,6 +2664,15 @@ SNBT `{nodes:[{x,y,z},…], reached:1b/0b}`。当前所有宿主上这个槽位�
 > edit_set_block_nbt: bit 1 notifies neighbours, bit 2 syncs the client.
 
 写入液体层。`block_spec` 可以是单纯的方块名，也可以是完整的 SNBT；写入 `"minecraft:air"` 就是清空。`update_flags` 的含义和 `edit_set_block_nbt` 一样：第 1 位通知相邻方块，第 2 位同步给客户端。
+
+## 03fc18fc5d
+
+> Reads one PIER_WPROP_* value of dimension `dim` into *out. Returns false, leaving *out
+> alone, for an unknown key, a null `out`, a dimension that does not exist, or a level
+> that is not ready. A custom dimension not built yet is built by this call, the same as
+> a block read from it would build it.
+
+把维度 `dim` 的一个 PIER_WPROP_* 值读入 *out。键未知、`out` 为空、维度不存在、或者 level 尚未就绪时返回 false，*out 保持不变。尚未构建的自定义维度会由这个调用构建，就像从它读取一个方块时会构建它一样。
 
 ## 94efcc06ef
 
@@ -2076,13 +3009,14 @@ KvDb：线程安全（内部有互斥锁）。路径限定在模组自己的数�
 
 客户端在世界里（已经加载了一个世界）时为 true。
 
-## 14e4877ed6
+## aa86631249
 
-> Current screen / UI name (e.g. "hud_screen", "pause_screen"). NULL on
-> every current host, client builds included: the engine exposes no
-> stable accessor for it.
+> Current screen name through IClientInstance::getScreenName, such as
+> "hud_screen" or "pause_screen". Returns false, sinking nothing, before the
+> client has an instance. PIER_CSTR_TOP_SCREEN_NAME of client_get_str reads the
+> topmost screen of the stack instead.
 
-当前界面的名字（例如 `"hud_screen"`、`"pause_screen"`）。当前所有宿主上这个槽位都是 NULL，客户端构建也一样：引擎没有提供稳定的访问方式。
+通过 IClientInstance::getScreenName 读取当前界面名，例如 "hud_screen" 或 "pause_screen"。客户端还没有实例时返回 false，sink 不会被调用。client_get_str 的 PIER_CSTR_TOP_SCREEN_NAME 读取的则是界面栈最顶层的界面。
 
 ## b18a8760c8
 
@@ -2099,6 +3033,76 @@ KvDb：线程安全（内部有互斥锁）。路径限定在模组自己的数�
 > sink receives a JSON-style array string "[1,2,3]".
 
 当前分配的按键码（被玩家重新映射过时可能和默认值不同）。输出回调收到一个 JSON 风格的数组字符串 `"[1,2,3]"`。
+
+## 9df0db347e
+
+> Reads one PIER_CPROP_* value into *out. Returns false, leaving *out alone, for an
+> unknown key, a null `out`, a client that has no instance yet, or a key about the
+> local player while the client is not in a world. A flag reads 1 or 0.
+
+把一个 PIER_CPROP_* 值读入 *out。键未知、`out` 为空、客户端还没有实例、或者客户端不在世界里时读取关于本地玩家的键，都返回 false，*out 保持不变。布尔类的值读出 1 或 0。
+
+## 366fd49883
+
+> Reads one PIER_CSTR_* value through `sink`, called once. Returns false, sinking
+> nothing, for an unknown key, a null sink, or a client that has no instance yet.
+
+通过 `sink` 读取一个 PIER_CSTR_* 值，sink 只调用一次。键未知、sink 为空、或者客户端还没有实例时返回 false，sink 不会被调用。
+
+## 6bf9af48ef
+
+> Performs one PIER_CACT_* verb on this client. Returns false for an unknown verb, a
+> text verb given empty text, or a client that has no instance yet. The text verbs
+> need the HUD, which exists once a world is loaded, and return false before that.
+> True means the call reached the engine, which reports nothing back.
+
+在这个客户端上执行一个 PIER_CACT_* 动作。动作未知、文本类动作给了空文本、或者客户端还没有实例时返回 false。文本类动作需要 HUD，HUD 在世界加载后才存在，之前一律返回 false。返回 true 表示调用到达了引擎，引擎不会回报任何结果。
+
+## b7486e54ee
+
+> Feeds the name of every binding ll::input::KeyRegistry holds to `sink`, one call
+> each, whichever mod registered it. Returns false only for a null sink.
+
+把 ll::input::KeyRegistry 中每个绑定的名字逐个交给 `sink`，每个名字调用一次，不论是哪个模组注册的。只有 sink 为空时返回 false。
+
+## 978cb77fe5
+
+> Reads one option by its options.txt key through `sink`, called once. Returns false,
+> sinking nothing, for an unknown key, a null sink, or a client that has no instance
+> yet.
+
+按 options.txt 里的键通过 `sink` 读取一个选项，sink 只调用一次。键未知、sink 为空、或者客户端还没有实例时返回 false，sink 不会被调用。
+
+## f4adfe5783
+
+> Writes the option that stores `key`, passing `value` to Option::load, the parser
+> options.txt is read with. Returns false for an unknown key, an option the engine
+> marks as not modifiable now, or a client that has no instance yet. The engine keeps
+> what it can parse and reports nothing, so a caller that needs to know reads the key
+> back. The host does not write options.txt itself.
+
+写入保存着 `key` 的那个选项，把 `value` 交给 Option::load，也就是读取 options.txt 时用的解析器。键未知、引擎标记该选项此刻不可修改、或者客户端还没有实例时返回 false。引擎保留它能解析的部分，不报告任何结果，所以需要确认的调用方要把这个键读回来。宿主自己不会写 options.txt。
+
+## 7834bf4d7a
+
+> The Actor object of a loaded actor.
+
+已加载实体的 Actor 对象。
+
+## ecbbfd870b
+
+> Whether native_detour is on, so the other native_* slots can answer. Logs
+> nothing.
+
+native_detour 是否打开，即其他 native_* 槽位能否响应。不写日志。
+
+## 5ebcf531a2
+
+> Removes a detour this mod installed. PIER_NATIVE_NOT_FOUND for an id this mod does
+> not hold, one already removed included. PIER_NATIVE_FAILED when the engine-side
+> removal fails; the detour then stays recorded and is tried again at unload.
+
+移除这个模组安装的一个 detour。id 不属于这个模组（包括已经移除过的）时返回 PIER_NATIVE_NOT_FOUND。引擎侧移除失败时返回 PIER_NATIVE_FAILED，这个 detour 仍保留在记录中，卸载时会再试一次。
 
 ## 6acc1822b4
 
@@ -2242,7 +3246,7 @@ KvDb：线程安全（内部有互斥锁）。路径限定在模组自己的数�
 
 所有快速通道，以 JSON 数组给出：`[{"name":…,"mod":…,"fingerprint":"0x…","protocol":1,"leases":N,"alive":true}]`
 
-## 9490beda0a
+## 547a24c081
 
 > Pier ABI — sdk/abi.h (ABI v2)
 >
@@ -2292,6 +3296,9 @@ KvDb：线程安全（内部有互斥锁）。路径限定在模组自己的数�
 >   - Threading: unless a slot says otherwise, call only on the server thread.
 >     log, gaming_status, schedule and schedule_after are thread-safe. Every
 >     callback (event, command, scheduled task) fires on the server thread.
+>   - No address of an engine object or engine function crosses this boundary.
+>     The native_* group is the one exception, off unless the operator turns it
+>     on; its section below says what a caller then answers for.
 
 **Pier ABI：sdk/abi.h（ABI v2）**
 
@@ -2315,6 +3322,7 @@ KvDb：线程安全（内部有互斥锁）。路径限定在模组自己的数�
 - 传进回调的字符串归调用方所有，只在这次调用期间有效；要保留就复制一份。
 - 模组在当前调用帧内通过输出回调把字符串交出去。所有权从不跨越边界：这个 ABI 里没有「返回一个指针，由另一边释放」的写法。
 - 线程：除非槽位另有说明，只能在服务器线程调用。`log`、`gaming_status`、`schedule` 和 `schedule_after` 是线程安全的。所有回调（事件、命令、定时任务）都在服务器线程上触发。
+- 引擎对象或引擎函数的地址不会跨过这条边界。native_* 这一组是唯一的例外，默认关闭，由服主打开；下面它那一节写明了调用方此时要为哪些事负责。
 
 ## 92aa109203
 
@@ -2436,6 +3444,37 @@ KvDb：线程安全（内部有互斥锁）。路径限定在模组自己的数�
 > by whether the client_* slots in PierApi are NULL.
 
 客户端能力组的 FFI 类型。这些类型声明始终存在（它们不占布局）；能力是否可用，看 `PierApi` 里的 `client_*` 槽位是不是 NULL。
+
+## 65037458af
+
+> Native escape hatch
+>
+> Every other slot in this file hands over names and ids, and the host looks the object
+> up again on each call. The native_* slots are the exception: they hand over raw
+> addresses of engine functions and engine objects, and they install native detours.
+> They exist for an engine call this table does not wrap, made by a mod that knows the
+> engine's own API and LeviLamina's.
+>
+> The host checks nothing about what a mod does with an address. The caller answers for
+> the signature and calling convention of a function, the layout of an object on this
+> exact engine build, the thread it calls on, and the lifetime of every object it was
+> handed. A pointer from native_player stays valid while that player is online, and
+> nothing here tells the mod when the player leaves. No exception and no other
+> unwinding may cross an engine function or a detour.
+>
+> The group is off unless config.json of the host sets "native_detour": true. While it
+> is off, every native_* slot except native_enabled returns PIER_NATIVE_DISABLED and
+> writes no output, and the host logs once per mod, to that mod's logger, which setting
+> to change. One switch covers the whole group, because an engine object's address
+> reaches the same memory a detour does.
+
+原生逃生口
+
+本文件中其他所有槽位交出的都是名字和 id，宿主每次调用时都重新查找对象。native_* 槽位是例外：它们交出引擎函数和引擎对象的原始地址，并安装原生 detour。它们用于调用函数表没有封装的引擎功能，调用者是了解引擎和 LeviLamina 自身 API 的模组。
+
+模组拿地址做什么，宿主一概不检查。函数的签名和调用约定、对象在这个确切引擎版本上的布局、调用所在的线程、以及拿到的每个对象的生命周期，都由调用方负责。native_player 给出的指针在那名玩家在线期间有效，玩家离开时这里没有任何东西会通知模组。任何异常或其他形式的展开都不能穿过引擎函数或 detour。
+
+除非宿主的 config.json 设置了 "native_detour": true，这一组都处于关闭状态。关闭时，除 native_enabled 外的每个 native_* 槽位都返回 PIER_NATIVE_DISABLED，不写任何输出，宿主会为每个模组在它自己的日志里写一次该改哪个设置。整组共用一个开关，因为引擎对象的地址能触及的内存和 detour 一样。
 
 ## b63d5fdd47
 
@@ -2934,6 +3973,12 @@ bool pier_main(const PierApi* api, PierModHandle self,
 
 追加：批量读写方块
 
+## f1c42efc37
+
+> World state readers. Server thread only.
+
+世界状态读取。只能在服务端线程调用。
+
 ## 84397bbbc1
 
 >
@@ -3126,6 +4171,54 @@ bool pier_main(const PierApi* api, PierModHandle self,
 > large.
 
 和 `scan_region` 扫描方块的部分一样，但每种不同的方块状态只通过调色板回调序列化一次，每一格只报告一个索引。一百万格石头的区域只需要序列化一次 SNBT，不用一百万次。不包括实体；要实体请用 `scan_region`，方块回调传空。同样有 2^24 格的上限。只能在服务器线程调用。维度没有就绪或者区域太大时返回 false。
+
+## 633e40d86b
+
+> world_get_num keys, read from the Weather object of one dimension. APPEND-ONLY.
+
+world_get_num 的键，读自一个维度的 Weather 对象。只能追加。
+
+## b17e6a6ad4
+
+> Weather::mRainLevel, 0 for none to 1 for full rain
+
+`Weather::mRainLevel`，0 表示无雨，1 表示满雨
+
+## 900f9ee1e2
+
+> Weather::mTargetRainLevel, the level rain moves toward
+
+`Weather::mTargetRainLevel`，降雨正在趋向的强度
+
+## c6c4fc0abc
+
+> Weather::mLightningLevel, 0 for none to 1 for a storm
+
+`Weather::mLightningLevel`，0 表示无雷暴，1 表示雷暴
+
+## 115022ab0c
+
+> Weather::mTargetLightningLevel
+
+`Weather::mTargetLightningLevel`
+
+## 161f281e8e
+
+> Weather::mFogLevel
+
+`Weather::mFogLevel`
+
+## 04cb3e7b3b
+
+> Weather::mSkyFlashTime, ticks left of a lightning flash
+
+`Weather::mSkyFlashTime`，闪电闪光剩余的刻数
+
+## 48b90f927e
+
+> Weather::mTick
+
+`Weather::mTick`
 
 ## 0d89f2f2de
 
@@ -3889,6 +4982,32 @@ bridge 负责解码包头：`packet_id` 是它的低 10 位，`sender_sub_id` / 
 
 所有回调都在客户端线程上触发。
 
+## e31aa963d4
+
+> Client capability group, continued. NULL on a server host, like client_* above;
+
+客户端能力组（续）。和上面的 client_* 一样，在服务端宿主上为 NULL；
+
+## 1bd9e4d0a3
+
+> these sit here because a slot only ever goes at the end. Client thread only.
+
+放在这里是因为槽位只会追加在末尾。只能在客户端线程调用。
+
+## 57332c8a0b
+
+> Client capability group, options. NULL on a server host. Client thread only. An
+
+客户端能力组：选项。在服务端宿主上为 NULL，只能在客户端线程调用。
+
+## 821113f214
+
+> option is addressed by the key options.txt stores it under, and its value travels in
+> the text form options.txt holds. The engine declares no names for OptionID, so each
+> call walks the ids the registry reports valid.
+
+选项用 options.txt 保存它时所用的键来指定，值以 options.txt 中的文本形式传递。引擎没有为 OptionID 声明任何名字，所以每次调用都会遍历注册表报告为有效的那些 id。
+
 ## 00d773eb9a
 
 > Register a key binding via ll::input::KeyRegistry::getOrCreateKey.
@@ -3896,6 +5015,14 @@ bridge 负责解码包头：`packet_id` 是它的低 10 位，`sender_sub_id` / 
 >  client_unregister_key. down_cb/up_cb fire on the client thread.
 
 通过 `ll::input::KeyRegistry::getOrCreateKey` 注册一个按键绑定。失败时返回 NULL。句柄归调用方所有，用 `client_unregister_key` 释放。`down_cb`/`up_cb` 在客户端线程上触发。
+
+## 1f2d00c389
+
+> Feeds every option to `sink`, one (key, value) pair each, as Option::save writes
+>  them. An option that stores several keys, such as one value per input mode, feeds
+>  each. Returns false for a null sink or a client that has no instance yet.
+
+把每个选项逐个交给 `sink`，每个 (key, value) 对调用一次，内容与 Option::save 写出的相同。保存多个键的选项（例如每种输入方式各一个值）会把每个键都交出来。sink 为空或者客户端还没有实例时返回 false。
 
 ## 6281a3d563
 
@@ -3930,6 +5057,215 @@ bridge 负责解码包头：`packet_id` 是它的低 10 位，`sender_sub_id` / 
 - `user`：传给 `client_register_key` 的指针
 - `action`：0=松开，1=按下（见 `PierKeyAction`）
 - `impact`：当前的焦点影响（见 `PierFocusImpact`）
+
+## fca60a126e
+
+> client_get_num keys. Each value is read from this client's own state, so on a
+>  remote server it describes what this client sees. APPEND-ONLY, like every key
+>  enumeration in this file; an unknown key makes the call return false. Keys 0 to 5
+>  and 13 to 27 read the local player and fail while the client is not in a world.
+
+client_get_num 的键。每个值都读自这个客户端自身的状态，所以连接远程服务器时，它描述的是这个客户端看到的情况。只能追加，和本文件中所有键枚举一样；未知的键会让调用返回 false。键 0 到 5 以及 13 到 27 读取本地玩家，客户端不在世界里时会失败。
+
+## ae1d444dbb
+
+> client_get_str keys.
+
+client_get_str 的键。
+
+## 2b7b932bf9
+
+> client_action verbs. Args are (sarg, a, b, c); unused args are ignored. The text
+>  verbs write to this client's HUD only and send nothing to a server.
+
+client_action 的动作。参数为 (sarg, a, b, c)，用不到的参数会被忽略。文本类动作只写到这个客户端的 HUD，不会向服务器发送任何东西。
+
+## 1828f6f93e
+
+> Native escape hatch (native_*); its section near the top of this file is the
+
+原生逃生口（native_*）；契约是本文件靠前位置它的那一节。
+
+## b370db2a30
+
+> contract. Filled on every host. While config.json leaves native_detour off, each
+> slot but native_enabled answers PIER_NATIVE_DISABLED. Call them on the thread the
+> host calls the mod on: the server thread, or the client thread on a client host.
+> Every `out` is set to NULL or 0 first and written on PIER_NATIVE_OK only.
+
+每个宿主都会填充这一组。config.json 没有打开 native_detour 时，除 native_enabled 外的每个槽位都返回 PIER_NATIVE_DISABLED。请在宿主调用模组的那个线程上调用它们：服务端线程，或者客户端宿主上的客户端线程。每个 `out` 都会先被置为 NULL 或 0，只有返回 PIER_NATIVE_OK 时才写入结果。
+
+## 11cd88a752
+
+> The address of an engine function by its decorated symbol name, through the
+>  host's own resolution, ll::memory::SymbolView::resolve.
+
+按修饰后的符号名得到一个引擎函数的地址，使用宿主自己的解析，即 ll::memory::SymbolView::resolve。
+
+## 011fc2557f
+
+> The first match of a byte pattern in the engine executable. `pattern` is tokens
+>  separated by spaces, each two hexadecimal digits or a wildcard written "?" or
+>  "??", such as "48 8B ?? 08". A token of any other shape refuses the call; it is
+>  never read as a byte.
+
+字节特征码在引擎可执行文件中的第一个匹配。`pattern` 是用空格分隔的记号，每个记号是两位十六进制数，或者写作 "?" 或 "??" 的通配符，例如 "48 8B ?? 08"。出现其他形状的记号时拒绝调用，绝不会把它当作一个字节来读。
+
+## 23e5aad742
+
+> An export of a module already loaded into the process, through GetModuleHandle
+>  and GetProcAddress. An empty `module` names the engine executable. LeviLamina's
+>  own API is reached this way, as an export of LeviLamina.dll under its decorated
+>  name. The host never loads a module for this call.
+
+进程中已加载模块的一个导出，通过 GetModuleHandle 和 GetProcAddress 取得。`module` 为空表示引擎可执行文件。LeviLamina 自身的 API 就通过这种方式取得，它是 LeviLamina.dll 以修饰名导出的符号。这个调用绝不会让宿主加载模块。
+
+## 9ea709a261
+
+> The address of one engine service object, `kind` a PIER_NATIVE_OBJ_* value.
+>  PIER_NATIVE_NOT_FOUND while the object does not exist, as the level before a world
+>  loads, and for a client-only kind on a server host.
+
+一个引擎服务对象的地址，`kind` 取 PIER_NATIVE_OBJ_* 之一。对象不存在时（例如世界加载前的 level），以及在服务端宿主上请求仅客户端的种类时，返回 PIER_NATIVE_NOT_FOUND。
+
+## 94ce4cb404
+
+> The Player object of an online player, resolved like every other selector.
+
+在线玩家的 Player 对象，解析方式和其他选择器相同。
+
+## 6cd73b96f2
+
+> The Dimension object of a dimension id, custom dimensions included. A custom
+>  dimension the engine has not built yet is built by this call, the same as a block
+>  write into it would build it.
+
+维度 id 对应的 Dimension 对象，包括自定义维度。引擎尚未构建的自定义维度会由这个调用构建，就像向它写入一个方块时会构建它一样。
+
+## 100baac881
+
+> The BlockSource of a dimension id, under the same rule as native_dimension.
+
+维度 id 对应的 BlockSource，规则与 native_dimension 相同。
+
+## 39cf1a14c9
+
+> Installs a native detour on `target` through ll::memory::hook.
+>
+>  `detour` must have the exact signature and calling convention of `target`, which
+>  the host cannot check. `priority` is 0 highest to 400 lowest with 200 normal, the
+>  values of ll::memory::HookPriority; a value outside 0..400 refuses the call. On
+>  PIER_NATIVE_OK *out_original receives the address through which the detour calls
+>  the next detour or the engine, and *out_id the id native_hook_remove takes.
+>
+>  The host records which mod installed what. When a mod unloads, every detour it
+>  still holds is removed before its dll is unmapped. A call already running inside
+>  a detour on another thread is not waited for, so a mod unloaded at runtime removes
+>  its detours itself first or keeps them off other threads. One (target, detour)
+>  pair installs once; a second install of the same pair is refused.
+
+通过 ll::memory::hook 在 `target` 上安装一个原生 detour。
+
+`detour` 必须与 `target` 的签名和调用约定完全一致，宿主无法检查这一点。`priority` 从最高的 0 到最低的 400，200 为普通，取值与 ll::memory::HookPriority 相同；超出 0..400 的值会被拒绝。返回 PIER_NATIVE_OK 时，*out_original 得到 detour 用来调用下一个 detour 或引擎的地址，*out_id 得到 native_hook_remove 使用的 id。
+
+宿主会记录哪个模组安装了什么。模组卸载时，它仍持有的每个 detour 都会在它的 dll 被卸载前移除。已经在其他线程上进入 detour 的调用不会被等待，因此运行时会被卸载的模组要么先自行移除 detour，要么不让 detour 在其他线程上运行。同一对 (target, detour) 只能安装一次，第二次安装会被拒绝。
+
+## 80145d7f29
+
+> native_object kinds.
+
+native_object 的种类。
+
+## d759d6c356
+
+> ll::service::getMinecraft
+
+ll::service::getMinecraft
+
+## 89e520e5c3
+
+> ll::service::getLevel
+
+ll::service::getLevel
+
+## a8cc2f38c1
+
+> ll::service::getServerNetworkHandler
+
+ll::service::getServerNetworkHandler
+
+## 5d773d63d1
+
+> ll::service::getServerInstance
+
+ll::service::getServerInstance
+
+## c6f3f6a0ef
+
+> ll::service::getCommandRegistry
+
+ll::service::getCommandRegistry
+
+## a385783509
+
+> ll::service::getNetworkSystem
+
+ll::service::getNetworkSystem
+
+## 224a8d1cb8
+
+> ll::service::getDBStorage
+
+ll::service::getDBStorage
+
+## a5b5afde75
+
+> ll::service::getClientInstance, client hosts
+
+ll::service::getClientInstance，仅客户端宿主
+
+## bd1bb17e50
+
+> ll::service::getMultiPlayerLevel, client hosts:
+> the level the client renders
+
+ll::service::getMultiPlayerLevel，仅客户端宿主：客户端渲染的那个 level
+
+## d2fd74cc79
+
+> native_* return codes.
+
+native_* 的返回码。
+
+## 341d812f70
+
+> done; the outputs are written
+
+完成；输出已写入
+
+## 6312473ea0
+
+> config.json of the host does not set native_detour to true
+
+宿主的 config.json 没有把 native_detour 设为 true
+
+## 4e857cd386
+
+> no such symbol, pattern match, export, object or actor now
+
+目前没有这样的符号、特征码匹配、导出、对象或实体
+
+## f03cccfb84
+
+> a null or malformed argument, an unknown kind, a foreign id
+
+参数为空或格式错误、种类未知、或者 id 不属于这个模组
+
+## 61b87c541e
+
+> the engine-side call failed: a detour that did not install
+
+引擎侧的调用失败：例如 detour 没能安装
 
 ## a2117b399a
 

@@ -219,7 +219,7 @@ A service registration handle. Dropping it deregisters.
 [`Registration::forget`](service.md#Registration.forget) keeps it alive until the mod unloads, and the host clears what
 remains at unload.
 
-- Implements: `Drop`
+- Implements: `Drop`, `Debug`
 
 ### `Registration::id` {#Registration.id}
 

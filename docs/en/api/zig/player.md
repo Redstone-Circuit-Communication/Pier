@@ -535,6 +535,61 @@ pub fn isInitialized(self: Player) core.Error!bool
 - Return type: `core.Error!bool`
 - Slots: [`player_get_num`](../cpp/player.md#player_get_num)
 
+### `Player.isSleeping` {#Player.isSleeping}
+
+```zig
+pub fn isSleeping(self: Player) core.Error!bool
+```
+
+`PIER_PPROP_IS_SLEEPING`: (G) `Player::isSleeping`
+
+- Return type: `core.Error!bool`
+- Slots: [`player_get_num`](../cpp/player.md#player_get_num)
+
+### `Player.isSimulated` {#Player.isSimulated}
+
+```zig
+pub fn isSimulated(self: Player) core.Error!bool
+```
+
+`PIER_PPROP_IS_SIMULATED`: (G) `Actor::isSimulatedPlayer`
+
+- Return type: `core.Error!bool`
+- Slots: [`player_get_num`](../cpp/player.md#player_get_num)
+
+### `Player.itemUseDuration` {#Player.itemUseDuration}
+
+```zig
+pub fn itemUseDuration(self: Player) core.Error!f64
+```
+
+`PIER_PPROP_ITEM_USE_DURATION`: (G) `Player::getItemUseDuration`, in ticks
+
+- Return type: `core.Error!f64`
+- Slots: [`player_get_num`](../cpp/player.md#player_get_num)
+
+### `Player.xpEarnedAtLevel` {#Player.xpEarnedAtLevel}
+
+```zig
+pub fn xpEarnedAtLevel(self: Player) core.Error!f64
+```
+
+`PIER_PPROP_XP_EARNED_AT_LEVEL`: (G) `Player::getXpEarnedAtCurrentLevel`
+
+- Return type: `core.Error!f64`
+- Slots: [`player_get_num`](../cpp/player.md#player_get_num)
+
+### `Player.canFly` {#Player.canFly}
+
+```zig
+pub fn canFly(self: Player) core.Error!bool
+```
+
+`PIER_PPROP_CAN_FLY`: (G) `Actor::canFly`
+
+- Return type: `core.Error!bool`
+- Slots: [`player_get_num`](../cpp/player.md#player_get_num)
+
 ### `Player.realName` {#Player.realName}
 
 ```zig
@@ -672,6 +727,32 @@ pub fn respawnPos(self: Player, allocator: std.mem.Allocator) core.Error![]u8
 ```
 
 `PIER_PSTR_RESPAWN_POS`: SNBT {x,y,z,dim}: where this player would respawn. Never empty; a player with no bed reports the world spawn, and the two are not distinguishable.
+
+- Parameters:
+    - allocator : `std.mem.Allocator`
+- Return type: `core.Error![]u8`
+- Slots: [`player_get_str`](../cpp/player.md#player_get_str)
+
+### `Player.selectedItem` {#Player.selectedItem}
+
+```zig
+pub fn selectedItem(self: Player, allocator: std.mem.Allocator) core.Error![]u8
+```
+
+`PIER_PSTR_SELECTED_ITEM`: `Player::getSelectedItem` as item SNBT
+
+- Parameters:
+    - allocator : `std.mem.Allocator`
+- Return type: `core.Error![]u8`
+- Slots: [`player_get_str`](../cpp/player.md#player_get_str)
+
+### `Player.deviceModel` {#Player.deviceModel}
+
+```zig
+pub fn deviceModel(self: Player, allocator: std.mem.Allocator) core.Error![]u8
+```
+
+`PIER_PSTR_DEVICE_MODEL`: `ConnectionRequest::getDeviceModel`; fails for a player with no connection request
 
 - Parameters:
     - allocator : `std.mem.Allocator`
@@ -1190,6 +1271,313 @@ The output, when the verb has one, is returned; abi.h names each argument.
     - n_c : `f64`
 - Return type: `core.Error![]u8`
 - Slots: [`player_action`](../cpp/player.md#player_action)
+
+### `Player.stopSleeping` {#Player.stopSleeping}
+
+```zig
+pub fn stopSleeping(self: Player, allocator: std.mem.Allocator, s_arg: []const u8, n_a: f64, n_b: f64, n_c: f64) core.Error![]u8
+```
+
+`PIER_PACT_STOP_SLEEPING`: a: non-zero wakes forcefully. `Player::stopSleepInBed`; false when not asleep
+
+The output, when the verb has one, is returned; abi.h names each argument.
+
+- Parameters:
+    - allocator : `std.mem.Allocator`
+    - s_arg : `[]const u8`
+    - n_a : `f64`
+    - n_b : `f64`
+    - n_c : `f64`
+- Return type: `core.Error![]u8`
+- Slots: [`player_action`](../cpp/player.md#player_action)
+
+### `Player.causeExhaustion` {#Player.causeExhaustion}
+
+```zig
+pub fn causeExhaustion(self: Player, allocator: std.mem.Allocator, s_arg: []const u8, n_a: f64, n_b: f64, n_c: f64) core.Error![]u8
+```
+
+`PIER_PACT_CAUSE_EXHAUSTION`: a: amount, positive. `Player::causeFoodExhaustion`
+
+The output, when the verb has one, is returned; abi.h names each argument.
+
+- Parameters:
+    - allocator : `std.mem.Allocator`
+    - s_arg : `[]const u8`
+    - n_a : `f64`
+    - n_b : `f64`
+    - n_c : `f64`
+- Return type: `core.Error![]u8`
+- Slots: [`player_action`](../cpp/player.md#player_action)
+
+### `Player.eat` {#Player.eat}
+
+```zig
+pub fn eat(self: Player, allocator: std.mem.Allocator, s_arg: []const u8, n_a: f64, n_b: f64, n_c: f64) core.Error![]u8
+```
+
+`PIER_PACT_EAT`: sarg: item SNBT. `Player::eat`, the food value of that item
+
+The output, when the verb has one, is returned; abi.h names each argument.
+
+- Parameters:
+    - allocator : `std.mem.Allocator`
+    - s_arg : `[]const u8`
+    - n_a : `f64`
+    - n_b : `f64`
+    - n_c : `f64`
+- Return type: `core.Error![]u8`
+- Slots: [`player_action`](../cpp/player.md#player_action)
+
+### `Player.asEntity` {#Player.asEntity}
+
+```zig
+pub fn asEntity(self: Player) core.Error!Entity
+```
+
+Resolves the selector to the player's actor, which gives the calls of `Entity`. NoAnswer when the player is offline.
+
+- Return type: `core.Error!Entity`
+- Slots: [`player_resolve`](../cpp/player.md#player_resolve)
+
+### `Player.isOnline` {#Player.isOnline}
+
+```zig
+pub fn isOnline(self: Player) bool
+```
+
+Whether the selector resolves to anyone online now.
+
+- Return type: `bool`
+- Slots: [`player_resolve`](../cpp/player.md#player_resolve)
+
+### `Player.connId` {#Player.connId}
+
+```zig
+pub fn connId(self: Player) core.Error!u64
+```
+
+The connection id of this player, the same number a packet handler sees. NoAnswer when the player is offline or has no network identity.
+
+- Return type: `core.Error!u64`
+- Slots: [`player_conn_id`](../cpp/player.md#player_conn_id)
+
+### `Player.teleport` {#Player.teleport}
+
+```zig
+pub fn teleport(self: Player, dim: i32, x: f64, y: f64, z: f64) core.Error!void
+```
+
+Teleports. A custom dimension, with an id of 3 or above, goes through here too, and the host refuses a dimension whose engine instance does not match.
+
+- Parameters:
+    - dim : `i32`
+    - x : `f64`
+    - y : `f64`
+    - z : `f64`
+- Return type: `core.Error!void`
+- Slots: [`player_teleport`](../cpp/player.md#player_teleport)
+
+### `Player.sendMessage` {#Player.sendMessage}
+
+```zig
+pub fn sendMessage(self: Player, msg: []const u8) core.Error!void
+```
+
+- Parameters:
+    - msg : `[]const u8`
+- Return type: `core.Error!void`
+- Slots: [`player_send_message`](../cpp/player.md#player_send_message)
+
+### `Player.tell` {#Player.tell}
+
+```zig
+pub fn tell(self: Player, msg: []const u8, kind: types.MessageType) core.Error!void
+```
+
+Sends one message with a given `TextPacketType`.
+
+- Parameters:
+    - msg : `[]const u8`
+    - kind : `types.MessageType`
+- Return type: `core.Error!void`
+- Slots: [`player_send_message_typed`](../cpp/player.md#player_send_message_typed)
+
+### `Player.sendTitle` {#Player.sendTitle}
+
+```zig
+pub fn sendTitle(self: Player, kind: types.TitleKind, text: []const u8, times: ?types.TitleTimes) core.Error!void
+```
+
+Sends one title. Only a title, a subtitle or an action bar carries text. `times` of null leaves the durations to the host.
+
+- Parameters:
+    - kind : `types.TitleKind`
+    - text : `[]const u8`
+    - times : `?types.TitleTimes`
+- Return type: `core.Error!void`
+- Slots: [`player_send_title`](../cpp/player.md#player_send_title)
+
+### `Player.setGameMode` {#Player.setGameMode}
+
+```zig
+pub fn setGameMode(self: Player, mode: types.GameMode) core.Error!void
+```
+
+- Parameters:
+    - mode : `types.GameMode`
+- Return type: `core.Error!void`
+- Slots: [`player_set_gamemode`](../cpp/player.md#player_set_gamemode)
+
+### `Player.disconnect` {#Player.disconnect}
+
+```zig
+pub fn disconnect(self: Player, reason: []const u8) core.Error!void
+```
+
+Disconnects the player with a reason the client shows.
+
+- Parameters:
+    - reason : `[]const u8`
+- Return type: `core.Error!void`
+- Slots: [`player_disconnect`](../cpp/player.md#player_disconnect)
+
+### `Player.item` {#Player.item}
+
+```zig
+pub fn item(self: Player, allocator: std.mem.Allocator, slot: i32) core.Error![]u8
+```
+
+One inventory slot as item SNBT, owned by the caller.
+
+- Parameters:
+    - allocator : `std.mem.Allocator`
+    - slot : `i32`
+- Return type: `core.Error![]u8`
+- Slots: [`player_get_item`](../cpp/player.md#player_get_item)
+
+### `Player.setItem` {#Player.setItem}
+
+```zig
+pub fn setItem(self: Player, slot: i32, item_snbt: []const u8) core.Error!void
+```
+
+Writes one inventory slot. Refresh the container afterwards, or the client keeps showing the old item.
+
+- Parameters:
+    - slot : `i32`
+    - item_snbt : `[]const u8`
+- Return type: `core.Error!void`
+- Slots: [`player_set_item`](../cpp/player.md#player_set_item)
+
+### `Player.carriedItem` {#Player.carriedItem}
+
+```zig
+pub fn carriedItem(self: Player, allocator: std.mem.Allocator) core.Error![]u8
+```
+
+The item in hand as item SNBT, owned by the caller.
+
+- Parameters:
+    - allocator : `std.mem.Allocator`
+- Return type: `core.Error![]u8`
+- Slots: [`player_get_carried_item`](../cpp/player.md#player_get_carried_item)
+
+### `Player.equipment` {#Player.equipment}
+
+```zig
+pub fn equipment(self: Player, allocator: std.mem.Allocator) core.Error!types.Owned(types.EquipmentEntry)
+```
+
+The full equipment set. For the `slot` numbering see `types.EquipSlot`.
+
+- Parameters:
+    - allocator : `std.mem.Allocator`
+- Return type: `core.Error!types.Owned(types.EquipmentEntry)`
+- Slots: [`player_get_equipment`](../cpp/player.md#player_get_equipment)
+
+### `Player.cooldown` {#Player.cooldown}
+
+```zig
+pub fn cooldown(self: Player, item_name: []const u8) core.Error!?i32
+```
+
+How many ticks of cooldown one item has left; null when it is not on cooldown.
+
+- Parameters:
+    - item_name : `[]const u8`
+- Return type: `core.Error!?i32`
+- Slots: [`player_get_cooldown`](../cpp/player.md#player_get_cooldown)
+
+### `Player.setCooldown` {#Player.setCooldown}
+
+```zig
+pub fn setCooldown(self: Player, item_name: []const u8, ticks: i32) core.Error!void
+```
+
+- Parameters:
+    - item_name : `[]const u8`
+    - ticks : `i32`
+- Return type: `core.Error!void`
+- Slots: [`player_start_cooldown`](../cpp/player.md#player_start_cooldown)
+
+### `Player.networkDetail` {#Player.networkDetail}
+
+```zig
+pub fn networkDetail(self: Player, allocator: std.mem.Allocator) core.Error!types.NetworkStatus
+```
+
+The network status in detail.
+
+- Parameters:
+    - allocator : `std.mem.Allocator`
+- Return type: `core.Error!types.NetworkStatus`
+- Slots: [`player_get_network_status`](../cpp/player.md#player_get_network_status)
+
+### `Player.position` {#Player.position}
+
+```zig
+pub fn position(self: Player, allocator: std.mem.Allocator) core.Error!types.PlayerPosition
+```
+
+The feet position and the dimension. It goes through a dedicated slot and not a property number, because a position needs three numbers and an id at once.
+
+- Parameters:
+    - allocator : `std.mem.Allocator`
+- Return type: `core.Error!types.PlayerPosition`
+- Slots: [`get_player_position`](../cpp/player.md#get_player_position), [`player_get_str`](../cpp/player.md#player_get_str)
+
+### `Player.inventory` {#Player.inventory}
+
+```zig
+pub fn inventory(self: Player) container.Container
+```
+
+- Return type: `container.Container`
+
+### `Player.enderChest` {#Player.enderChest}
+
+```zig
+pub fn enderChest(self: Player) container.Container
+```
+
+- Return type: `container.Container`
+
+### `Player.armor` {#Player.armor}
+
+```zig
+pub fn armor(self: Player) container.Container
+```
+
+- Return type: `container.Container`
+
+### `Player.offhandContainer` {#Player.offhandContainer}
+
+```zig
+pub fn offhandContainer(self: Player) container.Container
+```
+
+- Return type: `container.Container`
 
 ## `SelKind` {#SelKind}
 

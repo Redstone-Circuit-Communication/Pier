@@ -45,7 +45,7 @@ pub struct World(/* private */);
 
 关卡门面。零大小。
 
-- 实现的 trait：`Clone`、`Copy`
+- 实现的 trait：`Clone`、`Copy`、`Debug`
 
 ### `World::get` {#World.get}
 
@@ -402,6 +402,90 @@ pub fn delete_key(&self, key: &[u8]) -> Result<()>
     - key : `&[u8]`
 - 返回值类型：`Result<()>`
 - 对应槽位：[`level_delete_key`](../cpp/world.md#level_delete_key)
+
+### `World::weather_value` {#World.weather_value}
+
+```rust
+pub fn weather_value(&self, dim: i32, prop: i32) -> crate::Result<f64>
+```
+
+按 `PIER_WPROP_*` 键读取一个维度的一项天气值。
+
+- 参数：
+    - dim : `i32`
+    - prop : `i32`
+- 返回值类型：`crate::Result<f64>`
+- 对应槽位：[`world_get_num`](../cpp/world.md#world_get_num)
+
+### `World::rain_level` {#World.rain_level}
+
+```rust
+pub fn rain_level(&self, dim: i32) -> crate::Result<f64>
+```
+
+一个维度的降雨强度，0 表示无雨，1 表示满雨。
+
+- 参数：
+    - dim : `i32`
+- 返回值类型：`crate::Result<f64>`
+- 对应槽位：[`world_get_num`](../cpp/world.md#world_get_num)
+
+### `World::target_rain_level` {#World.target_rain_level}
+
+```rust
+pub fn target_rain_level(&self, dim: i32) -> crate::Result<f64>
+```
+
+- 参数：
+    - dim : `i32`
+- 返回值类型：`crate::Result<f64>`
+- 对应槽位：[`world_get_num`](../cpp/world.md#world_get_num)
+
+### `World::lightning_level` {#World.lightning_level}
+
+```rust
+pub fn lightning_level(&self, dim: i32) -> crate::Result<f64>
+```
+
+一个维度的雷暴强度，0 表示无雷暴，1 表示雷暴。
+
+- 参数：
+    - dim : `i32`
+- 返回值类型：`crate::Result<f64>`
+- 对应槽位：[`world_get_num`](../cpp/world.md#world_get_num)
+
+### `World::target_lightning_level` {#World.target_lightning_level}
+
+```rust
+pub fn target_lightning_level(&self, dim: i32) -> crate::Result<f64>
+```
+
+- 参数：
+    - dim : `i32`
+- 返回值类型：`crate::Result<f64>`
+- 对应槽位：[`world_get_num`](../cpp/world.md#world_get_num)
+
+### `World::fog_level` {#World.fog_level}
+
+```rust
+pub fn fog_level(&self, dim: i32) -> crate::Result<f64>
+```
+
+- 参数：
+    - dim : `i32`
+- 返回值类型：`crate::Result<f64>`
+- 对应槽位：[`world_get_num`](../cpp/world.md#world_get_num)
+
+### `World::sky_flash_time` {#World.sky_flash_time}
+
+```rust
+pub fn sky_flash_time(&self, dim: i32) -> crate::Result<i32>
+```
+
+- 参数：
+    - dim : `i32`
+- 返回值类型：`crate::Result<i32>`
+- 对应槽位：[`world_get_num`](../cpp/world.md#world_get_num)
 
 ### `World::fill_blocks` {#World.fill_blocks}
 

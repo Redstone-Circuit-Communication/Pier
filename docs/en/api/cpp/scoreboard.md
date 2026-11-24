@@ -26,6 +26,7 @@ bool (*scoreboard_op)(int32_t op, PierStr a, PierStr b, int64_t n, void* ctx, Pi
 - Callers in each binding:
     - Rust: [`Scoreboard::add_objective`](../rust/scoreboard.md#Scoreboard.add_objective), [`Scoreboard::remove_objective`](../rust/scoreboard.md#Scoreboard.remove_objective), [`Scoreboard::objectives`](../rust/scoreboard.md#Scoreboard.objectives), [`Scoreboard::score`](../rust/scoreboard.md#Scoreboard.score), [`Scoreboard::set_score`](../rust/scoreboard.md#Scoreboard.set_score), [`Scoreboard::add_score`](../rust/scoreboard.md#Scoreboard.add_score) and more, 10 in all
     - Go: [`Scoreboard`](../go/scoreboard.md#Scoreboard), [`Raw.ScoreboardOp`](../go/raw.md#Raw.ScoreboardOp)
+    - Zig: [`scoreboard.addObjective`](../zig/scoreboard.md#scoreboard.addObjective), [`scoreboard.removeObjective`](../zig/scoreboard.md#scoreboard.removeObjective), [`scoreboard.objectives`](../zig/scoreboard.md#scoreboard.objectives), [`scoreboard.score`](../zig/scoreboard.md#scoreboard.score), [`scoreboard.setScore`](../zig/scoreboard.md#scoreboard.setScore), [`scoreboard.addScore`](../zig/scoreboard.md#scoreboard.addScore) and more, 10 in all
 
 ## `PierScoreboardOp` {#PierScoreboardOp}
 

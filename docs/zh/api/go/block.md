@@ -111,6 +111,84 @@ func (b BlockAt) Container() Container
 
 - 返回值类型：`Container`
 
+### `BlockAt.CollisionBox` {#BlockAt.CollisionBox}
+
+```go
+func (b BlockAt) CollisionBox() (string, error)
+```
+
+CollisionBox 是方块的碰撞形状，按宿主写出的形式。
+
+- 返回值类型：`(string, error)`
+- 对应槽位：[`block_get_collision_shape`](../cpp/block.md#block_get_collision_shape)
+
+### `BlockAt.ExtraBlock` {#BlockAt.ExtraBlock}
+
+```go
+func (b BlockAt) ExtraBlock() (string, error)
+```
+
+ExtraBlock 是这个格子的液体层，以方块名的形式；空的液体层是空气。
+
+- 返回值类型：`(string, error)`
+- 对应槽位：[`get_extra_block`](../cpp/world.md#get_extra_block)
+
+### `BlockAt.SetExtraBlock` {#BlockAt.SetExtraBlock}
+
+```go
+func (b BlockAt) SetExtraBlock(blockSpec string, updateFlags int32) error
+```
+
+SetExtraBlock 写入这个格子的液体层；写 minecraft:air 可清除它。
+
+- 参数：
+    - blockSpec : `string`
+    - updateFlags : `int32`
+- 返回值类型：`error`
+- 对应槽位：[`set_extra_block`](../cpp/world.md#set_extra_block)
+
+### `BlockAt.SetNBT` {#BlockAt.SetNBT}
+
+```go
+func (b BlockAt) SetNBT(snbt string, updateFlags int32) error
+```
+
+SetNBT 用序列化的 NBT 写入一个方块，格式就是 Info 产生的那种。
+
+- 参数：
+    - snbt : `string`
+    - updateFlags : `int32`
+- 返回值类型：`error`
+- 对应槽位：[`edit_set_block_nbt`](../cpp/edit.md#edit_set_block_nbt)
+
+### `BlockAt.SetStates` {#BlockAt.SetStates}
+
+```go
+func (b BlockAt) SetStates(name, statesSNBT string, updateFlags int32) error
+```
+
+SetStates 用一个名字加可选的部分状态写入一个方块；statesSNBT 为空表示每个状态都取默认值。
+
+- 参数：
+    - name : `string`
+    - statesSNBT : `string`
+    - updateFlags : `int32`
+- 返回值类型：`error`
+- 对应槽位：[`edit_set_block_states`](../cpp/edit.md#edit_set_block_states)
+
+### `BlockAt.SetEntitySNBT` {#BlockAt.SetEntitySNBT}
+
+```go
+func (b BlockAt) SetEntitySNBT(snbt string) error
+```
+
+SetEntitySNBT 写入这个格子的方块实体的 NBT，该格子里必须已经是对应的方块。
+
+- 参数：
+    - snbt : `string`
+- 返回值类型：`error`
+- 对应槽位：[`edit_set_block_entity`](../cpp/edit.md#edit_set_block_entity)
+
 ### `BlockAt.IsAir` {#BlockAt.IsAir}
 
 ```go
@@ -434,6 +512,61 @@ func (b BlockAt) RequiresTool() (float64, error)
 - 返回值类型：`(float64, error)`
 - 对应槽位：[`block_get_num`](../cpp/block.md#block_get_num)
 
+### `BlockAt.IsThinFence` {#BlockAt.IsThinFence}
+
+```go
+func (b BlockAt) IsThinFence() (bool, error)
+```
+
+读取 `PIER_BPROP_IS_THIN_FENCE`：`BlockType::isThinFenceBlock`
+
+- 返回值类型：`(bool, error)`
+- 对应槽位：[`block_get_num`](../cpp/block.md#block_get_num)
+
+### `BlockAt.IsLever` {#BlockAt.IsLever}
+
+```go
+func (b BlockAt) IsLever() (bool, error)
+```
+
+读取 `PIER_BPROP_IS_LEVER`：`BlockType::isLeverBlock`
+
+- 返回值类型：`(bool, error)`
+- 对应槽位：[`block_get_num`](../cpp/block.md#block_get_num)
+
+### `BlockAt.IsStem` {#BlockAt.IsStem}
+
+```go
+func (b BlockAt) IsStem() (bool, error)
+```
+
+读取 `PIER_BPROP_IS_STEM`：`BlockType::isStemBlock`
+
+- 返回值类型：`(bool, error)`
+- 对应槽位：[`block_get_num`](../cpp/block.md#block_get_num)
+
+### `BlockAt.CanInstatick` {#BlockAt.CanInstatick}
+
+```go
+func (b BlockAt) CanInstatick() (bool, error)
+```
+
+读取 `PIER_BPROP_CAN_INSTATICK`：`BlockType::canInstatick`
+
+- 返回值类型：`(bool, error)`
+- 对应槽位：[`block_get_num`](../cpp/block.md#block_get_num)
+
+### `BlockAt.MapColor` {#BlockAt.MapColor}
+
+```go
+func (b BlockAt) MapColor() (float64, error)
+```
+
+读取 `PIER_BPROP_MAP_COLOR`：`BlockType::getMapColor`，0xRRGGBB 形式
+
+- 返回值类型：`(float64, error)`
+- 对应槽位：[`block_get_num`](../cpp/block.md#block_get_num)
+
 ### `BlockAt.TypeName` {#BlockAt.TypeName}
 
 ```go
@@ -638,6 +771,11 @@ type BlockInfo struct {
 | <span id="BPropBounciness"></span>`BPropBounciness` | `26` | 即 `PIER_BPROP_BOUNCINESS`：取自 `Block::getBounciness` |
 | <span id="BPropIsSolid"></span>`BPropIsSolid` | `27` | 即 `PIER_BPROP_IS_SOLID`：取自 `Block::isSolid` |
 | <span id="BPropRequiresTool"></span>`BPropRequiresTool` | `28` | 即 `PIER_BPROP_REQUIRES_TOOL`：取自 `Block::requiresCorrectToolForDrops` |
+| <span id="BPropIsThinFence"></span>`BPropIsThinFence` | `29` | 即 `PIER_BPROP_IS_THIN_FENCE`：`BlockType::isThinFenceBlock` |
+| <span id="BPropIsLever"></span>`BPropIsLever` | `30` | 即 `PIER_BPROP_IS_LEVER`：`BlockType::isLeverBlock` |
+| <span id="BPropIsStem"></span>`BPropIsStem` | `31` | 即 `PIER_BPROP_IS_STEM`：`BlockType::isStemBlock` |
+| <span id="BPropCanInstatick"></span>`BPropCanInstatick` | `32` | 即 `PIER_BPROP_CAN_INSTATICK`：`BlockType::canInstatick` |
+| <span id="BPropMapColor"></span>`BPropMapColor` | `33` | 即 `PIER_BPROP_MAP_COLOR`：`BlockType::getMapColor`，0xRRGGBB 形式 |
 
 ## `BStr*` {#BStr}
 

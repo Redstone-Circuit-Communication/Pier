@@ -62,6 +62,19 @@ ListPlayers lists the online players. An entry that does not parse is skipped wi
 - Return type: `([]PlayerInfo, error)`
 - Slots: [`list_players`](../cpp/player.md#list_players), [`log`](../cpp/core.md#log)
 
+### `PositionOf` {#PositionOf}
+
+```go
+func PositionOf(name string) (PlayerPos, error)
+```
+
+PositionOf looks up the feet position and the dimension of a connected player by name.
+
+- Parameters:
+    - name : `string`
+- Return type: `(PlayerPos, error)`
+- Slots: [`get_player_position`](../cpp/player.md#get_player_position)
+
 ### `ByName` {#ByName}
 
 ```go
@@ -317,6 +330,97 @@ func (p Player) Offhand() Container
 Offhand is the player's offhand slot as a container.
 
 - Return type: `Container`
+
+### `Player.Position` {#Player.Position}
+
+```go
+func (p Player) Position() (PlayerPos, error)
+```
+
+Position is the player's feet position and dimension.
+
+- Return type: `(PlayerPos, error)`
+- Slots: [`player_get_str`](../cpp/player.md#player_get_str), [`get_player_position`](../cpp/player.md#get_player_position)
+
+### `Player.Cooldown` {#Player.Cooldown}
+
+```go
+func (p Player) Cooldown(itemName string) (int32, error)
+```
+
+Cooldown is how many ticks of cooldown the item has left, and -1 when it is not on cooldown.
+
+- Parameters:
+    - itemName : `string`
+- Return type: `(int32, error)`
+- Slots: [`player_get_cooldown`](../cpp/player.md#player_get_cooldown)
+
+### `Player.SetCooldown` {#Player.SetCooldown}
+
+```go
+func (p Player) SetCooldown(itemName string, ticks int32) error
+```
+
+SetCooldown puts the item on cooldown for the player.
+
+- Parameters:
+    - itemName : `string`
+    - ticks : `int32`
+- Return type: `error`
+- Slots: [`player_start_cooldown`](../cpp/player.md#player_start_cooldown)
+
+### `Player.Equipment` {#Player.Equipment}
+
+```go
+func (p Player) Equipment() ([]SlotItem, error)
+```
+
+Equipment lists the equipment of the player, one entry per slot of the engine's numbering.
+
+- Return type: `([]SlotItem, error)`
+- Slots: [`player_get_equipment`](../cpp/player.md#player_get_equipment)
+
+### `Player.NetworkDetail` {#Player.NetworkDetail}
+
+```go
+func (p Player) NetworkDetail() (NetworkStatus, error)
+```
+
+NetworkDetail reads the network status of the player.
+
+- Return type: `(NetworkStatus, error)`
+- Slots: [`player_get_network_status`](../cpp/player.md#player_get_network_status)
+
+### `Player.SendPacket` {#Player.SendPacket}
+
+```go
+func (p Player) SendPacket(packetID int32, body []byte) error
+```
+
+SendPacket pushes one raw packet onto the connection of the player: the id and the body, without the header.
+
+- Parameters:
+    - packetID : `int32`
+    - body : `[]byte`
+- Return type: `error`
+- Slots: [`send_packet`](../cpp/packet.md#send_packet)
+
+### `Player.ShowParticle` {#Player.ShowParticle}
+
+```go
+func (p Player) ShowParticle(dim int32, effect string, x, y, z float64) error
+```
+
+ShowParticle spawns a particle that only this player sees.
+
+- Parameters:
+    - dim : `int32`
+    - effect : `string`
+    - x : `float64`
+    - y : `float64`
+    - z : `float64`
+- Return type: `error`
+- Slots: [`spawn_particle_for`](../cpp/world.md#spawn_particle_for)
 
 ### `Player.GameType` {#Player.GameType}
 
@@ -790,6 +894,61 @@ IsInitialized reads `PIER_PPROP_IS_INITIALIZED`: (G) `Player::isPlayerInitialize
 - Return type: `(bool, error)`
 - Slots: [`player_get_num`](../cpp/player.md#player_get_num)
 
+### `Player.IsSleeping` {#Player.IsSleeping}
+
+```go
+func (p Player) IsSleeping() (bool, error)
+```
+
+IsSleeping reads `PIER_PPROP_IS_SLEEPING`: (G) `Player::isSleeping`
+
+- Return type: `(bool, error)`
+- Slots: [`player_get_num`](../cpp/player.md#player_get_num)
+
+### `Player.IsSimulated` {#Player.IsSimulated}
+
+```go
+func (p Player) IsSimulated() (bool, error)
+```
+
+IsSimulated reads `PIER_PPROP_IS_SIMULATED`: (G) `Actor::isSimulatedPlayer`
+
+- Return type: `(bool, error)`
+- Slots: [`player_get_num`](../cpp/player.md#player_get_num)
+
+### `Player.ItemUseDuration` {#Player.ItemUseDuration}
+
+```go
+func (p Player) ItemUseDuration() (float64, error)
+```
+
+ItemUseDuration reads `PIER_PPROP_ITEM_USE_DURATION`: (G) `Player::getItemUseDuration`, in ticks
+
+- Return type: `(float64, error)`
+- Slots: [`player_get_num`](../cpp/player.md#player_get_num)
+
+### `Player.XpEarnedAtLevel` {#Player.XpEarnedAtLevel}
+
+```go
+func (p Player) XpEarnedAtLevel() (float64, error)
+```
+
+XpEarnedAtLevel reads `PIER_PPROP_XP_EARNED_AT_LEVEL`: (G) `Player::getXpEarnedAtCurrentLevel`
+
+- Return type: `(float64, error)`
+- Slots: [`player_get_num`](../cpp/player.md#player_get_num)
+
+### `Player.CanFly` {#Player.CanFly}
+
+```go
+func (p Player) CanFly() (bool, error)
+```
+
+CanFly reads `PIER_PPROP_CAN_FLY`: (G) `Actor::canFly`
+
+- Return type: `(bool, error)`
+- Slots: [`player_get_num`](../cpp/player.md#player_get_num)
+
 ### `Player.RealName` {#Player.RealName}
 
 ```go
@@ -907,6 +1066,28 @@ func (p Player) RespawnPos() (string, error)
 ```
 
 RespawnPos reads `PIER_PSTR_RESPAWN_POS`: SNBT {x,y,z,dim}: where this player would respawn. Never empty; a player with no bed reports the world spawn, and the two are not distinguishable.
+
+- Return type: `(string, error)`
+- Slots: [`player_get_str`](../cpp/player.md#player_get_str)
+
+### `Player.SelectedItem` {#Player.SelectedItem}
+
+```go
+func (p Player) SelectedItem() (string, error)
+```
+
+SelectedItem reads `PIER_PSTR_SELECTED_ITEM`: `Player::getSelectedItem` as item SNBT
+
+- Return type: `(string, error)`
+- Slots: [`player_get_str`](../cpp/player.md#player_get_str)
+
+### `Player.DeviceModel` {#Player.DeviceModel}
+
+```go
+func (p Player) DeviceModel() (string, error)
+```
+
+DeviceModel reads `PIER_PSTR_DEVICE_MODEL`: `ConnectionRequest::getDeviceModel`; fails for a player with no connection request
 
 - Return type: `(string, error)`
 - Slots: [`player_get_str`](../cpp/player.md#player_get_str)
@@ -1397,6 +1578,60 @@ The output, when the verb has one, is returned; abi.h names each argument.
 - Return type: `(string, error)`
 - Slots: [`player_action`](../cpp/player.md#player_action)
 
+### `Player.StopSleeping` {#Player.StopSleeping}
+
+```go
+func (p Player) StopSleeping(sarg string, a, b, c float64) (string, error)
+```
+
+StopSleeping runs `PIER_PACT_STOP_SLEEPING`: a: non-zero wakes forcefully. `Player::stopSleepInBed`; false when not asleep
+
+The output, when the verb has one, is returned; abi.h names each argument.
+
+- Parameters:
+    - sarg : `string`
+    - a : `float64`
+    - b : `float64`
+    - c : `float64`
+- Return type: `(string, error)`
+- Slots: [`player_action`](../cpp/player.md#player_action)
+
+### `Player.CauseExhaustion` {#Player.CauseExhaustion}
+
+```go
+func (p Player) CauseExhaustion(sarg string, a, b, c float64) (string, error)
+```
+
+CauseExhaustion runs `PIER_PACT_CAUSE_EXHAUSTION`: a: amount, positive. `Player::causeFoodExhaustion`
+
+The output, when the verb has one, is returned; abi.h names each argument.
+
+- Parameters:
+    - sarg : `string`
+    - a : `float64`
+    - b : `float64`
+    - c : `float64`
+- Return type: `(string, error)`
+- Slots: [`player_action`](../cpp/player.md#player_action)
+
+### `Player.Eat` {#Player.Eat}
+
+```go
+func (p Player) Eat(sarg string, a, b, c float64) (string, error)
+```
+
+Eat runs `PIER_PACT_EAT`: sarg: item SNBT. `Player::eat`, the food value of that item
+
+The output, when the verb has one, is returned; abi.h names each argument.
+
+- Parameters:
+    - sarg : `string`
+    - a : `float64`
+    - b : `float64`
+    - c : `float64`
+- Return type: `(string, error)`
+- Slots: [`player_action`](../cpp/player.md#player_action)
+
 ## `PlayerInfo` {#PlayerInfo}
 
 ```go
@@ -1410,6 +1645,16 @@ type PlayerInfo struct {
 ```
 
 PlayerInfo is one online player as ListPlayers reports it. Dim and the position are read only when present, and HasDim and HasPos say whether they were.
+
+## `NetworkStatus` {#NetworkStatus}
+
+```go
+type NetworkStatus struct {
+    Ping, AvgPing, MaxPing, PacketLoss int32
+}
+```
+
+NetworkStatus is the network status of a player. A value the host could not measure is -1.
 
 ## `SelKind` {#SelKind}
 
@@ -1489,6 +1734,11 @@ PlayerPos is where a player is; Found is false when nobody matched.
 | <span id="PPropHasDiedBefore"></span>`PPropHasDiedBefore` | `34` | PPropHasDiedBefore is `PIER_PPROP_HAS_DIED_BEFORE`: (G) `Player::hasDiedBefore` |
 | <span id="PPropDimension"></span>`PPropDimension` | `35` | PPropDimension is `PIER_PPROP_DIMENSION`: (G) `Actor::getDimensionId` |
 | <span id="PPropIsInitialized"></span>`PPropIsInitialized` | `36` | PPropIsInitialized is `PIER_PPROP_IS_INITIALIZED`: (G) `Player::isPlayerInitialized`; 1 for a simulated player |
+| <span id="PPropIsSleeping"></span>`PPropIsSleeping` | `37` | PPropIsSleeping is `PIER_PPROP_IS_SLEEPING`: (G) `Player::isSleeping` |
+| <span id="PPropIsSimulated"></span>`PPropIsSimulated` | `38` | PPropIsSimulated is `PIER_PPROP_IS_SIMULATED`: (G) `Actor::isSimulatedPlayer` |
+| <span id="PPropItemUseDuration"></span>`PPropItemUseDuration` | `39` | PPropItemUseDuration is `PIER_PPROP_ITEM_USE_DURATION`: (G) `Player::getItemUseDuration`, in ticks |
+| <span id="PPropXpEarnedAtLevel"></span>`PPropXpEarnedAtLevel` | `40` | PPropXpEarnedAtLevel is `PIER_PPROP_XP_EARNED_AT_LEVEL`: (G) `Player::getXpEarnedAtCurrentLevel` |
+| <span id="PPropCanFly"></span>`PPropCanFly` | `41` | PPropCanFly is `PIER_PPROP_CAN_FLY`: (G) `Actor::canFly` |
 
 ## `PStr*` {#PStr}
 
@@ -1505,6 +1755,8 @@ PlayerPos is where a player is; Found is false when nobody matched.
 | <span id="PStrNetworkStatus"></span>`PStrNetworkStatus` | `8` | PStrNetworkStatus is `PIER_PSTR_NETWORK_STATUS`: SNBT {ping,`avg_ping`,`packet_loss`,`max_ping`} |
 | <span id="PStrPlatformOnlineId"></span>`PStrPlatformOnlineId` | `9` | PStrPlatformOnlineId is `PIER_PSTR_PLATFORM_ONLINE_ID`: `Player::getPlatformOnlineId` |
 | <span id="PStrRespawnPos"></span>`PStrRespawnPos` | `10` | PStrRespawnPos is `PIER_PSTR_RESPAWN_POS`: SNBT {x,y,z,dim}: where this player would respawn. Never empty; a player with no bed reports the world spawn, and the two are not distinguishable. |
+| <span id="PStrSelectedItem"></span>`PStrSelectedItem` | `11` | PStrSelectedItem is `PIER_PSTR_SELECTED_ITEM`: `Player::getSelectedItem` as item SNBT |
+| <span id="PStrDeviceModel"></span>`PStrDeviceModel` | `12` | PStrDeviceModel is `PIER_PSTR_DEVICE_MODEL`: `ConnectionRequest::getDeviceModel`; fails for a player with no connection request |
 
 ## `PAct*` {#PAct}
 
@@ -1537,3 +1789,6 @@ PlayerPos is where a player is; Found is false when nobody matched.
 | <span id="PActSidebarSet"></span>`PActSidebarSet` | `24` | PActSidebarSet is `PIER_PACT_SIDEBAR_SET`: sarg="obj\\ntitle\\nline…" per-player sidebar |
 | <span id="PActSidebarClear"></span>`PActSidebarClear` | `25` | PActSidebarClear is `PIER_PACT_SIDEBAR_CLEAR`: sarg=objective RemoveObjectivePacket |
 | <span id="PActSetPermissionLevel"></span>`PActSetPermissionLevel` | `26` | PActSetPermissionLevel is `PIER_PACT_SET_PERMISSION_LEVEL`: a=PlayerPermissionLevel (0 Visitor, 1 Member, 2 Operator, 3 Custom). `LayeredAbilities::setPlayerPermissions` plus UpdateAbilitiesPacket. The read side is `PIER_PPROP_PERMISSION_LEVEL`. Refused until the player has finished joining, like `PIER_PACT_SET_ABILITY`. |
+| <span id="PActStopSleeping"></span>`PActStopSleeping` | `27` | PActStopSleeping is `PIER_PACT_STOP_SLEEPING`: a: non-zero wakes forcefully. `Player::stopSleepInBed`; false when not asleep |
+| <span id="PActCauseExhaustion"></span>`PActCauseExhaustion` | `28` | PActCauseExhaustion is `PIER_PACT_CAUSE_EXHAUSTION`: a: amount, positive. `Player::causeFoodExhaustion` |
+| <span id="PActEat"></span>`PActEat` | `29` | PActEat is `PIER_PACT_EAT`: sarg: item SNBT. `Player::eat`, the food value of that item |

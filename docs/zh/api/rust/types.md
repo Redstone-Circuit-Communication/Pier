@@ -496,3 +496,18 @@ pub struct LocalTime {
 本地时间，取自 `PIER_SYS_LOCAL_TIME`。
 
 - 实现的 trait：`Debug`、`Clone`、`Copy`、`PartialEq`、`Eq`、`Default`
+
+## `AttributeValue` {#AttributeValue}
+
+```rust
+pub struct AttributeValue {
+    pub current: f64,
+    pub min: f64,
+    pub max: f64,
+    pub default: f64,
+}
+```
+
+实体的一个属性，即 `Entity::attribute_info` 读到的内容。
+
+- 实现的 trait：`Debug`、`Clone`、`Copy`、`PartialEq`

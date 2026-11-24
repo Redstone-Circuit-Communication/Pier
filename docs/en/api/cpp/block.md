@@ -26,9 +26,9 @@ bool (*block_get_num)(int32_t dim, int32_t x, int32_t y, int32_t z, int32_t prop
 - Section of abi.h: §D blocks & block entities
 - Position in the table: slot 39, counting from 0
 - Callers in each binding:
-    - Rust: [`Block::num`](../rust/block.md#Block.num), [`Block::is_air`](../rust/block.md#Block.is_air), [`Block::is_solid`](../rust/block.md#Block.is_solid), [`Block::is_container`](../rust/block.md#Block.is_container), [`Block::is_door`](../rust/block.md#Block.is_door), [`Block::is_fence`](../rust/block.md#Block.is_fence) and more, 30 in all
-    - Go: [`BlockAt.IsAir`](../go/block.md#BlockAt.IsAir), [`BlockAt.Data`](../go/block.md#BlockAt.Data), [`BlockAt.BlockItemId`](../go/block.md#BlockAt.BlockItemId), [`BlockAt.IsCraftingBlock`](../go/block.md#BlockAt.IsCraftingBlock), [`BlockAt.IsInteractiveBlock`](../go/block.md#BlockAt.IsInteractiveBlock), [`BlockAt.HasBlockEntity`](../go/block.md#BlockAt.HasBlockEntity) and more, 30 in all
-    - Zig: [`BlockAt.isAir`](../zig/block.md#BlockAt.isAir), [`BlockAt.data`](../zig/block.md#BlockAt.data), [`BlockAt.blockItemId`](../zig/block.md#BlockAt.blockItemId), [`BlockAt.isCraftingBlock`](../zig/block.md#BlockAt.isCraftingBlock), [`BlockAt.isInteractiveBlock`](../zig/block.md#BlockAt.isInteractiveBlock), [`BlockAt.hasBlockEntity`](../zig/block.md#BlockAt.hasBlockEntity) and more, 29 in all
+    - Rust: [`Block::num`](../rust/block.md#Block.num), [`Block::is_air`](../rust/block.md#Block.is_air), [`Block::is_solid`](../rust/block.md#Block.is_solid), [`Block::is_container`](../rust/block.md#Block.is_container), [`Block::is_door`](../rust/block.md#Block.is_door), [`Block::is_fence`](../rust/block.md#Block.is_fence) and more, 35 in all
+    - Go: [`BlockAt.IsAir`](../go/block.md#BlockAt.IsAir), [`BlockAt.Data`](../go/block.md#BlockAt.Data), [`BlockAt.BlockItemId`](../go/block.md#BlockAt.BlockItemId), [`BlockAt.IsCraftingBlock`](../go/block.md#BlockAt.IsCraftingBlock), [`BlockAt.IsInteractiveBlock`](../go/block.md#BlockAt.IsInteractiveBlock), [`BlockAt.HasBlockEntity`](../go/block.md#BlockAt.HasBlockEntity) and more, 35 in all
+    - Zig: [`BlockAt.isAir`](../zig/block.md#BlockAt.isAir), [`BlockAt.data`](../zig/block.md#BlockAt.data), [`BlockAt.blockItemId`](../zig/block.md#BlockAt.blockItemId), [`BlockAt.isCraftingBlock`](../zig/block.md#BlockAt.isCraftingBlock), [`BlockAt.isInteractiveBlock`](../zig/block.md#BlockAt.isInteractiveBlock), [`BlockAt.hasBlockEntity`](../zig/block.md#BlockAt.hasBlockEntity) and more, 34 in all
 
 ### `block_get_str` {#block_get_str}
 
@@ -108,6 +108,7 @@ bool (*block_entity_snbt)(int32_t dim, int32_t x, int32_t y, int32_t z, void* ct
 - Callers in each binding:
     - Rust: [`Block::block_entity`](../rust/block.md#Block.block_entity)
     - Go: [`BlockAt.EntitySNBT`](../go/block.md#BlockAt.EntitySNBT), [`Raw.BlockEntitySnbt`](../go/raw.md#Raw.BlockEntitySnbt)
+    - Zig: [`BlockAt.blockEntity`](../zig/block.md#BlockAt.blockEntity)
 
 ### `block_get_state` {#block_get_state}
 
@@ -131,6 +132,7 @@ bool (*block_get_state)(int32_t dim, int32_t x, int32_t y, int32_t z, PierStr st
 - Callers in each binding:
     - Rust: [`Block::state`](../rust/block.md#Block.state)
     - Go: [`BlockAt.State`](../go/block.md#BlockAt.State), [`Raw.BlockGetState`](../go/raw.md#Raw.BlockGetState)
+    - Zig: [`BlockAt.getStateValue`](../zig/block.md#BlockAt.getStateValue)
 
 ### `block_set_state` {#block_set_state}
 
@@ -152,6 +154,7 @@ bool (*block_set_state)(int32_t dim, int32_t x, int32_t y, int32_t z, PierStr st
 - Callers in each binding:
     - Rust: [`Block::set_state`](../rust/block.md#Block.set_state)
     - Go: [`BlockAt.SetState`](../go/block.md#BlockAt.SetState), [`Raw.BlockSetState`](../go/raw.md#Raw.BlockSetState)
+    - Zig: [`BlockAt.setStateValue`](../zig/block.md#BlockAt.setStateValue)
 
 ### `block_get_collision_shape` {#block_get_collision_shape}
 
@@ -172,7 +175,8 @@ bool (*block_get_collision_shape)(int32_t dim, int32_t x, int32_t y, int32_t z, 
 - Position in the table: slot 124, counting from 0
 - Callers in each binding:
     - Rust: [`Block::collision_shape`](../rust/block.md#Block.collision_shape)
-    - Go: [`Raw.BlockGetCollisionShape`](../go/raw.md#Raw.BlockGetCollisionShape)
+    - Go: [`BlockAt.CollisionBox`](../go/block.md#BlockAt.CollisionBox), [`Raw.BlockGetCollisionShape`](../go/raw.md#Raw.BlockGetCollisionShape)
+    - Zig: [`BlockAt.collisionBox`](../zig/block.md#BlockAt.collisionBox)
 
 ## `PierBlockNumProp` {#PierBlockNumProp}
 
@@ -209,6 +213,11 @@ bool (*block_get_collision_shape)(int32_t dim, int32_t x, int32_t y, int32_t z, 
 | <span id="PIER_BPROP_BOUNCINESS"></span>`PIER_BPROP_BOUNCINESS` | `26` | `Block::getBounciness` |
 | <span id="PIER_BPROP_IS_SOLID"></span>`PIER_BPROP_IS_SOLID` | `27` | `Block::isSolid` |
 | <span id="PIER_BPROP_REQUIRES_TOOL"></span>`PIER_BPROP_REQUIRES_TOOL` | `28` | `Block::requiresCorrectToolForDrops` |
+| <span id="PIER_BPROP_IS_THIN_FENCE"></span>`PIER_BPROP_IS_THIN_FENCE` | `29` | `BlockType::isThinFenceBlock` |
+| <span id="PIER_BPROP_IS_LEVER"></span>`PIER_BPROP_IS_LEVER` | `30` | `BlockType::isLeverBlock` |
+| <span id="PIER_BPROP_IS_STEM"></span>`PIER_BPROP_IS_STEM` | `31` | `BlockType::isStemBlock` |
+| <span id="PIER_BPROP_CAN_INSTATICK"></span>`PIER_BPROP_CAN_INSTATICK` | `32` | `BlockType::canInstatick` |
+| <span id="PIER_BPROP_MAP_COLOR"></span>`PIER_BPROP_MAP_COLOR` | `33` | `BlockType::getMapColor` as 0xRRGGBB |
 
 ## `PierBlockStrProp` {#PierBlockStrProp}
 

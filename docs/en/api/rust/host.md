@@ -15,7 +15,7 @@ pub struct Host(/* private */);
 
 The host facade. Zero sized and freely `Copy`.
 
-- Implements: `Clone`, `Copy`
+- Implements: `Clone`, `Copy`, `Debug`
 
 ### `Host::get` {#Host.get}
 
@@ -236,6 +236,68 @@ does not know a build: a Pier release should not be on the critical path for
 supporting a BDS that shipped yesterday.
 
 - Return type: `Result<String>`
+- Slots: [`server_info_str`](../cpp/server.md#server_info_str)
+
+### `Host::loader_version` {#Host.loader_version}
+
+```rust
+pub fn loader_version(&self) -> Result<String>
+```
+
+The version of the LeviLamina this server runs.
+
+- Return type: `Result<String>`
+- Slots: [`server_info_str`](../cpp/server.md#server_info_str)
+
+### `Host::process_id` {#Host.process_id}
+
+```rust
+pub fn process_id(&self) -> Result<u32>
+```
+
+The id of the server process.
+
+- Return type: `Result<u32>`
+- Slots: [`sys_info_str`](../cpp/server.md#sys_info_str)
+
+### `Host::level_name` {#Host.level_name}
+
+```rust
+pub fn level_name(&self) -> Result<String>
+```
+
+The name of the loaded world.
+
+- Return type: `Result<String>`
+- Slots: [`server_info_str`](../cpp/server.md#server_info_str)
+
+### `Host::is_hardcore` {#Host.is_hardcore}
+
+```rust
+pub fn is_hardcore(&self) -> Result<bool>
+```
+
+- Return type: `Result<bool>`
+- Slots: [`server_info_str`](../cpp/server.md#server_info_str)
+
+### `Host::world_start_count` {#Host.world_start_count}
+
+```rust
+pub fn world_start_count(&self) -> Result<u32>
+```
+
+How many times the world has been opened.
+
+- Return type: `Result<u32>`
+- Slots: [`server_info_str`](../cpp/server.md#server_info_str)
+
+### `Host::education_features_enabled` {#Host.education_features_enabled}
+
+```rust
+pub fn education_features_enabled(&self) -> Result<bool>
+```
+
+- Return type: `Result<bool>`
 - Slots: [`server_info_str`](../cpp/server.md#server_info_str)
 
 ### `Host::bds_version` {#Host.bds_version}

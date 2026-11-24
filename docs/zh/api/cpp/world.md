@@ -38,6 +38,8 @@
 
     **追加：批量读写方块（`Appended: bulk block reads and writes`）**
 
+    **世界状态读取。只能在服务端线程调用。（`World state readers. Server thread only.`）**
+
 ## 槽位 {#slots}
 
 ### `spawn_particle` {#spawn_particle}
@@ -64,6 +66,7 @@ bool (*spawn_particle)(int32_t dimension, PierStr effect_name, double x, double 
 - 各绑定里的调用方：
     - Rust：[`World::spawn_particle`](../rust/world.md#World.spawn_particle)
     - Go：[`SpawnParticle`](../go/world.md#SpawnParticle)、[`Raw.SpawnParticle`](../go/raw.md#Raw.SpawnParticle)
+    - Zig：[`world.spawnParticle`](../zig/world.md#world.spawnParticle)
 
 ### `scan_region` {#scan_region}
 
@@ -102,6 +105,7 @@ bool (*scan_region)(
 - 各绑定里的调用方：
     - Rust：[`World::scan`](../rust/world.md#World.scan)、[`World::scan_with`](../rust/world.md#World.scan_with)
     - Go：[`ScanRegion`](../go/world.md#ScanRegion)
+    - Zig：[`world.scan`](../zig/world.md#world.scan)
 
 ### `get_block` {#get_block}
 
@@ -125,6 +129,7 @@ bool (*get_block)(int32_t dim, int32_t x, int32_t y, int32_t z, void* ctx, PierB
 - 各绑定里的调用方：
     - Rust：[`Block::read`](../rust/block.md#Block.read)
     - Go：[`GetBlock`](../go/world.md#GetBlock)、[`BlockAt.Info`](../go/block.md#BlockAt.Info)
+    - Zig：[`world.getBlock`](../zig/world.md#world.getBlock)
 
 ### `set_block` {#set_block}
 
@@ -147,6 +152,7 @@ bool (*set_block)(int32_t dim, int32_t x, int32_t y, int32_t z, PierStr block_sp
 - 各绑定里的调用方：
     - Rust：[`Block::set`](../rust/block.md#Block.set)
     - Go：[`BlockAt.Set`](../go/block.md#BlockAt.Set)、[`Raw.SetBlock`](../go/raw.md#Raw.SetBlock)
+    - Zig：[`world.setBlock`](../zig/world.md#world.setBlock)
 
 ### `get_time` {#get_time}
 
@@ -165,6 +171,7 @@ bool (*get_time)(int64_t* out);
 - 各绑定里的调用方：
     - Rust：[`World::time`](../rust/world.md#World.time)
     - Go：[`Time`](../go/world.md#Time)、[`Raw.GetTime`](../go/raw.md#Raw.GetTime)
+    - Zig：[`world.time`](../zig/world.md#world.time)
 
 ### `set_time` {#set_time}
 
@@ -183,6 +190,7 @@ bool (*set_time)(int64_t t);
 - 各绑定里的调用方：
     - Rust：[`World::set_time`](../rust/world.md#World.set_time)
     - Go：[`SetTime`](../go/world.md#SetTime)、[`Raw.SetTime`](../go/raw.md#Raw.SetTime)
+    - Zig：[`world.setTime`](../zig/world.md#world.setTime)
 
 ### `set_weather` {#set_weather}
 
@@ -201,6 +209,7 @@ bool (*set_weather)(int32_t weather);
 - 各绑定里的调用方：
     - Rust：[`World::set_weather`](../rust/world.md#World.set_weather)
     - Go：[`SetWeather`](../go/world.md#SetWeather)、[`Raw.SetWeather`](../go/raw.md#Raw.SetWeather)
+    - Zig：[`world.setWeather`](../zig/world.md#world.setWeather)
 
 ### `explode` {#explode}
 
@@ -239,6 +248,7 @@ bool (*explode)(
 - 各绑定里的调用方：
     - Rust：[`World::explode`](../rust/world.md#World.explode)
     - Go：[`Explode`](../go/world.md#Explode)、[`Raw.Explode`](../go/raw.md#Raw.Explode)
+    - Zig：[`world.explode`](../zig/world.md#world.explode)
 
 ### `get_difficulty` {#get_difficulty}
 
@@ -261,6 +271,7 @@ bool (*get_difficulty)(int32_t* out);
 - 各绑定里的调用方：
     - Rust：[`World::difficulty`](../rust/world.md#World.difficulty)
     - Go：[`Difficulty`](../go/world.md#Difficulty)、[`Raw.GetDifficulty`](../go/raw.md#Raw.GetDifficulty)
+    - Zig：[`world.difficulty`](../zig/world.md#world.difficulty)
 
 ### `set_difficulty` {#set_difficulty}
 
@@ -283,6 +294,7 @@ bool (*set_difficulty)(int32_t d);
 - 各绑定里的调用方：
     - Rust：[`World::set_difficulty`](../rust/world.md#World.set_difficulty)
     - Go：[`SetDifficulty`](../go/world.md#SetDifficulty)、[`Raw.SetDifficulty`](../go/raw.md#Raw.SetDifficulty)
+    - Zig：[`world.setDifficulty`](../zig/world.md#world.setDifficulty)
 
 ### `get_seed` {#get_seed}
 
@@ -305,6 +317,7 @@ bool (*get_seed)(int64_t* out);
 - 各绑定里的调用方：
     - Rust：[`World::seed`](../rust/world.md#World.seed)
     - Go：[`Seed`](../go/world.md#Seed)、[`Raw.GetSeed`](../go/raw.md#Raw.GetSeed)
+    - Zig：[`world.seed`](../zig/world.md#world.seed)
 
 ### `game_rule_get` {#game_rule_get}
 
@@ -329,6 +342,7 @@ bool (*game_rule_get)(PierStr name, void* ctx, PierStrSink sink);
 - 各绑定里的调用方：
     - Rust：[`World::game_rule`](../rust/world.md#World.game_rule)
     - Go：[`GameRule`](../go/world.md#GameRule)、[`Raw.GameRuleGet`](../go/raw.md#Raw.GameRuleGet)
+    - Zig：[`world.gameRule`](../zig/world.md#world.gameRule)
 
 ### `game_rule_set` {#game_rule_set}
 
@@ -352,6 +366,7 @@ bool (*game_rule_set)(PierStr name, PierStr value);
 - 各绑定里的调用方：
     - Rust：[`World::set_game_rule`](../rust/world.md#World.set_game_rule)
     - Go：[`SetGameRule`](../go/world.md#SetGameRule)、[`Raw.GameRuleSet`](../go/raw.md#Raw.GameRuleSet)
+    - Zig：[`world.setGameRule`](../zig/world.md#world.setGameRule)
 
 ### `spawn_particle_for` {#spawn_particle_for}
 
@@ -377,7 +392,8 @@ bool (*spawn_particle_for)(
 - 表内序号：第 78 个槽位（从 0 数起）
 - 各绑定里的调用方：
     - Rust：[`Player::spawn_particle`](../rust/player.md#Player.spawn_particle)
-    - Go：[`Raw.SpawnParticleFor`](../go/raw.md#Raw.SpawnParticleFor)
+    - Go：[`Player.ShowParticle`](../go/player.md#Player.ShowParticle)、[`Raw.SpawnParticleFor`](../go/raw.md#Raw.SpawnParticleFor)
+    - Zig：[`world.spawnParticleFor`](../zig/world.md#world.spawnParticleFor)
 
 ### `villages` {#villages}
 
@@ -400,7 +416,8 @@ void (*villages)(int32_t dimension, void* ctx, PierStrSink snbt_sink);
 - 表内序号：第 89 个槽位（从 0 数起）
 - 各绑定里的调用方：
     - Rust：[`World::try_villages`](../rust/world.md#World.try_villages)、[`World::villages`](../rust/world.md#World.villages)
-    - Go：[`Raw.Villages`](../go/raw.md#Raw.Villages)
+    - Go：[`Villages`](../go/world.md#Villages)、[`Raw.Villages`](../go/raw.md#Raw.Villages)
+    - Zig：[`world.villages`](../zig/world.md#world.villages)
 
 ### `structures_near` {#structures_near}
 
@@ -429,7 +446,8 @@ void (*structures_near)(
 - 表内序号：第 90 个槽位（从 0 数起）
 - 各绑定里的调用方：
     - Rust：[`World::try_structures_near`](../rust/world.md#World.try_structures_near)、[`World::structures_near`](../rust/world.md#World.structures_near)
-    - Go：[`Raw.StructuresNear`](../go/raw.md#Raw.StructuresNear)
+    - Go：[`StructuresNear`](../go/world.md#StructuresNear)、[`Raw.StructuresNear`](../go/raw.md#Raw.StructuresNear)
+    - Zig：[`world.structuresNear`](../zig/world.md#world.structuresNear)
 
 ### `level_get_biome` {#level_get_biome}
 
@@ -451,6 +469,7 @@ bool (*level_get_biome)(int32_t dim, int32_t x, int32_t y, int32_t z, void* ctx,
 - 各绑定里的调用方：
     - Rust：[`World::biome`](../rust/world.md#World.biome)
     - Go：[`BlockAt.Biome`](../go/block.md#BlockAt.Biome)、[`Raw.LevelGetBiome`](../go/raw.md#Raw.LevelGetBiome)
+    - Zig：[`world.biome`](../zig/world.md#world.biome)
 
 ### `level_get_default_spawn` {#level_get_default_spawn}
 
@@ -469,6 +488,7 @@ bool (*level_get_default_spawn)(int32_t* x, int32_t* y, int32_t* z);
 - 各绑定里的调用方：
     - Rust：[`World::default_spawn`](../rust/world.md#World.default_spawn)
     - Go：[`DefaultSpawn`](../go/world.md#DefaultSpawn)、[`Raw.LevelGetDefaultSpawn`](../go/raw.md#Raw.LevelGetDefaultSpawn)
+    - Zig：[`world.defaultSpawn`](../zig/world.md#world.defaultSpawn)
 
 ### `level_set_default_spawn` {#level_set_default_spawn}
 
@@ -487,6 +507,7 @@ bool (*level_set_default_spawn)(int32_t x, int32_t y, int32_t z);
 - 各绑定里的调用方：
     - Rust：[`World::set_default_spawn`](../rust/world.md#World.set_default_spawn)
     - Go：[`SetDefaultSpawn`](../go/world.md#SetDefaultSpawn)、[`Raw.LevelSetDefaultSpawn`](../go/raw.md#Raw.LevelSetDefaultSpawn)
+    - Zig：[`world.setDefaultSpawn`](../zig/world.md#world.setDefaultSpawn)
 
 ### `level_save` {#level_save}
 
@@ -501,6 +522,7 @@ bool (*level_save)(void);
 - 各绑定里的调用方：
     - Rust：[`World::save`](../rust/world.md#World.save)
     - Go：[`SaveLevel`](../go/world.md#SaveLevel)、[`Raw.LevelSave`](../go/raw.md#Raw.LevelSave)
+    - Zig：[`world.save`](../zig/world.md#world.save)
 
 ### `level_get_sleep_status` {#level_get_sleep_status}
 
@@ -519,7 +541,8 @@ SNBT `{sleeping, total_players, active_sleeping}`
 - 表内序号：第 133 个槽位（从 0 数起）
 - 各绑定里的调用方：
     - Rust：[`World::sleep_status`](../rust/world.md#World.sleep_status)
-    - Go：[`Raw.LevelGetSleepStatus`](../go/raw.md#Raw.LevelGetSleepStatus)
+    - Go：[`LevelSleepStatus`](../go/world.md#LevelSleepStatus)、[`Raw.LevelGetSleepStatus`](../go/raw.md#Raw.LevelGetSleepStatus)
+    - Zig：[`world.sleepStatus`](../zig/world.md#world.sleepStatus)
 
 ### `level_update_weather` {#level_update_weather}
 
@@ -538,7 +561,8 @@ bool (*level_update_weather)(float rain_level, int32_t rain_time, float lightnin
 - 表内序号：第 134 个槽位（从 0 数起）
 - 各绑定里的调用方：
     - Rust：[`World::update_weather`](../rust/world.md#World.update_weather)
-    - Go：[`Raw.LevelUpdateWeather`](../go/raw.md#Raw.LevelUpdateWeather)
+    - Go：[`UpdateWeather`](../go/world.md#UpdateWeather)、[`Raw.LevelUpdateWeather`](../go/raw.md#Raw.LevelUpdateWeather)
+    - Zig：[`world.updateWeather`](../zig/world.md#world.updateWeather)
 
 ### `level_find_path` {#level_find_path}
 
@@ -561,7 +585,8 @@ SNBT `{nodes:[{x,y,z},…], reached:1b/0b}`。当前所有宿主上这个槽位�
 - 表内序号：第 135 个槽位（从 0 数起）
 - 各绑定里的调用方：
     - Rust：[`World::find_path`](../rust/world.md#World.find_path)
-    - Go：[`Raw.LevelFindPath`](../go/raw.md#Raw.LevelFindPath)
+    - Go：[`FindPath`](../go/world.md#FindPath)、[`Raw.LevelFindPath`](../go/raw.md#Raw.LevelFindPath)
+    - Zig：[`world.findPath`](../zig/world.md#world.findPath)
 
 ### `level_delete_chunk_keys` {#level_delete_chunk_keys}
 
@@ -593,7 +618,8 @@ int32_t (*level_delete_chunk_keys)(int32_t dim, int32_t chunk_x, int32_t chunk_z
 - 表内序号：第 178 个槽位（从 0 数起）
 - 各绑定里的调用方：
     - Rust：[`World::delete_chunk_keys`](../rust/world.md#World.delete_chunk_keys)
-    - Go：[`Raw.LevelDeleteChunkKeys`](../go/raw.md#Raw.LevelDeleteChunkKeys)
+    - Go：[`DeleteChunkKeys`](../go/world.md#DeleteChunkKeys)、[`Raw.LevelDeleteChunkKeys`](../go/raw.md#Raw.LevelDeleteChunkKeys)
+    - Zig：[`world.deleteChunkKeys`](../zig/world.md#world.deleteChunkKeys)
 
 ### `level_chunks_loaded` {#level_chunks_loaded}
 
@@ -621,7 +647,8 @@ int32_t (*level_chunks_loaded)(int32_t dim, int32_t min_x, int32_t min_z, int32_
 - 表内序号：第 179 个槽位（从 0 数起）
 - 各绑定里的调用方：
     - Rust：[`World::chunks_loaded`](../rust/world.md#World.chunks_loaded)
-    - Go：[`Raw.LevelChunksLoaded`](../go/raw.md#Raw.LevelChunksLoaded)
+    - Go：[`ChunksLoaded`](../go/world.md#ChunksLoaded)、[`Raw.LevelChunksLoaded`](../go/raw.md#Raw.LevelChunksLoaded)
+    - Zig：[`world.chunksLoaded`](../zig/world.md#world.chunksLoaded)
 
 ### `level_chunk_keys` {#level_chunk_keys}
 
@@ -649,7 +676,8 @@ int32_t (*level_chunk_keys)(int32_t dim, int32_t chunk_x, int32_t chunk_z, void*
 - 表内序号：第 181 个槽位（从 0 数起）
 - 各绑定里的调用方：
     - Rust：[`World::chunk_keys`](../rust/world.md#World.chunk_keys)
-    - Go：[`Raw.LevelChunkKeys`](../go/raw.md#Raw.LevelChunkKeys)
+    - Go：[`ChunkKeys`](../go/world.md#ChunkKeys)、[`Raw.LevelChunkKeys`](../go/raw.md#Raw.LevelChunkKeys)
+    - Zig：[`world.chunkKeys`](../zig/world.md#world.chunkKeys)
 
 ### `level_delete_key` {#level_delete_key}
 
@@ -669,7 +697,8 @@ bool (*level_delete_key)(PierStr key);
 - 表内序号：第 182 个槽位（从 0 数起）
 - 各绑定里的调用方：
     - Rust：[`World::delete_key`](../rust/world.md#World.delete_key)
-    - Go：[`Raw.LevelDeleteKey`](../go/raw.md#Raw.LevelDeleteKey)
+    - Go：[`DeleteSaveKey`](../go/world.md#DeleteSaveKey)、[`Raw.LevelDeleteKey`](../go/raw.md#Raw.LevelDeleteKey)
+    - Zig：[`world.deleteKey`](../zig/world.md#world.deleteKey)
 
 ### `level_set_biome` {#level_set_biome}
 
@@ -700,6 +729,7 @@ int32_t (*level_set_biome)(int32_t dim,
 - 各绑定里的调用方：
     - Rust：[`World::set_biome`](../rust/world.md#World.set_biome)
     - Go：[`SetBiome`](../go/world.md#SetBiome)、[`Raw.LevelSetBiome`](../go/raw.md#Raw.LevelSetBiome)
+    - Zig：[`world.setBiome`](../zig/world.md#world.setBiome)
 
 ### `get_extra_block` {#get_extra_block}
 
@@ -723,7 +753,8 @@ bool (*get_extra_block)(int32_t dim, int32_t x, int32_t y, int32_t z,
 - 表内序号：第 184 个槽位（从 0 数起）
 - 各绑定里的调用方：
     - Rust：[`Block::extra`](../rust/block.md#Block.extra)
-    - Go：[`Raw.GetExtraBlock`](../go/raw.md#Raw.GetExtraBlock)
+    - Go：[`BlockAt.ExtraBlock`](../go/block.md#BlockAt.ExtraBlock)、[`Raw.GetExtraBlock`](../go/raw.md#Raw.GetExtraBlock)
+    - Zig：[`world.getExtraBlock`](../zig/world.md#world.getExtraBlock)
 
 ### `set_extra_block` {#set_extra_block}
 
@@ -747,7 +778,8 @@ bool (*set_extra_block)(int32_t dim, int32_t x, int32_t y, int32_t z,
 - 表内序号：第 185 个槽位（从 0 数起）
 - 各绑定里的调用方：
     - Rust：[`Block::set_extra`](../rust/block.md#Block.set_extra)
-    - Go：[`Raw.SetExtraBlock`](../go/raw.md#Raw.SetExtraBlock)
+    - Go：[`BlockAt.SetExtraBlock`](../go/block.md#BlockAt.SetExtraBlock)、[`Raw.SetExtraBlock`](../go/raw.md#Raw.SetExtraBlock)
+    - Zig：[`world.setExtraBlock`](../zig/world.md#world.setExtraBlock)
 
 ### `scan_region_indexed` {#scan_region_indexed}
 
@@ -777,3 +809,39 @@ bool (*scan_region_indexed)(int32_t dimension, int32_t x1, int32_t y1, int32_t z
 - 各绑定里的调用方：
     - Rust：[`World::scan_indexed`](../rust/world.md#World.scan_indexed)
     - Go：[`ScanRegionIndexed`](../go/world.md#ScanRegionIndexed)
+    - Zig：[`world.scanIndexed`](../zig/world.md#world.scanIndexed)
+
+### `world_get_num` {#world_get_num}
+
+```c
+bool (*world_get_num)(int32_t dim, int32_t prop, double* out);
+```
+
+把维度 `dim` 的一个 PIER_WPROP_* 值读入 *out。键未知、`out` 为空、维度不存在、或者 level 尚未就绪时返回 false，*out 保持不变。尚未构建的自定义维度会由这个调用构建，就像从它读取一个方块时会构建它一样。
+
+- 调用形式：`api->world_get_num(dim, prop, out)`
+- 参数：
+    - dim : `int32_t`
+    - prop : `int32_t`
+    - out : `double*`
+- 返回值类型：`bool`
+- 所在分节：世界状态读取。只能在服务端线程调用。（`World state readers. Server thread only.`）
+- 表内序号：第 220 个槽位（从 0 数起）
+- 各绑定里的调用方：
+    - Rust：[`World::weather_value`](../rust/world.md#World.weather_value)、[`World::rain_level`](../rust/world.md#World.rain_level)、[`World::target_rain_level`](../rust/world.md#World.target_rain_level)、[`World::lightning_level`](../rust/world.md#World.lightning_level)、[`World::target_lightning_level`](../rust/world.md#World.target_lightning_level)、[`World::fog_level`](../rust/world.md#World.fog_level) 等，共 7 个
+    - Go：[`Raw.WorldGetNum`](../go/raw.md#Raw.WorldGetNum)
+    - Zig：[`world.weatherValue`](../zig/world.md#world.weatherValue)、[`world.rainLevel`](../zig/world.md#world.rainLevel)、[`world.targetRainLevel`](../zig/world.md#world.targetRainLevel)、[`world.lightningLevel`](../zig/world.md#world.lightningLevel)、[`world.targetLightningLevel`](../zig/world.md#world.targetLightningLevel)、[`world.fogLevel`](../zig/world.md#world.fogLevel) 等，共 7 个
+
+## `PierWorldNumProp` {#PierWorldNumProp}
+
+world_get_num 的键，读自一个维度的 Weather 对象。只能追加。
+
+| 名称 | 值 | 说明 |
+|---|---|---|
+| <span id="PIER_WPROP_RAIN_LEVEL"></span>`PIER_WPROP_RAIN_LEVEL` | `0` | `Weather::mRainLevel`，0 表示无雨，1 表示满雨 |
+| <span id="PIER_WPROP_TARGET_RAIN_LEVEL"></span>`PIER_WPROP_TARGET_RAIN_LEVEL` | `1` | `Weather::mTargetRainLevel`，降雨正在趋向的强度 |
+| <span id="PIER_WPROP_LIGHTNING_LEVEL"></span>`PIER_WPROP_LIGHTNING_LEVEL` | `2` | `Weather::mLightningLevel`，0 表示无雷暴，1 表示雷暴 |
+| <span id="PIER_WPROP_TARGET_LIGHTNING_LEVEL"></span>`PIER_WPROP_TARGET_LIGHTNING_LEVEL` | `3` | `Weather::mTargetLightningLevel` |
+| <span id="PIER_WPROP_FOG_LEVEL"></span>`PIER_WPROP_FOG_LEVEL` | `4` | `Weather::mFogLevel` |
+| <span id="PIER_WPROP_SKY_FLASH_TIME"></span>`PIER_WPROP_SKY_FLASH_TIME` | `5` | `Weather::mSkyFlashTime`，闪电闪光剩余的刻数 |
+| <span id="PIER_WPROP_WEATHER_TICK"></span>`PIER_WPROP_WEATHER_TICK` | `6` | `Weather::mTick` |

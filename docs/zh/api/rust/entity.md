@@ -310,6 +310,113 @@ pub fn set_rotation(&self, pitch: f64, yaw: f64) -> Result<()>
 - 返回值类型：`Result<()>`
 - 对应槽位：[`actor_action`](../cpp/entity.md#actor_action)
 
+### `Entity::tags` {#Entity.tags}
+
+```rust
+pub fn tags(&self) -> Result<Vec<String>>
+```
+
+实体带有的标签，也就是 `/tag` 列出的那些。
+
+- 返回值类型：`Result<Vec<String>>`
+- 对应槽位：[`actor_get_str`](../cpp/entity.md#actor_get_str)
+
+### `Entity::owner_id` {#Entity.owner_id}
+
+```rust
+pub fn owner_id(&self) -> Result<i64>
+```
+
+实体主人的 id，没有主人时为 -1。
+
+- 返回值类型：`Result<i64>`
+- 对应槽位：[`actor_get_str`](../cpp/entity.md#actor_get_str)
+
+### `Entity::set_sitting` {#Entity.set_sitting}
+
+```rust
+pub fn set_sitting(&self, sitting: bool) -> Result<()>
+```
+
+- 参数：
+    - sitting : `bool`
+- 返回值类型：`Result<()>`
+- 对应槽位：[`actor_action`](../cpp/entity.md#actor_action)
+
+### `Entity::start_riding` {#Entity.start_riding}
+
+```rust
+pub fn start_riding(&self, vehicle: &Entity, force: bool) -> Result<()>
+```
+
+让这个实体骑上 `vehicle`；`force` 为真时即使载具没有空位也会骑上。
+
+- 参数：
+    - vehicle : `&Entity`
+    - force : `bool`
+- 返回值类型：`Result<()>`
+- 对应槽位：[`actor_action`](../cpp/entity.md#actor_action)
+
+### `Entity::attribute_info` {#Entity.attribute_info}
+
+```rust
+pub fn attribute_info(&self, name: &str) -> Result<crate::types::AttributeValue>
+```
+
+按名字（例如 `"minecraft:health"` 或 `"minecraft:movement"`）读取一个属性的当前值、最小值、最大值和默认值。
+
+- 参数：
+    - name : `&str`
+- 返回值类型：`Result<crate::types::AttributeValue>`
+- 对应槽位：[`actor_action`](../cpp/entity.md#actor_action)
+
+### `Entity::set_attribute` {#Entity.set_attribute}
+
+```rust
+pub fn set_attribute(&self, name: &str, value: f32) -> Result<()>
+```
+
+- 参数：
+    - name : `&str`
+    - value : `f32`
+- 返回值类型：`Result<()>`
+- 对应槽位：[`actor_action`](../cpp/entity.md#actor_action)
+
+### `Entity::set_attribute_max` {#Entity.set_attribute_max}
+
+```rust
+pub fn set_attribute_max(&self, name: &str, value: f32) -> Result<()>
+```
+
+- 参数：
+    - name : `&str`
+    - value : `f32`
+- 返回值类型：`Result<()>`
+- 对应槽位：[`actor_action`](../cpp/entity.md#actor_action)
+
+### `Entity::set_attribute_default` {#Entity.set_attribute_default}
+
+```rust
+pub fn set_attribute_default(&self, name: &str, value: f32) -> Result<()>
+```
+
+- 参数：
+    - name : `&str`
+    - value : `f32`
+- 返回值类型：`Result<()>`
+- 对应槽位：[`actor_action`](../cpp/entity.md#actor_action)
+
+### `Entity::attribute_names` {#Entity.attribute_names}
+
+```rust
+pub fn attribute_names(&self) -> Result<Vec<String>>
+```
+
+这个实体拥有的属性的名字，限于属性相关调用能叫出名字的那些。
+
+- 返回值类型：`Result<Vec<String>>`
+- 对应槽位：[`actor_action`](../cpp/entity.md#actor_action)
+
 ### `Entity::set_velocity` {#Entity.set_velocity}
 
 ```rust
@@ -887,6 +994,116 @@ pub fn has_passenger(&self) -> Result<bool>
 
 - 返回值类型：`Result<bool>`
 - 对应槽位：[`actor_get_num`](../cpp/entity.md#actor_get_num)
+
+### `Entity::is_sprinting` {#Entity.is_sprinting}
+
+```rust
+pub fn is_sprinting(&self) -> Result<bool>
+```
+
+- 返回值类型：`Result<bool>`
+- 对应槽位：[`actor_get_num`](../cpp/entity.md#actor_get_num)
+
+### `Entity::is_swimming` {#Entity.is_swimming}
+
+```rust
+pub fn is_swimming(&self) -> Result<bool>
+```
+
+- 返回值类型：`Result<bool>`
+- 对应槽位：[`actor_get_num`](../cpp/entity.md#actor_get_num)
+
+### `Entity::is_sleeping` {#Entity.is_sleeping}
+
+```rust
+pub fn is_sleeping(&self) -> Result<bool>
+```
+
+- 返回值类型：`Result<bool>`
+- 对应槽位：[`actor_get_num`](../cpp/entity.md#actor_get_num)
+
+### `Entity::is_sitting` {#Entity.is_sitting}
+
+```rust
+pub fn is_sitting(&self) -> Result<bool>
+```
+
+- 返回值类型：`Result<bool>`
+- 对应槽位：[`actor_get_num`](../cpp/entity.md#actor_get_num)
+
+### `Entity::is_angry` {#Entity.is_angry}
+
+```rust
+pub fn is_angry(&self) -> Result<bool>
+```
+
+- 返回值类型：`Result<bool>`
+- 对应槽位：[`actor_get_num`](../cpp/entity.md#actor_get_num)
+
+### `Entity::strength` {#Entity.strength}
+
+```rust
+pub fn strength(&self) -> Result<i32>
+```
+
+- 返回值类型：`Result<i32>`
+- 对应槽位：[`actor_get_num`](../cpp/entity.md#actor_get_num)
+
+### `Entity::is_player` {#Entity.is_player}
+
+```rust
+pub fn is_player(&self) -> Result<bool>
+```
+
+- 返回值类型：`Result<bool>`
+- 对应槽位：[`actor_get_num`](../cpp/entity.md#actor_get_num)
+
+### `Entity::is_simulated_player` {#Entity.is_simulated_player}
+
+```rust
+pub fn is_simulated_player(&self) -> Result<bool>
+```
+
+- 返回值类型：`Result<bool>`
+- 对应槽位：[`actor_get_num`](../cpp/entity.md#actor_get_num)
+
+### `Entity::entity_type` {#Entity.entity_type}
+
+```rust
+pub fn entity_type(&self) -> Result<i32>
+```
+
+引擎的实体类型编号，它的位可以区分生物、怪物和动物。
+
+- 返回值类型：`Result<i32>`
+- 对应槽位：[`actor_get_num`](../cpp/entity.md#actor_get_num)
+
+### `Entity::can_fly` {#Entity.can_fly}
+
+```rust
+pub fn can_fly(&self) -> Result<bool>
+```
+
+- 返回值类型：`Result<bool>`
+- 对应槽位：[`actor_get_num`](../cpp/entity.md#actor_get_num)
+
+### `Entity::tags_json` {#Entity.tags_json}
+
+```rust
+pub fn tags_json(&self) -> Result<String>
+```
+
+- 返回值类型：`Result<String>`
+- 对应槽位：[`actor_get_str`](../cpp/entity.md#actor_get_str)
+
+### `Entity::owner_id_text` {#Entity.owner_id_text}
+
+```rust
+pub fn owner_id_text(&self) -> Result<String>
+```
+
+- 返回值类型：`Result<String>`
+- 对应槽位：[`actor_get_str`](../cpp/entity.md#actor_get_str)
 
 ### `Entity::vehicle` {#Entity.vehicle}
 

@@ -346,6 +346,61 @@ pub fn requiresTool(self: BlockAt) core.Error!f64
 - Return type: `core.Error!f64`
 - Slots: [`block_get_num`](../cpp/block.md#block_get_num)
 
+### `BlockAt.isThinFence` {#BlockAt.isThinFence}
+
+```zig
+pub fn isThinFence(self: BlockAt) core.Error!bool
+```
+
+`PIER_BPROP_IS_THIN_FENCE`: `BlockType::isThinFenceBlock`
+
+- Return type: `core.Error!bool`
+- Slots: [`block_get_num`](../cpp/block.md#block_get_num)
+
+### `BlockAt.isLever` {#BlockAt.isLever}
+
+```zig
+pub fn isLever(self: BlockAt) core.Error!bool
+```
+
+`PIER_BPROP_IS_LEVER`: `BlockType::isLeverBlock`
+
+- Return type: `core.Error!bool`
+- Slots: [`block_get_num`](../cpp/block.md#block_get_num)
+
+### `BlockAt.isStem` {#BlockAt.isStem}
+
+```zig
+pub fn isStem(self: BlockAt) core.Error!bool
+```
+
+`PIER_BPROP_IS_STEM`: `BlockType::isStemBlock`
+
+- Return type: `core.Error!bool`
+- Slots: [`block_get_num`](../cpp/block.md#block_get_num)
+
+### `BlockAt.canInstatick` {#BlockAt.canInstatick}
+
+```zig
+pub fn canInstatick(self: BlockAt) core.Error!bool
+```
+
+`PIER_BPROP_CAN_INSTATICK`: `BlockType::canInstatick`
+
+- Return type: `core.Error!bool`
+- Slots: [`block_get_num`](../cpp/block.md#block_get_num)
+
+### `BlockAt.mapColor` {#BlockAt.mapColor}
+
+```zig
+pub fn mapColor(self: BlockAt) core.Error!f64
+```
+
+`PIER_BPROP_MAP_COLOR`: `BlockType::getMapColor` as 0xRRGGBB
+
+- Return type: `core.Error!f64`
+- Slots: [`block_get_num`](../cpp/block.md#block_get_num)
+
 ### `BlockAt.typeName` {#BlockAt.typeName}
 
 ```zig
@@ -526,3 +581,57 @@ The output, when the verb has one, is returned; abi.h names each argument.
     - s_arg : `[]const u8`
 - Return type: `core.Error![]u8`
 - Slots: [`block_action`](../cpp/block.md#block_action)
+
+### `BlockAt.getStateValue` {#BlockAt.getStateValue}
+
+```zig
+pub fn getStateValue(self: BlockAt, allocator: std.mem.Allocator, state_name: []const u8) core.Error![]u8
+```
+
+One block state value by its name, owned by the caller.
+
+- Parameters:
+    - allocator : `std.mem.Allocator`
+    - state_name : `[]const u8`
+- Return type: `core.Error![]u8`
+- Slots: [`block_get_state`](../cpp/block.md#block_get_state)
+
+### `BlockAt.setStateValue` {#BlockAt.setStateValue}
+
+```zig
+pub fn setStateValue(self: BlockAt, state_name: []const u8, value: []const u8) core.Error!void
+```
+
+Writes one block state value, given as text.
+
+- Parameters:
+    - state_name : `[]const u8`
+    - value : `[]const u8`
+- Return type: `core.Error!void`
+- Slots: [`block_set_state`](../cpp/block.md#block_set_state)
+
+### `BlockAt.blockEntity` {#BlockAt.blockEntity}
+
+```zig
+pub fn blockEntity(self: BlockAt, allocator: std.mem.Allocator) core.Error![]u8
+```
+
+The block entity as SNBT, owned by the caller. NoAnswer when the cell holds none.
+
+- Parameters:
+    - allocator : `std.mem.Allocator`
+- Return type: `core.Error![]u8`
+- Slots: [`block_entity_snbt`](../cpp/block.md#block_entity_snbt)
+
+### `BlockAt.collisionBox` {#BlockAt.collisionBox}
+
+```zig
+pub fn collisionBox(self: BlockAt, allocator: std.mem.Allocator) core.Error![]u8
+```
+
+The collision shape as the host writes it, owned by the caller.
+
+- Parameters:
+    - allocator : `std.mem.Allocator`
+- Return type: `core.Error![]u8`
+- Slots: [`block_get_collision_shape`](../cpp/block.md#block_get_collision_shape)

@@ -8,7 +8,8 @@ Pier 的设置都在 `plugins/Pier/config.json` 里。第一次启动时，如�
 {
   "language": "auto",
   "mods": {
-    "disabled": []
+    "disabled": [],
+    "adopt": true
   },
   "hooks": {
     "disabled": [],
@@ -19,7 +20,8 @@ Pier 的设置都在 `plugins/Pier/config.json` 里。第一次启动时，如�
     "warn_ms": 2000,
     "hang_ms": 30000,
     "shutdown_ms": 10000
-  }
+  },
+  "native_detour": false
 }
 ```
 
@@ -128,6 +130,39 @@ Pier 先把原因写进控制台和日志，然后以退出码 **70** 结束**�
 !!! tip "某个模组启动时确实很慢？"
 
     调大 `hang_ms`，不要直接关掉看门狗。只在排查问题、需要排除看门狗影响的时候，才把 `enabled` 设成 `false`。
+
+## 收养把依赖写成 `pier` 的模组 `mods.adopt` {#mods-adopt}
+
+```json
+"mods": { "disabled": [], "adopt": true }
+```
+
+早先的文档让模组在 `dependencies` 里写 `{ "name": "pier" }`。LeviLamina 用依赖名和模组 manifest
+里的 name 做精确比较，而宿主的 name 是 `Pier`，所以启动时会以 "dependency pier is missing" 拒绝这样的
+模组，连同所有依赖它的模组。
+
+`adopt` 打开时（默认如此），Pier 会在 LeviLamina 加载完之后找出这些模组，等它们依赖的东西都启用了，
+就按 `/pier load` 的方式加载，并写一条警告，说明是哪个模组、该去改哪个 `manifest.json`。LeviLamina
+自己的那行错误仍然会先出现，因为它在任何模组运行之前就打印了。
+
+- 被收养的模组在 Pier 自己的表里，不在 LeviLamina 的依赖图里，和用 `/pier load` 加载的模组一样。依赖它的
+  native C++ 模组仍然会被拒绝。
+- 只收养 `pier` 这一种写法。其他写错的名字仍然交给 LeviLamina 报错。
+- 设为 `false` 时，这些模组保持被拒绝，LeviLamina 的那行错误就是唯一的提示。
+
+## 原生访问 `native_detour` {#native-detour}
+
+```json
+"native_detour": false
+```
+
+`native_*` 这一组函数会把引擎的原始地址交给模组：按符号、特征码或模块导出找到的函数，引擎的服务对象，
+Player、Actor、Dimension 和 BlockSource 对象，以及原生 detour。模组拿它们做什么，Pier 一概不检查。
+在这里出错会让服务端崩溃或损坏世界，而日志不会指向那个模组。
+
+只有设为 `true` 时它们才会响应。设为 `false`（默认）时，每次调用都会失败，并且 Pier 会在每个模组的日志里
+写一条警告：Pier 未开启此功能，请查看本文件中的 native_detour 是否为 true。只对你愿意把整个进程交给它的
+模组打开。
 
 ## 配置文件读不出来的时候
 

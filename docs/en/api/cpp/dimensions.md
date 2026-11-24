@@ -47,6 +47,7 @@ Whether this host can register custom dimensions. NULL when pier-dimensions was 
 - Callers in each binding:
     - Rust: [`dimensions::is_available`](../rust/dimensions.md#fn.is_available), [`dimensions::is_available`](../rust/dimensions.md#fn.is_available)
     - Go: [`DimensionsAvailable`](../go/dimensions.md#DimensionsAvailable), [`Raw.MdIsAvailable`](../go/raw.md#Raw.MdIsAvailable)
+    - Zig: [`dimensions.isAvailable`](../zig/dimensions.md#dimensions.isAvailable)
 
 ### `md_set_dimension_rule` {#md_set_dimension_rule}
 
@@ -72,6 +73,7 @@ Dimensions with no entry are left completely alone: the hooks fall through to or
 - Callers in each binding:
     - Rust: [`dimensions::set_rule`](../rust/dimensions.md#fn.set_rule)
     - Go: [`SetDimensionRule`](../go/dimensions.md#SetDimensionRule), [`Raw.MdSetDimensionRule`](../go/raw.md#Raw.MdSetDimensionRule)
+    - Zig: [`dimensions.setRule`](../zig/dimensions.md#dimensions.setRule)
 
 ### `md_get_dimension_rule` {#md_get_dimension_rule}
 
@@ -92,6 +94,7 @@ Read back a rule. `outAllow` is only written when the dimension has an explicit 
 - Callers in each binding:
     - Rust: [`dimensions::rule`](../rust/dimensions.md#fn.rule)
     - Go: [`DimensionRule`](../go/dimensions.md#DimensionRule), [`Raw.MdGetDimensionRule`](../go/raw.md#Raw.MdGetDimensionRule)
+    - Zig: [`dimensions.rule`](../zig/dimensions.md#dimensions.rule)
 
 ### `md_clear_dimension_rules` {#md_clear_dimension_rules}
 
@@ -108,7 +111,8 @@ Drop every rule for a dimension (used when a world is deleted).
 - Position in the table: slot 149, counting from 0
 - Callers in each binding:
     - Rust: [`dimensions::clear_rules`](../rust/dimensions.md#fn.clear_rules)
-    - Go: [`Raw.MdClearDimensionRules`](../go/raw.md#Raw.MdClearDimensionRules)
+    - Go: [`ClearDimensionRules`](../go/dimensions.md#ClearDimensionRules), [`Raw.MdClearDimensionRules`](../go/raw.md#Raw.MdClearDimensionRules)
+    - Zig: [`dimensions.clearRules`](../zig/dimensions.md#dimensions.clearRules)
 
 ### `md_get_dimension_id` {#md_get_dimension_id}
 
@@ -131,6 +135,7 @@ This is rarely the right call. `md_add_dimension` and `md_add_dimension_pack` ar
 - Callers in each binding:
     - Rust: [`dimensions::dimension_id`](../rust/dimensions.md#fn.dimension_id), [`dimensions::dimension_id`](../rust/dimensions.md#fn.dimension_id)
     - Go: [`DimensionID`](../go/dimensions.md#DimensionID), [`Raw.MdGetDimensionId`](../go/raw.md#Raw.MdGetDimensionId)
+    - Zig: [`dimensions.dimensionId`](../zig/dimensions.md#dimensions.dimensionId)
 
 ### `md_set_plot_merges` {#md_set_plot_merges}
 
@@ -151,7 +156,8 @@ Wholesale, not incremental: incremental requires both sides to agree forever on 
 - Position in the table: slot 162, counting from 0
 - Callers in each binding:
     - Rust: [`dimensions::set_plot_merges`](../rust/dimensions.md#fn.set_plot_merges)
-    - Go: [`Raw.MdSetPlotMerges`](../go/raw.md#Raw.MdSetPlotMerges)
+    - Go: [`SetPlotMerges`](../go/dimensions.md#SetPlotMerges), [`Raw.MdSetPlotMerges`](../go/raw.md#Raw.MdSetPlotMerges)
+    - Zig: [`dimensions.setPlotMerges`](../zig/dimensions.md#dimensions.setPlotMerges)
 
 ### `md_list_dimensions` {#md_list_dimensions}
 
@@ -177,7 +183,8 @@ The callback is not invoked at all when `md_is_available()` is false.
 - Position in the table: slot 177, counting from 0
 - Callers in each binding:
     - Rust: [`dimensions::list`](../rust/dimensions.md#fn.list), [`dimensions::list`](../rust/dimensions.md#fn.list), [`World::fill_blocks`](../rust/world.md#World.fill_blocks), [`World::add_ticking_area`](../rust/world.md#World.add_ticking_area), [`World::remove_ticking_area`](../rust/world.md#World.remove_ticking_area), [`World::list_ticking_areas`](../rust/world.md#World.list_ticking_areas)
-    - Go: [`ListDimensions`](../go/dimensions.md#ListDimensions), [`Raw.MdListDimensions`](../go/raw.md#Raw.MdListDimensions)
+    - Go: [`ListDimensions`](../go/dimensions.md#ListDimensions), [`ExistingDimensions`](../go/dimensions.md#ExistingDimensions), [`Raw.MdListDimensions`](../go/raw.md#Raw.MdListDimensions)
+    - Zig: [`dimensions.list`](../zig/dimensions.md#dimensions.list)
 
 ### `md_add_dimension` {#md_add_dimension}
 
@@ -220,6 +227,7 @@ Idempotent by name. Returns dim id (&gt;=3) or -1.
 - Callers in each binding:
     - Rust: [`dimensions::add_dimension`](../rust/dimensions.md#fn.add_dimension)
     - Go: [`AddDimension`](../go/dimensions.md#AddDimension), [`Raw.MdAddDimension`](../go/raw.md#Raw.MdAddDimension)
+    - Zig: [`dimensions.addDimension`](../zig/dimensions.md#dimensions.addDimension)
 
 ### `md_add_dimension_pack` {#md_add_dimension_pack}
 
@@ -266,7 +274,8 @@ Returns dim id (&gt;=3), or one of the PIER\_PACK\_\* codes below, all negative.
 - Position in the table: slot 194, counting from 0
 - Callers in each binding:
     - Rust: [`dimensions::add_dimension_pack`](../rust/dimensions.md#fn.add_dimension_pack)
-    - Go: [`Raw.MdAddDimensionPack`](../go/raw.md#Raw.MdAddDimensionPack)
+    - Go: [`AddDimensionPack`](../go/dimensions.md#AddDimensionPack), [`Raw.MdAddDimensionPack`](../go/raw.md#Raw.MdAddDimensionPack)
+    - Zig: [`dimensions.addDimensionPack`](../zig/dimensions.md#dimensions.addDimensionPack)
 
 ### `md_pack_inspect` {#md_pack_inspect}
 
@@ -302,7 +311,8 @@ A mod builds its form from "params": free is a slider, choice a list, fixed a re
 - Position in the table: slot 195, counting from 0
 - Callers in each binding:
     - Rust: [`dimensions::pack_inspect`](../rust/dimensions.md#fn.pack_inspect)
-    - Go: [`Raw.MdPackInspect`](../go/raw.md#Raw.MdPackInspect)
+    - Go: [`InspectPack`](../go/dimensions.md#InspectPack), [`Raw.MdPackInspect`](../go/raw.md#Raw.MdPackInspect)
+    - Zig: [`dimensions.packInspect`](../zig/dimensions.md#dimensions.packInspect)
 
 ### `md_retire_dimension` {#md_retire_dimension}
 
@@ -326,7 +336,8 @@ True while the name was known and has been retired, false when the host had no s
 - Position in the table: slot 196, counting from 0
 - Callers in each binding:
     - Rust: [`dimensions::retire_dimension`](../rust/dimensions.md#fn.retire_dimension)
-    - Go: [`Raw.MdRetireDimension`](../go/raw.md#Raw.MdRetireDimension)
+    - Go: [`RetireDimension`](../go/dimensions.md#RetireDimension), [`Raw.MdRetireDimension`](../go/raw.md#Raw.MdRetireDimension)
+    - Zig: [`dimensions.retireDimension`](../zig/dimensions.md#dimensions.retireDimension)
 
 ### `md_add_dimension_generated` {#md_add_dimension_generated}
 
@@ -371,6 +382,7 @@ Idempotent by name. Returns dim id (&gt;=3) or -1.
 - Callers in each binding:
     - Rust: [`dimensions::add_dimension_generated`](../rust/dimensions.md#fn.add_dimension_generated)
     - Go: [`AddGeneratedDimension`](../go/dimensions.md#AddGeneratedDimension)
+    - Zig: [`dimensions.addDimensionGenerated`](../zig/dimensions.md#dimensions.addDimensionGenerated)
 
 ### `md_set_dimension_cells` {#md_set_dimension_cells}
 
@@ -394,7 +406,8 @@ Returns false when the id is not a dimension this host registered.
 - Position in the table: slot 199, counting from 0
 - Callers in each binding:
     - Rust: [`dimensions::set_dimension_cells`](../rust/dimensions.md#fn.set_dimension_cells)
-    - Go: [`Raw.MdSetDimensionCells`](../go/raw.md#Raw.MdSetDimensionCells)
+    - Go: [`SetDimensionCells`](../go/dimensions.md#SetDimensionCells), [`Raw.MdSetDimensionCells`](../go/raw.md#Raw.MdSetDimensionCells)
+    - Zig: [`dimensions.setDimensionCells`](../zig/dimensions.md#dimensions.setDimensionCells)
 
 ## Types {#types}
 

@@ -38,3 +38,18 @@ FillRegion fills a box with one block and returns how many cells changed.
     - updateFlags : `int32`
 - Return type: `(int64, error)`
 - Slots: [`edit_fill_region`](../cpp/edit.md#edit_fill_region)
+
+### `SpawnEntityNBT` {#SpawnEntityNBT}
+
+```go
+func SpawnEntityNBT(dim int32, snbt string, pos *[3]float64) (Entity, error)
+```
+
+SpawnEntityNBT spawns an actor from full NBT, the inverse of Snapshot. A non-nil pos overrides the Pos tag. Every current host answers not provided.
+
+- Parameters:
+    - dim : `int32`
+    - snbt : `string`
+    - pos : `*[3]float64`
+- Return type: `(Entity, error)`
+- Slots: [`edit_spawn_entity_nbt`](../cpp/edit.md#edit_spawn_entity_nbt)

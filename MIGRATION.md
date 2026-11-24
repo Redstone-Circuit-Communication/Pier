@@ -1080,3 +1080,64 @@ fixture is compared cell by cell with a line-for-line port of the 26.20.2 `PlotG
 | `tools/pier-pack/README.md` | how to build, inspect and convert packs, and how to run the tests |
 | `docs/i18n/zh/api` | the Chinese catalog of the API reference: one unit per English comment of a binding, keyed by its fingerprint, which tools/gen-api-docs.py reads to write docs/zh/api |
 | `.gitattributes` | forces LF line endings for Go source files so gofmt sees consistent formatting across platforms |
+
+## 26.51.4: the client group, the native escape hatch and adopting mods that name "pier"
+
+| File | What it is |
+|---|---|
+| `examples/client-probe/Cargo.toml` | ✔ added: the crate of the client probe, a Rust mod built for the client target |
+| `examples/client-probe/Cargo.lock` | ✔ added: the lock file of the client probe, which is a workspace of its own |
+| `examples/client-probe/manifest.json` | ✔ added: the manifest of the client probe |
+| `examples/client-probe/src/lib.rs` | ✔ added: runs every client-side interface and writes a pass or fail line for each, crash-safe across restarts |
+| `packages/pier-adopt/xmake.lua` | ✔ added: the optional package that adopts mods naming the host "pier" |
+| `packages/pier-adopt/src/Adopt.cpp` | ✔ added: finds the mods LeviLamina refused for naming "pier" and brings each one up once its dependencies are enabled, with a warning |
+| `packages/pier-api/include/pier/api/native.h` | ✔ added: the config switch every native slot consults first |
+| `packages/pier-api/src/native/Gate.cpp` | ✔ added: native_enabled, and the warning once per mod while native_detour is off |
+| `packages/pier-api/src/native/Symbols.cpp` | ✔ added: symbol, byte pattern and module export lookups |
+| `packages/pier-api/src/native/Objects.cpp` | ✔ added: the engine service objects, and the objects behind a selector, an id or a dimension |
+| `packages/pier-api/src/native/Detours.cpp` | ✔ added: native detours recorded per mod and removed at teardown stage 5 |
+| `bindings/rust/pier-sys-rs/src/consts/client.rs` | ✔ added: the keys of client_get_num, client_get_str and client_action |
+| `bindings/rust/pier-sys-rs/src/consts/native.rs` | ✔ added: the kinds of native_object |
+| `bindings/rust/pier-rs/src/native.rs` | ✔ added: the native escape hatch in safe Rust |
+| `bindings/go/levilamina/client.go` | ✔ added: the second client group for Go |
+| `bindings/go/levilamina/native.go` | ✔ added: the native escape hatch for Go, with the raw methods the generator leaves to hand-written code |
+| `bindings/zig/src/client.zig` | ✔ added: the second client group for Zig |
+| `bindings/zig/src/native.zig` | ✔ added: the native escape hatch for Zig |
+| `packages/pier-api/src/world/WorldProps.cpp` | ✔ added: world_get_num, the weather of a dimension read from its Weather object |
+| `bindings/go/levilamina/world_state.go` | ✔ added: the weather readers of world_get_num for Go |
+| `bindings/zig/src/world.zig` | ✔ added: the weather readers of world_get_num for Zig |
+
+## 26.51.4: the fixes from the first compile of the new surface
+
+| File | What changed |
+|---|---|
+| `packages/pier-api/src/actors/Actors.cpp` | ✔ fixed: the attribute setters reach the map through the const overload of `Actor::getAttributes`, the only one the server headers declare |
+| `tools/compile-all.py` | ✔ fixed: `-Fo` is redirected as `/Fo` is, and a database missing sources under `packages/` is refused with the files named |
+| `packages/pier-api/src/native/Objects.cpp` | ✔ fixed: `optional_ref` is declared at global scope and not in `ll`, so the helper that reads an engine service takes `optional_ref<T>` |
+| `packages/pier-api/src/native/Symbols.cpp` | ✔ fixed: `windows.h` is included the way the other packages include it, with `WIN32_LEAN_AND_MEAN`, and the parameter once named `module` is `moduleName`, since `module` is a contextual keyword in C++20 |
+
+## 26.51.4: the Zig binding reaches the slots the Rust binding does
+
+| File | What it is |
+|---|---|
+| `bindings/zig/src/types.zig` | ✔ added: the values the Zig modules share: positions, a box, the engine's numberings as enums, and the arena-backed list the host's structured answers come in |
+| `bindings/zig/src/internal.zig` | ✔ added: the parsing helpers the Zig modules share, among them reading a JSON object into a struct by field name; not part of the public surface |
+| `bindings/zig/src/server.zig` | ✔ added: ticks and their speed, performance sampling, the run stage, the process environment and the lists of players, actors and events |
+| `bindings/zig/src/container.zig` | ✔ added: the items of a player's or a block container, as SNBT |
+| `bindings/zig/src/kvdb.zig` | ✔ added: the host's key-value store |
+| `bindings/zig/src/money.zig` | ✔ added: balances, transfers, history, ranking and the events a mod can watch or veto |
+| `bindings/zig/src/scoreboard.zig` | ✔ added: objectives, scores and display slots |
+| `bindings/zig/src/gui.zig` | ✔ added: simple, modal and custom forms and the answers to them, in the wire format of the Rust binding |
+| `bindings/zig/src/packet.zig` | ✔ added: raw packet interceptors, connection observers and packet injection |
+| `bindings/zig/src/sim.zig` | ✔ added: simulated players and the verbs that drive them |
+| `bindings/zig/src/dimensions.zig` | ✔ added: custom dimensions: from a spec, from a terrain pack or from a generator the mod supplies, per-dimension rules and plot geometry |
+| `bindings/zig/src/registry.zig` | ✔ added: the engine's registries of blocks, items, entities and commands |
+| `bindings/zig/src/lane.zig` | ✔ added: fast lanes: publishing, acquiring, leases and the guard that keeps a provider from unloading under a call |
+| `bindings/zig/src/command.zig` | ✔ added: commands with typed overloads, static enums and soft enums |
+| `bindings/zig/methods/Player.zig.in` | ✔ added: the hand-written methods of `Player` that gen-zig-api.py splices into props_gen.zig: teleport, messages, titles, game mode, items, equipment, cooldowns, network status |
+| `bindings/zig/methods/Entity.zig.in` | ✔ added: the hand-written methods of `Entity`: snapshot, clone, distance, bounding box, effects, equipment, relations, status flags and ray traces |
+| `bindings/zig/methods/BlockAt.zig.in` | ✔ added: the hand-written methods of `BlockAt`: one state value, the block entity and the collision shape |
+| `bindings/zig/methods/Item.zig.in` | ✔ added: the hand-written methods of `Item`: building, comparing, transforming and the enchantments |
+| `bindings/go/levilamina/facades_more.go` | ✔ added: the Go facade for the slots the other facade files did not reach: what an actor looks at and wears, ray traces, the block-writing slots, the level and the server clock, the economy history, pack dimensions, plot merges and the fast lanes |
+| `bindings/zig/src/host_test.zig` | ✔ added: tests that run the Zig wrappers against a table the test fills in, so the parsing of what a slot sinks, the strings a builder sends and the ownership of each piece of memory are executed and not only type-checked |
+| `bindings/go/levilamina/facades_more_test.go` | ✔ added: tests of the pure parts of the new Go facade, the readers of numbers and cells, the ray hit, the plot merge mask, the pack refusal and the call-counting protocol of a lane lease; the CI go job runs them with `go test` |

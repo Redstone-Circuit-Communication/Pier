@@ -36,7 +36,14 @@ TYPE_PAGES = {
     "PacketVerdict": "packet", "PacketEvent": "packet", "PacketCall": "packet",
     "PacketHook": "packet", "PacketHookHandle": "packet",
     "KeyBinding": "client", "KeyHandle": "client",
-    "ChunkRequest": "dimensions",
+    "NativeObjectKind": "native", "NativeError": "native", "NativeHook": "native",
+    "ChunkRequest": "dimensions", "ExistingDimension": "dimensions", "PackError": "dimensions",
+    "PlotMerge": "dimensions",
+    "AABB": "entity", "Effect": "entity", "RayKind": "entity", "RayHit": "entity",
+    "SleepStatus": "world", "Village": "world", "Structure": "world",
+    "NetworkStatus": "player", "Enchant": "item",
+    "LaneInfo": "crossmod", "LanePublication": "crossmod", "LaneLease": "crossmod",
+    "LaneNotFoundError": "crossmod", "LaneFingerprintError": "crossmod",
     "Subscription": "crossmod", "Vetoable": "crossmod", "ServiceRegistration": "crossmod",
     "CallErrorKind": "crossmod", "CallError": "crossmod", "ServiceInfo": "crossmod",
     "NbtKind": "nbt", "Nbt": "nbt",
@@ -50,13 +57,41 @@ FUNC_PAGES = {
     "PlayerByName": "player", "PlayerByXuid": "player", "PlayerByUuid": "player",
     "EntityByID": "entity", "Block": "block", "ItemOf": "item",
     "NewOverload": "commands", "NewCommand": "commands", "Scoreboard": "scoreboard",
+    "ClientProperty": "client", "NewPlotMerge": "dimensions",
+    "ClientLocalPosition": "client",
+    "ClientLocalRotation": "client",
+    "ClientRegisteredKeys": "client",
+    "ClientHasKey": "client",
+    "WorldRainLevel": "world",
+    "WorldTargetRainLevel": "world",
+    "WorldLightningLevel": "world",
+    "WorldTargetLightningLevel": "world",
+    "WorldFogLevel": "world",
+    "WorldSkyFlashTime": "world",
+    "WorldWeather": "world",
+    "ClientOptions": "client",
+    "ClientOption": "client",
+    "SetClientOption": "client",
+    "NativeEnabledNow": "native",
+    "NativeSymbol": "native",
+    "NativeSignature": "native",
+    "NativeExport": "native",
+    "NativeObjectOf": "native",
+    "NativePlayerOf": "native",
+    "NativeActorOf": "native",
+    "NativeDimensionOf": "native",
+    "NativeBlockSourceOf": "native",
+    "InstallNativeHook": "native",
+    "RemoveNativeHook": "native",
 }
-CONST_PAGES = {"Container": "item"}
+CONST_PAGES = {"Container": "item", "HookPriority": "native"}
 CONST_FAMILIES = [
     ("PProp", "player"), ("PStr", "player"), ("PAct", "player"),
     ("AProp", "entity"), ("AStr", "entity"), ("AAct", "entity"),
     ("BProp", "block"), ("BStr", "block"), ("BAct", "block"),
     ("IProp", "item"), ("IStr", "item"), ("Srv", "server"), ("Sys", "server"),
+    ("CProp", "client"), ("CStr", "client"), ("CAct", "client"),
+    ("Equip", "entity"),
 ]
 EXTRA_TOPICS = [("nbt", "SNBT and NBT values", "SNBT 与 NBT 值"),
                 ("raw", "Raw: one typed method per slot", "Raw：每个槽位一个带类型的方法")]
@@ -435,6 +470,7 @@ def build(slot_names, slot_page):
             continue
         if not page:
             where("constant", d.name)
+            continue
         g = groups.get(("consts", gkey))
         if not g:
             g = Group(gtitle, gkey, "consts")

@@ -29,7 +29,7 @@ PAGES = [
     ("packet.rs", "packet"), ("server.rs", "server"), ("host.rs", "host"),
     ("bus.rs", "bus"), ("service.rs", "service"), ("lane.rs", "lane"),
     ("kvdb.rs", "kvdb"), ("money.rs", "money"), ("nbt/", "nbt"), ("sim.rs", "sim"),
-    ("dimensions.rs", "dimensions"), ("client.rs", "client"), ("registry.rs", "registry"),
+    ("dimensions.rs", "dimensions"), ("client.rs", "client"), ("native.rs", "native"), ("registry.rs", "registry"),
     ("types.rs", "types"),
 ]
 TITLES = {
@@ -57,6 +57,7 @@ TITLES = {
     "sim": ("levilamina::sim", "levilamina::sim · 模拟玩家"),
     "dimensions": ("levilamina::dimensions", "levilamina::dimensions · 自定义维度"),
     "client": ("levilamina::client", "levilamina::client · 客户端"),
+    "native": ("levilamina::native", "levilamina::native · 原生逃生口"),
     "registry": ("levilamina::registry", "levilamina::registry · 注册表"),
     "types": ("levilamina::types", "levilamina::types · 通用类型"),
 }

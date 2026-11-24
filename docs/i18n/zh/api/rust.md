@@ -363,6 +363,24 @@ levilamina::register_mod!(MyMod);
 
 按下标设置能力位，用于宿主比这一层新、多出了能力位的情况。
 
+## 1fa8da56dd
+
+>  Wakes a sleeping player; an `Err` when the player is not asleep.
+
+唤醒正在睡觉的玩家；玩家没在睡觉时返回 `Err`。
+
+## 608313e8f8
+
+>  Adds food exhaustion, which the engine turns into lost saturation and hunger.
+
+增加食物消耗值，引擎会把它换算成饱和度和饥饿值的损失。
+
+## e14763e346
+
+>  Feeds the player the food value of an item, given as item SNBT.
+
+按一个物品（以物品 SNBT 给出）的食物值让玩家进食。
+
 ## 03f7ab5f36
 
 >  A per-player sidebar. `lines` runs from top to bottom.
@@ -575,6 +593,18 @@ levilamina::register_mod!(MyMod);
 
 客户端已经完成加入。在这之前写能力，会写到一个还没建好能力层的客户端上，这次写入会被拒绝。定时器如果会碰到可能还在加载的玩家，应该先问这一项。模拟玩家没有客户端，永远答复为真。
 
+## 154505e5cb
+
+>  The item in the selected hotbar slot, as item SNBT.
+
+快捷栏中选中的那一格里的物品，物品 SNBT 形式。
+
+## ba50ae1dc6
+
+>  The device model the client reported when it connected.
+
+客户端连接时报告的设备型号。
+
 ## d38f8f9a3e
 
 >  How to point at a player.
@@ -745,6 +775,37 @@ levilamina::register_mod!(MyMod);
 
 传送到指定的维度。id 为 3 及以上的自定义维度也走这里。
 
+## 320bf1c88d
+
+>  The tags the entity carries, the ones `/tag` lists.
+
+实体带有的标签，也就是 `/tag` 列出的那些。
+
+## 29f586bc39
+
+>  The id of the entity's owner, or -1 when it has none.
+
+实体主人的 id，没有主人时为 -1。
+
+## 102914a589
+
+>  Mounts this entity on `vehicle`; `force` mounts it where the vehicle has no free seat.
+
+让这个实体骑上 `vehicle`；`force` 为真时即使载具没有空位也会骑上。
+
+## 59e551df04
+
+>  The current, minimum, maximum and default value of one attribute, by a name such as
+>  `"minecraft:health"` or `"minecraft:movement"`.
+
+按名字（例如 `"minecraft:health"` 或 `"minecraft:movement"`）读取一个属性的当前值、最小值、最大值和默认值。
+
+## 959a9e23b0
+
+>  The names of the attributes the entity has, of the ones the attribute calls can name.
+
+这个实体拥有的属性的名字，限于属性相关调用能叫出名字的那些。
+
 ## 59a7d09731
 
 >  Adds one status effect.
@@ -828,6 +889,12 @@ levilamina::register_mod!(MyMod);
 >  Holding a totem of undying in a hand or the off hand.
 
 主手或副手拿着不死图腾。
+
+## 157ad474c3
+
+>  The engine's actor type number, whose bits tell a mob, a monster and an animal apart.
+
+引擎的实体类型编号，它的位可以区分生物、怪物和动物。
 
 ## fc9e030fb6
 
@@ -1084,6 +1151,24 @@ levilamina::register_mod!(MyMod);
 >  is what is deleted.
 
 逐字节删除一个存档键。内容不会被解读，传进来什么就删除什么。
+
+## 426377a7b7
+
+>  One weather value of a dimension by its `PIER_WPROP_*` key.
+
+按 `PIER_WPROP_*` 键读取一个维度的一项天气值。
+
+## 69761afcb4
+
+>  The rain level of a dimension, 0 for none to 1 for full rain.
+
+一个维度的降雨强度，0 表示无雨，1 表示满雨。
+
+## a90ef4d55d
+
+>  The lightning level of a dimension, 0 for none to 1 for a storm.
+
+一个维度的雷暴强度，0 表示无雷暴，1 表示雷暴。
 
 ## 5753bde507
 
@@ -1563,6 +1648,12 @@ levilamina::register_mod!(MyMod);
 >  it is.
 
 比较器从这一格读到的强度；容器按装满的程度计算它。
+
+## 225f75afef
+
+>  The color the block shows on a map, as 0xRRGGBB.
+
+方块在地图上显示的颜色，0xRRGGBB 形式。
 
 ## dd55305b66
 
@@ -4080,6 +4171,30 @@ ABI 那一侧用毫秒，所以这里换算一次。超过 `u64` 毫秒的时长
 
 [`Self::protocol_version`] 不认识某个构建时，以它为依据自带一张版本到协议的对照表：支持一个昨天才发布的 BDS，不应该卡在等 Pier 发新版上。
 
+## 5138921fba
+
+>  The version of the LeviLamina this server runs.
+
+这个服务端运行的 LeviLamina 的版本。
+
+## 8d861ab03b
+
+>  The id of the server process.
+
+服务端进程的 id。
+
+## 7b9f7738a1
+
+>  The name of the loaded world.
+
+已加载世界的名字。
+
+## 5949ab880a
+
+>  How many times the world has been opened.
+
+这个世界被打开过的次数。
+
 ## edfe4ac6f9
 
 >  The BDS version string, from `Common::getGameVersionString`.
@@ -5743,6 +5858,271 @@ let v = NbtValue::obj([
 
 `key_codes` 是默认的绑定，`allow_remap` 决定玩家能不能在设置里改它。回调收到（动作，焦点影响），两者都在客户端线程上运行。
 
+## 021edff04d
+
+>  One numeric client property by its `PIER_CPROP_*` key.
+>
+>  An `Err` covers a host without the slot, a key this host does not know, and a key about
+>  the local player read while the client is not in a world.
+
+按 `PIER_CPROP_*` 键读取一个数值型的客户端属性。
+
+宿主没有这个槽位、宿主不认识这个键、或者客户端不在世界里时读取关于本地玩家的键，都会得到 `Err`。
+
+## 88d30db231
+
+>  The local player's feet position as `[x, y, z]`, the point `get_player_position` reports.
+
+本地玩家脚下的位置 `[x, y, z]`，与 `get_player_position` 报告的是同一个点。
+
+## 7bdfda8060
+
+>  The local player's `(pitch, yaw)` in degrees; a negative pitch looks up.
+
+本地玩家的 `(pitch, yaw)`，单位为度；pitch 为负表示向上看。
+
+## 091d3f1283
+
+>  The id of the dimension the local player is in.
+
+本地玩家所在维度的 id。
+
+## eb846db30b
+
+>  The GUI scale this client draws with.
+
+这个客户端绘制界面所用的 GUI 缩放。
+
+## bf7d415259
+
+>  The round trip to the server in milliseconds, as this client measures it.
+
+到服务器的往返延迟，单位毫秒，由这个客户端测得。
+
+## 3809563d5a
+
+>  Whether a menu screen is showing.
+
+是否正在显示菜单界面。
+
+## 4947c0174d
+
+>  Whether the pause screen is showing.
+
+是否正在显示暂停界面。
+
+## a7d37c7d44
+
+>  Whether the client is playing a world.
+
+客户端是否正在游玩一个世界。
+
+## c67ee192d2
+
+>  Whether the world is a Realm.
+
+当前世界是否是 Realm。
+
+## 49e81cc886
+
+>  Whether game input reaches the world, which a screen on top takes away.
+
+游戏输入是否能到达世界；上层有界面时就不能。
+
+## a0948afe1c
+
+>  The topmost screen of the client's screen stack.
+
+客户端界面栈最顶层的界面。
+
+## e203002f6e
+
+>  Shows `text` in this client's chat. Nothing is sent to a server.
+
+在这个客户端的聊天栏里显示 `text`，不会发送给服务器。
+
+## 774faa2e8e
+
+>  Shows `text` as the title on this client.
+
+在这个客户端上把 `text` 显示为标题。
+
+## e8d4d8ee13
+
+>  Shows `text` as the subtitle on this client.
+
+在这个客户端上把 `text` 显示为副标题。
+
+## d555d23ed0
+
+>  Shows `text` above the hotbar on this client.
+
+在这个客户端的快捷栏上方显示 `text`。
+
+## ce5337e72f
+
+>  Shows `text` as a tip on this client.
+
+在这个客户端上把 `text` 显示为提示。
+
+## 2cc5e63143
+
+>  Plays a UI sound by name on this client, such as `"random.click"`.
+
+在这个客户端上按名字播放一个界面音效，例如 `"random.click"`。
+
+## c54daaa923
+
+>  Captures the mouse for the game, as a click into the world does.
+
+让游戏捕获鼠标，效果和点击进入世界一样。
+
+## 5637483e69
+
+>  Releases the mouse to the screen.
+
+把鼠标释放给界面。
+
+## e79c0331cc
+
+>  Disables or enables game input.
+
+禁用或启用游戏输入。
+
+## 0d1bd2cc15
+
+>  Leaves the current world for the menus. The engine does it asynchronously.
+
+离开当前世界回到菜单。引擎以异步方式完成。
+
+## 060f4f5f0b
+
+>  Every key binding name the key registry holds, whichever mod registered it.
+
+按键注册表里所有按键绑定的名字，不论是哪个模组注册的。
+
+## 6b6ac7a2c6
+
+>  Whether a key binding of this name is registered.
+
+是否注册了这个名字的按键绑定。
+
+## 7b41c8294d
+
+>  Shows a popup with an optional subtitle on this client.
+
+在这个客户端上显示一个弹出提示，副标题可以为空。
+
+## 0034ed9660
+
+>  Writes `text` to the client's developer console.
+
+把 `text` 写入客户端的开发者控制台。
+
+## 3844e989e4
+
+>  Suspends or resumes all input.
+
+暂停或恢复全部输入。
+
+## 0169c91b0b
+
+>  Suspends or resumes movement input.
+
+暂停或恢复移动输入。
+
+## 54393a0683
+
+>  Enables or disables game input.
+
+启用或禁用游戏输入。
+
+## 21514d78cb
+
+>  Gives the mouse back to the game; `lost` tells the engine the focus was lost.
+
+把鼠标交还给游戏；`lost` 告诉引擎焦点曾经丢失。
+
+## 4980e34760
+
+>  Mutes the client's audio.
+
+把客户端静音。
+
+## 6d1472fba6
+
+>  Unmutes the client's audio.
+
+取消客户端静音。
+
+## bfb32fb44c
+
+>  Fades out the music that is playing.
+
+让正在播放的音乐淡出。
+
+## 3f2c10442a
+
+>  Sets the GUI scale offset.
+
+设置 GUI 缩放偏移。
+
+## 086573e9bf
+
+>  Resets the local player's movement input.
+
+重置本地玩家的移动输入。
+
+## 08a4abd5d2
+
+>  Opens the screen that asks whether to leave the world.
+
+打开询问是否离开世界的界面。
+
+## 25bee07136
+
+>  Opens the content log history.
+
+打开内容日志历史。
+
+## 1eecb720e5
+
+>  Writes `text` to the system clipboard.
+
+把 `text` 写入系统剪贴板。
+
+## cdd557a828
+
+>  Opens the How to Play screen at `topic`, or at its start for an empty topic.
+
+打开“游戏指南”界面并定位到 `topic`，主题为空时打开首页。
+
+## a27cf8e52b
+
+>  Every client option as `(key, value)` pairs, in the text form `options.txt` stores.
+
+全部客户端选项，以 `(key, value)` 对的形式给出，值是 `options.txt` 保存时用的文本形式。
+
+## ba39a51aea
+
+>  One client option by its `options.txt` key, such as `"gfx_field_of_view"`.
+
+按 `options.txt` 里的键读取一个客户端选项，例如 `"gfx_field_of_view"`。
+
+## 341bb07424
+
+>  Writes one client option from its `options.txt` text form. The engine keeps what it can
+>  parse and reports nothing, so a caller that needs to know reads the key back.
+
+用 `options.txt` 的文本形式写入一个客户端选项。引擎保留它能解析的部分，不报告任何结果，所以需要确认的调用方要把这个键读回来。
+
+## 44ab359221
+
+>  The client as a value, for the property table below: `Client.health()` reads the local
+>  player's health and `Client.is_mouse_grabbed()` asks the client instance.
+
+把客户端当作一个值，供下面的属性表使用：`Client.health()` 读取本地玩家的生命值，`Client.is_mouse_grabbed()` 向客户端实例询问。
+
 ## f8f624762d
 
 >  One registered hotkey. Dropping it deregisters.
@@ -5767,6 +6147,144 @@ let v = NbtValue::obj([
 >  A key action.
 
 一个按键动作。
+
+## d0e74b8d12
+
+>  The native escape hatch: engine addresses and native detours, for an engine call that no
+>  other module wraps.
+>
+>  The host checks nothing a mod does with an address. The caller answers for signatures,
+>  calling conventions, the object layouts of this exact engine build, threads and
+>  lifetimes. Getting an address is therefore safe and every use of it is `unsafe` at the
+>  caller. The host's `config.json` has to set `"native_detour": true`; until it does,
+>  every call returns an `Err` saying so and [`enabled`] returns false.
+
+原生逃生口：引擎地址和原生 detour，用于调用没有其他模块封装的引擎功能。
+
+模组拿地址做什么，宿主一概不检查。签名、调用约定、这个确切引擎版本上的对象布局、线程和生命周期都由调用方负责。因此获取地址是安全的，而对地址的每次使用在调用方都是 `unsafe`。宿主的 `config.json` 必须设置 `"native_detour": true`；在此之前，每次调用都会返回一个说明原因的 `Err`，[`enabled`] 返回 false。
+
+## 38d717bc6d
+
+>  Whether the host answers the native calls, which its `config.json` decides.
+
+宿主是否响应原生调用，由它的 `config.json` 决定。
+
+## fcf7d0bd82
+
+>  The address of an engine function by its decorated symbol name.
+
+按修饰后的符号名得到一个引擎函数的地址。
+
+## f83a55946b
+
+>  The first match of a byte pattern such as `"48 8B ?? 08"` in the engine executable.
+
+字节特征码（例如 `"48 8B ?? 08"`）在引擎可执行文件中的第一个匹配。
+
+## 0ec0ba864c
+
+>  An export of a module already loaded into the process; an empty `module` names the
+>  engine executable. LeviLamina's API is an export of `LeviLamina.dll`.
+
+进程中已加载模块的一个导出；`module` 为空表示引擎可执行文件。LeviLamina 的 API 是 `LeviLamina.dll` 的导出。
+
+## fdfc8004e9
+
+>  The address of one engine service object. An `Err` while it does not exist yet.
+
+一个引擎服务对象的地址。对象尚不存在时返回 `Err`。
+
+## c7167aa8e7
+
+>  The engine's Player object of an online player. Valid while the player stays online.
+
+在线玩家对应的引擎 Player 对象。玩家在线期间有效。
+
+## 3fcdd2d3a1
+
+>  The engine's Actor object of a loaded actor. Valid while the actor stays loaded.
+
+已加载实体对应的引擎 Actor 对象。实体保持加载期间有效。
+
+## 42521d8a2f
+
+>  The engine's Dimension object of a dimension id, custom dimensions included.
+
+维度 id 对应的引擎 Dimension 对象，包括自定义维度。
+
+## bbd41bb3a5
+
+>  The engine's BlockSource of a dimension id.
+
+维度 id 对应的引擎 BlockSource。
+
+## d789851016
+
+>  Installs a detour on `target` through `ll::memory::hook`, at a `PRIORITY_*` value.
+>
+>  The host removes a detour this mod still holds when the mod unloads, before the dll is
+>  unmapped, and does not wait for a call already inside it on another thread.
+>
+>  # Safety
+>  `detour` must be an `extern` function with the exact signature and calling convention of
+>  `target`. It must not unwind, and it reaches the engine through `original` only.
+
+通过 `ll::memory::hook` 在 `target` 上安装一个 detour，优先级取 `PRIORITY_*` 之一。
+
+模组卸载时，宿主会在卸载它的 dll 之前移除它仍持有的 detour；已经在其他线程上进入 detour 的调用不会被等待。
+
+# Safety
+
+`detour` 必须是与 `target` 签名和调用约定完全一致的 `extern` 函数。它不能展开，并且只能通过 `original` 调用引擎。
+
+## 76f4a8a7be
+
+>  Removes a detour this mod installed.
+
+移除这个模组安装的一个 detour。
+
+## 9c130e4ed7
+
+>  The engine service objects [`object`] hands out.
+
+[`object`] 能取得的引擎服务对象。
+
+## 3aceeefaac
+
+>  One installed detour: the id [`hook_remove`] takes, and the address through which the
+>  detour calls the next detour or the engine.
+
+一个已安装的 detour：[`hook_remove`] 使用的 id，以及 detour 用来调用下一个 detour 或引擎的地址。
+
+## d7e4f49368
+
+>  `ll::memory::HookPriority::Highest`: runs first.
+
+`ll::memory::HookPriority::Highest`：最先运行。
+
+## 5d46a05dd8
+
+>  `ll::memory::HookPriority::High`.
+
+`ll::memory::HookPriority::High`。
+
+## 077bb0fa66
+
+>  `ll::memory::HookPriority::Normal`.
+
+`ll::memory::HookPriority::Normal`。
+
+## 4bc5789b6e
+
+>  `ll::memory::HookPriority::Low`.
+
+`ll::memory::HookPriority::Low`。
+
+## 23a817b7ad
+
+>  `ll::memory::HookPriority::Lowest`: runs last.
+
+`ll::memory::HookPriority::Lowest`：最后运行。
 
 ## a92a52c63f
 
@@ -6028,3 +6546,8 @@ Clear、Reset 和 Times 这三种，宿主不读 `text` 参数。
 
 本地时间，取自 `PIER_SYS_LOCAL_TIME`。
 
+## 5a24805182
+
+>  One attribute of an entity as `Entity::attribute_info` reads it.
+
+实体的一个属性，即 `Entity::attribute_info` 读到的内容。

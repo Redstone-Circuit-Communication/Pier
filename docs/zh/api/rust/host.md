@@ -12,7 +12,7 @@ pub struct Host(/* private */);
 
 宿主门面。零大小，可以随意 `Copy`。
 
-- 实现的 trait：`Clone`、`Copy`
+- 实现的 trait：`Clone`、`Copy`、`Debug`
 
 ### `Host::get` {#Host.get}
 
@@ -206,6 +206,68 @@ pub fn game_sem_version(&self) -> Result<String>
 `Self::protocol_version` 不认识某个构建时，以它为依据自带一张版本到协议的对照表：支持一个昨天才发布的 BDS，不应该卡在等 Pier 发新版上。
 
 - 返回值类型：`Result<String>`
+- 对应槽位：[`server_info_str`](../cpp/server.md#server_info_str)
+
+### `Host::loader_version` {#Host.loader_version}
+
+```rust
+pub fn loader_version(&self) -> Result<String>
+```
+
+这个服务端运行的 LeviLamina 的版本。
+
+- 返回值类型：`Result<String>`
+- 对应槽位：[`server_info_str`](../cpp/server.md#server_info_str)
+
+### `Host::process_id` {#Host.process_id}
+
+```rust
+pub fn process_id(&self) -> Result<u32>
+```
+
+服务端进程的 id。
+
+- 返回值类型：`Result<u32>`
+- 对应槽位：[`sys_info_str`](../cpp/server.md#sys_info_str)
+
+### `Host::level_name` {#Host.level_name}
+
+```rust
+pub fn level_name(&self) -> Result<String>
+```
+
+已加载世界的名字。
+
+- 返回值类型：`Result<String>`
+- 对应槽位：[`server_info_str`](../cpp/server.md#server_info_str)
+
+### `Host::is_hardcore` {#Host.is_hardcore}
+
+```rust
+pub fn is_hardcore(&self) -> Result<bool>
+```
+
+- 返回值类型：`Result<bool>`
+- 对应槽位：[`server_info_str`](../cpp/server.md#server_info_str)
+
+### `Host::world_start_count` {#Host.world_start_count}
+
+```rust
+pub fn world_start_count(&self) -> Result<u32>
+```
+
+这个世界被打开过的次数。
+
+- 返回值类型：`Result<u32>`
+- 对应槽位：[`server_info_str`](../cpp/server.md#server_info_str)
+
+### `Host::education_features_enabled` {#Host.education_features_enabled}
+
+```rust
+pub fn education_features_enabled(&self) -> Result<bool>
+```
+
+- 返回值类型：`Result<bool>`
 - 对应槽位：[`server_info_str`](../cpp/server.md#server_info_str)
 
 ### `Host::bds_version` {#Host.bds_version}

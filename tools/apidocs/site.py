@@ -21,7 +21,7 @@ RUST_NAV = {
     "packet": ("packet", "数据包"), "server": ("server", "服务器"), "host": ("Host", "宿主与任务"),
     "bus": ("bus", "事件总线"), "service": ("service", "服务"), "lane": ("lane", "快速通道"),
     "kvdb": ("kvdb", "键值数据库"), "money": ("money", "经济"), "nbt": ("nbt", "NBT"),
-    "sim": ("sim", "模拟玩家"), "dimensions": ("dimensions", "自定义维度"), "client": ("client", "客户端"),
+    "sim": ("sim", "模拟玩家"), "dimensions": ("dimensions", "自定义维度"), "client": ("client", "客户端"), "native": ("native", "原生逃生口"),
     "registry": ("registry", "注册表"), "types": ("types", "通用类型"),
 }
 SHORT = {s: (en.split(":")[0], zh.split("：")[0]) for s, en, zh in cpp.TOPICS}

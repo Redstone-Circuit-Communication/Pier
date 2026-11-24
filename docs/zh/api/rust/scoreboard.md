@@ -12,7 +12,7 @@ pub struct Scoreboard(/* private */);
 
 计分板门面。零大小。
 
-- 实现的 trait：`Clone`、`Copy`
+- 实现的 trait：`Clone`、`Copy`、`Debug`
 
 ### `Scoreboard::get` {#Scoreboard.get}
 

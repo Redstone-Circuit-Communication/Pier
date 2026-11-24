@@ -86,6 +86,41 @@ func (i Item) Transform(op int32, sarg string, narg float64) (Item, error)
 - 返回值类型：`(Item, error)`
 - 对应槽位：[`item_transform`](../cpp/item.md#item_transform)
 
+### `Item.UserDataSNBT` {#Item.UserDataSNBT}
+
+```go
+func (i Item) UserDataSNBT() (string, error)
+```
+
+UserDataSNBT 是物品的自定义 NBT，也就是它的 tag 部分，SNBT 形式。
+
+- 返回值类型：`(string, error)`
+- 对应槽位：[`item_get_user_data`](../cpp/item.md#item_get_user_data)
+
+### `Item.EnchantList` {#Item.EnchantList}
+
+```go
+func (i Item) EnchantList() ([]Enchant, error)
+```
+
+EnchantList 列出物品上的附魔。
+
+- 返回值类型：`([]Enchant, error)`
+- 对应槽位：[`item_get_enchants`](../cpp/item.md#item_get_enchants)
+
+### `Item.WithEnchants` {#Item.WithEnchants}
+
+```go
+func (i Item) WithEnchants(set []Enchant) (Item, error)
+```
+
+WithEnchants 替换整套附魔，并返回新物品。目前所有宿主都回答 not provided：写入附魔没有实现，要添加一个附魔请用 Transform 的添加附魔操作。
+
+- 参数：
+    - set : `[]Enchant`
+- 返回值类型：`(Item, error)`
+- 对应槽位：[`item_set_enchants`](../cpp/item.md#item_set_enchants)
+
 ### `Item.Count` {#Item.Count}
 
 ```go
@@ -394,6 +429,149 @@ func (i Item) HasCustomName() (bool, error)
 - 返回值类型：`(bool, error)`
 - 对应槽位：[`item_get_num`](../cpp/item.md#item_get_num)
 
+### `Item.IsFood` {#Item.IsFood}
+
+```go
+func (i Item) IsFood() (bool, error)
+```
+
+读取 `PIER_IPROP_IS_FOOD`：`Item::isFood`
+
+- 返回值类型：`(bool, error)`
+- 对应槽位：[`item_get_num`](../cpp/item.md#item_get_num)
+
+### `Item.IsDyeable` {#Item.IsDyeable}
+
+```go
+func (i Item) IsDyeable() (bool, error)
+```
+
+读取 `PIER_IPROP_IS_DYEABLE`：`Item::isDyeable`
+
+- 返回值类型：`(bool, error)`
+- 对应槽位：[`item_get_num`](../cpp/item.md#item_get_num)
+
+### `Item.IsHandEquipped` {#Item.IsHandEquipped}
+
+```go
+func (i Item) IsHandEquipped() (bool, error)
+```
+
+读取 `PIER_IPROP_IS_HAND_EQUIPPED`：`Item::isHandEquipped`
+
+- 返回值类型：`(bool, error)`
+- 对应槽位：[`item_get_num`](../cpp/item.md#item_get_num)
+
+### `Item.IsLiquidClip` {#Item.IsLiquidClip}
+
+```go
+func (i Item) IsLiquidClip() (bool, error)
+```
+
+读取 `PIER_IPROP_IS_LIQUID_CLIP`：`Item::isLiquidClipItem`
+
+- 返回值类型：`(bool, error)`
+- 对应槽位：[`item_get_num`](../cpp/item.md#item_get_num)
+
+### `Item.IsStackedByData` {#Item.IsStackedByData}
+
+```go
+func (i Item) IsStackedByData() (bool, error)
+```
+
+读取 `PIER_IPROP_IS_STACKED_BY_DATA`：`Item::isStackedByData`
+
+- 返回值类型：`(bool, error)`
+- 对应槽位：[`item_get_num`](../cpp/item.md#item_get_num)
+
+### `Item.CooldownDuration` {#Item.CooldownDuration}
+
+```go
+func (i Item) CooldownDuration() (float64, error)
+```
+
+读取 `PIER_IPROP_COOLDOWN_DURATION`：`Item::getCooldownDuration`，单位为刻
+
+- 返回值类型：`(float64, error)`
+- 对应槽位：[`item_get_num`](../cpp/item.md#item_get_num)
+
+### `Item.IsComponentBased` {#Item.IsComponentBased}
+
+```go
+func (i Item) IsComponentBased() (bool, error)
+```
+
+读取 `PIER_IPROP_IS_COMPONENT_BASED`：`Item::isComponentBased`
+
+- 返回值类型：`(bool, error)`
+- 对应槽位：[`item_get_num`](../cpp/item.md#item_get_num)
+
+### `Item.IsHumanoidArmor` {#Item.IsHumanoidArmor}
+
+```go
+func (i Item) IsHumanoidArmor() (bool, error)
+```
+
+读取 `PIER_IPROP_IS_HUMANOID_ARMOR`：`Item::isHumanoidArmor`
+
+- 返回值类型：`(bool, error)`
+- 对应槽位：[`item_get_num`](../cpp/item.md#item_get_num)
+
+### `Item.ArmorValue` {#Item.ArmorValue}
+
+```go
+func (i Item) ArmorValue() (float64, error)
+```
+
+读取 `PIER_IPROP_ARMOR_VALUE`：`Item::getArmorValue`
+
+- 返回值类型：`(float64, error)`
+- 对应槽位：[`item_get_num`](../cpp/item.md#item_get_num)
+
+### `Item.CanBeDepleted` {#Item.CanBeDepleted}
+
+```go
+func (i Item) CanBeDepleted() (bool, error)
+```
+
+读取 `PIER_IPROP_CAN_BE_DEPLETED`：`Item::canBeDepleted`
+
+- 返回值类型：`(bool, error)`
+- 对应槽位：[`item_get_num`](../cpp/item.md#item_get_num)
+
+### `Item.IsUseable` {#Item.IsUseable}
+
+```go
+func (i Item) IsUseable() (bool, error)
+```
+
+读取 `PIER_IPROP_IS_USEABLE`：`Item::isUseable`
+
+- 返回值类型：`(bool, error)`
+- 对应槽位：[`item_get_num`](../cpp/item.md#item_get_num)
+
+### `Item.CanDestroyInCreative` {#Item.CanDestroyInCreative}
+
+```go
+func (i Item) CanDestroyInCreative() (bool, error)
+```
+
+读取 `PIER_IPROP_CAN_DESTROY_IN_CREATIVE`：`Item::canDestroyInCreative`
+
+- 返回值类型：`(bool, error)`
+- 对应槽位：[`item_get_num`](../cpp/item.md#item_get_num)
+
+### `Item.ShowsDurabilityInCreative` {#Item.ShowsDurabilityInCreative}
+
+```go
+func (i Item) ShowsDurabilityInCreative() (float64, error)
+```
+
+读取 `PIER_IPROP_SHOWS_DURABILITY_IN_CREATIVE`：`Item::showsDurabilityInCreative`
+
+- 返回值类型：`(float64, error)`
+- 对应槽位：[`item_get_num`](../cpp/item.md#item_get_num)
+
 ### `Item.TypeName` {#Item.TypeName}
 
 ```go
@@ -612,6 +790,17 @@ func (c Container) Items() ([]SlotItem, error)
 - 返回值类型：`([]SlotItem, error)`
 - 对应槽位：[`container_get_items`](../cpp/item.md#container_get_items)
 
+### `Container.Refresh` {#Container.Refresh}
+
+```go
+func (c Container) Refresh() error
+```
+
+Refresh 把整个容器重新发给它的主人。方块容器没有主人可发，宿主会拒绝。
+
+- 返回值类型：`error`
+- 对应槽位：[`container_refresh`](../cpp/item.md#container_refresh)
+
 ## `SlotItem` {#SlotItem}
 
 ```go
@@ -622,6 +811,17 @@ type SlotItem struct {
 ```
 
 容器里一个有东西的格子，以及以 SNBT 表示的物品。
+
+## `Enchant` {#Enchant}
+
+```go
+type Enchant struct {
+    ID    string
+    Level int32
+}
+```
+
+Enchant 是一个附魔。
 
 ## `ContainerRef` {#ContainerRef}
 
@@ -668,6 +868,19 @@ type ContainerRef struct {
 | <span id="IPropIsBundle"></span>`IPropIsBundle` | `25` | 即 `PIER_IPROP_IS_BUNDLE`：取自 `ItemStackBase::isBundle` |
 | <span id="IPropHasUserData"></span>`IPropHasUserData` | `26` | 即 `PIER_IPROP_HAS_USER_DATA`：取自 `ItemStackBase::hasUserData` |
 | <span id="IPropHasCustomName"></span>`IPropHasCustomName` | `27` | 即 `PIER_IPROP_HAS_CUSTOM_NAME`：取自 `ItemStackBase::hasCustomHoverName` |
+| <span id="IPropIsFood"></span>`IPropIsFood` | `28` | 即 `PIER_IPROP_IS_FOOD`：`Item::isFood` |
+| <span id="IPropIsDyeable"></span>`IPropIsDyeable` | `29` | 即 `PIER_IPROP_IS_DYEABLE`：`Item::isDyeable` |
+| <span id="IPropIsHandEquipped"></span>`IPropIsHandEquipped` | `30` | 即 `PIER_IPROP_IS_HAND_EQUIPPED`：`Item::isHandEquipped` |
+| <span id="IPropIsLiquidClip"></span>`IPropIsLiquidClip` | `31` | 即 `PIER_IPROP_IS_LIQUID_CLIP`：`Item::isLiquidClipItem` |
+| <span id="IPropIsStackedByData"></span>`IPropIsStackedByData` | `32` | 即 `PIER_IPROP_IS_STACKED_BY_DATA`：`Item::isStackedByData` |
+| <span id="IPropCooldownDuration"></span>`IPropCooldownDuration` | `33` | 即 `PIER_IPROP_COOLDOWN_DURATION`：`Item::getCooldownDuration`，单位为刻 |
+| <span id="IPropIsComponentBased"></span>`IPropIsComponentBased` | `34` | 即 `PIER_IPROP_IS_COMPONENT_BASED`：`Item::isComponentBased` |
+| <span id="IPropIsHumanoidArmor"></span>`IPropIsHumanoidArmor` | `35` | 即 `PIER_IPROP_IS_HUMANOID_ARMOR`：`Item::isHumanoidArmor` |
+| <span id="IPropArmorValue"></span>`IPropArmorValue` | `36` | 即 `PIER_IPROP_ARMOR_VALUE`：`Item::getArmorValue` |
+| <span id="IPropCanBeDepleted"></span>`IPropCanBeDepleted` | `37` | 即 `PIER_IPROP_CAN_BE_DEPLETED`：`Item::canBeDepleted` |
+| <span id="IPropIsUseable"></span>`IPropIsUseable` | `38` | 即 `PIER_IPROP_IS_USEABLE`：`Item::isUseable` |
+| <span id="IPropCanDestroyInCreative"></span>`IPropCanDestroyInCreative` | `39` | 即 `PIER_IPROP_CAN_DESTROY_IN_CREATIVE`：`Item::canDestroyInCreative` |
+| <span id="IPropShowsDurabilityInCreative"></span>`IPropShowsDurabilityInCreative` | `40` | 即 `PIER_IPROP_SHOWS_DURABILITY_IN_CREATIVE`：`Item::showsDurabilityInCreative` |
 
 ## `IStr*` {#IStr}
 

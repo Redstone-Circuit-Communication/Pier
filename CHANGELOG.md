@@ -8,6 +8,166 @@ BDS 1.26.20. The ABI carries its own version, currently v2, which moves far more
 
 ## [Unreleased]
 
+## [26.51.4]
+
+Built for BDS 1.26.51 and LeviLamina 26.51.7. `PIER_ABI_VERSION` stays at 2 and no slot moved;
+nineteen new ones went on the end, so a mod built against 26.51.3 loads unchanged and a mod built
+against this one reports a missing slot on an older host. pier-sys-rs is 26.51.4 and pier-rs
+2.3.0; nothing public was removed from either (contract §2.5).
+
+### Added
+
+- **The client group reads and drives much more of the client.** `client_get_num`,
+  `client_get_str`, `client_action` and `client_list_keys` are appended to `PierApi`. They read
+  the local player's feet position, rotation and dimension, the GUI scale, the server ping, and
+  whether a menu, the pause screen, a Realm or game input is active. They show a chat line, a
+  title, a subtitle, an action bar text or a tip on this client only, play a UI sound, grab and
+  release the mouse, disable game input and leave the world, and they list the key bindings the
+  key registry holds. Every engine call goes through `IClientInstance`, a vtable call, except the
+  five HUD texts, which `GuiData` offers only as imported functions. `client_get_screen_name`,
+  NULL on every earlier host, is filled through `IClientInstance::getScreenName`. The binding
+  functions are the new functions of `client` in Rust and Zig and the `Client*` functions in Go.
+- **The client group covers most of what `IClientInstance` answers.** `client_get_num` reads 69
+  keys, adding the local player's health, maximum health, ground, water, sneaking, sprinting,
+  swimming, fire and flight state, game mode, selected slot, velocity and experience to the next
+  level, and from the client instance the loading, progress, death, bed and server form screens,
+  whether a world is active, multiplayer state, the input devices and the mouse, split screen,
+  the GUI scale offset, the server connection and network times, the frame alpha and the user.
+  `client_get_str` adds the platform ids, the local player's xuid, uuid and name tag, and the
+  clipboard. `client_action` adds a popup with a subtitle, a developer console line, suspending
+  input and movement input, game input, mouse refocus, muting, fading the music, the GUI scale
+  offset, resetting movement, the leave-world screen, the content log, writing the clipboard and
+  How to Play. Every key is an appended enumeration value, read through the slots appended in
+  this release. In Rust a `Client` value carries one method per key, in Go
+  `tools/gen-go-api.py` writes one `Client*` function per key as it does for players, and Zig has
+  one function per key in `client`. `examples/client-probe` reads every key and runs the verbs
+  that leave nothing behind.
+- **More of the server is readable and writable through the existing property tables.** All are
+  values appended to existing enumerations, so no slot was added for them. Players: asleep,
+  simulated, item use duration, experience earned at the current level, can fly, the selected
+  item as SNBT and the device model; and the verbs stop sleeping, cause food exhaustion and eat an
+  item. Actors: sprinting, swimming, asleep, sitting, angry, strength, player, simulated player,
+  the engine's actor type number and can fly; the tags as JSON and the owner's id; and the verbs
+  sit and start riding another actor. Blocks: thin fence, lever, stem, instant tick and the map
+  color. Items: food, dyeable, hand equipped, liquid clip, stacked by data, cooldown, component
+  based, humanoid armor, armor value, depletable, useable, destroyable in creative and durability
+  shown in creative. Server information: the LeviLamina version. System information: the process
+  id. A host older than this one answers false for each, as for any unknown key.
+- **Client options are readable and writable by their `options.txt` key.** `client_option_list`
+  feeds every option as a key and its value in the text form `options.txt` stores, as
+  `Option::save` writes them, `client_option_get` reads one key and `client_option_set` writes
+  one through `Option::load`, the parser `options.txt` is read with, after asking the engine
+  whether the option can be modified now. That reaches every option the game saves to
+  `options.txt`, such as the field of view, gamma and render distance. The engine
+  declares no names for `OptionID`, so each call walks the ids the registry reports valid. The
+  host does not write `options.txt` itself. The bindings are `client::options`, `option` and
+  `set_option` in Rust and Zig, and `ClientOptions`, `ClientOption` and `SetClientOption` in
+  Go.
+- **Attributes are readable and writable by name.** `PIER_AACT_ATTRIBUTE_GET`, which answered
+  false on every earlier host, reads the current value of an attribute such as
+  `minecraft:health` or `minecraft:movement`, as its comment always said.
+  `PIER_AACT_ATTRIBUTE_INFO` reads the current, minimum, maximum and default value as JSON, and
+  `PIER_AACT_ATTRIBUTE_SET`, `_SET_MAX` and `_SET_DEFAULT` write them through LeviLamina's
+  `BaseAttributeMap` helpers. `PIER_AACT_ATTRIBUTE_LIST` names the attributes an actor has. The
+  names are the 18 attributes the engine declares as statics, health, absorption, movement,
+  attack damage, knockback resistance, luck, hunger, saturation, exhaustion, level and
+  experience among them, matched exactly. `Entity::attribute` in Rust, already in pier-rs and
+  failing until now, works as documented; `attribute_info`, `set_attribute`,
+  `set_attribute_max`, `set_attribute_default` and `attribute_names` are new.
+- **The weather of a dimension is readable.** `world_get_num` reads the rain and lightning
+  level, where each is heading, the fog level, the flash time and the weather tick of one
+  dimension from its `Weather` object, which `set_weather` and `level_update_weather` could
+  only write. Server information adds the world name, hardcore, how many times the world was
+  opened and whether education features are on.
+- **A native escape hatch reaches what the table does not wrap, and it is off until the operator
+  turns it on.** Eleven `native_*` slots hand over the address of an engine function by its
+  decorated symbol, the first match of a byte pattern, an export of a loaded module such as
+  LeviLamina's own API in `LeviLamina.dll`, the engine's service objects, the Player, Actor,
+  Dimension and BlockSource objects behind a selector, an id or a dimension, and they install and
+  remove native detours through `ll::memory::hook`. Until `config.json` sets
+  `"native_detour": true` each one answers `PIER_NATIVE_DISABLED`, and the host writes one warning
+  per mod into that mod's log saying Pier has not enabled the feature and naming the setting. The
+  host records every detour a mod installs and removes what the mod still holds at teardown stage
+  5, before its dll is unmapped. These slots are the one place an engine address crosses the
+  boundary, and `abi.h` lists what a caller answers for. The bindings are `native` in Rust and
+  Zig and the `Native*` functions in Go.
+- **Pier loads a mod whose manifest names the host `pier`, and warns about it.** LeviLamina
+  resolves `dependencies` by exact manifest name before any mod runs, so a mod that followed the
+  earlier documentation was refused with "dependency pier is missing", together with every mod
+  depending on it. The new optional package `pier-adopt` waits for the host's own enable, finds
+  those mods and brings each one up through the path of `/pier load` once everything it depends
+  on is enabled, with a warning that the official name is `Pier` and which `manifest.json` to
+  correct. LeviLamina still prints its refusal first. An adopted mod lives outside LeviLamina's
+  dependency graph, like one brought up by `/pier load`. `mods.adopt` in `config.json` turns this
+  off; it is on by default.
+- **`examples/client-probe` runs every client interface and records the result of each**, to the
+  game log and to a file that survives a crash, so a client build can be verified on a real game.
+- **`config.json` has two settings more**, `mods.adopt` (true) and `native_detour` (false). A file
+  an earlier release wrote has neither, and the defaults apply.
+
+- **The Zig binding reaches almost every slot the Rust binding does.** Until now it wrapped 53 of
+  the 221 slots of `PierApi` and left the rest to `slot("name")`. New modules cover the level
+  (`world`), the server runtime (`server`), containers, the key-value store, the economy, the
+  scoreboard, forms (`gui`), raw packets (`packet`), simulated players (`sim`), custom dimensions,
+  the engine registries, fast lanes (`lane`) and typed commands (`command`), and `client` gained key
+  bindings. `nbt` gained a writer, which builds SNBT the way the Rust and Go bindings do, and the
+  conversion to and from binary NBT; `types` holds the shared values. A function that returns text
+  or a list takes the allocator that owns the result, and a structured answer comes as
+  `types.Owned`, whose `deinit` frees every string of it. The methods of `Player`, `Entity`,
+  `BlockAt` and `Item` that the slots behind them need are written by hand in
+  `bindings/zig/methods/` and spliced into the generated `props_gen.zig`, and the generator refuses a
+  hand-written name that a generated method already has. The API reference now documents all of
+  these modules, 967 Zig interfaces where it listed 386. `zig build test` type-checks all of it and
+  runs the wrappers against a table the tests fill in (`host_test.zig`), under the testing allocator,
+  which found `nbt.Writer.toOwnedSlice` leaking its nesting stack. None of it has run against a real
+  host yet.
+
+- **The Go binding reaches every slot the Rust binding does.** The facade lacked 60 slots, 58 of
+  which already had a typed method in `Raw`. `facades_more.go` wraps them: the bounding box,
+  effects, equipment, passengers, status flags and ray traces of an actor, the block-writing
+  slots, `SpawnEntityNBT`, the weather, the sleep status, villages, structures, chunk keys, the
+  tick freeze, step and warp, profiling, the economy history and ranking, the client's level and
+  player, the key codes of a binding, pack dimensions, plot merges and cell geometry. The fast
+  lanes are in as `PublishLane`, `AcquireLane` and `LaneLease`, which keep the call-counting
+  protocol of the Rust binding. A name that a generated method already had was renamed rather
+  than shadowed: `SetCooldown`, `CollisionBox` and `NetworkDetail`. The CI go job now runs `go test`, which had nothing to run before.
+
+- **The Rust binding's public types are easier to use correctly.** The 22 facade and handle types
+  that had no `Debug` have one. A handle whose drop ends something, a `Subscription`, a
+  `Listener`, a service `Registration`, a lane `Publication`, a `PacketHook` and a `KeyBinding`, is
+  `#[must_use]`, so `subscribe(...)?;` that drops the subscription at once is a warning and not a
+  silent unsubscribe, and so are the form and command builders, whose methods return the changed
+  builder. `cargo test` runs 31 tests where it ran 5: the numbering of the enums, the closed box,
+  the slicing of a `/fill`, the shapes a form answer takes, the pack status codes, the plot merge
+  mask, and how SNBT is written, which are the rules the Go and Zig bindings follow too.
+
+### Changed
+
+- **The examples and the documentation name the host `Pier` in `dependencies`.** That is the
+  host's manifest name, which LeviLamina compares against; `pier` is the mod type. The
+  `manifest-matches-host` check compares a dependency with the host's manifest name now, where it
+  compared it with the mod type and passed the spelling LeviLamina refuses.
+
+### Fixed
+
+- **`DimensionRule::EntityOnGap` said what no host does.** `abi.h` numbers the dimension rules up to
+  12 and the host's `kDimRuleCount` is 13, so setting rule 13 changes nothing and reading it gives
+  `None`. The variant stays, since removing it would break a caller, and its comment says so.
+- **`examples/client-probe` passes clippy.** It had six findings, among them a call to the
+  deprecated `pending_tasks`, which answers 0 when the host cannot count.
+- **`tools/compile-all.py` no longer writes objects into the build tree.** It redirected only
+  the MSVC spelling `/Fo`, and xmake writes `-Fo` for clang-cl, so every object went to the
+  path the database named under `build/.objs`, and a file whose directory the build had not
+  made yet failed with "unable to open output file". Both spellings are redirected now. The run
+  also refuses, naming the files, when a source under `packages/` is missing from
+  `compile_commands.json`: such a database predates the tree, compiles the wrong set of files,
+  and reports headers a dependency added since as not found. `--stale-ok` runs it anyway.
+- **A client no longer crashes when the game is closed.** The watchdog's thread was a
+  global object, and a `std::thread` that is still joinable when it is destroyed ends the
+  process. A server stops the watchdog while unloading its mods. A client closed through
+  `exit()` never gets there, so the process died with `0xC0000409` during shutdown,
+  after the game had saved. The thread object is now leaked on purpose.
+
 ## [26.51.3]
 
 Built for BDS 1.26.51 and LeviLamina 26.51.7. `PIER_ABI_VERSION` stays at 2 and no slot moved,

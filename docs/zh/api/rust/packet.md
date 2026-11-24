@@ -20,6 +20,8 @@ pub struct Packet<'a> {
 
 回调收到的数据包。只在回调期间有效。
 
+- 实现的 trait：`Debug`
+
 ### `Packet::direction` {#Packet.direction}
 
 ```rust
@@ -132,7 +134,7 @@ pub struct Packets(/* private */);
 
 数据包门面。
 
-- 实现的 trait：`Clone`、`Copy`
+- 实现的 trait：`Clone`、`Copy`、`Debug`
 
 ### `Packets::get` {#Packets.get}
 
@@ -208,7 +210,7 @@ pub struct PacketHook {
 
 丢弃它就会注销。`forget()` 让它一直存活到模组卸载；要明确调用它，是因为「注册后丢弃」和「注册后忘了保存返回值」在代码里看起来一模一样，而后者是个 bug。模组卸载时，宿主会在拆除的第 90 阶段清掉剩下的拦截器。
 
-- 实现的 trait：`Drop`
+- 实现的 trait：`Drop`、`Debug`
 
 ### `PacketHook::forget` {#PacketHook.forget}
 

@@ -346,6 +346,123 @@ pub fn has_custom_name(&self) -> Result<bool>
 - 返回值类型：`Result<bool>`
 - 对应槽位：[`item_get_num`](../cpp/item.md#item_get_num)
 
+### `ItemStack::is_food` {#ItemStack.is_food}
+
+```rust
+pub fn is_food(&self) -> Result<bool>
+```
+
+- 返回值类型：`Result<bool>`
+- 对应槽位：[`item_get_num`](../cpp/item.md#item_get_num)
+
+### `ItemStack::is_dyeable` {#ItemStack.is_dyeable}
+
+```rust
+pub fn is_dyeable(&self) -> Result<bool>
+```
+
+- 返回值类型：`Result<bool>`
+- 对应槽位：[`item_get_num`](../cpp/item.md#item_get_num)
+
+### `ItemStack::is_hand_equipped` {#ItemStack.is_hand_equipped}
+
+```rust
+pub fn is_hand_equipped(&self) -> Result<bool>
+```
+
+- 返回值类型：`Result<bool>`
+- 对应槽位：[`item_get_num`](../cpp/item.md#item_get_num)
+
+### `ItemStack::is_liquid_clip` {#ItemStack.is_liquid_clip}
+
+```rust
+pub fn is_liquid_clip(&self) -> Result<bool>
+```
+
+- 返回值类型：`Result<bool>`
+- 对应槽位：[`item_get_num`](../cpp/item.md#item_get_num)
+
+### `ItemStack::is_stacked_by_data` {#ItemStack.is_stacked_by_data}
+
+```rust
+pub fn is_stacked_by_data(&self) -> Result<bool>
+```
+
+- 返回值类型：`Result<bool>`
+- 对应槽位：[`item_get_num`](../cpp/item.md#item_get_num)
+
+### `ItemStack::cooldown_duration` {#ItemStack.cooldown_duration}
+
+```rust
+pub fn cooldown_duration(&self) -> Result<i32>
+```
+
+- 返回值类型：`Result<i32>`
+- 对应槽位：[`item_get_num`](../cpp/item.md#item_get_num)
+
+### `ItemStack::is_component_based` {#ItemStack.is_component_based}
+
+```rust
+pub fn is_component_based(&self) -> Result<bool>
+```
+
+- 返回值类型：`Result<bool>`
+- 对应槽位：[`item_get_num`](../cpp/item.md#item_get_num)
+
+### `ItemStack::is_humanoid_armor` {#ItemStack.is_humanoid_armor}
+
+```rust
+pub fn is_humanoid_armor(&self) -> Result<bool>
+```
+
+- 返回值类型：`Result<bool>`
+- 对应槽位：[`item_get_num`](../cpp/item.md#item_get_num)
+
+### `ItemStack::armor_value` {#ItemStack.armor_value}
+
+```rust
+pub fn armor_value(&self) -> Result<i32>
+```
+
+- 返回值类型：`Result<i32>`
+- 对应槽位：[`item_get_num`](../cpp/item.md#item_get_num)
+
+### `ItemStack::can_be_depleted` {#ItemStack.can_be_depleted}
+
+```rust
+pub fn can_be_depleted(&self) -> Result<bool>
+```
+
+- 返回值类型：`Result<bool>`
+- 对应槽位：[`item_get_num`](../cpp/item.md#item_get_num)
+
+### `ItemStack::is_useable` {#ItemStack.is_useable}
+
+```rust
+pub fn is_useable(&self) -> Result<bool>
+```
+
+- 返回值类型：`Result<bool>`
+- 对应槽位：[`item_get_num`](../cpp/item.md#item_get_num)
+
+### `ItemStack::can_destroy_in_creative` {#ItemStack.can_destroy_in_creative}
+
+```rust
+pub fn can_destroy_in_creative(&self) -> Result<bool>
+```
+
+- 返回值类型：`Result<bool>`
+- 对应槽位：[`item_get_num`](../cpp/item.md#item_get_num)
+
+### `ItemStack::shows_durability_in_creative` {#ItemStack.shows_durability_in_creative}
+
+```rust
+pub fn shows_durability_in_creative(&self) -> Result<bool>
+```
+
+- 返回值类型：`Result<bool>`
+- 对应槽位：[`item_get_num`](../cpp/item.md#item_get_num)
+
 ### `ItemStack::text` {#ItemStack.text}
 
 ```rust

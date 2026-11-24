@@ -82,6 +82,7 @@ Current gaming status: 0=Default, 1=Starting, 2=Running, 3=Stopping (mirrors `ll
 - Callers in each binding:
     - Rust: [`Host::gaming_status`](../rust/host.md#Host.gaming_status)
     - Go: [`Status`](../go/core.md#Status), [`Raw.GamingStatus`](../go/raw.md#Raw.GamingStatus)
+    - Zig: [`server.gamingStatus`](../zig/server.md#server.gamingStatus)
 
 ### `schedule` {#schedule}
 

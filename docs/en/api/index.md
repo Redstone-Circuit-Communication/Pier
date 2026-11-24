@@ -4,12 +4,12 @@ Pier's API is listed binding by binding.
 
 | Binding | Brought in with | Functions and methods | Types | Constants |
 |---|---|---|---|---|
-| [Rust](rust/index.md) | `use levilamina::...` | 795 | 118 | 112 |
-| [Go](go/index.md) | `import "github.com/Maskviva/pier/bindings/go/levilamina"` | 630 | 62 | 317 |
-| [Zig](zig/index.md) | `@import("levilamina")` | 307 | 23 | 3 |
-| [C++](cpp/index.md) | `#include "sdk/abi.h"` | 208 | 42 | 325 |
+| [Rust](rust/index.md) | `use levilamina::...` | 987 | 122 | 117 |
+| [Go](go/index.md) | `import "github.com/Maskviva/pier/bindings/go/levilamina"` | 899 | 82 | 495 |
+| [Zig](zig/index.md) | `@import("levilamina")` | 831 | 112 | 24 |
+| [C++](cpp/index.md) | `#include "sdk/abi.h"` | 227 | 42 | 501 |
 
-The C++ count is the 202 slots of abi.h plus 6 macros.
+The C++ count is the 221 slots of abi.h plus 6 macros.
 
 ## Reading an entry
 

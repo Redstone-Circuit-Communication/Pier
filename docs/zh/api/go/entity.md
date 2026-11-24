@@ -127,6 +127,123 @@ func (e Entity) Clone(dim int32, x, y, z float64) (Entity, error)
 - 返回值类型：`(Entity, error)`
 - 对应槽位：[`actor_clone`](../cpp/entity.md#actor_clone)
 
+### `Entity.AABB` {#Entity.AABB}
+
+```go
+func (e Entity) AABB() (AABB, error)
+```
+
+AABB 读取这个实体的包围盒。
+
+- 返回值类型：`(AABB, error)`
+- 对应槽位：[`actor_get_aabb`](../cpp/entity.md#actor_get_aabb)
+
+### `Entity.Effects` {#Entity.Effects}
+
+```go
+func (e Entity) Effects() ([]Effect, error)
+```
+
+Effects 列出这个实体身上的每一个状态效果。
+
+- 返回值类型：`([]Effect, error)`
+- 对应槽位：[`actor_get_effects`](../cpp/entity.md#actor_get_effects)
+
+### `Entity.EquippedItem` {#Entity.EquippedItem}
+
+```go
+func (e Entity) EquippedItem(slot int32) (Item, error)
+```
+
+EquippedItem 是这个实体在某个装备槽里穿戴或手持的东西。
+
+- 参数：
+    - slot : `int32`
+- 返回值类型：`(Item, error)`
+- 对应槽位：[`actor_get_equipped_item`](../cpp/entity.md#actor_get_equipped_item)
+
+### `Entity.SetEquippedItem` {#Entity.SetEquippedItem}
+
+```go
+func (e Entity) SetEquippedItem(slot int32, item Item) error
+```
+
+SetEquippedItem 把一个物品放进一个装备槽。
+
+- 参数：
+    - slot : `int32`
+    - item : `Item`
+- 返回值类型：`error`
+- 对应槽位：[`actor_set_equipped_item`](../cpp/entity.md#actor_set_equipped_item)
+
+### `Entity.FirstPassenger` {#Entity.FirstPassenger}
+
+```go
+func (e Entity) FirstPassenger() (Entity, error)
+```
+
+FirstPassenger 是骑在这个实体上的第一个实体。
+
+- 返回值类型：`(Entity, error)`
+- 对应槽位：[`actor_get_first_passenger`](../cpp/entity.md#actor_get_first_passenger)
+
+### `Entity.StatusFlag` {#Entity.StatusFlag}
+
+```go
+func (e Entity) StatusFlag(flagIndex int32) (bool, error)
+```
+
+StatusFlag 读取引擎 ActorFlags 的一位。
+
+- 参数：
+    - flagIndex : `int32`
+- 返回值类型：`(bool, error)`
+- 对应槽位：[`actor_get_status_flag`](../cpp/entity.md#actor_get_status_flag)
+
+### `Entity.SetStatusFlag` {#Entity.SetStatusFlag}
+
+```go
+func (e Entity) SetStatusFlag(flagIndex int32, value bool) error
+```
+
+SetStatusFlag 写入引擎 ActorFlags 的一位。
+
+- 参数：
+    - flagIndex : `int32`
+    - value : `bool`
+- 返回值类型：`error`
+- 对应槽位：[`actor_set_status_flag`](../cpp/entity.md#actor_set_status_flag)
+
+### `Entity.TraceRay` {#Entity.TraceRay}
+
+```go
+func (e Entity) TraceRay(maxDist float32, includeActors, includeBlocks bool) (RayHit, error)
+```
+
+TraceRay 沿着这个实体的视线射出一条射线，报告它撞到了什么。
+
+- 参数：
+    - maxDist : `float32`
+    - includeActors : `bool`
+    - includeBlocks : `bool`
+- 返回值类型：`(RayHit, error)`
+- 对应槽位：[`actor_trace_ray`](../cpp/entity.md#actor_trace_ray)
+
+### `Entity.TraceRayBlocks` {#Entity.TraceRayBlocks}
+
+```go
+func (e Entity) TraceRayBlocks(maxDist float32, includeActors, includeBlocks bool) (RayHit, error)
+```
+
+TraceRayBlocks 同 TraceRay，但把命中结果报告为一个方块格子，并带上被击中的那一面。
+
+- 参数：
+    - maxDist : `float32`
+    - includeActors : `bool`
+    - includeBlocks : `bool`
+- 返回值类型：`(RayHit, error)`
+- 对应槽位：[`edit_trace_ray`](../cpp/edit.md#edit_trace_ray)
+
 ### `Entity.PosX` {#Entity.PosX}
 
 ```go
@@ -657,6 +774,116 @@ func (e Entity) HasPassenger() (bool, error)
 - 返回值类型：`(bool, error)`
 - 对应槽位：[`actor_get_num`](../cpp/entity.md#actor_get_num)
 
+### `Entity.IsSprinting` {#Entity.IsSprinting}
+
+```go
+func (e Entity) IsSprinting() (bool, error)
+```
+
+读取 `PIER_APROP_IS_SPRINTING`：`Actor::isSprinting`
+
+- 返回值类型：`(bool, error)`
+- 对应槽位：[`actor_get_num`](../cpp/entity.md#actor_get_num)
+
+### `Entity.IsSwimming` {#Entity.IsSwimming}
+
+```go
+func (e Entity) IsSwimming() (bool, error)
+```
+
+读取 `PIER_APROP_IS_SWIMMING`：`Actor::isSwimming`
+
+- 返回值类型：`(bool, error)`
+- 对应槽位：[`actor_get_num`](../cpp/entity.md#actor_get_num)
+
+### `Entity.IsSleeping` {#Entity.IsSleeping}
+
+```go
+func (e Entity) IsSleeping() (bool, error)
+```
+
+读取 `PIER_APROP_IS_SLEEPING`：`Actor::isSleeping`
+
+- 返回值类型：`(bool, error)`
+- 对应槽位：[`actor_get_num`](../cpp/entity.md#actor_get_num)
+
+### `Entity.IsSitting` {#Entity.IsSitting}
+
+```go
+func (e Entity) IsSitting() (bool, error)
+```
+
+读取 `PIER_APROP_IS_SITTING`：`Actor::isSitting`
+
+- 返回值类型：`(bool, error)`
+- 对应槽位：[`actor_get_num`](../cpp/entity.md#actor_get_num)
+
+### `Entity.IsAngry` {#Entity.IsAngry}
+
+```go
+func (e Entity) IsAngry() (bool, error)
+```
+
+读取 `PIER_APROP_IS_ANGRY`：`Actor::isAngry`
+
+- 返回值类型：`(bool, error)`
+- 对应槽位：[`actor_get_num`](../cpp/entity.md#actor_get_num)
+
+### `Entity.Strength` {#Entity.Strength}
+
+```go
+func (e Entity) Strength() (float64, error)
+```
+
+读取 `PIER_APROP_STRENGTH`：`Actor::getStrength`
+
+- 返回值类型：`(float64, error)`
+- 对应槽位：[`actor_get_num`](../cpp/entity.md#actor_get_num)
+
+### `Entity.IsPlayer` {#Entity.IsPlayer}
+
+```go
+func (e Entity) IsPlayer() (bool, error)
+```
+
+读取 `PIER_APROP_IS_PLAYER`：`Actor::isPlayer`
+
+- 返回值类型：`(bool, error)`
+- 对应槽位：[`actor_get_num`](../cpp/entity.md#actor_get_num)
+
+### `Entity.IsSimulatedPlayer` {#Entity.IsSimulatedPlayer}
+
+```go
+func (e Entity) IsSimulatedPlayer() (bool, error)
+```
+
+读取 `PIER_APROP_IS_SIMULATED_PLAYER`：`Actor::isSimulatedPlayer`
+
+- 返回值类型：`(bool, error)`
+- 对应槽位：[`actor_get_num`](../cpp/entity.md#actor_get_num)
+
+### `Entity.EntityType` {#Entity.EntityType}
+
+```go
+func (e Entity) EntityType() (float64, error)
+```
+
+读取 `PIER_APROP_ENTITY_TYPE`：`Actor::getEntityTypeId`，含义与 registry_list 实体条目中的类型位相同
+
+- 返回值类型：`(float64, error)`
+- 对应槽位：[`actor_get_num`](../cpp/entity.md#actor_get_num)
+
+### `Entity.CanFly` {#Entity.CanFly}
+
+```go
+func (e Entity) CanFly() (bool, error)
+```
+
+读取 `PIER_APROP_CAN_FLY`：`Actor::canFly`
+
+- 返回值类型：`(bool, error)`
+- 对应槽位：[`actor_get_num`](../cpp/entity.md#actor_get_num)
+
 ### `Entity.TypeName` {#Entity.TypeName}
 
 ```go
@@ -697,6 +924,28 @@ func (e Entity) FilteredName() (string, error)
 ```
 
 读取 `PIER_ASTR_FILTERED_NAME`：取自 `Actor::getFilteredNameTag`
+
+- 返回值类型：`(string, error)`
+- 对应槽位：[`actor_get_str`](../cpp/entity.md#actor_get_str)
+
+### `Entity.Tags` {#Entity.Tags}
+
+```go
+func (e Entity) Tags() (string, error)
+```
+
+读取 `PIER_ASTR_TAGS`：`Actor::getTags`，字符串组成的 JSON 数组
+
+- 返回值类型：`(string, error)`
+- 对应槽位：[`actor_get_str`](../cpp/entity.md#actor_get_str)
+
+### `Entity.OwnerId` {#Entity.OwnerId}
+
+```go
+func (e Entity) OwnerId() (string, error)
+```
+
+读取 `PIER_ASTR_OWNER_ID`：`Actor::getOwnerId`，十进制的实体 id，没有主人时为 -1
 
 - 返回值类型：`(string, error)`
 - 对应槽位：[`actor_get_str`](../cpp/entity.md#actor_get_str)
@@ -1295,6 +1544,132 @@ func (e Entity) SetRotation(sarg string, a, b, c float64) (string, error)
 - 返回值类型：`(string, error)`
 - 对应槽位：[`actor_action`](../cpp/entity.md#actor_action)
 
+### `Entity.SetSitting` {#Entity.SetSitting}
+
+```go
+func (e Entity) SetSitting(sarg string, a, b, c float64) (string, error)
+```
+
+执行 `PIER_AACT_SET_SITTING`：a：非零时坐下。`Actor::setSitting`
+
+这个动作有输出时，输出就是返回值；每个参数的含义写在 abi.h 里这个常量的注释中。
+
+- 参数：
+    - sarg : `string`
+    - a : `float64`
+    - b : `float64`
+    - c : `float64`
+- 返回值类型：`(string, error)`
+- 对应槽位：[`actor_action`](../cpp/entity.md#actor_action)
+
+### `Entity.StartRiding` {#Entity.StartRiding}
+
+```go
+func (e Entity) StartRiding(sarg string, a, b, c float64) (string, error)
+```
+
+执行 `PIER_AACT_START_RIDING`：sarg：载具的十进制实体 id，a：非零时强制。`Actor::startRiding`
+
+这个动作有输出时，输出就是返回值；每个参数的含义写在 abi.h 里这个常量的注释中。
+
+- 参数：
+    - sarg : `string`
+    - a : `float64`
+    - b : `float64`
+    - c : `float64`
+- 返回值类型：`(string, error)`
+- 对应槽位：[`actor_action`](../cpp/entity.md#actor_action)
+
+### `Entity.AttributeSet` {#Entity.AttributeSet}
+
+```go
+func (e Entity) AttributeSet(sarg string, a, b, c float64) (string, error)
+```
+
+执行 `PIER_AACT_ATTRIBUTE_SET`：sarg：属性名，a：值。`BaseAttributeMap::setCurrentValue`
+
+这个动作有输出时，输出就是返回值；每个参数的含义写在 abi.h 里这个常量的注释中。
+
+- 参数：
+    - sarg : `string`
+    - a : `float64`
+    - b : `float64`
+    - c : `float64`
+- 返回值类型：`(string, error)`
+- 对应槽位：[`actor_action`](../cpp/entity.md#actor_action)
+
+### `Entity.AttributeSetMax` {#Entity.AttributeSetMax}
+
+```go
+func (e Entity) AttributeSetMax(sarg string, a, b, c float64) (string, error)
+```
+
+执行 `PIER_AACT_ATTRIBUTE_SET_MAX`：sarg：属性名，a：最大值。`BaseAttributeMap::setMaxValue`
+
+这个动作有输出时，输出就是返回值；每个参数的含义写在 abi.h 里这个常量的注释中。
+
+- 参数：
+    - sarg : `string`
+    - a : `float64`
+    - b : `float64`
+    - c : `float64`
+- 返回值类型：`(string, error)`
+- 对应槽位：[`actor_action`](../cpp/entity.md#actor_action)
+
+### `Entity.AttributeSetDefault` {#Entity.AttributeSetDefault}
+
+```go
+func (e Entity) AttributeSetDefault(sarg string, a, b, c float64) (string, error)
+```
+
+执行 `PIER_AACT_ATTRIBUTE_SET_DEFAULT`：sarg：属性名，a：默认值。`BaseAttributeMap::setDefaultValue`
+
+这个动作有输出时，输出就是返回值；每个参数的含义写在 abi.h 里这个常量的注释中。
+
+- 参数：
+    - sarg : `string`
+    - a : `float64`
+    - b : `float64`
+    - c : `float64`
+- 返回值类型：`(string, error)`
+- 对应槽位：[`actor_action`](../cpp/entity.md#actor_action)
+
+### `Entity.AttributeList` {#Entity.AttributeList}
+
+```go
+func (e Entity) AttributeList(sarg string, a, b, c float64) (string, error)
+```
+
+执行 `PIER_AACT_ATTRIBUTE_LIST`：out：这个实体拥有的属性名组成的 JSON 数组，限于属性动作认识的那些
+
+这个动作有输出时，输出就是返回值；每个参数的含义写在 abi.h 里这个常量的注释中。
+
+- 参数：
+    - sarg : `string`
+    - a : `float64`
+    - b : `float64`
+    - c : `float64`
+- 返回值类型：`(string, error)`
+- 对应槽位：[`actor_action`](../cpp/entity.md#actor_action)
+
+### `Entity.AttributeInfo` {#Entity.AttributeInfo}
+
+```go
+func (e Entity) AttributeInfo(sarg string, a, b, c float64) (string, error)
+```
+
+执行 `PIER_AACT_ATTRIBUTE_INFO`：sarg：属性名；out：JSON {current, min, max, default}
+
+这个动作有输出时，输出就是返回值；每个参数的含义写在 abi.h 里这个常量的注释中。
+
+- 参数：
+    - sarg : `string`
+    - a : `float64`
+    - b : `float64`
+    - c : `float64`
+- 返回值类型：`(string, error)`
+- 对应槽位：[`actor_action`](../cpp/entity.md#actor_action)
+
 ## `ActorInfo` {#ActorInfo}
 
 ```go
@@ -1306,6 +1681,61 @@ type ActorInfo struct {
 
 一个维度里的一个实体：它的唯一 id 和类型名。
 
+## `AABB` {#AABB}
+
+```go
+type AABB struct{ Min, Max [3]float64 }
+type AABB struct{ Min, Max [3]float64 }
+```
+
+AABB 是一个实体的轴对齐包围盒。
+
+## `Effect` {#Effect}
+
+```go
+type Effect struct {
+    ID        string
+    Ticks     int32
+    Amplifier int32
+    Visible   bool
+}
+```
+
+Effect 是一个实体的一个状态效果。
+
+## `RayKind` {#RayKind}
+
+```go
+type RayKind int32
+```
+
+RayKind 表示一次射线追踪撞到了什么。
+
+| 名称 | 值 | 说明 |
+|---|---|---|
+| <span id="RayNone"></span>`RayNone` | `0` |  |
+| <span id="RayEntity"></span>`RayEntity` | `1` |  |
+| <span id="RayBlock"></span>`RayBlock` | `2` |  |
+
+## `RayHit` {#RayHit}
+
+```go
+type RayHit struct {
+    Kind RayKind
+    // EntityID is the actor hit, for RayEntity.
+    EntityID ActorID
+    // Block is the cell hit, for RayBlock, with the face in Facing and the block's name in
+    // BlockName.
+    Block     [3]int32
+    Facing    int32
+    BlockName string
+    // Pos is the exact point of the hit.
+    Pos [3]float64
+}
+```
+
+RayHit 是一次射线追踪的结果。
+
 ## `ActorID` {#ActorID}
 
 ```go
@@ -1313,6 +1743,19 @@ type ActorID int64
 ```
 
 实体的唯一 id，即事件载荷里的 `uid`。0 永远解析不到。
+
+## `Equip*` {#Equip}
+
+EquippedItem 和 SetEquippedItem 使用的装备槽。
+
+| 名称 | 值 | 说明 |
+|---|---|---|
+| <span id="EquipMainHand"></span>`EquipMainHand` | `0` |  |
+| <span id="EquipOffHand"></span>`EquipOffHand` | `1` |  |
+| <span id="EquipHelmet"></span>`EquipHelmet` | `2` |  |
+| <span id="EquipChestplate"></span>`EquipChestplate` | `3` |  |
+| <span id="EquipLeggings"></span>`EquipLeggings` | `4` |  |
+| <span id="EquipBoots"></span>`EquipBoots` | `5` |  |
 
 ## `AProp*` {#AProp}
 
@@ -1366,6 +1809,16 @@ type ActorID int64
 | <span id="APropIsInLove"></span>`APropIsInLove` | `45` | **这个常量在当前的引擎版本上取不到值**：即 `PIER_APROP_IS_IN_LOVE`：(G) 从 BDS 1.26.40 起不再支持：`Actor::isInLove` 已被移除 |
 | <span id="APropDeathTime"></span>`APropDeathTime` | `46` | 即 `PIER_APROP_DEATH_TIME`：(G) `Actor::getDeathTime` |
 | <span id="APropHasPassenger"></span>`APropHasPassenger` | `47` | 即 `PIER_APROP_HAS_PASSENGER`：(G) `Actor::hasPassenger` |
+| <span id="APropIsSprinting"></span>`APropIsSprinting` | `48` | 即 `PIER_APROP_IS_SPRINTING`：`Actor::isSprinting` |
+| <span id="APropIsSwimming"></span>`APropIsSwimming` | `49` | 即 `PIER_APROP_IS_SWIMMING`：`Actor::isSwimming` |
+| <span id="APropIsSleeping"></span>`APropIsSleeping` | `50` | 即 `PIER_APROP_IS_SLEEPING`：`Actor::isSleeping` |
+| <span id="APropIsSitting"></span>`APropIsSitting` | `51` | 即 `PIER_APROP_IS_SITTING`：`Actor::isSitting` |
+| <span id="APropIsAngry"></span>`APropIsAngry` | `52` | 即 `PIER_APROP_IS_ANGRY`：`Actor::isAngry` |
+| <span id="APropStrength"></span>`APropStrength` | `53` | 即 `PIER_APROP_STRENGTH`：`Actor::getStrength` |
+| <span id="APropIsPlayer"></span>`APropIsPlayer` | `54` | 即 `PIER_APROP_IS_PLAYER`：`Actor::isPlayer` |
+| <span id="APropIsSimulatedPlayer"></span>`APropIsSimulatedPlayer` | `55` | 即 `PIER_APROP_IS_SIMULATED_PLAYER`：`Actor::isSimulatedPlayer` |
+| <span id="APropEntityType"></span>`APropEntityType` | `56` | 即 `PIER_APROP_ENTITY_TYPE`：`Actor::getEntityTypeId`，含义与 registry_list 实体条目中的类型位相同 |
+| <span id="APropCanFly"></span>`APropCanFly` | `57` | 即 `PIER_APROP_CAN_FLY`：`Actor::canFly` |
 
 ## `AStr*` {#AStr}
 
@@ -1375,6 +1828,8 @@ type ActorID int64
 | <span id="AStrNameTag"></span>`AStrNameTag` | `1` | 即 `PIER_ASTR_NAME_TAG`：取自 `Actor::getNameTag` |
 | <span id="AStrScoreTag"></span>`AStrScoreTag` | `2` | 即 `PIER_ASTR_SCORE_TAG`：取自 `Actor::getScoreTag` |
 | <span id="AStrFilteredName"></span>`AStrFilteredName` | `3` | 即 `PIER_ASTR_FILTERED_NAME`：取自 `Actor::getFilteredNameTag` |
+| <span id="AStrTags"></span>`AStrTags` | `4` | 即 `PIER_ASTR_TAGS`：`Actor::getTags`，字符串组成的 JSON 数组 |
+| <span id="AStrOwnerId"></span>`AStrOwnerId` | `5` | 即 `PIER_ASTR_OWNER_ID`：`Actor::getOwnerId`，十进制的实体 id，没有主人时为 -1 |
 
 ## `AAct*` {#AAct}
 
@@ -1413,3 +1868,10 @@ type ActorID int64
 | <span id="AActRemoveAllPassengers"></span>`AActRemoveAllPassengers` | `30` | 即 `PIER_AACT_REMOVE_ALL_PASSENGERS`：调用 `Actor::removeAllPassengers` |
 | <span id="AActExecuteEvent"></span>`AActExecuteEvent` | `31` | 即 `PIER_AACT_EXECUTE_EVENT`：`sarg` 为事件名，调用 `Actor::executeEvent` |
 | <span id="AActSetRotation"></span>`AActSetRotation` | `32` | 即 `PIER_AACT_SET_ROTATION`：`a` 为俯仰角，`b` 为偏航角，调用 `Actor::setRotationWrapped` |
+| <span id="AActSetSitting"></span>`AActSetSitting` | `33` | 即 `PIER_AACT_SET_SITTING`：a：非零时坐下。`Actor::setSitting` |
+| <span id="AActStartRiding"></span>`AActStartRiding` | `34` | 即 `PIER_AACT_START_RIDING`：sarg：载具的十进制实体 id，a：非零时强制。`Actor::startRiding` |
+| <span id="AActAttributeSet"></span>`AActAttributeSet` | `35` | 即 `PIER_AACT_ATTRIBUTE_SET`：sarg：属性名，a：值。`BaseAttributeMap::setCurrentValue` |
+| <span id="AActAttributeSetMax"></span>`AActAttributeSetMax` | `36` | 即 `PIER_AACT_ATTRIBUTE_SET_MAX`：sarg：属性名，a：最大值。`BaseAttributeMap::setMaxValue` |
+| <span id="AActAttributeSetDefault"></span>`AActAttributeSetDefault` | `37` | 即 `PIER_AACT_ATTRIBUTE_SET_DEFAULT`：sarg：属性名，a：默认值。`BaseAttributeMap::setDefaultValue` |
+| <span id="AActAttributeList"></span>`AActAttributeList` | `38` | 即 `PIER_AACT_ATTRIBUTE_LIST`：out：这个实体拥有的属性名组成的 JSON 数组，限于属性动作认识的那些 |
+| <span id="AActAttributeInfo"></span>`AActAttributeInfo` | `39` | 即 `PIER_AACT_ATTRIBUTE_INFO`：sarg：属性名；out：JSON {current, min, max, default} |

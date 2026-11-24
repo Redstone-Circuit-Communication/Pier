@@ -32,6 +32,7 @@ TOPICS = [
     ("packet", "Packets", "数据包"),
     ("sim", "Simulated players", "模拟玩家"),
     ("client", "Client", "客户端"),
+    ("native", "Native escape hatch", "原生逃生口"),
     ("dimensions", "Custom dimensions", "自定义维度"),
     ("crossmod", "Cross-mod: bus, services and lanes", "跨模组：总线、服务与快速通道"),
     ("registry", "Registries", "注册表"),
@@ -59,6 +60,8 @@ SLOT_RULES = [
     (r"packet_\w+|send_packet", "packet"),
     (r"sim_\w+", "sim"),
     (r"client_\w+", "client"),
+    (r"native_\w+", "native"),
+    (r"world_\w+", "world"),
     (r"md_\w+", "dimensions"),
     (r"bus_\w+|service_\w+|lane_\w+", "crossmod"),
     (r"registry_\w+", "registry"),
@@ -70,6 +73,8 @@ ENUM_PAGES = {
     "PierBlockNumProp": "block", "PierBlockStrProp": "block", "PierBlockAction": "block",
     "PierItemNumProp": "item", "PierItemStrProp": "item", "PierItemOp": "item",
     "PierScoreboardOp": "scoreboard", "PierDimRule": "dimensions", "PierPackStatus": "dimensions",
+    "PierClientNumProp": "client", "PierClientStrProp": "client", "PierClientAction": "client",
+    "PierNativeObject": "native", "PierWorldNumProp": "world",
     "PierSysInfoProp": "server", "PierServerInfoProp": "server", "PierMoneyEvent": "money",
 }
 
@@ -78,6 +83,7 @@ DEFINE_RULES = [
     (r"PIER_(SERVICE|LANE)_\w+", "crossmod"),
     (r"PIER_PKT_\w+", "packet"),
     (r"PIER_REGISTRY_\w+", "registry"),
+    (r"PIER_NATIVE_\w+", "native"),
 ]
 
 TYPE_RULES = [

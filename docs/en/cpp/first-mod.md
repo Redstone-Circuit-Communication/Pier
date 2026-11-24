@@ -29,7 +29,7 @@ my-mod/
     "type": "pier",
     "version": "1.0.0",
     "dependencies": [
-        { "name": "pier" }
+        { "name": "Pier" }
     ]
 }
 ```

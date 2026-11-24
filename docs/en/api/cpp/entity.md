@@ -26,6 +26,7 @@ Enumerate live actors; dim = -1 for all dimensions.
 - Callers in each binding:
     - Rust: [`Entity::list`](../rust/entity.md#Entity.list), [`Entity::list`](../rust/entity.md#Entity.list)
     - Go: [`ListActors`](../go/entity.md#ListActors)
+    - Zig: [`server.listActors`](../zig/server.md#server.listActors)
 
 ### `actor_snapshot` {#actor_snapshot}
 
@@ -46,6 +47,7 @@ Full `Actor::save` NBT as SNBT.
 - Callers in each binding:
     - Rust: [`Entity::snapshot`](../rust/entity.md#Entity.snapshot)
     - Go: [`Entity.Snapshot`](../go/entity.md#Entity.Snapshot), [`Raw.ActorSnapshot`](../go/raw.md#Raw.ActorSnapshot)
+    - Zig: [`Entity.snapshot`](../zig/entity.md#Entity.snapshot)
 
 ### `actor_get_num` {#actor_get_num}
 
@@ -62,9 +64,9 @@ bool (*actor_get_num)(PierActorId id, int32_t prop, double* out);
 - Section of abi.h: §C actors (players resolve here too, via player\_resolve)
 - Position in the table: slot 34, counting from 0
 - Callers in each binding:
-    - Rust: [`Entity::num`](../rust/entity.md#Entity.num), [`Entity::pos`](../rust/entity.md#Entity.pos), [`Entity::feet_pos`](../rust/entity.md#Entity.feet_pos), [`Entity::head_pos`](../rust/entity.md#Entity.head_pos), [`Entity::velocity`](../rust/entity.md#Entity.velocity), [`Entity::view_vector`](../rust/entity.md#Entity.view_vector) and more, 37 in all
-    - Go: [`Entity.PosX`](../go/entity.md#Entity.PosX), [`Entity.PosY`](../go/entity.md#Entity.PosY), [`Entity.PosZ`](../go/entity.md#Entity.PosZ), [`Entity.RotPitch`](../go/entity.md#Entity.RotPitch), [`Entity.RotYaw`](../go/entity.md#Entity.RotYaw), [`Entity.Dimension`](../go/entity.md#Entity.Dimension) and more, 49 in all
-    - Zig: [`Entity.posX`](../zig/entity.md#Entity.posX), [`Entity.posY`](../zig/entity.md#Entity.posY), [`Entity.posZ`](../zig/entity.md#Entity.posZ), [`Entity.rotPitch`](../zig/entity.md#Entity.rotPitch), [`Entity.rotYaw`](../zig/entity.md#Entity.rotYaw), [`Entity.dimension`](../zig/entity.md#Entity.dimension) and more, 48 in all
+    - Rust: [`Entity::num`](../rust/entity.md#Entity.num), [`Entity::pos`](../rust/entity.md#Entity.pos), [`Entity::feet_pos`](../rust/entity.md#Entity.feet_pos), [`Entity::head_pos`](../rust/entity.md#Entity.head_pos), [`Entity::velocity`](../rust/entity.md#Entity.velocity), [`Entity::view_vector`](../rust/entity.md#Entity.view_vector) and more, 47 in all
+    - Go: [`Entity.PosX`](../go/entity.md#Entity.PosX), [`Entity.PosY`](../go/entity.md#Entity.PosY), [`Entity.PosZ`](../go/entity.md#Entity.PosZ), [`Entity.RotPitch`](../go/entity.md#Entity.RotPitch), [`Entity.RotYaw`](../go/entity.md#Entity.RotYaw), [`Entity.Dimension`](../go/entity.md#Entity.Dimension) and more, 59 in all
+    - Zig: [`Entity.posX`](../zig/entity.md#Entity.posX), [`Entity.posY`](../zig/entity.md#Entity.posY), [`Entity.posZ`](../zig/entity.md#Entity.posZ), [`Entity.rotPitch`](../zig/entity.md#Entity.rotPitch), [`Entity.rotYaw`](../zig/entity.md#Entity.rotYaw), [`Entity.dimension`](../zig/entity.md#Entity.dimension) and more, 58 in all
 
 ### `actor_get_str` {#actor_get_str}
 
@@ -82,9 +84,9 @@ bool (*actor_get_str)(PierActorId id, int32_t prop, void* ctx, PierStrSink sink)
 - Section of abi.h: §C actors (players resolve here too, via player\_resolve)
 - Position in the table: slot 35, counting from 0
 - Callers in each binding:
-    - Rust: [`Entity::exists`](../rust/entity.md#Entity.exists), [`Entity::text`](../rust/entity.md#Entity.text), [`Entity::type_name`](../rust/entity.md#Entity.type_name), [`Entity::name_tag`](../rust/entity.md#Entity.name_tag), [`Entity::score_tag`](../rust/entity.md#Entity.score_tag), [`Entity::filtered_name`](../rust/entity.md#Entity.filtered_name)
-    - Go: [`Entity.TypeName`](../go/entity.md#Entity.TypeName), [`Entity.NameTag`](../go/entity.md#Entity.NameTag), [`Entity.ScoreTag`](../go/entity.md#Entity.ScoreTag), [`Entity.FilteredName`](../go/entity.md#Entity.FilteredName), [`Raw.ActorGetStr`](../go/raw.md#Raw.ActorGetStr)
-    - Zig: [`Entity.typeName`](../zig/entity.md#Entity.typeName), [`Entity.nameTag`](../zig/entity.md#Entity.nameTag), [`Entity.scoreTag`](../zig/entity.md#Entity.scoreTag), [`Entity.filteredName`](../zig/entity.md#Entity.filteredName)
+    - Rust: [`Entity::exists`](../rust/entity.md#Entity.exists), [`Entity::text`](../rust/entity.md#Entity.text), [`Entity::tags`](../rust/entity.md#Entity.tags), [`Entity::owner_id`](../rust/entity.md#Entity.owner_id), [`Entity::type_name`](../rust/entity.md#Entity.type_name), [`Entity::name_tag`](../rust/entity.md#Entity.name_tag) and more, 10 in all
+    - Go: [`Entity.TypeName`](../go/entity.md#Entity.TypeName), [`Entity.NameTag`](../go/entity.md#Entity.NameTag), [`Entity.ScoreTag`](../go/entity.md#Entity.ScoreTag), [`Entity.FilteredName`](../go/entity.md#Entity.FilteredName), [`Entity.Tags`](../go/entity.md#Entity.Tags), [`Entity.OwnerId`](../go/entity.md#Entity.OwnerId) and more, 7 in all
+    - Zig: [`Entity.typeName`](../zig/entity.md#Entity.typeName), [`Entity.nameTag`](../zig/entity.md#Entity.nameTag), [`Entity.scoreTag`](../zig/entity.md#Entity.scoreTag), [`Entity.filteredName`](../zig/entity.md#Entity.filteredName), [`Entity.tags`](../zig/entity.md#Entity.tags), [`Entity.ownerId`](../zig/entity.md#Entity.ownerId)
 
 ### `actor_action` {#actor_action}
 
@@ -115,9 +117,9 @@ bool (*actor_action)(
 - Section of abi.h: §C actors (players resolve here too, via player\_resolve)
 - Position in the table: slot 36, counting from 0
 - Callers in each binding:
-    - Rust: [`Entity::act`](../rust/entity.md#Entity.act), [`Entity::kill`](../rust/entity.md#Entity.kill), [`Entity::despawn`](../rust/entity.md#Entity.despawn), [`Entity::clear_effects`](../rust/entity.md#Entity.clear_effects), [`Entity::stop_fire`](../rust/entity.md#Entity.stop_fire), [`Entity::remove_all_passengers`](../rust/entity.md#Entity.remove_all_passengers) and more, 35 in all
-    - Go: [`Entity.Kill`](../go/entity.md#Entity.Kill), [`Entity.Despawn`](../go/entity.md#Entity.Despawn), [`Entity.Heal`](../go/entity.md#Entity.Heal), [`Entity.SetOnFire`](../go/entity.md#Entity.SetOnFire), [`Entity.Teleport`](../go/entity.md#Entity.Teleport), [`Entity.SetNameTag`](../go/entity.md#Entity.SetNameTag) and more, 34 in all
-    - Zig: [`Entity.kill`](../zig/entity.md#Entity.kill), [`Entity.despawn`](../zig/entity.md#Entity.despawn), [`Entity.heal`](../zig/entity.md#Entity.heal), [`Entity.setOnFire`](../zig/entity.md#Entity.setOnFire), [`Entity.teleport`](../zig/entity.md#Entity.teleport), [`Entity.setNameTag`](../zig/entity.md#Entity.setNameTag) and more, 33 in all
+    - Rust: [`Entity::act`](../rust/entity.md#Entity.act), [`Entity::kill`](../rust/entity.md#Entity.kill), [`Entity::despawn`](../rust/entity.md#Entity.despawn), [`Entity::clear_effects`](../rust/entity.md#Entity.clear_effects), [`Entity::stop_fire`](../rust/entity.md#Entity.stop_fire), [`Entity::remove_all_passengers`](../rust/entity.md#Entity.remove_all_passengers) and more, 42 in all
+    - Go: [`Entity.Kill`](../go/entity.md#Entity.Kill), [`Entity.Despawn`](../go/entity.md#Entity.Despawn), [`Entity.Heal`](../go/entity.md#Entity.Heal), [`Entity.SetOnFire`](../go/entity.md#Entity.SetOnFire), [`Entity.Teleport`](../go/entity.md#Entity.Teleport), [`Entity.SetNameTag`](../go/entity.md#Entity.SetNameTag) and more, 41 in all
+    - Zig: [`Entity.kill`](../zig/entity.md#Entity.kill), [`Entity.despawn`](../zig/entity.md#Entity.despawn), [`Entity.heal`](../zig/entity.md#Entity.heal), [`Entity.setOnFire`](../zig/entity.md#Entity.setOnFire), [`Entity.teleport`](../zig/entity.md#Entity.teleport), [`Entity.setNameTag`](../zig/entity.md#Entity.setNameTag) and more, 40 in all
 
 ### `spawn_mob` {#spawn_mob}
 
@@ -141,6 +143,7 @@ Spawn a mob (`Spawner::spawnMob`); on success \*out = its ActorUniqueID.
 - Callers in each binding:
     - Rust: [`World::spawn_mob`](../rust/world.md#World.spawn_mob)
     - Go: [`SpawnMob`](../go/entity.md#SpawnMob), [`Raw.SpawnMob`](../go/raw.md#Raw.SpawnMob)
+    - Zig: [`world.spawnMob`](../zig/world.md#world.spawnMob)
 
 ### `actor_get_vehicle` {#actor_get_vehicle}
 
@@ -174,7 +177,7 @@ bool (*actor_get_first_passenger)(PierActorId id, PierActorId* out);
 - Position in the table: slot 110, counting from 0
 - Callers in each binding:
     - Rust: [`Entity::first_passenger`](../rust/entity.md#Entity.first_passenger)
-    - Go: [`Raw.ActorGetFirstPassenger`](../go/raw.md#Raw.ActorGetFirstPassenger)
+    - Go: [`Entity.FirstPassenger`](../go/entity.md#Entity.FirstPassenger), [`Raw.ActorGetFirstPassenger`](../go/raw.md#Raw.ActorGetFirstPassenger)
 
 ### `actor_get_owner` {#actor_get_owner}
 
@@ -229,7 +232,8 @@ slot: 0=mainhand 1=offhand 2=helmet 3=chestplate 4=leggings 5=boots
 - Position in the table: slot 113, counting from 0
 - Callers in each binding:
     - Rust: [`Entity::equipped_item`](../rust/entity.md#Entity.equipped_item)
-    - Go: [`Raw.ActorGetEquippedItem`](../go/raw.md#Raw.ActorGetEquippedItem)
+    - Go: [`Entity.EquippedItem`](../go/entity.md#Entity.EquippedItem), [`Raw.ActorGetEquippedItem`](../go/raw.md#Raw.ActorGetEquippedItem)
+    - Zig: [`Entity.equippedItem`](../zig/entity.md#Entity.equippedItem)
 
 ### `actor_set_equipped_item` {#actor_set_equipped_item}
 
@@ -247,7 +251,8 @@ bool (*actor_set_equipped_item)(PierActorId id, int32_t slot, PierStr item_snbt)
 - Position in the table: slot 114, counting from 0
 - Callers in each binding:
     - Rust: [`Entity::set_equipped_item`](../rust/entity.md#Entity.set_equipped_item)
-    - Go: [`Raw.ActorSetEquippedItem`](../go/raw.md#Raw.ActorSetEquippedItem)
+    - Go: [`Entity.SetEquippedItem`](../go/entity.md#Entity.SetEquippedItem), [`Raw.ActorSetEquippedItem`](../go/raw.md#Raw.ActorSetEquippedItem)
+    - Zig: [`Entity.setEquippedItem`](../zig/entity.md#Entity.setEquippedItem)
 
 ### `actor_get_effects` {#actor_get_effects}
 
@@ -267,7 +272,8 @@ SNBT \[{id, ticks, amplifier, visible},…\]
 - Position in the table: slot 115, counting from 0
 - Callers in each binding:
     - Rust: [`Entity::effects`](../rust/entity.md#Entity.effects)
-    - Go: [`Raw.ActorGetEffects`](../go/raw.md#Raw.ActorGetEffects)
+    - Go: [`Entity.Effects`](../go/entity.md#Entity.Effects), [`Raw.ActorGetEffects`](../go/raw.md#Raw.ActorGetEffects)
+    - Zig: [`Entity.effects`](../zig/entity.md#Entity.effects)
 
 ### `actor_get_status_flag` {#actor_get_status_flag}
 
@@ -286,7 +292,8 @@ bool (*actor_get_status_flag)(PierActorId id, int32_t flag_index);
 - Position in the table: slot 116, counting from 0
 - Callers in each binding:
     - Rust: [`Entity::status_flag`](../rust/entity.md#Entity.status_flag)
-    - Go: [`Raw.ActorGetStatusFlag`](../go/raw.md#Raw.ActorGetStatusFlag)
+    - Go: [`Entity.StatusFlag`](../go/entity.md#Entity.StatusFlag), [`Raw.ActorGetStatusFlag`](../go/raw.md#Raw.ActorGetStatusFlag)
+    - Zig: [`Entity.statusFlag`](../zig/entity.md#Entity.statusFlag)
 
 ### `actor_set_status_flag` {#actor_set_status_flag}
 
@@ -304,7 +311,8 @@ bool (*actor_set_status_flag)(PierActorId id, int32_t flag_index, bool value);
 - Position in the table: slot 117, counting from 0
 - Callers in each binding:
     - Rust: [`Entity::set_status_flag`](../rust/entity.md#Entity.set_status_flag)
-    - Go: [`Raw.ActorSetStatusFlag`](../go/raw.md#Raw.ActorSetStatusFlag)
+    - Go: [`Entity.SetStatusFlag`](../go/entity.md#Entity.SetStatusFlag), [`Raw.ActorSetStatusFlag`](../go/raw.md#Raw.ActorSetStatusFlag)
+    - Zig: [`Entity.setStatusFlag`](../zig/entity.md#Entity.setStatusFlag)
 
 ### `actor_trace_ray` {#actor_trace_ray}
 
@@ -328,7 +336,8 @@ SNBT {type:"entity"|"block"|"none", pos:\[x,y,z\], `entity_id`?, `block_name`?}
 - Position in the table: slot 118, counting from 0
 - Callers in each binding:
     - Rust: [`Entity::trace_ray`](../rust/entity.md#Entity.trace_ray)
-    - Go: [`Raw.ActorTraceRay`](../go/raw.md#Raw.ActorTraceRay)
+    - Go: [`Entity.TraceRay`](../go/entity.md#Entity.TraceRay), [`Raw.ActorTraceRay`](../go/raw.md#Raw.ActorTraceRay)
+    - Zig: [`Entity.traceRay`](../zig/entity.md#Entity.traceRay)
 
 ### `actor_distance_to` {#actor_distance_to}
 
@@ -347,6 +356,7 @@ bool (*actor_distance_to)(PierActorId id, PierActorId other, double* out);
 - Callers in each binding:
     - Rust: [`Entity::distance_to`](../rust/entity.md#Entity.distance_to)
     - Go: [`Entity.DistanceTo`](../go/entity.md#Entity.DistanceTo), [`Raw.ActorDistanceTo`](../go/raw.md#Raw.ActorDistanceTo)
+    - Zig: [`Entity.distanceTo`](../zig/entity.md#Entity.distanceTo)
 
 ### `actor_get_aabb` {#actor_get_aabb}
 
@@ -366,7 +376,8 @@ SNBT {min:\[x,y,z\], max:\[x,y,z\]}
 - Position in the table: slot 120, counting from 0
 - Callers in each binding:
     - Rust: [`Entity::aabb`](../rust/entity.md#Entity.aabb)
-    - Go: [`Raw.ActorGetAabb`](../go/raw.md#Raw.ActorGetAabb)
+    - Go: [`Entity.AABB`](../go/entity.md#Entity.AABB), [`Raw.ActorGetAabb`](../go/raw.md#Raw.ActorGetAabb)
+    - Zig: [`Entity.aabb`](../zig/entity.md#Entity.aabb)
 
 ### `actor_clone` {#actor_clone}
 
@@ -388,6 +399,7 @@ bool (*actor_clone)(PierActorId id, int32_t dim, double x, double y, double z, P
 - Callers in each binding:
     - Rust: [`Entity::clone_at`](../rust/entity.md#Entity.clone_at)
     - Go: [`Entity.Clone`](../go/entity.md#Entity.Clone), [`Raw.ActorClone`](../go/raw.md#Raw.ActorClone)
+    - Zig: [`Entity.cloneAt`](../zig/entity.md#Entity.cloneAt)
 
 ## `PierActorNumProp` {#PierActorNumProp}
 
@@ -443,6 +455,16 @@ bool (*actor_clone)(PierActorId id, int32_t dim, double x, double y, double z, P
 | <span id="PIER_APROP_IS_IN_LOVE"></span>`PIER_APROP_IS_IN_LOVE` | `45` | **the current engine version gives no value for this constant**: (G) unsupported since BDS 1.26.40: `Actor::isInLove` is gone |
 | <span id="PIER_APROP_DEATH_TIME"></span>`PIER_APROP_DEATH_TIME` | `46` | (G) `Actor::getDeathTime` |
 | <span id="PIER_APROP_HAS_PASSENGER"></span>`PIER_APROP_HAS_PASSENGER` | `47` | (G) `Actor::hasPassenger` |
+| <span id="PIER_APROP_IS_SPRINTING"></span>`PIER_APROP_IS_SPRINTING` | `48` | `Actor::isSprinting` |
+| <span id="PIER_APROP_IS_SWIMMING"></span>`PIER_APROP_IS_SWIMMING` | `49` | `Actor::isSwimming` |
+| <span id="PIER_APROP_IS_SLEEPING"></span>`PIER_APROP_IS_SLEEPING` | `50` | `Actor::isSleeping` |
+| <span id="PIER_APROP_IS_SITTING"></span>`PIER_APROP_IS_SITTING` | `51` | `Actor::isSitting` |
+| <span id="PIER_APROP_IS_ANGRY"></span>`PIER_APROP_IS_ANGRY` | `52` | `Actor::isAngry` |
+| <span id="PIER_APROP_STRENGTH"></span>`PIER_APROP_STRENGTH` | `53` | `Actor::getStrength` |
+| <span id="PIER_APROP_IS_PLAYER"></span>`PIER_APROP_IS_PLAYER` | `54` | `Actor::isPlayer` |
+| <span id="PIER_APROP_IS_SIMULATED_PLAYER"></span>`PIER_APROP_IS_SIMULATED_PLAYER` | `55` | `Actor::isSimulatedPlayer` |
+| <span id="PIER_APROP_ENTITY_TYPE"></span>`PIER_APROP_ENTITY_TYPE` | `56` | `Actor::getEntityTypeId`, the bits of an entity entry of `registry_list` |
+| <span id="PIER_APROP_CAN_FLY"></span>`PIER_APROP_CAN_FLY` | `57` | `Actor::canFly` |
 
 ## `PierActorStrProp` {#PierActorStrProp}
 
@@ -454,6 +476,8 @@ bool (*actor_clone)(PierActorId id, int32_t dim, double x, double y, double z, P
 | <span id="PIER_ASTR_NAME_TAG"></span>`PIER_ASTR_NAME_TAG` | `1` | `Actor::getNameTag` |
 | <span id="PIER_ASTR_SCORE_TAG"></span>`PIER_ASTR_SCORE_TAG` | `2` | `Actor::getScoreTag` |
 | <span id="PIER_ASTR_FILTERED_NAME"></span>`PIER_ASTR_FILTERED_NAME` | `3` | `Actor::getFilteredNameTag` |
+| <span id="PIER_ASTR_TAGS"></span>`PIER_ASTR_TAGS` | `4` | `Actor::getTags` as a JSON array of strings |
+| <span id="PIER_ASTR_OWNER_ID"></span>`PIER_ASTR_OWNER_ID` | `5` | `Actor::getOwnerId` as a decimal actor id, -1 when it has none |
 
 ## `PierActorAction` {#PierActorAction}
 
@@ -494,3 +518,10 @@ bool (*actor_clone)(PierActorId id, int32_t dim, double x, double y, double z, P
 | <span id="PIER_AACT_REMOVE_ALL_PASSENGERS"></span>`PIER_AACT_REMOVE_ALL_PASSENGERS` | `30` | `Actor::removeAllPassengers` |
 | <span id="PIER_AACT_EXECUTE_EVENT"></span>`PIER_AACT_EXECUTE_EVENT` | `31` | sarg=event name `Actor::executeEvent` |
 | <span id="PIER_AACT_SET_ROTATION"></span>`PIER_AACT_SET_ROTATION` | `32` | a=pitch b=yaw `Actor::setRotationWrapped` |
+| <span id="PIER_AACT_SET_SITTING"></span>`PIER_AACT_SET_SITTING` | `33` | a: non-zero sits. `Actor::setSitting` |
+| <span id="PIER_AACT_START_RIDING"></span>`PIER_AACT_START_RIDING` | `34` | sarg: the vehicle actor id in decimal, a: non-zero forces. `Actor::startRiding` |
+| <span id="PIER_AACT_ATTRIBUTE_SET"></span>`PIER_AACT_ATTRIBUTE_SET` | `35` | sarg: attribute name, a: value. `BaseAttributeMap::setCurrentValue` |
+| <span id="PIER_AACT_ATTRIBUTE_SET_MAX"></span>`PIER_AACT_ATTRIBUTE_SET_MAX` | `36` | sarg: attribute name, a: maximum. `BaseAttributeMap::setMaxValue` |
+| <span id="PIER_AACT_ATTRIBUTE_SET_DEFAULT"></span>`PIER_AACT_ATTRIBUTE_SET_DEFAULT` | `37` | sarg: attribute name, a: default. `BaseAttributeMap::setDefaultValue` |
+| <span id="PIER_AACT_ATTRIBUTE_LIST"></span>`PIER_AACT_ATTRIBUTE_LIST` | `38` | out: a JSON array of the attribute names this actor has, of the ones the attribute verbs know |
+| <span id="PIER_AACT_ATTRIBUTE_INFO"></span>`PIER_AACT_ATTRIBUTE_INFO` | `39` | sarg: attribute name; out: JSON {current, min, max, default} |

@@ -549,6 +549,116 @@ pub fn hasPassenger(self: Entity) core.Error!bool
 - Return type: `core.Error!bool`
 - Slots: [`actor_get_num`](../cpp/entity.md#actor_get_num)
 
+### `Entity.isSprinting` {#Entity.isSprinting}
+
+```zig
+pub fn isSprinting(self: Entity) core.Error!bool
+```
+
+`PIER_APROP_IS_SPRINTING`: `Actor::isSprinting`
+
+- Return type: `core.Error!bool`
+- Slots: [`actor_get_num`](../cpp/entity.md#actor_get_num)
+
+### `Entity.isSwimming` {#Entity.isSwimming}
+
+```zig
+pub fn isSwimming(self: Entity) core.Error!bool
+```
+
+`PIER_APROP_IS_SWIMMING`: `Actor::isSwimming`
+
+- Return type: `core.Error!bool`
+- Slots: [`actor_get_num`](../cpp/entity.md#actor_get_num)
+
+### `Entity.isSleeping` {#Entity.isSleeping}
+
+```zig
+pub fn isSleeping(self: Entity) core.Error!bool
+```
+
+`PIER_APROP_IS_SLEEPING`: `Actor::isSleeping`
+
+- Return type: `core.Error!bool`
+- Slots: [`actor_get_num`](../cpp/entity.md#actor_get_num)
+
+### `Entity.isSitting` {#Entity.isSitting}
+
+```zig
+pub fn isSitting(self: Entity) core.Error!bool
+```
+
+`PIER_APROP_IS_SITTING`: `Actor::isSitting`
+
+- Return type: `core.Error!bool`
+- Slots: [`actor_get_num`](../cpp/entity.md#actor_get_num)
+
+### `Entity.isAngry` {#Entity.isAngry}
+
+```zig
+pub fn isAngry(self: Entity) core.Error!bool
+```
+
+`PIER_APROP_IS_ANGRY`: `Actor::isAngry`
+
+- Return type: `core.Error!bool`
+- Slots: [`actor_get_num`](../cpp/entity.md#actor_get_num)
+
+### `Entity.strength` {#Entity.strength}
+
+```zig
+pub fn strength(self: Entity) core.Error!f64
+```
+
+`PIER_APROP_STRENGTH`: `Actor::getStrength`
+
+- Return type: `core.Error!f64`
+- Slots: [`actor_get_num`](../cpp/entity.md#actor_get_num)
+
+### `Entity.isPlayer` {#Entity.isPlayer}
+
+```zig
+pub fn isPlayer(self: Entity) core.Error!bool
+```
+
+`PIER_APROP_IS_PLAYER`: `Actor::isPlayer`
+
+- Return type: `core.Error!bool`
+- Slots: [`actor_get_num`](../cpp/entity.md#actor_get_num)
+
+### `Entity.isSimulatedPlayer` {#Entity.isSimulatedPlayer}
+
+```zig
+pub fn isSimulatedPlayer(self: Entity) core.Error!bool
+```
+
+`PIER_APROP_IS_SIMULATED_PLAYER`: `Actor::isSimulatedPlayer`
+
+- Return type: `core.Error!bool`
+- Slots: [`actor_get_num`](../cpp/entity.md#actor_get_num)
+
+### `Entity.entityType` {#Entity.entityType}
+
+```zig
+pub fn entityType(self: Entity) core.Error!f64
+```
+
+`PIER_APROP_ENTITY_TYPE`: `Actor::getEntityTypeId`, the bits of an entity entry of `registry_list`
+
+- Return type: `core.Error!f64`
+- Slots: [`actor_get_num`](../cpp/entity.md#actor_get_num)
+
+### `Entity.canFly` {#Entity.canFly}
+
+```zig
+pub fn canFly(self: Entity) core.Error!bool
+```
+
+`PIER_APROP_CAN_FLY`: `Actor::canFly`
+
+- Return type: `core.Error!bool`
+- Slots: [`actor_get_num`](../cpp/entity.md#actor_get_num)
+
 ### `Entity.typeName` {#Entity.typeName}
 
 ```zig
@@ -595,6 +705,32 @@ pub fn filteredName(self: Entity, allocator: std.mem.Allocator) core.Error![]u8
 ```
 
 `PIER_ASTR_FILTERED_NAME`: `Actor::getFilteredNameTag`
+
+- Parameters:
+    - allocator : `std.mem.Allocator`
+- Return type: `core.Error![]u8`
+- Slots: [`actor_get_str`](../cpp/entity.md#actor_get_str)
+
+### `Entity.tags` {#Entity.tags}
+
+```zig
+pub fn tags(self: Entity, allocator: std.mem.Allocator) core.Error![]u8
+```
+
+`PIER_ASTR_TAGS`: `Actor::getTags` as a JSON array of strings
+
+- Parameters:
+    - allocator : `std.mem.Allocator`
+- Return type: `core.Error![]u8`
+- Slots: [`actor_get_str`](../cpp/entity.md#actor_get_str)
+
+### `Entity.ownerId` {#Entity.ownerId}
+
+```zig
+pub fn ownerId(self: Entity, allocator: std.mem.Allocator) core.Error![]u8
+```
+
+`PIER_ASTR_OWNER_ID`: `Actor::getOwnerId` as a decimal actor id, -1 when it has none
 
 - Parameters:
     - allocator : `std.mem.Allocator`
@@ -1227,3 +1363,321 @@ The output, when the verb has one, is returned; abi.h names each argument.
     - n_c : `f64`
 - Return type: `core.Error![]u8`
 - Slots: [`actor_action`](../cpp/entity.md#actor_action)
+
+### `Entity.setSitting` {#Entity.setSitting}
+
+```zig
+pub fn setSitting(self: Entity, allocator: std.mem.Allocator, s_arg: []const u8, n_a: f64, n_b: f64, n_c: f64) core.Error![]u8
+```
+
+`PIER_AACT_SET_SITTING`: a: non-zero sits. `Actor::setSitting`
+
+The output, when the verb has one, is returned; abi.h names each argument.
+
+- Parameters:
+    - allocator : `std.mem.Allocator`
+    - s_arg : `[]const u8`
+    - n_a : `f64`
+    - n_b : `f64`
+    - n_c : `f64`
+- Return type: `core.Error![]u8`
+- Slots: [`actor_action`](../cpp/entity.md#actor_action)
+
+### `Entity.startRiding` {#Entity.startRiding}
+
+```zig
+pub fn startRiding(self: Entity, allocator: std.mem.Allocator, s_arg: []const u8, n_a: f64, n_b: f64, n_c: f64) core.Error![]u8
+```
+
+`PIER_AACT_START_RIDING`: sarg: the vehicle actor id in decimal, a: non-zero forces. `Actor::startRiding`
+
+The output, when the verb has one, is returned; abi.h names each argument.
+
+- Parameters:
+    - allocator : `std.mem.Allocator`
+    - s_arg : `[]const u8`
+    - n_a : `f64`
+    - n_b : `f64`
+    - n_c : `f64`
+- Return type: `core.Error![]u8`
+- Slots: [`actor_action`](../cpp/entity.md#actor_action)
+
+### `Entity.attributeSet` {#Entity.attributeSet}
+
+```zig
+pub fn attributeSet(self: Entity, allocator: std.mem.Allocator, s_arg: []const u8, n_a: f64, n_b: f64, n_c: f64) core.Error![]u8
+```
+
+`PIER_AACT_ATTRIBUTE_SET`: sarg: attribute name, a: value. `BaseAttributeMap::setCurrentValue`
+
+The output, when the verb has one, is returned; abi.h names each argument.
+
+- Parameters:
+    - allocator : `std.mem.Allocator`
+    - s_arg : `[]const u8`
+    - n_a : `f64`
+    - n_b : `f64`
+    - n_c : `f64`
+- Return type: `core.Error![]u8`
+- Slots: [`actor_action`](../cpp/entity.md#actor_action)
+
+### `Entity.attributeSetMax` {#Entity.attributeSetMax}
+
+```zig
+pub fn attributeSetMax(self: Entity, allocator: std.mem.Allocator, s_arg: []const u8, n_a: f64, n_b: f64, n_c: f64) core.Error![]u8
+```
+
+`PIER_AACT_ATTRIBUTE_SET_MAX`: sarg: attribute name, a: maximum. `BaseAttributeMap::setMaxValue`
+
+The output, when the verb has one, is returned; abi.h names each argument.
+
+- Parameters:
+    - allocator : `std.mem.Allocator`
+    - s_arg : `[]const u8`
+    - n_a : `f64`
+    - n_b : `f64`
+    - n_c : `f64`
+- Return type: `core.Error![]u8`
+- Slots: [`actor_action`](../cpp/entity.md#actor_action)
+
+### `Entity.attributeSetDefault` {#Entity.attributeSetDefault}
+
+```zig
+pub fn attributeSetDefault(self: Entity, allocator: std.mem.Allocator, s_arg: []const u8, n_a: f64, n_b: f64, n_c: f64) core.Error![]u8
+```
+
+`PIER_AACT_ATTRIBUTE_SET_DEFAULT`: sarg: attribute name, a: default. `BaseAttributeMap::setDefaultValue`
+
+The output, when the verb has one, is returned; abi.h names each argument.
+
+- Parameters:
+    - allocator : `std.mem.Allocator`
+    - s_arg : `[]const u8`
+    - n_a : `f64`
+    - n_b : `f64`
+    - n_c : `f64`
+- Return type: `core.Error![]u8`
+- Slots: [`actor_action`](../cpp/entity.md#actor_action)
+
+### `Entity.attributeList` {#Entity.attributeList}
+
+```zig
+pub fn attributeList(self: Entity, allocator: std.mem.Allocator, s_arg: []const u8, n_a: f64, n_b: f64, n_c: f64) core.Error![]u8
+```
+
+`PIER_AACT_ATTRIBUTE_LIST`: out: a JSON array of the attribute names this actor has, of the ones the attribute verbs know
+
+The output, when the verb has one, is returned; abi.h names each argument.
+
+- Parameters:
+    - allocator : `std.mem.Allocator`
+    - s_arg : `[]const u8`
+    - n_a : `f64`
+    - n_b : `f64`
+    - n_c : `f64`
+- Return type: `core.Error![]u8`
+- Slots: [`actor_action`](../cpp/entity.md#actor_action)
+
+### `Entity.attributeInfo` {#Entity.attributeInfo}
+
+```zig
+pub fn attributeInfo(self: Entity, allocator: std.mem.Allocator, s_arg: []const u8, n_a: f64, n_b: f64, n_c: f64) core.Error![]u8
+```
+
+`PIER_AACT_ATTRIBUTE_INFO`: sarg: attribute name; out: JSON {current, min, max, default}
+
+The output, when the verb has one, is returned; abi.h names each argument.
+
+- Parameters:
+    - allocator : `std.mem.Allocator`
+    - s_arg : `[]const u8`
+    - n_a : `f64`
+    - n_b : `f64`
+    - n_c : `f64`
+- Return type: `core.Error![]u8`
+- Slots: [`actor_action`](../cpp/entity.md#actor_action)
+
+### `Entity.snapshot` {#Entity.snapshot}
+
+```zig
+pub fn snapshot(self: Entity, allocator: std.mem.Allocator) core.Error![]u8
+```
+
+The whole actor as SNBT, owned by the caller.
+
+- Parameters:
+    - allocator : `std.mem.Allocator`
+- Return type: `core.Error![]u8`
+- Slots: [`actor_snapshot`](../cpp/entity.md#actor_snapshot)
+
+### `Entity.cloneAt` {#Entity.cloneAt}
+
+```zig
+pub fn cloneAt(self: Entity, dim: i32, x: f64, y: f64, z: f64) core.Error!Entity
+```
+
+Clones this actor to a given position.
+
+- Parameters:
+    - dim : `i32`
+    - x : `f64`
+    - y : `f64`
+    - z : `f64`
+- Return type: `core.Error!Entity`
+- Slots: [`actor_clone`](../cpp/entity.md#actor_clone)
+
+### `Entity.distanceTo` {#Entity.distanceTo}
+
+```zig
+pub fn distanceTo(self: Entity, other: Entity) core.Error!f64
+```
+
+The distance between two actors. The host refuses across dimensions.
+
+- Parameters:
+    - other : `Entity`
+- Return type: `core.Error!f64`
+- Slots: [`actor_distance_to`](../cpp/entity.md#actor_distance_to)
+
+### `Entity.aabb` {#Entity.aabb}
+
+```zig
+pub fn aabb(self: Entity, allocator: std.mem.Allocator) core.Error!types.Aabb
+```
+
+The bounding box.
+
+- Parameters:
+    - allocator : `std.mem.Allocator`
+- Return type: `core.Error!types.Aabb`
+- Slots: [`actor_get_aabb`](../cpp/entity.md#actor_get_aabb)
+
+### `Entity.effects` {#Entity.effects}
+
+```zig
+pub fn effects(self: Entity, allocator: std.mem.Allocator) core.Error!types.Owned(types.Effect)
+```
+
+Every status effect on this actor.
+
+- Parameters:
+    - allocator : `std.mem.Allocator`
+- Return type: `core.Error!types.Owned(types.Effect)`
+- Slots: [`actor_get_effects`](../cpp/entity.md#actor_get_effects)
+
+### `Entity.equippedItem` {#Entity.equippedItem}
+
+```zig
+pub fn equippedItem(self: Entity, allocator: std.mem.Allocator, slot: types.EquipSlot) core.Error![]u8
+```
+
+What is equipped in one slot, as item SNBT owned by the caller.
+
+- Parameters:
+    - allocator : `std.mem.Allocator`
+    - slot : `types.EquipSlot`
+- Return type: `core.Error![]u8`
+- Slots: [`actor_get_equipped_item`](../cpp/entity.md#actor_get_equipped_item)
+
+### `Entity.setEquippedItem` {#Entity.setEquippedItem}
+
+```zig
+pub fn setEquippedItem(self: Entity, slot: types.EquipSlot, item_snbt: []const u8) core.Error!void
+```
+
+- Parameters:
+    - slot : `types.EquipSlot`
+    - item_snbt : `[]const u8`
+- Return type: `core.Error!void`
+- Slots: [`actor_set_equipped_item`](../cpp/entity.md#actor_set_equipped_item)
+
+### `Entity.vehicle` {#Entity.vehicle}
+
+```zig
+pub fn vehicle(self: Entity) core.Error!?Entity
+```
+
+The vehicle being ridden. Riding nothing gives null and only a missing slot is an error.
+
+- Return type: `core.Error!?Entity`
+
+### `Entity.firstPassenger` {#Entity.firstPassenger}
+
+```zig
+pub fn firstPassenger(self: Entity) core.Error!?Entity
+```
+
+- Return type: `core.Error!?Entity`
+
+### `Entity.owner` {#Entity.owner}
+
+```zig
+pub fn owner(self: Entity) core.Error!?Entity
+```
+
+- Return type: `core.Error!?Entity`
+
+### `Entity.target` {#Entity.target}
+
+```zig
+pub fn target(self: Entity) core.Error!?Entity
+```
+
+- Return type: `core.Error!?Entity`
+
+### `Entity.statusFlag` {#Entity.statusFlag}
+
+```zig
+pub fn statusFlag(self: Entity, flag_index: i32) core.Error!bool
+```
+
+Reads one bit of `ActorFlags`.
+
+- Parameters:
+    - flag_index : `i32`
+- Return type: `core.Error!bool`
+- Slots: [`actor_get_status_flag`](../cpp/entity.md#actor_get_status_flag)
+
+### `Entity.setStatusFlag` {#Entity.setStatusFlag}
+
+```zig
+pub fn setStatusFlag(self: Entity, flag_index: i32, value: bool) core.Error!void
+```
+
+- Parameters:
+    - flag_index : `i32`
+    - value : `bool`
+- Return type: `core.Error!void`
+- Slots: [`actor_set_status_flag`](../cpp/entity.md#actor_set_status_flag)
+
+### `Entity.traceRay` {#Entity.traceRay}
+
+```zig
+pub fn traceRay(self: Entity, allocator: std.mem.Allocator, max_dist: f32, include_actors: bool, include_blocks: bool) core.Error!types.RayHit
+```
+
+Casts a ray along the line of sight of this actor and reports what it hits. A block hit carries a name owned by `allocator`; `RayHit.deinit` frees it.
+
+- Parameters:
+    - allocator : `std.mem.Allocator`
+    - max_dist : `f32`
+    - include_actors : `bool`
+    - include_blocks : `bool`
+- Return type: `core.Error!types.RayHit`
+- Slots: [`actor_trace_ray`](../cpp/entity.md#actor_trace_ray)
+
+### `Entity.traceRayBlocks` {#Entity.traceRayBlocks}
+
+```zig
+pub fn traceRayBlocks(self: Entity, allocator: std.mem.Allocator, max_dist: f32, include_actors: bool, include_blocks: bool) core.Error!types.RayHit
+```
+
+As `traceRay`, reporting the hit as a block cell and carrying the face that was hit.
+
+- Parameters:
+    - allocator : `std.mem.Allocator`
+    - max_dist : `f32`
+    - include_actors : `bool`
+    - include_blocks : `bool`
+- Return type: `core.Error!types.RayHit`
+- Slots: [`edit_trace_ray`](../cpp/edit.md#edit_trace_ray)

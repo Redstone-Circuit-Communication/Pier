@@ -518,3 +518,18 @@ pub struct LocalTime {
 The local time, from `PIER_SYS_LOCAL_TIME`.
 
 - Implements: `Debug`, `Clone`, `Copy`, `PartialEq`, `Eq`, `Default`
+
+## `AttributeValue` {#AttributeValue}
+
+```rust
+pub struct AttributeValue {
+    pub current: f64,
+    pub min: f64,
+    pub max: f64,
+    pub default: f64,
+}
+```
+
+One attribute of an entity as `Entity::attribute_info` reads it.
+
+- Implements: `Debug`, `Clone`, `Copy`, `PartialEq`

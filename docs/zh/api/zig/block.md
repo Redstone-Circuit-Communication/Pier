@@ -346,6 +346,61 @@ pub fn requiresTool(self: BlockAt) core.Error!f64
 - 返回值类型：`core.Error!f64`
 - 对应槽位：[`block_get_num`](../cpp/block.md#block_get_num)
 
+### `BlockAt.isThinFence` {#BlockAt.isThinFence}
+
+```zig
+pub fn isThinFence(self: BlockAt) core.Error!bool
+```
+
+`PIER_BPROP_IS_THIN_FENCE`：`BlockType::isThinFenceBlock`
+
+- 返回值类型：`core.Error!bool`
+- 对应槽位：[`block_get_num`](../cpp/block.md#block_get_num)
+
+### `BlockAt.isLever` {#BlockAt.isLever}
+
+```zig
+pub fn isLever(self: BlockAt) core.Error!bool
+```
+
+`PIER_BPROP_IS_LEVER`：`BlockType::isLeverBlock`
+
+- 返回值类型：`core.Error!bool`
+- 对应槽位：[`block_get_num`](../cpp/block.md#block_get_num)
+
+### `BlockAt.isStem` {#BlockAt.isStem}
+
+```zig
+pub fn isStem(self: BlockAt) core.Error!bool
+```
+
+`PIER_BPROP_IS_STEM`：`BlockType::isStemBlock`
+
+- 返回值类型：`core.Error!bool`
+- 对应槽位：[`block_get_num`](../cpp/block.md#block_get_num)
+
+### `BlockAt.canInstatick` {#BlockAt.canInstatick}
+
+```zig
+pub fn canInstatick(self: BlockAt) core.Error!bool
+```
+
+`PIER_BPROP_CAN_INSTATICK`：`BlockType::canInstatick`
+
+- 返回值类型：`core.Error!bool`
+- 对应槽位：[`block_get_num`](../cpp/block.md#block_get_num)
+
+### `BlockAt.mapColor` {#BlockAt.mapColor}
+
+```zig
+pub fn mapColor(self: BlockAt) core.Error!f64
+```
+
+`PIER_BPROP_MAP_COLOR`：`BlockType::getMapColor`，0xRRGGBB 形式
+
+- 返回值类型：`core.Error!f64`
+- 对应槽位：[`block_get_num`](../cpp/block.md#block_get_num)
+
 ### `BlockAt.typeName` {#BlockAt.typeName}
 
 ```zig
@@ -526,3 +581,57 @@ pub fn asItem(self: BlockAt, allocator: std.mem.Allocator, s_arg: []const u8) co
     - s_arg : `[]const u8`
 - 返回值类型：`core.Error![]u8`
 - 对应槽位：[`block_action`](../cpp/block.md#block_action)
+
+### `BlockAt.getStateValue` {#BlockAt.getStateValue}
+
+```zig
+pub fn getStateValue(self: BlockAt, allocator: std.mem.Allocator, state_name: []const u8) core.Error![]u8
+```
+
+按名字读取一个方块状态的值，由调用方持有。
+
+- 参数：
+    - allocator : `std.mem.Allocator`
+    - state_name : `[]const u8`
+- 返回值类型：`core.Error![]u8`
+- 对应槽位：[`block_get_state`](../cpp/block.md#block_get_state)
+
+### `BlockAt.setStateValue` {#BlockAt.setStateValue}
+
+```zig
+pub fn setStateValue(self: BlockAt, state_name: []const u8, value: []const u8) core.Error!void
+```
+
+写入一个方块状态的值，以文本形式给出。
+
+- 参数：
+    - state_name : `[]const u8`
+    - value : `[]const u8`
+- 返回值类型：`core.Error!void`
+- 对应槽位：[`block_set_state`](../cpp/block.md#block_set_state)
+
+### `BlockAt.blockEntity` {#BlockAt.blockEntity}
+
+```zig
+pub fn blockEntity(self: BlockAt, allocator: std.mem.Allocator) core.Error![]u8
+```
+
+方块实体的 SNBT，由调用方持有。该格子里没有方块实体时为 `NoAnswer`。
+
+- 参数：
+    - allocator : `std.mem.Allocator`
+- 返回值类型：`core.Error![]u8`
+- 对应槽位：[`block_entity_snbt`](../cpp/block.md#block_entity_snbt)
+
+### `BlockAt.collisionBox` {#BlockAt.collisionBox}
+
+```zig
+pub fn collisionBox(self: BlockAt, allocator: std.mem.Allocator) core.Error![]u8
+```
+
+碰撞形状，按宿主写出的形式，由调用方持有。
+
+- 参数：
+    - allocator : `std.mem.Allocator`
+- 返回值类型：`core.Error![]u8`
+- 对应槽位：[`block_get_collision_shape`](../cpp/block.md#block_get_collision_shape)

@@ -113,7 +113,7 @@ pub struct Lane<C: LaneContract> {
 
 一个已获取的快速通道。丢弃它就会归还租约。
 
-- 实现的 trait：`Drop`
+- 实现的 trait：`Drop`、`Debug`
 
 ### `Lane::is_alive` {#Lane.is_alive}
 
@@ -161,7 +161,7 @@ pub struct Publication {
 
 一次发布。丢弃它就会撤回通道。
 
-- 实现的 trait：`Drop`
+- 实现的 trait：`Drop`、`Debug`
 
 ### `Publication::id` {#Publication.id}
 
@@ -190,7 +190,7 @@ pub struct LaneStr {
 
 指针有效多久由生产方决定，通常只在一次调用期间有效（契约 §3）。接收方要保留就得复制出来。
 
-- 实现的 trait：`Clone`、`Copy`
+- 实现的 trait：`Clone`、`Copy`、`Debug`
 
 ### `LaneStr::new` {#LaneStr.new}
 
@@ -231,7 +231,7 @@ pub struct LaneSlice<T> {
 
 通过快速通道传递的一段连续的同类型元素。
 
-- 实现的 trait：`Clone`、`Copy`
+- 实现的 trait：`Clone`、`Copy`、`Debug`
 
 ### `LaneSlice::new` {#LaneSlice.new}
 
@@ -333,7 +333,7 @@ pub struct LaneData(pub *mut c_void);
 
 它包了一层，没有直接用 `*mut c_void`，这样契约里的表签名读起来就是：这个参数是那一边的 self。
 
-- 实现的 trait：`Clone`、`Copy`
+- 实现的 trait：`Clone`、`Copy`、`Debug`
 
 ## `LaneStrSink` {#LaneStrSink}
 

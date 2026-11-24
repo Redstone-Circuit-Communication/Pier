@@ -99,7 +99,7 @@ go build -buildmode=c-shared -trimpath -o hello_pier_go.dll .
     "entry": "hello_pier_go.dll",
     "type": "pier",
     "version": "0.1.0",
-    "dependencies": [{ "name": "pier" }]
+    "dependencies": [{ "name": "Pier" }]
 }
 ```
 

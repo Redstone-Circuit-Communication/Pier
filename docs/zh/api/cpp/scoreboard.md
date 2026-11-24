@@ -26,6 +26,7 @@ bool (*scoreboard_op)(int32_t op, PierStr a, PierStr b, int64_t n, void* ctx, Pi
 - 各绑定里的调用方：
     - Rust：[`Scoreboard::add_objective`](../rust/scoreboard.md#Scoreboard.add_objective)、[`Scoreboard::remove_objective`](../rust/scoreboard.md#Scoreboard.remove_objective)、[`Scoreboard::objectives`](../rust/scoreboard.md#Scoreboard.objectives)、[`Scoreboard::score`](../rust/scoreboard.md#Scoreboard.score)、[`Scoreboard::set_score`](../rust/scoreboard.md#Scoreboard.set_score)、[`Scoreboard::add_score`](../rust/scoreboard.md#Scoreboard.add_score) 等，共 10 个
     - Go：[`Scoreboard`](../go/scoreboard.md#Scoreboard)、[`Raw.ScoreboardOp`](../go/raw.md#Raw.ScoreboardOp)
+    - Zig：[`scoreboard.addObjective`](../zig/scoreboard.md#scoreboard.addObjective)、[`scoreboard.removeObjective`](../zig/scoreboard.md#scoreboard.removeObjective)、[`scoreboard.objectives`](../zig/scoreboard.md#scoreboard.objectives)、[`scoreboard.score`](../zig/scoreboard.md#scoreboard.score)、[`scoreboard.setScore`](../zig/scoreboard.md#scoreboard.setScore)、[`scoreboard.addScore`](../zig/scoreboard.md#scoreboard.addScore) 等，共 10 个
 
 ## `PierScoreboardOp` {#PierScoreboardOp}
 

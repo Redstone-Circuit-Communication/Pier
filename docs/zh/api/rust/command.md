@@ -106,6 +106,8 @@ pub struct Invocation<'a> {
 
 一次命令调用。
 
+- 实现的 trait：`Debug`
+
 ### `Invocation::raw` {#Invocation.raw}
 
 ```rust
@@ -348,6 +350,8 @@ command::builder("plot", "Plots", CommandPermission::Any)
     .overload(|o| o.text("verb", "rate").required("score", ParamType::Int))
     .register(handler)?;
 ```
+
+- 实现的 trait：`Debug`
 
 ### `CommandBuilder::overload` {#CommandBuilder.overload}
 

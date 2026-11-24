@@ -432,6 +432,45 @@ pub fn set_permission_level(&self, level: PlayerPermission) -> Result<()>
 - Return type: `Result<()>`
 - Slots: [`player_action`](../cpp/player.md#player_action)
 
+### `Player::stop_sleeping` {#Player.stop_sleeping}
+
+```rust
+pub fn stop_sleeping(&self, forceful: bool) -> Result<()>
+```
+
+Wakes a sleeping player; an `Err` when the player is not asleep.
+
+- Parameters:
+    - forceful : `bool`
+- Return type: `Result<()>`
+- Slots: [`player_action`](../cpp/player.md#player_action)
+
+### `Player::cause_exhaustion` {#Player.cause_exhaustion}
+
+```rust
+pub fn cause_exhaustion(&self, amount: f32) -> Result<()>
+```
+
+Adds food exhaustion, which the engine turns into lost saturation and hunger.
+
+- Parameters:
+    - amount : `f32`
+- Return type: `Result<()>`
+- Slots: [`player_action`](../cpp/player.md#player_action)
+
+### `Player::eat` {#Player.eat}
+
+```rust
+pub fn eat(&self, item_snbt: &str) -> Result<()>
+```
+
+Feeds the player the food value of an item, given as item SNBT.
+
+- Parameters:
+    - item_snbt : `&str`
+- Return type: `Result<()>`
+- Slots: [`player_action`](../cpp/player.md#player_action)
+
 ### `Player::set_selected_slot` {#Player.set_selected_slot}
 
 ```rust
@@ -1301,6 +1340,73 @@ and always answers true.
 
 - Return type: `Result<bool>`
 - Slots: [`player_get_num`](../cpp/player.md#player_get_num)
+
+### `Player::is_sleeping` {#Player.is_sleeping}
+
+```rust
+pub fn is_sleeping(&self) -> Result<bool>
+```
+
+- Return type: `Result<bool>`
+- Slots: [`player_get_num`](../cpp/player.md#player_get_num)
+
+### `Player::is_simulated_player` {#Player.is_simulated_player}
+
+```rust
+pub fn is_simulated_player(&self) -> Result<bool>
+```
+
+- Return type: `Result<bool>`
+- Slots: [`player_get_num`](../cpp/player.md#player_get_num)
+
+### `Player::item_use_duration` {#Player.item_use_duration}
+
+```rust
+pub fn item_use_duration(&self) -> Result<i32>
+```
+
+- Return type: `Result<i32>`
+- Slots: [`player_get_num`](../cpp/player.md#player_get_num)
+
+### `Player::xp_earned_at_level` {#Player.xp_earned_at_level}
+
+```rust
+pub fn xp_earned_at_level(&self) -> Result<i32>
+```
+
+- Return type: `Result<i32>`
+- Slots: [`player_get_num`](../cpp/player.md#player_get_num)
+
+### `Player::can_fly` {#Player.can_fly}
+
+```rust
+pub fn can_fly(&self) -> Result<bool>
+```
+
+- Return type: `Result<bool>`
+- Slots: [`player_get_num`](../cpp/player.md#player_get_num)
+
+### `Player::selected_item_snbt` {#Player.selected_item_snbt}
+
+```rust
+pub fn selected_item_snbt(&self) -> Result<String>
+```
+
+The item in the selected hotbar slot, as item SNBT.
+
+- Return type: `Result<String>`
+- Slots: [`player_get_str`](../cpp/player.md#player_get_str)
+
+### `Player::device_model` {#Player.device_model}
+
+```rust
+pub fn device_model(&self) -> Result<String>
+```
+
+The device model the client reported when it connected.
+
+- Return type: `Result<String>`
+- Slots: [`player_get_str`](../cpp/player.md#player_get_str)
 
 ## `PlayerSel` {#PlayerSel}
 

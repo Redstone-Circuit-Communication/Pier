@@ -248,6 +248,8 @@ Publish a lane. Exclusive, same discipline as `service_register`: if the name is
 - Position in the table: slot 172, counting from 0
 - Callers in each binding:
     - Rust: [`lane::publish`](../rust/lane.md#fn.publish)
+    - Go: [`PublishLane`](../go/crossmod.md#PublishLane)
+    - Zig: [`lane.publish`](../zig/crossmod.md#lane.publish)
 
 ### `lane_unpublish` {#lane_unpublish}
 
@@ -265,7 +267,8 @@ Withdraw a lane owned by this mod. Calls release for every outstanding lease and
 - Section of abi.h: Same-toolchain fast lane, appended and struct\_size-gated.
 - Position in the table: slot 173, counting from 0
 - Callers in each binding:
-    - Go: [`Raw.LaneUnpublish`](../go/raw.md#Raw.LaneUnpublish)
+    - Go: [`LanePublication.Withdraw`](../go/crossmod.md#LanePublication.Withdraw), [`Raw.LaneUnpublish`](../go/raw.md#Raw.LaneUnpublish)
+    - Zig: [`lane.Publication.withdraw`](../zig/crossmod.md#lane.Publication.withdraw)
 
 ### `lane_acquire` {#lane_acquire}
 
@@ -291,6 +294,8 @@ Returns a PIER\_LANE\_\* value. After a successful acquire, `lane_release` is ma
 - Position in the table: slot 174, counting from 0
 - Callers in each binding:
     - Rust: [`lane::acquire`](../rust/lane.md#fn.acquire), [`lane::acquire`](../rust/lane.md#fn.acquire)
+    - Go: [`AcquireLane`](../go/crossmod.md#AcquireLane)
+    - Zig: [`lane.acquire`](../zig/crossmod.md#lane.acquire)
 
 ### `lane_release` {#lane_release}
 
@@ -308,7 +313,8 @@ Return a lease. Only a lease held by this mod. Returns false when the provider i
 - Section of abi.h: Same-toolchain fast lane, appended and struct\_size-gated.
 - Position in the table: slot 175, counting from 0
 - Callers in each binding:
-    - Go: [`Raw.LaneRelease`](../go/raw.md#Raw.LaneRelease)
+    - Go: [`LaneLease.Release`](../go/crossmod.md#LaneLease.Release), [`Raw.LaneRelease`](../go/raw.md#Raw.LaneRelease)
+    - Zig: [`lane.Lease.release`](../zig/crossmod.md#lane.Lease.release)
 
 ### `lane_list` {#lane_list}
 
@@ -326,7 +332,8 @@ Every lane, as a JSON array: \[{"name":…,"mod":…,"fingerprint":"0x…","prot
 - Position in the table: slot 176, counting from 0
 - Callers in each binding:
     - Rust: [`lane::list`](../rust/lane.md#fn.list), [`lane::list`](../rust/lane.md#fn.list), [`lane::list_json`](../rust/lane.md#fn.list_json), [`lane::list_json`](../rust/lane.md#fn.list_json)
-    - Go: [`Raw.LaneList`](../go/raw.md#Raw.LaneList)
+    - Go: [`Lanes`](../go/crossmod.md#Lanes), [`Raw.LaneList`](../go/raw.md#Raw.LaneList)
+    - Zig: [`lane.list`](../zig/crossmod.md#lane.list), [`lane.listJson`](../zig/crossmod.md#lane.listJson)
 
 ### `service_caller` {#service_caller}
 

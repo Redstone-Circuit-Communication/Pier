@@ -33,16 +33,17 @@ pier-support      small cross-package utilities (PierStr and sv, SNBT escaping, 
    ^
 pier-host         the mod lifecycle, the SPI registry, and the owner of the PierApi table
    ^
-   |-- pier-api           the core domain implementation (core / runtime / actors / world / net)
+   |-- pier-api           the core domain implementation (core / runtime / actors / world / net / native)
    |-- pier-hooks         events synthesized with native detours       (capability package)
    |-- pier-lane          the same-toolchain fast lane                 (capability package, optional)
    |-- pier-dimensions    custom dimensions                            (capability package, optional, server)
-   +-- pier-client        client-only slots                            (capability package, client build only)
+   |-- pier-client        client-only slots                            (capability package, client build only)
+   +-- pier-adopt         adopting mods that name the host "pier"     (capability package, optional)
 
 pier-sys-rs -> pier-rs                                                  <- the binding of one language
 ```
 
-**These are two independent build lines.** The eight packages above are compiled by the root
+**These are two independent build lines.** The nine packages above are compiled by the root
 `xmake.lua` into the host itself, `pier.dll`, and the two crates below by the root
 `Cargo.toml` into the binding. There is no build dependency between the lines, only a
 contract dependency: a binding reads the single header `sdk/abi.h`, through a hand-written

@@ -842,6 +842,22 @@ func (RawAPI) SetExtraBlock(dim int32, x int32, y int32, z int32, blockSpec stri
 - 返回值类型：`(bool, error)`
 - 对应槽位：[`set_extra_block`](../cpp/world.md#set_extra_block)
 
+### `Raw.WorldGetNum` {#Raw.WorldGetNum}
+
+```go
+func (RawAPI) WorldGetNum(dim int32, prop int32) (float64, bool, error)
+```
+
+调用 `world_get_num` 槽位。
+
+把维度 `dim` 的一个 PIER_WPROP_* 值读入 *out。键未知、`out` 为空、维度不存在、或者 level 尚未就绪时返回 false，*out 保持不变。尚未构建的自定义维度会由这个调用构建，就像从它读取一个方块时会构建它一样。
+
+- 参数：
+    - dim : `int32`
+    - prop : `int32`
+- 返回值类型：`(float64, bool, error)`
+- 对应槽位：[`world_get_num`](../cpp/world.md#world_get_num)
+
 ## 批量编辑世界 {#raw-edit}
 
 ### `Raw.EditSetBlockNbt` {#Raw.EditSetBlockNbt}
@@ -2334,7 +2350,7 @@ func (RawAPI) ClientGetScreenName() ([]string, bool, error)
 
 调用 `client_get_screen_name` 槽位。
 
-当前界面的名字（例如 `"hud_screen"`、`"pause_screen"`）。当前所有宿主上这个槽位都是 NULL，客户端构建也一样：引擎没有提供稳定的访问方式。
+通过 IClientInstance::getScreenName 读取当前界面名，例如 "hud_screen" 或 "pause_screen"。客户端还没有实例时返回 false，sink 不会被调用。client_get_str 的 PIER_CSTR_TOP_SCREEN_NAME 读取的则是界面栈最顶层的界面。
 
 - 返回值类型：`([]string, bool, error)`
 - 对应槽位：[`client_get_screen_name`](../cpp/client.md#client_get_screen_name)
@@ -2368,6 +2384,267 @@ func (RawAPI) ClientGetKeyCodes(handleArg KeyHandle) ([]string, bool, error)
     - handleArg : `KeyHandle`
 - 返回值类型：`([]string, bool, error)`
 - 对应槽位：[`client_get_key_codes`](../cpp/client.md#client_get_key_codes)
+
+### `Raw.ClientGetNum` {#Raw.ClientGetNum}
+
+```go
+func (RawAPI) ClientGetNum(prop int32) (float64, bool, error)
+```
+
+调用 `client_get_num` 槽位。
+
+把一个 PIER_CPROP_* 值读入 *out。键未知、`out` 为空、客户端还没有实例、或者客户端不在世界里时读取关于本地玩家的键，都返回 false，*out 保持不变。布尔类的值读出 1 或 0。
+
+- 参数：
+    - prop : `int32`
+- 返回值类型：`(float64, bool, error)`
+- 对应槽位：[`client_get_num`](../cpp/client.md#client_get_num)
+
+### `Raw.ClientGetStr` {#Raw.ClientGetStr}
+
+```go
+func (RawAPI) ClientGetStr(prop int32) ([]string, bool, error)
+```
+
+调用 `client_get_str` 槽位。
+
+通过 `sink` 读取一个 PIER_CSTR_* 值，sink 只调用一次。键未知、sink 为空、或者客户端还没有实例时返回 false，sink 不会被调用。
+
+- 参数：
+    - prop : `int32`
+- 返回值类型：`([]string, bool, error)`
+- 对应槽位：[`client_get_str`](../cpp/client.md#client_get_str)
+
+### `Raw.ClientAction` {#Raw.ClientAction}
+
+```go
+func (RawAPI) ClientAction(action int32, sarg string, a float64, b float64, c float64) (bool, error)
+```
+
+调用 `client_action` 槽位。
+
+在这个客户端上执行一个 PIER_CACT_* 动作。动作未知、文本类动作给了空文本、或者客户端还没有实例时返回 false。文本类动作需要 HUD，HUD 在世界加载后才存在，之前一律返回 false。返回 true 表示调用到达了引擎，引擎不会回报任何结果。
+
+- 参数：
+    - action : `int32`
+    - sarg : `string`
+    - a : `float64`
+    - b : `float64`
+    - c : `float64`
+- 返回值类型：`(bool, error)`
+- 对应槽位：[`client_action`](../cpp/client.md#client_action)
+
+### `Raw.ClientListKeys` {#Raw.ClientListKeys}
+
+```go
+func (RawAPI) ClientListKeys() ([]string, bool, error)
+```
+
+调用 `client_list_keys` 槽位。
+
+把 ll::input::KeyRegistry 中每个绑定的名字逐个交给 `sink`，每个名字调用一次，不论是哪个模组注册的。只有 sink 为空时返回 false。
+
+- 返回值类型：`([]string, bool, error)`
+- 对应槽位：[`client_list_keys`](../cpp/client.md#client_list_keys)
+
+### `Raw.ClientOptionGet` {#Raw.ClientOptionGet}
+
+```go
+func (RawAPI) ClientOptionGet(key string) ([]string, bool, error)
+```
+
+调用 `client_option_get` 槽位。
+
+按 options.txt 里的键通过 `sink` 读取一个选项，sink 只调用一次。键未知、sink 为空、或者客户端还没有实例时返回 false，sink 不会被调用。
+
+- 参数：
+    - key : `string`
+- 返回值类型：`([]string, bool, error)`
+- 对应槽位：[`client_option_get`](../cpp/client.md#client_option_get)
+
+### `Raw.ClientOptionSet` {#Raw.ClientOptionSet}
+
+```go
+func (RawAPI) ClientOptionSet(key string, value string) (bool, error)
+```
+
+调用 `client_option_set` 槽位。
+
+写入保存着 `key` 的那个选项，把 `value` 交给 Option::load，也就是读取 options.txt 时用的解析器。键未知、引擎标记该选项此刻不可修改、或者客户端还没有实例时返回 false。引擎保留它能解析的部分，不报告任何结果，所以需要确认的调用方要把这个键读回来。宿主自己不会写 options.txt。
+
+- 参数：
+    - key : `string`
+    - value : `string`
+- 返回值类型：`(bool, error)`
+- 对应槽位：[`client_option_set`](../cpp/client.md#client_option_set)
+
+## 原生逃生口 {#raw-native}
+
+### `Raw.NativeResolveSymbol` {#Raw.NativeResolveSymbol}
+
+```go
+func (RawAPI) NativeResolveSymbol(symbol string) (unsafe.Pointer, int32, error)
+```
+
+调用 `native_resolve_symbol` 槽位。
+
+按修饰后的符号名得到一个引擎函数的地址。
+
+- 参数：
+    - symbol : `string`
+- 返回值类型：`(unsafe.Pointer, int32, error)`
+- 对应槽位：[`native_resolve_symbol`](../cpp/native.md#native_resolve_symbol)
+
+### `Raw.NativeResolveSignature` {#Raw.NativeResolveSignature}
+
+```go
+func (RawAPI) NativeResolveSignature(pattern string) (unsafe.Pointer, int32, error)
+```
+
+调用 `native_resolve_signature` 槽位。
+
+字节特征码在引擎可执行文件中的第一个匹配。
+
+- 参数：
+    - pattern : `string`
+- 返回值类型：`(unsafe.Pointer, int32, error)`
+- 对应槽位：[`native_resolve_signature`](../cpp/native.md#native_resolve_signature)
+
+### `Raw.NativeModuleExport` {#Raw.NativeModuleExport}
+
+```go
+func (RawAPI) NativeModuleExport(module, name string) (unsafe.Pointer, int32, error)
+```
+
+调用 `native_module_export` 槽位。
+
+进程中已加载模块的一个导出。
+
+- 参数：
+    - module : `string`
+    - name : `string`
+- 返回值类型：`(unsafe.Pointer, int32, error)`
+- 对应槽位：[`native_module_export`](../cpp/native.md#native_module_export)
+
+### `Raw.NativeObject` {#Raw.NativeObject}
+
+```go
+func (RawAPI) NativeObject(kind int32) (unsafe.Pointer, int32, error)
+```
+
+调用 `native_object` 槽位。
+
+一个引擎服务对象的地址。
+
+- 参数：
+    - kind : `int32`
+- 返回值类型：`(unsafe.Pointer, int32, error)`
+- 对应槽位：[`native_object`](../cpp/native.md#native_object)
+
+### `Raw.NativePlayer` {#Raw.NativePlayer}
+
+```go
+func (RawAPI) NativePlayer(p Player) (unsafe.Pointer, int32, error)
+```
+
+调用 `native_player` 槽位。
+
+在线玩家的 Player 对象。
+
+- 参数：
+    - p : `Player`
+- 返回值类型：`(unsafe.Pointer, int32, error)`
+- 对应槽位：[`native_player`](../cpp/native.md#native_player)
+
+### `Raw.NativeActor` {#Raw.NativeActor}
+
+```go
+func (RawAPI) NativeActor(id ActorID) (unsafe.Pointer, int32, error)
+```
+
+调用 `native_actor` 槽位。
+
+已加载实体的 Actor 对象。
+
+- 参数：
+    - id : `ActorID`
+- 返回值类型：`(unsafe.Pointer, int32, error)`
+- 对应槽位：[`native_actor`](../cpp/native.md#native_actor)
+
+### `Raw.NativeDimension` {#Raw.NativeDimension}
+
+```go
+func (RawAPI) NativeDimension(dim int32) (unsafe.Pointer, int32, error)
+```
+
+调用 `native_dimension` 槽位。
+
+维度 id 对应的 Dimension 对象。
+
+- 参数：
+    - dim : `int32`
+- 返回值类型：`(unsafe.Pointer, int32, error)`
+- 对应槽位：[`native_dimension`](../cpp/native.md#native_dimension)
+
+### `Raw.NativeBlockSource` {#Raw.NativeBlockSource}
+
+```go
+func (RawAPI) NativeBlockSource(dim int32) (unsafe.Pointer, int32, error)
+```
+
+调用 `native_block_source` 槽位。
+
+维度 id 对应的 BlockSource。
+
+- 参数：
+    - dim : `int32`
+- 返回值类型：`(unsafe.Pointer, int32, error)`
+- 对应槽位：[`native_block_source`](../cpp/native.md#native_block_source)
+
+### `Raw.NativeHookInstall` {#Raw.NativeHookInstall}
+
+```go
+func (RawAPI) NativeHookInstall(target, detour unsafe.Pointer, priority int32) (unsafe.Pointer, uint64, int32, error)
+```
+
+调用 `native_hook_install` 槽位。
+
+通过 ll::memory::hook 在 target 上安装一个原生 detour。
+
+- 参数：
+    - target : `unsafe.Pointer`
+    - detour : `unsafe.Pointer`
+    - priority : `int32`
+- 返回值类型：`(unsafe.Pointer, uint64, int32, error)`
+- 对应槽位：[`native_hook_install`](../cpp/native.md#native_hook_install)
+
+### `Raw.NativeEnabled` {#Raw.NativeEnabled}
+
+```go
+func (RawAPI) NativeEnabled() (bool, error)
+```
+
+调用 `native_enabled` 槽位。
+
+native_detour 是否打开，即其他 native_* 槽位能否响应。不写日志。
+
+- 返回值类型：`(bool, error)`
+- 对应槽位：[`native_enabled`](../cpp/native.md#native_enabled)
+
+### `Raw.NativeHookRemove` {#Raw.NativeHookRemove}
+
+```go
+func (RawAPI) NativeHookRemove(id uint64) (int32, error)
+```
+
+调用 `native_hook_remove` 槽位。
+
+移除这个模组安装的一个 detour。id 不属于这个模组（包括已经移除过的）时返回 PIER_NATIVE_NOT_FOUND。引擎侧移除失败时返回 PIER_NATIVE_FAILED，这个 detour 仍保留在记录中，卸载时会再试一次。
+
+- 参数：
+    - id : `uint64`
+- 返回值类型：`(int32, error)`
+- 对应槽位：[`native_hook_remove`](../cpp/native.md#native_hook_remove)
 
 ## 自定义维度 {#raw-dimensions}
 

@@ -134,6 +134,49 @@ ServiceCaller is the mod whose call is running, asked inside a provider. It is f
 - Return type: `(string, bool)`
 - Slots: [`service_caller`](../cpp/crossmod.md#service_caller)
 
+### `Lanes` {#Lanes}
+
+```go
+func Lanes() ([]LaneInfo, error)
+```
+
+Lanes lists every published lane. It passes no pointer at all, so it suits looking at what exists first.
+
+- Return type: `([]LaneInfo, error)`
+- Slots: [`lane_list`](../cpp/crossmod.md#lane_list)
+
+### `PublishLane` {#PublishLane}
+
+```go
+func PublishLane(name string, fingerprint uint64, data, table, retain, release unsafe.Pointer) (*LanePublication, error)
+```
+
+PublishLane publishes a lane, exclusively under name. fingerprint is the value of the contract and must not be 0, which means anyone may connect and which the host refuses. table is the provider's table of function pointers and data the pointer each of them receives; both must point into C memory, since the consumer reaches them from outside Go. retain and release, when not nil, are C functions that count leases on data. The lane is withdrawn automatically at unload.
+
+- Parameters:
+    - name : `string`
+    - fingerprint : `uint64`
+    - data : `unsafe.Pointer`
+    - table : `unsafe.Pointer`
+    - retain : `unsafe.Pointer`
+    - release : `unsafe.Pointer`
+- Return type: `(*LanePublication, error)`
+- Slots: [`lane_publish`](../cpp/crossmod.md#lane_publish)
+
+### `AcquireLane` {#AcquireLane}
+
+```go
+func AcquireLane(name string, fingerprint uint64) (*LaneLease, error)
+```
+
+AcquireLane acquires a lane. fingerprint must be the value the consumer computed itself from the contract; 0 is not valid and always fails. A missing lane is a \*LaneNotFoundError and a contract that differs is a \*LaneFingerprintError.
+
+- Parameters:
+    - name : `string`
+    - fingerprint : `uint64`
+- Return type: `(*LaneLease, error)`
+- Slots: [`lane_acquire`](../cpp/crossmod.md#lane_acquire)
+
 ## `Subscription` {#Subscription}
 
 ```go
@@ -216,6 +259,47 @@ Unregister withdraws the service. Calling it twice is harmless.
 - Return type: `error`
 - Slots: [`service_unregister`](../cpp/crossmod.md#service_unregister)
 
+## `LaneLease` {#LaneLease}
+
+```go
+type LaneLease struct {
+    // unexported fields
+}
+```
+
+LaneLease is a lease on a published lane, kept to return it.
+
+### `LaneLease.IsAlive` {#LaneLease.IsAlive}
+
+```go
+func (l *LaneLease) IsAlive() bool
+```
+
+IsAlive reports whether the provider is still there.
+
+- Return type: `bool`
+
+### `LaneLease.Enter` {#LaneLease.Enter}
+
+```go
+func (l *LaneLease) Enter() (table, data unsafe.Pointer, leave func(), ok bool)
+```
+
+Enter enters the provider for one call and returns the provider's table and data pointers. ok is false when the provider is gone. Call leave when the call is over, so the provider cannot unload underneath a call that is running.
+
+- Return type: `(table, data unsafe.Pointer, leave func(), ok bool)`
+
+### `LaneLease.Release` {#LaneLease.Release}
+
+```go
+func (l *LaneLease) Release() (bool, error)
+```
+
+Release returns the lease. It reports false when the provider is already gone, since the loader has released it by then and releasing again would be a double free.
+
+- Return type: `(bool, error)`
+- Slots: [`lane_release`](../cpp/crossmod.md#lane_release)
+
 ## `CallError` {#CallError}
 
 ```go
@@ -232,6 +316,62 @@ CallError is why a service call failed: nobody provides the name, the provider s
 
 ```go
 func (e *CallError) Error() string
+```
+
+- Return type: `string`
+
+## `LanePublication` {#LanePublication}
+
+```go
+type LanePublication struct{ id uint64 }
+type LanePublication struct{ id uint64 }
+```
+
+LanePublication is one published lane.
+
+### `LanePublication.Withdraw` {#LanePublication.Withdraw}
+
+```go
+func (p *LanePublication) Withdraw() error
+```
+
+Withdraw takes the lane back; calling it twice is harmless. Every outstanding lease is released.
+
+- Return type: `error`
+- Slots: [`lane_unpublish`](../cpp/crossmod.md#lane_unpublish)
+
+## `LaneNotFoundError` {#LaneNotFoundError}
+
+```go
+type LaneNotFoundError struct{ Name string }
+type LaneNotFoundError struct{ Name string }
+```
+
+LaneNotFoundError means no lane by that name is published.
+
+### `LaneNotFoundError.Error` {#LaneNotFoundError.Error}
+
+```go
+func (e *LaneNotFoundError) Error() string
+```
+
+- Return type: `string`
+
+## `LaneFingerprintError` {#LaneFingerprintError}
+
+```go
+type LaneFingerprintError struct {
+    Name         string
+    Ours, Theirs uint64
+}
+```
+
+LaneFingerprintError means the provider's contract is not the one the consumer asked for.
+
+### `LaneFingerprintError.Error` {#LaneFingerprintError.Error}
+
+```go
+func (e *LaneFingerprintError) Error() string
 ```
 
 - Return type: `string`
@@ -275,3 +415,18 @@ type ServiceInfo struct {
 ```
 
 ServiceInfo is one registered service and the mod providing it.
+
+## `LaneInfo` {#LaneInfo}
+
+```go
+type LaneInfo struct {
+    Name        string `json:"name"`
+    Mod         string `json:"mod"`
+    Fingerprint string `json:"fingerprint"`
+    Protocol    uint32 `json:"protocol"`
+    Leases      uint32 `json:"leases"`
+    Alive       bool   `json:"alive"`
+}
+```
+
+LaneInfo is the registration record of a published lane.

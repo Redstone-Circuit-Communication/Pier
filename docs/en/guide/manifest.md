@@ -17,7 +17,7 @@ plugins/
   "type": "pier",
   "version": "0.1.0",
   "description": "What this mod does.",
-  "dependencies": [{ "name": "pier" }]
+  "dependencies": [{ "name": "Pier" }]
 }
 ```
 
@@ -30,7 +30,7 @@ plugins/
 | `type` | yes | Exactly `pier`. |
 | `version` | yes | Semver. |
 | `description` | no | Shown in `/pier list`. |
-| `dependencies` | yes | Must include `{ "name": "pier" }`. |
+| `dependencies` | yes | Must include `{ "name": "Pier" }`. |
 | `reload_safe` | no | `true` opens the mod to `/pier reload`. Default false. |
 | `load_level` | no | Integer, default 0. Lower loads earlier. |
 
@@ -67,14 +67,17 @@ mod the default is exactly the silent fallback this project refuses elsewhere.
 
 ## Dependencies
 
-Listing `pier` is what orders the load, so that the host exists before your mod is
-dispatched to it. A name that is not `pier` is a dependency on a mod that does not exist.
+Listing `Pier`, the manifest name of the host, is what orders the load, so that the host
+exists before your mod is dispatched to it. LeviLamina compares the name exactly, and `pier`
+is the mod type and no mod's name. A mod that names `pier` is refused at startup; Pier then
+loads it and writes a warning, see [`mods.adopt`](configuration.md#mods-adopt), and the
+manifest should still be corrected.
 
 Depending on another Pier mod works the same way:
 
 ```json
 "dependencies": [
-  { "name": "pier" },
+  { "name": "Pier" },
   { "name": "plot-manager" }
 ]
 ```

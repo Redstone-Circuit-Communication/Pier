@@ -16,7 +16,7 @@ plugins/
   "type": "pier",
   "version": "0.1.0",
   "description": "这个模组做什么。",
-  "dependencies": [{ "name": "pier" }]
+  "dependencies": [{ "name": "Pier" }]
 }
 ```
 
@@ -29,7 +29,7 @@ plugins/
 | `type` | 是 | 必须正好是 `pier` |
 | `version` | 是 | 语义化版本 |
 | `description` | 否 | 显示在 `/pier list` 里 |
-| `dependencies` | 是 | 必须含 `{ "name": "pier" }` |
+| `dependencies` | 是 | 必须含 `{ "name": "Pier" }` |
 | `reload_safe` | 否 | 为 `true` 才允许 `/pier reload`，默认 false |
 | `load_level` | 否 | 整数，默认 0，越小越早加载 |
 
@@ -60,17 +60,19 @@ plugins/
 
 ## 依赖
 
-写上 `pier` 是为了给装载排序，让宿主先于你的模组存在。写成别的名字，
+写上 `Pier` 是为了给装载排序，让宿主先于你的模组存在。写成别的名字，
 就等于依赖一个不存在的模组。
 
 依赖另一个 Pier 模组同理：
 
 ```json
 "dependencies": [
-  { "name": "pier" },
+  { "name": "Pier" },
   { "name": "plot-manager" }
 ]
 ```
 
 这只排装载顺序，不会让对方的 API 可达。要通信请用
 [服务或总线](../rust/cross-mod.md)。
+
+依赖名要写宿主 manifest 里的 name，也就是 `Pier`；`pier` 是模组类型，不是任何模组的名字。写成 `pier` 的模组启动时会被 LeviLamina 拒绝，随后由 Pier 加载并给出警告，见 [`mods.adopt`](configuration.md#mods-adopt)，但 manifest 仍然应该改正。

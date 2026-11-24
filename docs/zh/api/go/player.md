@@ -62,6 +62,19 @@ func ListPlayers() ([]PlayerInfo, error)
 - 返回值类型：`([]PlayerInfo, error)`
 - 对应槽位：[`list_players`](../cpp/player.md#list_players)、[`log`](../cpp/core.md#log)
 
+### `PositionOf` {#PositionOf}
+
+```go
+func PositionOf(name string) (PlayerPos, error)
+```
+
+PositionOf 按名字查找一名已连接玩家的脚下位置和所在维度。
+
+- 参数：
+    - name : `string`
+- 返回值类型：`(PlayerPos, error)`
+- 对应槽位：[`get_player_position`](../cpp/player.md#get_player_position)
+
 ### `ByName` {#ByName}
 
 ```go
@@ -317,6 +330,97 @@ func (p Player) Offhand() Container
 把这名玩家的副手栏当作容器。
 
 - 返回值类型：`Container`
+
+### `Player.Position` {#Player.Position}
+
+```go
+func (p Player) Position() (PlayerPos, error)
+```
+
+Position 是玩家脚下的位置和所在维度。
+
+- 返回值类型：`(PlayerPos, error)`
+- 对应槽位：[`player_get_str`](../cpp/player.md#player_get_str)、[`get_player_position`](../cpp/player.md#get_player_position)
+
+### `Player.Cooldown` {#Player.Cooldown}
+
+```go
+func (p Player) Cooldown(itemName string) (int32, error)
+```
+
+Cooldown 是物品还剩多少 tick 的冷却，不在冷却中时为 -1。
+
+- 参数：
+    - itemName : `string`
+- 返回值类型：`(int32, error)`
+- 对应槽位：[`player_get_cooldown`](../cpp/player.md#player_get_cooldown)
+
+### `Player.SetCooldown` {#Player.SetCooldown}
+
+```go
+func (p Player) SetCooldown(itemName string, ticks int32) error
+```
+
+SetCooldown 让这名玩家的这个物品进入冷却。
+
+- 参数：
+    - itemName : `string`
+    - ticks : `int32`
+- 返回值类型：`error`
+- 对应槽位：[`player_start_cooldown`](../cpp/player.md#player_start_cooldown)
+
+### `Player.Equipment` {#Player.Equipment}
+
+```go
+func (p Player) Equipment() ([]SlotItem, error)
+```
+
+Equipment 列出玩家的装备，按引擎的槽位编号每个槽位一项。
+
+- 返回值类型：`([]SlotItem, error)`
+- 对应槽位：[`player_get_equipment`](../cpp/player.md#player_get_equipment)
+
+### `Player.NetworkDetail` {#Player.NetworkDetail}
+
+```go
+func (p Player) NetworkDetail() (NetworkStatus, error)
+```
+
+NetworkDetail 读取玩家的网络状态。
+
+- 返回值类型：`(NetworkStatus, error)`
+- 对应槽位：[`player_get_network_status`](../cpp/player.md#player_get_network_status)
+
+### `Player.SendPacket` {#Player.SendPacket}
+
+```go
+func (p Player) SendPacket(packetID int32, body []byte) error
+```
+
+SendPacket 把一个原始数据包推到这名玩家的连接上：id 和包体，不含包头。
+
+- 参数：
+    - packetID : `int32`
+    - body : `[]byte`
+- 返回值类型：`error`
+- 对应槽位：[`send_packet`](../cpp/packet.md#send_packet)
+
+### `Player.ShowParticle` {#Player.ShowParticle}
+
+```go
+func (p Player) ShowParticle(dim int32, effect string, x, y, z float64) error
+```
+
+ShowParticle 生成一个只有这名玩家能看到的粒子。
+
+- 参数：
+    - dim : `int32`
+    - effect : `string`
+    - x : `float64`
+    - y : `float64`
+    - z : `float64`
+- 返回值类型：`error`
+- 对应槽位：[`spawn_particle_for`](../cpp/world.md#spawn_particle_for)
 
 ### `Player.GameType` {#Player.GameType}
 
@@ -790,6 +894,61 @@ func (p Player) IsInitialized() (bool, error)
 - 返回值类型：`(bool, error)`
 - 对应槽位：[`player_get_num`](../cpp/player.md#player_get_num)
 
+### `Player.IsSleeping` {#Player.IsSleeping}
+
+```go
+func (p Player) IsSleeping() (bool, error)
+```
+
+读取 `PIER_PPROP_IS_SLEEPING`：(G) `Player::isSleeping`
+
+- 返回值类型：`(bool, error)`
+- 对应槽位：[`player_get_num`](../cpp/player.md#player_get_num)
+
+### `Player.IsSimulated` {#Player.IsSimulated}
+
+```go
+func (p Player) IsSimulated() (bool, error)
+```
+
+读取 `PIER_PPROP_IS_SIMULATED`：(G) `Actor::isSimulatedPlayer`
+
+- 返回值类型：`(bool, error)`
+- 对应槽位：[`player_get_num`](../cpp/player.md#player_get_num)
+
+### `Player.ItemUseDuration` {#Player.ItemUseDuration}
+
+```go
+func (p Player) ItemUseDuration() (float64, error)
+```
+
+读取 `PIER_PPROP_ITEM_USE_DURATION`：(G) `Player::getItemUseDuration`，单位为刻
+
+- 返回值类型：`(float64, error)`
+- 对应槽位：[`player_get_num`](../cpp/player.md#player_get_num)
+
+### `Player.XpEarnedAtLevel` {#Player.XpEarnedAtLevel}
+
+```go
+func (p Player) XpEarnedAtLevel() (float64, error)
+```
+
+读取 `PIER_PPROP_XP_EARNED_AT_LEVEL`：(G) `Player::getXpEarnedAtCurrentLevel`
+
+- 返回值类型：`(float64, error)`
+- 对应槽位：[`player_get_num`](../cpp/player.md#player_get_num)
+
+### `Player.CanFly` {#Player.CanFly}
+
+```go
+func (p Player) CanFly() (bool, error)
+```
+
+读取 `PIER_PPROP_CAN_FLY`：(G) `Actor::canFly`
+
+- 返回值类型：`(bool, error)`
+- 对应槽位：[`player_get_num`](../cpp/player.md#player_get_num)
+
 ### `Player.RealName` {#Player.RealName}
 
 ```go
@@ -907,6 +1066,28 @@ func (p Player) RespawnPos() (string, error)
 ```
 
 读取 `PIER_PSTR_RESPAWN_POS`：SNBT `{x,y,z,dim}`：这名玩家会在哪里重生。不会为空：没有床的玩家报告的是世界出生点，这两种情况区分不开。
+
+- 返回值类型：`(string, error)`
+- 对应槽位：[`player_get_str`](../cpp/player.md#player_get_str)
+
+### `Player.SelectedItem` {#Player.SelectedItem}
+
+```go
+func (p Player) SelectedItem() (string, error)
+```
+
+读取 `PIER_PSTR_SELECTED_ITEM`：`Player::getSelectedItem`，物品 SNBT
+
+- 返回值类型：`(string, error)`
+- 对应槽位：[`player_get_str`](../cpp/player.md#player_get_str)
+
+### `Player.DeviceModel` {#Player.DeviceModel}
+
+```go
+func (p Player) DeviceModel() (string, error)
+```
+
+读取 `PIER_PSTR_DEVICE_MODEL`：`ConnectionRequest::getDeviceModel`；没有连接请求的玩家读取失败
 
 - 返回值类型：`(string, error)`
 - 对应槽位：[`player_get_str`](../cpp/player.md#player_get_str)
@@ -1397,6 +1578,60 @@ func (p Player) SetPermissionLevel(sarg string, a, b, c float64) (string, error)
 - 返回值类型：`(string, error)`
 - 对应槽位：[`player_action`](../cpp/player.md#player_action)
 
+### `Player.StopSleeping` {#Player.StopSleeping}
+
+```go
+func (p Player) StopSleeping(sarg string, a, b, c float64) (string, error)
+```
+
+执行 `PIER_PACT_STOP_SLEEPING`：a：非零时强制唤醒。`Player::stopSleepInBed`；没在睡觉时返回 false
+
+这个动作有输出时，输出就是返回值；每个参数的含义写在 abi.h 里这个常量的注释中。
+
+- 参数：
+    - sarg : `string`
+    - a : `float64`
+    - b : `float64`
+    - c : `float64`
+- 返回值类型：`(string, error)`
+- 对应槽位：[`player_action`](../cpp/player.md#player_action)
+
+### `Player.CauseExhaustion` {#Player.CauseExhaustion}
+
+```go
+func (p Player) CauseExhaustion(sarg string, a, b, c float64) (string, error)
+```
+
+执行 `PIER_PACT_CAUSE_EXHAUSTION`：a：数量，必须为正。`Player::causeFoodExhaustion`
+
+这个动作有输出时，输出就是返回值；每个参数的含义写在 abi.h 里这个常量的注释中。
+
+- 参数：
+    - sarg : `string`
+    - a : `float64`
+    - b : `float64`
+    - c : `float64`
+- 返回值类型：`(string, error)`
+- 对应槽位：[`player_action`](../cpp/player.md#player_action)
+
+### `Player.Eat` {#Player.Eat}
+
+```go
+func (p Player) Eat(sarg string, a, b, c float64) (string, error)
+```
+
+执行 `PIER_PACT_EAT`：sarg：物品 SNBT。`Player::eat`，按这个物品的食物值进食
+
+这个动作有输出时，输出就是返回值；每个参数的含义写在 abi.h 里这个常量的注释中。
+
+- 参数：
+    - sarg : `string`
+    - a : `float64`
+    - b : `float64`
+    - c : `float64`
+- 返回值类型：`(string, error)`
+- 对应槽位：[`player_action`](../cpp/player.md#player_action)
+
 ## `PlayerInfo` {#PlayerInfo}
 
 ```go
@@ -1410,6 +1645,16 @@ type PlayerInfo struct {
 ```
 
 `ListPlayers` 报告的一名在线玩家。`Dim` 和位置只在有的时候才读取，`HasDim` 和 `HasPos` 说明它们有没有。
+
+## `NetworkStatus` {#NetworkStatus}
+
+```go
+type NetworkStatus struct {
+    Ping, AvgPing, MaxPing, PacketLoss int32
+}
+```
+
+NetworkStatus 是一名玩家的网络状态。宿主测不出来的值是 -1。
 
 ## `SelKind` {#SelKind}
 
@@ -1489,6 +1734,11 @@ type PlayerPos struct {
 | <span id="PPropHasDiedBefore"></span>`PPropHasDiedBefore` | `34` | 即 `PIER_PPROP_HAS_DIED_BEFORE`：(G) `Player::hasDiedBefore` |
 | <span id="PPropDimension"></span>`PPropDimension` | `35` | 即 `PIER_PPROP_DIMENSION`：(G) `Actor::getDimensionId` |
 | <span id="PPropIsInitialized"></span>`PPropIsInitialized` | `36` | 即 `PIER_PPROP_IS_INITIALIZED`：(G) `Player::isPlayerInitialized`；模拟玩家读到 1 |
+| <span id="PPropIsSleeping"></span>`PPropIsSleeping` | `37` | 即 `PIER_PPROP_IS_SLEEPING`：(G) `Player::isSleeping` |
+| <span id="PPropIsSimulated"></span>`PPropIsSimulated` | `38` | 即 `PIER_PPROP_IS_SIMULATED`：(G) `Actor::isSimulatedPlayer` |
+| <span id="PPropItemUseDuration"></span>`PPropItemUseDuration` | `39` | 即 `PIER_PPROP_ITEM_USE_DURATION`：(G) `Player::getItemUseDuration`，单位为刻 |
+| <span id="PPropXpEarnedAtLevel"></span>`PPropXpEarnedAtLevel` | `40` | 即 `PIER_PPROP_XP_EARNED_AT_LEVEL`：(G) `Player::getXpEarnedAtCurrentLevel` |
+| <span id="PPropCanFly"></span>`PPropCanFly` | `41` | 即 `PIER_PPROP_CAN_FLY`：(G) `Actor::canFly` |
 
 ## `PStr*` {#PStr}
 
@@ -1505,6 +1755,8 @@ type PlayerPos struct {
 | <span id="PStrNetworkStatus"></span>`PStrNetworkStatus` | `8` | 即 `PIER_PSTR_NETWORK_STATUS`：SNBT `{ping,avg_ping,packet_loss,max_ping}` |
 | <span id="PStrPlatformOnlineId"></span>`PStrPlatformOnlineId` | `9` | 即 `PIER_PSTR_PLATFORM_ONLINE_ID`：取自 `Player::getPlatformOnlineId` |
 | <span id="PStrRespawnPos"></span>`PStrRespawnPos` | `10` | 即 `PIER_PSTR_RESPAWN_POS`：SNBT `{x,y,z,dim}`：这名玩家会在哪里重生。不会为空：没有床的玩家报告的是世界出生点，这两种情况区分不开。 |
+| <span id="PStrSelectedItem"></span>`PStrSelectedItem` | `11` | 即 `PIER_PSTR_SELECTED_ITEM`：`Player::getSelectedItem`，物品 SNBT |
+| <span id="PStrDeviceModel"></span>`PStrDeviceModel` | `12` | 即 `PIER_PSTR_DEVICE_MODEL`：`ConnectionRequest::getDeviceModel`；没有连接请求的玩家读取失败 |
 
 ## `PAct*` {#PAct}
 
@@ -1537,3 +1789,6 @@ type PlayerPos struct {
 | <span id="PActSidebarSet"></span>`PActSidebarSet` | `24` | 即 `PIER_PACT_SIDEBAR_SET`：`sarg` 为 `"obj\ntitle\nline…"`，只对这名玩家显示的侧边栏 |
 | <span id="PActSidebarClear"></span>`PActSidebarClear` | `25` | 即 `PIER_PACT_SIDEBAR_CLEAR`：`sarg` 为计分项，发送 `RemoveObjectivePacket` |
 | <span id="PActSetPermissionLevel"></span>`PActSetPermissionLevel` | `26` | 即 `PIER_PACT_SET_PERMISSION_LEVEL`：`a` 为 `PlayerPermissionLevel`（0 Visitor，1 Member，2 Operator，3 Custom）。调用 `LayeredAbilities::setPlayerPermissions` 并发送 `UpdateAbilitiesPacket`。读取一侧是 `PIER_PPROP_PERMISSION_LEVEL`。和 `PIER_PACT_SET_ABILITY` 一样，玩家加入完成之前调用会被拒绝。 |
+| <span id="PActStopSleeping"></span>`PActStopSleeping` | `27` | 即 `PIER_PACT_STOP_SLEEPING`：a：非零时强制唤醒。`Player::stopSleepInBed`；没在睡觉时返回 false |
+| <span id="PActCauseExhaustion"></span>`PActCauseExhaustion` | `28` | 即 `PIER_PACT_CAUSE_EXHAUSTION`：a：数量，必须为正。`Player::causeFoodExhaustion` |
+| <span id="PActEat"></span>`PActEat` | `29` | 即 `PIER_PACT_EAT`：sarg：物品 SNBT。`Player::eat`，按这个物品的食物值进食 |

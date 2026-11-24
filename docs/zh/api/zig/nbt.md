@@ -17,6 +17,36 @@ pub fn parse(arena: std.mem.Allocator, text: []const u8) ParseError!Value
     - text : `[]const u8`
 - 返回值类型：`ParseError!Value`
 
+### `nbt.snbtToBinary` {#nbt.snbtToBinary}
+
+```zig
+pub fn snbtToBinary(allocator: std.mem.Allocator, snbt: []const u8, format: Format) core.Error![]u8
+```
+
+把 SNBT 编码成二进制 NBT，由调用方持有。宿主解析不了的文本得到 `Refused`。
+
+- 参数：
+    - allocator : `std.mem.Allocator`
+    - snbt : `[]const u8`
+    - format : `Format`
+- 返回值类型：`core.Error![]u8`
+- 对应槽位：[`nbt_snbt_to_binary`](../cpp/data.md#nbt_snbt_to_binary)
+
+### `nbt.binaryToSnbt` {#nbt.binaryToSnbt}
+
+```zig
+pub fn binaryToSnbt(allocator: std.mem.Allocator, data: []const u8, format: Format) core.Error![]u8
+```
+
+把二进制 NBT 解码成 SNBT，由调用方持有。不是 NBT 的字节得到 `Refused`。
+
+- 参数：
+    - allocator : `std.mem.Allocator`
+    - data : `[]const u8`
+    - format : `Format`
+- 返回值类型：`core.Error![]u8`
+- 对应槽位：[`nbt_binary_to_snbt`](../cpp/data.md#nbt_binary_to_snbt)
+
 ## 声明 {#declarations}
 
 ### `nbt.max_depth` {#nbt.max_depth}
@@ -26,6 +56,199 @@ pub const max_depth = 512;
 ```
 
 接受的最大嵌套深度，和 Minecraft 对 NBT 的上限一样。更深的数据会被拒绝，以免耗尽宿主线程的栈。
+
+## `nbt.Writer` {#nbt.Writer}
+
+```zig
+pub const Writer = struct {
+    allocator: std.mem.Allocator,
+    out: std.ArrayList(u8) = .empty,
+    /// One entry per open container: true while it has no element yet.
+    empty: std.ArrayList(bool) = .empty,
+    after_key: bool = false,
+    // ...
+};
+```
+
+按 Rust 和 Go 绑定的写法生成 SNBT 文本，这样宿主更严格的解析器才会接受：每个键都加引号，每个数字都带类型后缀，控制字符写成 `\uXXXX`。打开一个容器，往里写，再关闭它；复合标签里每个值前面要先写键。写入器不检查调用是否配对。
+
+### `nbt.Writer.init` {#nbt.Writer.init}
+
+```zig
+pub fn init(allocator: std.mem.Allocator) Writer
+```
+
+- 参数：
+    - allocator : `std.mem.Allocator`
+- 返回值类型：`Writer`
+
+### `nbt.Writer.deinit` {#nbt.Writer.deinit}
+
+```zig
+pub fn deinit(self: *Writer) void
+```
+
+- 返回值类型：`void`
+
+### `nbt.Writer.text` {#nbt.Writer.text}
+
+```zig
+pub fn text(self: *const Writer) []const u8
+```
+
+到目前为止写入的文本。
+
+- 返回值类型：`[]const u8`
+
+### `nbt.Writer.toOwnedSlice` {#nbt.Writer.toOwnedSlice}
+
+```zig
+pub fn toOwnedSlice(self: *Writer) std.mem.Allocator.Error![]u8
+```
+
+写完的文本，由调用方持有。之后写入器是空的。
+
+- 返回值类型：`std.mem.Allocator.Error![]u8`
+
+### `nbt.Writer.beginCompound` {#nbt.Writer.beginCompound}
+
+```zig
+pub fn beginCompound(self: *Writer) std.mem.Allocator.Error!void
+```
+
+- 返回值类型：`std.mem.Allocator.Error!void`
+
+### `nbt.Writer.endCompound` {#nbt.Writer.endCompound}
+
+```zig
+pub fn endCompound(self: *Writer) std.mem.Allocator.Error!void
+```
+
+- 返回值类型：`std.mem.Allocator.Error!void`
+
+### `nbt.Writer.beginList` {#nbt.Writer.beginList}
+
+```zig
+pub fn beginList(self: *Writer) std.mem.Allocator.Error!void
+```
+
+- 返回值类型：`std.mem.Allocator.Error!void`
+
+### `nbt.Writer.endList` {#nbt.Writer.endList}
+
+```zig
+pub fn endList(self: *Writer) std.mem.Allocator.Error!void
+```
+
+- 返回值类型：`std.mem.Allocator.Error!void`
+
+### `nbt.Writer.key` {#nbt.Writer.key}
+
+```zig
+pub fn key(self: *Writer, name: []const u8) std.mem.Allocator.Error!void
+```
+
+写下打开着的复合标签里下一项的键。
+
+- 参数：
+    - name : `[]const u8`
+- 返回值类型：`std.mem.Allocator.Error!void`
+
+### `nbt.Writer.string` {#nbt.Writer.string}
+
+```zig
+pub fn string(self: *Writer, value: []const u8) std.mem.Allocator.Error!void
+```
+
+- 参数：
+    - value : `[]const u8`
+- 返回值类型：`std.mem.Allocator.Error!void`
+
+### `nbt.Writer.byte` {#nbt.Writer.byte}
+
+```zig
+pub fn byte(self: *Writer, value: i8) std.mem.Allocator.Error!void
+```
+
+- 参数：
+    - value : `i8`
+- 返回值类型：`std.mem.Allocator.Error!void`
+
+### `nbt.Writer.short` {#nbt.Writer.short}
+
+```zig
+pub fn short(self: *Writer, value: i16) std.mem.Allocator.Error!void
+```
+
+- 参数：
+    - value : `i16`
+- 返回值类型：`std.mem.Allocator.Error!void`
+
+### `nbt.Writer.int` {#nbt.Writer.int}
+
+```zig
+pub fn int(self: *Writer, value: i32) std.mem.Allocator.Error!void
+```
+
+- 参数：
+    - value : `i32`
+- 返回值类型：`std.mem.Allocator.Error!void`
+
+### `nbt.Writer.long` {#nbt.Writer.long}
+
+```zig
+pub fn long(self: *Writer, value: i64) std.mem.Allocator.Error!void
+```
+
+- 参数：
+    - value : `i64`
+- 返回值类型：`std.mem.Allocator.Error!void`
+
+### `nbt.Writer.boolean` {#nbt.Writer.boolean}
+
+```zig
+pub fn boolean(self: *Writer, value: bool) std.mem.Allocator.Error!void
+```
+
+布尔值是一个字节，1b 或 0b。
+
+- 参数：
+    - value : `bool`
+- 返回值类型：`std.mem.Allocator.Error!void`
+
+### `nbt.Writer.float` {#nbt.Writer.float}
+
+```zig
+pub fn float(self: *Writer, value: f32) std.mem.Allocator.Error!void
+```
+
+- 参数：
+    - value : `f32`
+- 返回值类型：`std.mem.Allocator.Error!void`
+
+### `nbt.Writer.double` {#nbt.Writer.double}
+
+```zig
+pub fn double(self: *Writer, value: f64) std.mem.Allocator.Error!void
+```
+
+double 总是带着小数点和 `d`。SNBT 表达不了的值，NaN 或无穷大，写成 0.0。
+
+- 参数：
+    - value : `f64`
+- 返回值类型：`std.mem.Allocator.Error!void`
+
+### `nbt.Writer.raw` {#nbt.Writer.raw}
+
+```zig
+pub fn raw(self: *Writer, snbt: []const u8) std.mem.Allocator.Error!void
+```
+
+插入已经是 SNBT 的文本，可以是一个值，也可以是用逗号分隔的多个值，占据一个值的位置。
+
+- 参数：
+    - snbt : `[]const u8`
+- 返回值类型：`std.mem.Allocator.Error!void`
 
 ## `nbt.Value` {#nbt.Value}
 
@@ -126,3 +349,16 @@ pub const Entry = struct {
 ```zig
 pub const ParseError = error{ Malformed, TooDeep, OutOfMemory };
 ```
+
+## `nbt.Format` {#nbt.Format}
+
+```zig
+pub const Format = enum(i32) {
+    /// Little-endian, as a level stores it on disk.
+    disk = 0,
+    /// The network encoding.
+    network = 1,
+};
+```
+
+一份 NBT 数据的二进制形式。

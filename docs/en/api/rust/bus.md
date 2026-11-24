@@ -94,7 +94,7 @@ One subscription. Dropping it unsubscribes.
 
 [`Subscription::forget`](bus.md#Subscription.forget) keeps it alive until the mod unloads, when the host clears it.
 
-- Implements: `Drop`
+- Implements: `Drop`, `Debug`
 
 ### `Subscription::id` {#Subscription.id}
 

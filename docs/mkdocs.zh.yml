@@ -164,6 +164,7 @@ nav:
           - "模拟玩家": api/rust/sim.md
           - "自定义维度": api/rust/dimensions.md
           - "客户端": api/rust/client.md
+          - "原生逃生口": api/rust/native.md
           - "注册表": api/rust/registry.md
           - "通用类型": api/rust/types.md
       - "Go":
@@ -185,6 +186,7 @@ nav:
           - "数据包": api/go/packet.md
           - "模拟玩家": api/go/sim.md
           - "客户端": api/go/client.md
+          - "原生逃生口": api/go/native.md
           - "自定义维度": api/go/dimensions.md
           - "跨模组": api/go/crossmod.md
           - "注册表": api/go/registry.md
@@ -196,12 +198,24 @@ nav:
           - "事件": api/zig/events.md
           - "命令": api/zig/commands.md
           - "服务器、刻与系统信息": api/zig/server.md
+          - "世界": api/zig/world.md
           - "玩家": api/zig/player.md
           - "实体": api/zig/entity.md
           - "方块": api/zig/block.md
           - "物品与容器": api/zig/item.md
+          - "计分板": api/zig/scoreboard.md
+          - "表单": api/zig/form.md
+          - "NBT 与键值数据库": api/zig/data.md
+          - "经济": api/zig/money.md
+          - "数据包": api/zig/packet.md
+          - "模拟玩家": api/zig/sim.md
+          - "客户端": api/zig/client.md
+          - "原生逃生口": api/zig/native.md
+          - "自定义维度": api/zig/dimensions.md
           - "跨模组": api/zig/crossmod.md
+          - "注册表": api/zig/registry.md
           - "SNBT": api/zig/nbt.md
+          - "通用类型": api/zig/types.md
       - "C++":
           - api/cpp/index.md
           - "核心": api/cpp/core.md
@@ -221,6 +235,7 @@ nav:
           - "数据包": api/cpp/packet.md
           - "模拟玩家": api/cpp/sim.md
           - "客户端": api/cpp/client.md
+          - "原生逃生口": api/cpp/native.md
           - "自定义维度": api/cpp/dimensions.md
           - "跨模组": api/cpp/crossmod.md
           - "注册表": api/cpp/registry.md

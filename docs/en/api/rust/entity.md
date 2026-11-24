@@ -321,6 +321,114 @@ pub fn set_rotation(&self, pitch: f64, yaw: f64) -> Result<()>
 - Return type: `Result<()>`
 - Slots: [`actor_action`](../cpp/entity.md#actor_action)
 
+### `Entity::tags` {#Entity.tags}
+
+```rust
+pub fn tags(&self) -> Result<Vec<String>>
+```
+
+The tags the entity carries, the ones `/tag` lists.
+
+- Return type: `Result<Vec<String>>`
+- Slots: [`actor_get_str`](../cpp/entity.md#actor_get_str)
+
+### `Entity::owner_id` {#Entity.owner_id}
+
+```rust
+pub fn owner_id(&self) -> Result<i64>
+```
+
+The id of the entity's owner, or -1 when it has none.
+
+- Return type: `Result<i64>`
+- Slots: [`actor_get_str`](../cpp/entity.md#actor_get_str)
+
+### `Entity::set_sitting` {#Entity.set_sitting}
+
+```rust
+pub fn set_sitting(&self, sitting: bool) -> Result<()>
+```
+
+- Parameters:
+    - sitting : `bool`
+- Return type: `Result<()>`
+- Slots: [`actor_action`](../cpp/entity.md#actor_action)
+
+### `Entity::start_riding` {#Entity.start_riding}
+
+```rust
+pub fn start_riding(&self, vehicle: &Entity, force: bool) -> Result<()>
+```
+
+Mounts this entity on `vehicle`; `force` mounts it where the vehicle has no free seat.
+
+- Parameters:
+    - vehicle : `&Entity`
+    - force : `bool`
+- Return type: `Result<()>`
+- Slots: [`actor_action`](../cpp/entity.md#actor_action)
+
+### `Entity::attribute_info` {#Entity.attribute_info}
+
+```rust
+pub fn attribute_info(&self, name: &str) -> Result<crate::types::AttributeValue>
+```
+
+The current, minimum, maximum and default value of one attribute, by a name such as
+`"minecraft:health"` or `"minecraft:movement"`.
+
+- Parameters:
+    - name : `&str`
+- Return type: `Result<crate::types::AttributeValue>`
+- Slots: [`actor_action`](../cpp/entity.md#actor_action)
+
+### `Entity::set_attribute` {#Entity.set_attribute}
+
+```rust
+pub fn set_attribute(&self, name: &str, value: f32) -> Result<()>
+```
+
+- Parameters:
+    - name : `&str`
+    - value : `f32`
+- Return type: `Result<()>`
+- Slots: [`actor_action`](../cpp/entity.md#actor_action)
+
+### `Entity::set_attribute_max` {#Entity.set_attribute_max}
+
+```rust
+pub fn set_attribute_max(&self, name: &str, value: f32) -> Result<()>
+```
+
+- Parameters:
+    - name : `&str`
+    - value : `f32`
+- Return type: `Result<()>`
+- Slots: [`actor_action`](../cpp/entity.md#actor_action)
+
+### `Entity::set_attribute_default` {#Entity.set_attribute_default}
+
+```rust
+pub fn set_attribute_default(&self, name: &str, value: f32) -> Result<()>
+```
+
+- Parameters:
+    - name : `&str`
+    - value : `f32`
+- Return type: `Result<()>`
+- Slots: [`actor_action`](../cpp/entity.md#actor_action)
+
+### `Entity::attribute_names` {#Entity.attribute_names}
+
+```rust
+pub fn attribute_names(&self) -> Result<Vec<String>>
+```
+
+The names of the attributes the entity has, of the ones the attribute calls can name.
+
+- Return type: `Result<Vec<String>>`
+- Slots: [`actor_action`](../cpp/entity.md#actor_action)
+
 ### `Entity::set_velocity` {#Entity.set_velocity}
 
 ```rust
@@ -898,6 +1006,116 @@ pub fn has_passenger(&self) -> Result<bool>
 
 - Return type: `Result<bool>`
 - Slots: [`actor_get_num`](../cpp/entity.md#actor_get_num)
+
+### `Entity::is_sprinting` {#Entity.is_sprinting}
+
+```rust
+pub fn is_sprinting(&self) -> Result<bool>
+```
+
+- Return type: `Result<bool>`
+- Slots: [`actor_get_num`](../cpp/entity.md#actor_get_num)
+
+### `Entity::is_swimming` {#Entity.is_swimming}
+
+```rust
+pub fn is_swimming(&self) -> Result<bool>
+```
+
+- Return type: `Result<bool>`
+- Slots: [`actor_get_num`](../cpp/entity.md#actor_get_num)
+
+### `Entity::is_sleeping` {#Entity.is_sleeping}
+
+```rust
+pub fn is_sleeping(&self) -> Result<bool>
+```
+
+- Return type: `Result<bool>`
+- Slots: [`actor_get_num`](../cpp/entity.md#actor_get_num)
+
+### `Entity::is_sitting` {#Entity.is_sitting}
+
+```rust
+pub fn is_sitting(&self) -> Result<bool>
+```
+
+- Return type: `Result<bool>`
+- Slots: [`actor_get_num`](../cpp/entity.md#actor_get_num)
+
+### `Entity::is_angry` {#Entity.is_angry}
+
+```rust
+pub fn is_angry(&self) -> Result<bool>
+```
+
+- Return type: `Result<bool>`
+- Slots: [`actor_get_num`](../cpp/entity.md#actor_get_num)
+
+### `Entity::strength` {#Entity.strength}
+
+```rust
+pub fn strength(&self) -> Result<i32>
+```
+
+- Return type: `Result<i32>`
+- Slots: [`actor_get_num`](../cpp/entity.md#actor_get_num)
+
+### `Entity::is_player` {#Entity.is_player}
+
+```rust
+pub fn is_player(&self) -> Result<bool>
+```
+
+- Return type: `Result<bool>`
+- Slots: [`actor_get_num`](../cpp/entity.md#actor_get_num)
+
+### `Entity::is_simulated_player` {#Entity.is_simulated_player}
+
+```rust
+pub fn is_simulated_player(&self) -> Result<bool>
+```
+
+- Return type: `Result<bool>`
+- Slots: [`actor_get_num`](../cpp/entity.md#actor_get_num)
+
+### `Entity::entity_type` {#Entity.entity_type}
+
+```rust
+pub fn entity_type(&self) -> Result<i32>
+```
+
+The engine's actor type number, whose bits tell a mob, a monster and an animal apart.
+
+- Return type: `Result<i32>`
+- Slots: [`actor_get_num`](../cpp/entity.md#actor_get_num)
+
+### `Entity::can_fly` {#Entity.can_fly}
+
+```rust
+pub fn can_fly(&self) -> Result<bool>
+```
+
+- Return type: `Result<bool>`
+- Slots: [`actor_get_num`](../cpp/entity.md#actor_get_num)
+
+### `Entity::tags_json` {#Entity.tags_json}
+
+```rust
+pub fn tags_json(&self) -> Result<String>
+```
+
+- Return type: `Result<String>`
+- Slots: [`actor_get_str`](../cpp/entity.md#actor_get_str)
+
+### `Entity::owner_id_text` {#Entity.owner_id_text}
+
+```rust
+pub fn owner_id_text(&self) -> Result<String>
+```
+
+- Return type: `Result<String>`
+- Slots: [`actor_get_str`](../cpp/entity.md#actor_get_str)
 
 ### `Entity::vehicle` {#Entity.vehicle}
 

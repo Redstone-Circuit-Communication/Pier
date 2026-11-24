@@ -329,6 +329,149 @@ pub fn hasCustomName(self: Item) core.Error!bool
 - 返回值类型：`core.Error!bool`
 - 对应槽位：[`item_get_num`](../cpp/item.md#item_get_num)
 
+### `Item.isFood` {#Item.isFood}
+
+```zig
+pub fn isFood(self: Item) core.Error!bool
+```
+
+`PIER_IPROP_IS_FOOD`：`Item::isFood`
+
+- 返回值类型：`core.Error!bool`
+- 对应槽位：[`item_get_num`](../cpp/item.md#item_get_num)
+
+### `Item.isDyeable` {#Item.isDyeable}
+
+```zig
+pub fn isDyeable(self: Item) core.Error!bool
+```
+
+`PIER_IPROP_IS_DYEABLE`：`Item::isDyeable`
+
+- 返回值类型：`core.Error!bool`
+- 对应槽位：[`item_get_num`](../cpp/item.md#item_get_num)
+
+### `Item.isHandEquipped` {#Item.isHandEquipped}
+
+```zig
+pub fn isHandEquipped(self: Item) core.Error!bool
+```
+
+`PIER_IPROP_IS_HAND_EQUIPPED`：`Item::isHandEquipped`
+
+- 返回值类型：`core.Error!bool`
+- 对应槽位：[`item_get_num`](../cpp/item.md#item_get_num)
+
+### `Item.isLiquidClip` {#Item.isLiquidClip}
+
+```zig
+pub fn isLiquidClip(self: Item) core.Error!bool
+```
+
+`PIER_IPROP_IS_LIQUID_CLIP`：`Item::isLiquidClipItem`
+
+- 返回值类型：`core.Error!bool`
+- 对应槽位：[`item_get_num`](../cpp/item.md#item_get_num)
+
+### `Item.isStackedByData` {#Item.isStackedByData}
+
+```zig
+pub fn isStackedByData(self: Item) core.Error!bool
+```
+
+`PIER_IPROP_IS_STACKED_BY_DATA`：`Item::isStackedByData`
+
+- 返回值类型：`core.Error!bool`
+- 对应槽位：[`item_get_num`](../cpp/item.md#item_get_num)
+
+### `Item.cooldownDuration` {#Item.cooldownDuration}
+
+```zig
+pub fn cooldownDuration(self: Item) core.Error!f64
+```
+
+`PIER_IPROP_COOLDOWN_DURATION`：`Item::getCooldownDuration`，单位为刻
+
+- 返回值类型：`core.Error!f64`
+- 对应槽位：[`item_get_num`](../cpp/item.md#item_get_num)
+
+### `Item.isComponentBased` {#Item.isComponentBased}
+
+```zig
+pub fn isComponentBased(self: Item) core.Error!bool
+```
+
+`PIER_IPROP_IS_COMPONENT_BASED`：`Item::isComponentBased`
+
+- 返回值类型：`core.Error!bool`
+- 对应槽位：[`item_get_num`](../cpp/item.md#item_get_num)
+
+### `Item.isHumanoidArmor` {#Item.isHumanoidArmor}
+
+```zig
+pub fn isHumanoidArmor(self: Item) core.Error!bool
+```
+
+`PIER_IPROP_IS_HUMANOID_ARMOR`：`Item::isHumanoidArmor`
+
+- 返回值类型：`core.Error!bool`
+- 对应槽位：[`item_get_num`](../cpp/item.md#item_get_num)
+
+### `Item.armorValue` {#Item.armorValue}
+
+```zig
+pub fn armorValue(self: Item) core.Error!f64
+```
+
+`PIER_IPROP_ARMOR_VALUE`：`Item::getArmorValue`
+
+- 返回值类型：`core.Error!f64`
+- 对应槽位：[`item_get_num`](../cpp/item.md#item_get_num)
+
+### `Item.canBeDepleted` {#Item.canBeDepleted}
+
+```zig
+pub fn canBeDepleted(self: Item) core.Error!bool
+```
+
+`PIER_IPROP_CAN_BE_DEPLETED`：`Item::canBeDepleted`
+
+- 返回值类型：`core.Error!bool`
+- 对应槽位：[`item_get_num`](../cpp/item.md#item_get_num)
+
+### `Item.isUseable` {#Item.isUseable}
+
+```zig
+pub fn isUseable(self: Item) core.Error!bool
+```
+
+`PIER_IPROP_IS_USEABLE`：`Item::isUseable`
+
+- 返回值类型：`core.Error!bool`
+- 对应槽位：[`item_get_num`](../cpp/item.md#item_get_num)
+
+### `Item.canDestroyInCreative` {#Item.canDestroyInCreative}
+
+```zig
+pub fn canDestroyInCreative(self: Item) core.Error!bool
+```
+
+`PIER_IPROP_CAN_DESTROY_IN_CREATIVE`：`Item::canDestroyInCreative`
+
+- 返回值类型：`core.Error!bool`
+- 对应槽位：[`item_get_num`](../cpp/item.md#item_get_num)
+
+### `Item.showsDurabilityInCreative` {#Item.showsDurabilityInCreative}
+
+```zig
+pub fn showsDurabilityInCreative(self: Item) core.Error!f64
+```
+
+`PIER_IPROP_SHOWS_DURABILITY_IN_CREATIVE`：`Item::showsDurabilityInCreative`
+
+- 返回值类型：`core.Error!f64`
+- 对应槽位：[`item_get_num`](../cpp/item.md#item_get_num)
+
 ### `Item.typeName` {#Item.typeName}
 
 ```zig
@@ -471,3 +614,417 @@ pub fn color(self: Item, allocator: std.mem.Allocator) core.Error![]u8
     - allocator : `std.mem.Allocator`
 - 返回值类型：`core.Error![]u8`
 - 对应槽位：[`item_get_str`](../cpp/item.md#item_get_str)
+
+### `Item.create` {#Item.create}
+
+```zig
+pub fn create(allocator: std.mem.Allocator, type_name: []const u8, amount: u8) std.mem.Allocator.Error![]u8
+```
+
+用类型名和数量构造一个物品，SNBT 形式，由调用方持有。
+
+- 参数：
+    - allocator : `std.mem.Allocator`
+    - type_name : `[]const u8`
+    - amount : `u8`
+- 返回值类型：`std.mem.Allocator.Error![]u8`
+
+### `Item.matches` {#Item.matches}
+
+```zig
+pub fn matches(self: Item, other: Item) core.Error!bool
+```
+
+两个物品是否是同一种东西。
+
+- 参数：
+    - other : `Item`
+- 返回值类型：`core.Error!bool`
+- 对应槽位：[`item_matches`](../cpp/item.md#item_matches)
+
+### `Item.transform` {#Item.transform}
+
+```zig
+pub fn transform(self: Item, allocator: std.mem.Allocator, op: types.ItemOp, sarg: []const u8, narg: f64) core.Error![]u8
+```
+
+执行一次变换，并返回新物品的 SNBT，由调用方持有。原物品不变。
+
+- 参数：
+    - allocator : `std.mem.Allocator`
+    - op : `types.ItemOp`
+    - sarg : `[]const u8`
+    - narg : `f64`
+- 返回值类型：`core.Error![]u8`
+- 对应槽位：[`item_transform`](../cpp/item.md#item_transform)
+
+### `Item.withCustomName` {#Item.withCustomName}
+
+```zig
+pub fn withCustomName(self: Item, allocator: std.mem.Allocator, new_name: []const u8) core.Error![]u8
+```
+
+- 参数：
+    - allocator : `std.mem.Allocator`
+    - new_name : `[]const u8`
+- 返回值类型：`core.Error![]u8`
+- 对应槽位：[`item_transform`](../cpp/item.md#item_transform)
+
+### `Item.withoutCustomName` {#Item.withoutCustomName}
+
+```zig
+pub fn withoutCustomName(self: Item, allocator: std.mem.Allocator) core.Error![]u8
+```
+
+- 参数：
+    - allocator : `std.mem.Allocator`
+- 返回值类型：`core.Error![]u8`
+- 对应槽位：[`item_transform`](../cpp/item.md#item_transform)
+
+### `Item.withDamage` {#Item.withDamage}
+
+```zig
+pub fn withDamage(self: Item, allocator: std.mem.Allocator, value: i32) core.Error![]u8
+```
+
+- 参数：
+    - allocator : `std.mem.Allocator`
+    - value : `i32`
+- 返回值类型：`core.Error![]u8`
+- 对应槽位：[`item_transform`](../cpp/item.md#item_transform)
+
+### `Item.withCount` {#Item.withCount}
+
+```zig
+pub fn withCount(self: Item, allocator: std.mem.Allocator, amount: u8) core.Error![]u8
+```
+
+- 参数：
+    - allocator : `std.mem.Allocator`
+    - amount : `u8`
+- 返回值类型：`core.Error![]u8`
+- 对应槽位：[`item_transform`](../cpp/item.md#item_transform)
+
+### `Item.withUnbreakable` {#Item.withUnbreakable}
+
+```zig
+pub fn withUnbreakable(self: Item, allocator: std.mem.Allocator, on: bool) core.Error![]u8
+```
+
+- 参数：
+    - allocator : `std.mem.Allocator`
+    - on : `bool`
+- 返回值类型：`core.Error![]u8`
+- 对应槽位：[`item_transform`](../cpp/item.md#item_transform)
+
+### `Item.hurtAndBreak` {#Item.hurtAndBreak}
+
+```zig
+pub fn hurtAndBreak(self: Item, allocator: std.mem.Allocator, wear: i32) core.Error![]u8
+```
+
+让物品磨损 `wear` 点，磨完时物品会损坏。
+
+- 参数：
+    - allocator : `std.mem.Allocator`
+    - wear : `i32`
+- 返回值类型：`core.Error![]u8`
+- 对应槽位：[`item_transform`](../cpp/item.md#item_transform)
+
+### `Item.withRepairCost` {#Item.withRepairCost}
+
+```zig
+pub fn withRepairCost(self: Item, allocator: std.mem.Allocator, cost: i32) core.Error![]u8
+```
+
+- 参数：
+    - allocator : `std.mem.Allocator`
+    - cost : `i32`
+- 返回值类型：`core.Error![]u8`
+- 对应槽位：[`item_transform`](../cpp/item.md#item_transform)
+
+### `Item.withLore` {#Item.withLore}
+
+```zig
+pub fn withLore(self: Item, allocator: std.mem.Allocator, lines: []const []const u8) core.Error![]u8
+```
+
+设置物品说明文字，每行一个字符串。
+
+- 参数：
+    - allocator : `std.mem.Allocator`
+    - lines : `[]const []const u8`
+- 返回值类型：`core.Error![]u8`
+- 对应槽位：[`item_transform`](../cpp/item.md#item_transform)
+
+### `Item.withoutLore` {#Item.withoutLore}
+
+```zig
+pub fn withoutLore(self: Item, allocator: std.mem.Allocator) core.Error![]u8
+```
+
+- 参数：
+    - allocator : `std.mem.Allocator`
+- 返回值类型：`core.Error![]u8`
+- 对应槽位：[`item_transform`](../cpp/item.md#item_transform)
+
+### `Item.withEnchant` {#Item.withEnchant}
+
+```zig
+pub fn withEnchant(self: Item, allocator: std.mem.Allocator, enchant_id: []const u8, level: i32) core.Error![]u8
+```
+
+添加一个附魔。等级为 0 时，在引擎看来就是移除它。
+
+- 参数：
+    - allocator : `std.mem.Allocator`
+    - enchant_id : `[]const u8`
+    - level : `i32`
+- 返回值类型：`core.Error![]u8`
+- 对应槽位：[`item_transform`](../cpp/item.md#item_transform)
+
+### `Item.withoutEnchants` {#Item.withoutEnchants}
+
+```zig
+pub fn withoutEnchants(self: Item, allocator: std.mem.Allocator) core.Error![]u8
+```
+
+- 参数：
+    - allocator : `std.mem.Allocator`
+- 返回值类型：`core.Error![]u8`
+- 对应槽位：[`item_transform`](../cpp/item.md#item_transform)
+
+### `Item.withCanDestroy` {#Item.withCanDestroy}
+
+```zig
+pub fn withCanDestroy(self: Item, allocator: std.mem.Allocator, blocks: []const []const u8) core.Error![]u8
+```
+
+物品在冒险模式下可以破坏的方块。
+
+- 参数：
+    - allocator : `std.mem.Allocator`
+    - blocks : `[]const []const u8`
+- 返回值类型：`core.Error![]u8`
+- 对应槽位：[`item_transform`](../cpp/item.md#item_transform)
+
+### `Item.withCanPlaceOn` {#Item.withCanPlaceOn}
+
+```zig
+pub fn withCanPlaceOn(self: Item, allocator: std.mem.Allocator, blocks: []const []const u8) core.Error![]u8
+```
+
+物品在冒险模式下可以放置到的方块上。
+
+- 参数：
+    - allocator : `std.mem.Allocator`
+    - blocks : `[]const []const u8`
+- 返回值类型：`core.Error![]u8`
+- 对应槽位：[`item_transform`](../cpp/item.md#item_transform)
+
+### `Item.enchants` {#Item.enchants}
+
+```zig
+pub fn enchants(self: Item, allocator: std.mem.Allocator) core.Error!types.Owned(types.Enchant)
+```
+
+物品上的附魔。
+
+- 参数：
+    - allocator : `std.mem.Allocator`
+- 返回值类型：`core.Error!types.Owned(types.Enchant)`
+- 对应槽位：[`item_get_enchants`](../cpp/item.md#item_get_enchants)
+
+### `Item.withEnchants` {#Item.withEnchants}
+
+```zig
+pub fn withEnchants(self: Item, allocator: std.mem.Allocator, set: []const types.Enchant) core.Error![]u8
+```
+
+替换整套附魔，并返回新物品的 SNBT，由调用方持有。目前所有宿主都返回 `NotProvided`：写入附魔没有实现，要添加一个附魔请用 `withEnchant`。
+
+- 参数：
+    - allocator : `std.mem.Allocator`
+    - set : `[]const types.Enchant`
+- 返回值类型：`core.Error![]u8`
+- 对应槽位：[`item_set_enchants`](../cpp/item.md#item_set_enchants)
+
+### `Item.userDataSnbt` {#Item.userDataSnbt}
+
+```zig
+pub fn userDataSnbt(self: Item, allocator: std.mem.Allocator) core.Error![]u8
+```
+
+物品的自定义 NBT，也就是 `tag` 部分，SNBT 形式，由调用方持有。它走专用槽位，而不是字符串属性。
+
+- 参数：
+    - allocator : `std.mem.Allocator`
+- 返回值类型：`core.Error![]u8`
+- 对应槽位：[`item_get_user_data`](../cpp/item.md#item_get_user_data)
+
+## `container.Container` {#container.Container}
+
+```zig
+pub const Container = struct {
+    kind: Kind,
+    owner: props.Player,
+    dim: i32 = 0,
+    x: i32 = 0,
+    y: i32 = 0,
+    z: i32 = 0,
+    // ...
+};
+```
+
+对一个容器的引用。
+
+### `container.Container.ofPlayer` {#container.Container.ofPlayer}
+
+```zig
+pub fn ofPlayer(owner: props.Player, kind: Kind) Container
+```
+
+玩家身上的一个容器。
+
+- 参数：
+    - owner : `props.Player`
+    - kind : `Kind`
+- 返回值类型：`Container`
+
+### `container.Container.block` {#container.Container.block}
+
+```zig
+pub fn block(dim: i32, x: i32, y: i32, z: i32) Container
+```
+
+世界里某个坐标处的方块容器。
+
+- 参数：
+    - dim : `i32`
+    - x : `i32`
+    - y : `i32`
+    - z : `i32`
+- 返回值类型：`Container`
+
+### `container.Container.size` {#container.Container.size}
+
+```zig
+pub fn size(self: Container) core.Error!i32
+```
+
+槽位数。
+
+- 返回值类型：`core.Error!i32`
+- 对应槽位：[`container_size`](../cpp/item.md#container_size)
+
+### `container.Container.item` {#container.Container.item}
+
+```zig
+pub fn item(self: Container, allocator: Allocator, slot: i32) core.Error![]u8
+```
+
+一个槽位里的内容，物品 SNBT 形式，由调用方持有。空槽位给出空气物品的 SNBT，不是错误。
+
+- 参数：
+    - allocator : `Allocator`
+    - slot : `i32`
+- 返回值类型：`core.Error![]u8`
+- 对应槽位：[`container_get_item`](../cpp/item.md#container_get_item)
+
+### `container.Container.items` {#container.Container.items}
+
+```zig
+pub fn items(self: Container, allocator: Allocator) core.Error![][]u8
+```
+
+按槽位顺序给出每个槽位，物品 SNBT 形式，由调用方持有；用 `core.freeList` 释放。
+
+- 参数：
+    - allocator : `Allocator`
+- 返回值类型：`core.Error![][]u8`
+- 对应槽位：[`container_get_items`](../cpp/item.md#container_get_items)
+
+### `container.Container.setItem` {#container.Container.setItem}
+
+```zig
+pub fn setItem(self: Container, slot: i32, item_snbt: []const u8) core.Error!void
+```
+
+写入一个槽位。玩家的容器写完后要调用 `refresh`。
+
+- 参数：
+    - slot : `i32`
+    - item_snbt : `[]const u8`
+- 返回值类型：`core.Error!void`
+- 对应槽位：[`container_set_item`](../cpp/item.md#container_set_item)
+
+### `container.Container.addItem` {#container.Container.addItem}
+
+```zig
+pub fn addItem(self: Container, item_snbt: []const u8) core.Error!void
+```
+
+放进去一个，槽位由引擎挑选。
+
+- 参数：
+    - item_snbt : `[]const u8`
+- 返回值类型：`core.Error!void`
+- 对应槽位：[`container_add_item`](../cpp/item.md#container_add_item)
+
+### `container.Container.removeItem` {#container.Container.removeItem}
+
+```zig
+pub fn removeItem(self: Container, slot: i32, count: i32) core.Error!void
+```
+
+从某一格取出 `count` 个物品。
+
+- 参数：
+    - slot : `i32`
+    - count : `i32`
+- 返回值类型：`core.Error!void`
+- 对应槽位：[`container_remove_item`](../cpp/item.md#container_remove_item)
+
+### `container.Container.clear` {#container.Container.clear}
+
+```zig
+pub fn clear(self: Container) core.Error!void
+```
+
+- 返回值类型：`core.Error!void`
+- 对应槽位：[`container_clear`](../cpp/item.md#container_clear)
+
+### `container.Container.refresh` {#container.Container.refresh}
+
+```zig
+pub fn refresh(self: Container) core.Error!void
+```
+
+把整个容器重新发给它的主人。方块容器没有主人可发，会得到 `Refused`。
+
+- 返回值类型：`core.Error!void`
+- 对应槽位：[`container_refresh`](../cpp/item.md#container_refresh)
+
+## `container.Kind` {#container.Kind}
+
+```zig
+pub const Kind = enum(i32) {
+    inventory = 0,
+    ender_chest = 1,
+    armor = 2,
+    off_hand = 3,
+    block = 4,
+};
+```
+
+容器的种类。取值和 `PierContainerRef::which` 对齐。
+
+### `container.Kind.isPlayerOwned` {#container.Kind.isPlayerOwned}
+
+```zig
+pub fn isPlayerOwned(self: Kind) bool
+```
+
+方块容器没有唯一的主人，所以无法重新同步。
+
+- 返回值类型：`bool`

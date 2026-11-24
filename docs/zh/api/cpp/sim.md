@@ -29,6 +29,7 @@ bool (*sim_spawn)(PierStr name, int32_t dimension, double x, double y, double z)
 - 各绑定里的调用方：
     - Rust：[`sim::spawn`](../rust/sim.md#fn.spawn)
     - Go：[`SimSpawn`](../go/sim.md#SimSpawn)、[`Raw.SimSpawn`](../go/raw.md#Raw.SimSpawn)
+    - Zig：[`sim.SimPlayer.spawn`](../zig/sim.md#sim.SimPlayer.spawn)
 
 ### `sim_do` {#sim_do}
 
@@ -51,6 +52,7 @@ bool (*sim_do)(PierPlayerSel sel, PierStr action, PierStr args_snbt);
 - 各绑定里的调用方：
     - Rust：[`SimPlayer::act`](../rust/sim.md#SimPlayer.act)、[`SimPlayer::despawn`](../rust/sim.md#SimPlayer.despawn)、[`SimPlayer::stop`](../rust/sim.md#SimPlayer.stop)、[`SimPlayer::jump`](../rust/sim.md#SimPlayer.jump)、[`SimPlayer::attack`](../rust/sim.md#SimPlayer.attack)、[`SimPlayer::interact`](../rust/sim.md#SimPlayer.interact) 等，共 19 个
     - Go：[`SimDo`](../go/sim.md#SimDo)、[`Raw.SimDo`](../go/raw.md#Raw.SimDo)
+    - Zig：[`sim.SimPlayer.act`](../zig/sim.md#sim.SimPlayer.act)、[`sim.SimPlayer.despawn`](../zig/sim.md#sim.SimPlayer.despawn)、[`sim.SimPlayer.stop`](../zig/sim.md#sim.SimPlayer.stop)、[`sim.SimPlayer.jump`](../zig/sim.md#sim.SimPlayer.jump)、[`sim.SimPlayer.attack`](../zig/sim.md#sim.SimPlayer.attack)、[`sim.SimPlayer.interact`](../zig/sim.md#sim.SimPlayer.interact) 等，共 19 个
 
 ### `sim_is` {#sim_is}
 
@@ -73,6 +75,7 @@ bool (*sim_is)(PierPlayerSel sel);
 - 各绑定里的调用方：
     - Rust：[`SimPlayer::try_is_simulated`](../rust/sim.md#SimPlayer.try_is_simulated)、[`SimPlayer::is_simulated`](../rust/sim.md#SimPlayer.is_simulated)
     - Go：[`IsSimulated`](../go/sim.md#IsSimulated)、[`Raw.SimIs`](../go/raw.md#Raw.SimIs)
+    - Zig：[`sim.SimPlayer.isSimulated`](../zig/sim.md#sim.SimPlayer.isSimulated)
 
 ### `sim_list` {#sim_list}
 
@@ -95,3 +98,4 @@ void (*sim_list)(void* ctx, PierStrSink name_sink);
 - 各绑定里的调用方：
     - Rust：[`sim::try_list`](../rust/sim.md#fn.try_list)、[`sim::list`](../rust/sim.md#fn.list)
     - Go：[`SimList`](../go/sim.md#SimList)、[`Raw.SimList`](../go/raw.md#Raw.SimList)
+    - Zig：[`sim.list`](../zig/sim.md#sim.list)

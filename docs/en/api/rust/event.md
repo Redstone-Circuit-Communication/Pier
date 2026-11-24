@@ -419,6 +419,8 @@ let wiring = Wiring::new("plots")
 // wiring going out of scope unsubscribes everything
 ```
 
+- Implements: `Debug`
+
 ### `Wiring::new` {#Wiring.new}
 
 ```rust
@@ -584,7 +586,7 @@ A subscription handle. Dropping it unsubscribes.
 remains at unload, really calling `removeListener` and reporting a failure rather than
 staying silent.
 
-- Implements: `Drop`
+- Implements: `Drop`, `Debug`
 
 ### `Listener::event_id` {#Listener.event_id}
 

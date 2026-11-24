@@ -407,6 +407,45 @@ pub fn set_permission_level(&self, level: PlayerPermission) -> Result<()>
 - 返回值类型：`Result<()>`
 - 对应槽位：[`player_action`](../cpp/player.md#player_action)
 
+### `Player::stop_sleeping` {#Player.stop_sleeping}
+
+```rust
+pub fn stop_sleeping(&self, forceful: bool) -> Result<()>
+```
+
+唤醒正在睡觉的玩家；玩家没在睡觉时返回 `Err`。
+
+- 参数：
+    - forceful : `bool`
+- 返回值类型：`Result<()>`
+- 对应槽位：[`player_action`](../cpp/player.md#player_action)
+
+### `Player::cause_exhaustion` {#Player.cause_exhaustion}
+
+```rust
+pub fn cause_exhaustion(&self, amount: f32) -> Result<()>
+```
+
+增加食物消耗值，引擎会把它换算成饱和度和饥饿值的损失。
+
+- 参数：
+    - amount : `f32`
+- 返回值类型：`Result<()>`
+- 对应槽位：[`player_action`](../cpp/player.md#player_action)
+
+### `Player::eat` {#Player.eat}
+
+```rust
+pub fn eat(&self, item_snbt: &str) -> Result<()>
+```
+
+按一个物品（以物品 SNBT 给出）的食物值让玩家进食。
+
+- 参数：
+    - item_snbt : `&str`
+- 返回值类型：`Result<()>`
+- 对应槽位：[`player_action`](../cpp/player.md#player_action)
+
 ### `Player::set_selected_slot` {#Player.set_selected_slot}
 
 ```rust
@@ -1258,6 +1297,73 @@ pub fn is_initialized(&self) -> Result<bool>
 
 - 返回值类型：`Result<bool>`
 - 对应槽位：[`player_get_num`](../cpp/player.md#player_get_num)
+
+### `Player::is_sleeping` {#Player.is_sleeping}
+
+```rust
+pub fn is_sleeping(&self) -> Result<bool>
+```
+
+- 返回值类型：`Result<bool>`
+- 对应槽位：[`player_get_num`](../cpp/player.md#player_get_num)
+
+### `Player::is_simulated_player` {#Player.is_simulated_player}
+
+```rust
+pub fn is_simulated_player(&self) -> Result<bool>
+```
+
+- 返回值类型：`Result<bool>`
+- 对应槽位：[`player_get_num`](../cpp/player.md#player_get_num)
+
+### `Player::item_use_duration` {#Player.item_use_duration}
+
+```rust
+pub fn item_use_duration(&self) -> Result<i32>
+```
+
+- 返回值类型：`Result<i32>`
+- 对应槽位：[`player_get_num`](../cpp/player.md#player_get_num)
+
+### `Player::xp_earned_at_level` {#Player.xp_earned_at_level}
+
+```rust
+pub fn xp_earned_at_level(&self) -> Result<i32>
+```
+
+- 返回值类型：`Result<i32>`
+- 对应槽位：[`player_get_num`](../cpp/player.md#player_get_num)
+
+### `Player::can_fly` {#Player.can_fly}
+
+```rust
+pub fn can_fly(&self) -> Result<bool>
+```
+
+- 返回值类型：`Result<bool>`
+- 对应槽位：[`player_get_num`](../cpp/player.md#player_get_num)
+
+### `Player::selected_item_snbt` {#Player.selected_item_snbt}
+
+```rust
+pub fn selected_item_snbt(&self) -> Result<String>
+```
+
+快捷栏中选中的那一格里的物品，物品 SNBT 形式。
+
+- 返回值类型：`Result<String>`
+- 对应槽位：[`player_get_str`](../cpp/player.md#player_get_str)
+
+### `Player::device_model` {#Player.device_model}
+
+```rust
+pub fn device_model(&self) -> Result<String>
+```
+
+客户端连接时报告的设备型号。
+
+- 返回值类型：`Result<String>`
+- 对应槽位：[`player_get_str`](../cpp/player.md#player_get_str)
 
 ## `PlayerSel` {#PlayerSel}
 

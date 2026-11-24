@@ -165,6 +165,7 @@ nav:
           - "sim": api/rust/sim.md
           - "dimensions": api/rust/dimensions.md
           - "client": api/rust/client.md
+          - "native": api/rust/native.md
           - "registry": api/rust/registry.md
           - "types": api/rust/types.md
       - "Go":
@@ -186,6 +187,7 @@ nav:
           - "Packets": api/go/packet.md
           - "Simulated players": api/go/sim.md
           - "Client": api/go/client.md
+          - "Native escape hatch": api/go/native.md
           - "Custom dimensions": api/go/dimensions.md
           - "Cross-mod": api/go/crossmod.md
           - "Registries": api/go/registry.md
@@ -197,12 +199,24 @@ nav:
           - "Events": api/zig/events.md
           - "Commands": api/zig/commands.md
           - "Server, ticks and system information": api/zig/server.md
+          - "World": api/zig/world.md
           - "Players": api/zig/player.md
           - "Actors": api/zig/entity.md
           - "Blocks": api/zig/block.md
           - "Items and containers": api/zig/item.md
+          - "Scoreboard": api/zig/scoreboard.md
+          - "Forms": api/zig/form.md
+          - "NBT and the key-value database": api/zig/data.md
+          - "Economy": api/zig/money.md
+          - "Packets": api/zig/packet.md
+          - "Simulated players": api/zig/sim.md
+          - "Client": api/zig/client.md
+          - "Native escape hatch": api/zig/native.md
+          - "Custom dimensions": api/zig/dimensions.md
           - "Cross-mod": api/zig/crossmod.md
+          - "Registries": api/zig/registry.md
           - "SNBT": api/zig/nbt.md
+          - "Shared types": api/zig/types.md
       - "C++":
           - api/cpp/index.md
           - "Core": api/cpp/core.md
@@ -222,6 +236,7 @@ nav:
           - "Packets": api/cpp/packet.md
           - "Simulated players": api/cpp/sim.md
           - "Client": api/cpp/client.md
+          - "Native escape hatch": api/cpp/native.md
           - "Custom dimensions": api/cpp/dimensions.md
           - "Cross-mod": api/cpp/crossmod.md
           - "Registries": api/cpp/registry.md

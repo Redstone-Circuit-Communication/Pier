@@ -34,7 +34,8 @@ bool (*edit_set_block_nbt)(
 - 表内序号：第 167 个槽位（从 0 数起）
 - 各绑定里的调用方：
     - Rust：[`Block::set_nbt`](../rust/block.md#Block.set_nbt)
-    - Go：[`Raw.EditSetBlockNbt`](../go/raw.md#Raw.EditSetBlockNbt)
+    - Go：[`BlockAt.SetNBT`](../go/block.md#BlockAt.SetNBT)、[`Raw.EditSetBlockNbt`](../go/raw.md#Raw.EditSetBlockNbt)
+    - Zig：[`world.setBlockNbt`](../zig/world.md#world.setBlockNbt)
 
 ### `edit_set_block_states` {#edit_set_block_states}
 
@@ -60,7 +61,8 @@ bool (*edit_set_block_states)(
 - 表内序号：第 168 个槽位（从 0 数起）
 - 各绑定里的调用方：
     - Rust：[`Block::set_states`](../rust/block.md#Block.set_states)
-    - Go：[`Raw.EditSetBlockStates`](../go/raw.md#Raw.EditSetBlockStates)
+    - Go：[`BlockAt.SetStates`](../go/block.md#BlockAt.SetStates)、[`Raw.EditSetBlockStates`](../go/raw.md#Raw.EditSetBlockStates)
+    - Zig：[`world.setBlockStates`](../zig/world.md#world.setBlockStates)
 
 ### `edit_set_block_entity` {#edit_set_block_entity}
 
@@ -82,7 +84,8 @@ bool (*edit_set_block_entity)(int32_t dim, int32_t x, int32_t y, int32_t z, Pier
 - 表内序号：第 169 个槽位（从 0 数起）
 - 各绑定里的调用方：
     - Rust：[`Block::set_block_entity`](../rust/block.md#Block.set_block_entity)
-    - Go：[`Raw.EditSetBlockEntity`](../go/raw.md#Raw.EditSetBlockEntity)
+    - Go：[`BlockAt.SetEntitySNBT`](../go/block.md#BlockAt.SetEntitySNBT)、[`Raw.EditSetBlockEntity`](../go/raw.md#Raw.EditSetBlockEntity)
+    - Zig：[`world.setBlockEntity`](../zig/world.md#world.setBlockEntity)
 
 ### `edit_spawn_entity_nbt` {#edit_spawn_entity_nbt}
 
@@ -110,7 +113,8 @@ bool (*edit_spawn_entity_nbt)(
 - 表内序号：第 170 个槽位（从 0 数起）
 - 各绑定里的调用方：
     - Rust：[`World::spawn_entity_nbt`](../rust/world.md#World.spawn_entity_nbt)
-    - Go：[`Raw.EditSpawnEntityNbt`](../go/raw.md#Raw.EditSpawnEntityNbt)
+    - Go：[`SpawnEntityNBT`](../go/edit.md#SpawnEntityNBT)、[`Raw.EditSpawnEntityNbt`](../go/raw.md#Raw.EditSpawnEntityNbt)
+    - Zig：[`world.spawnEntityNbt`](../zig/world.md#world.spawnEntityNbt)
 
 ### `edit_trace_ray` {#edit_trace_ray}
 
@@ -135,7 +139,8 @@ bool (*edit_trace_ray)(
 - 表内序号：第 171 个槽位（从 0 数起）
 - 各绑定里的调用方：
     - Rust：[`Entity::trace_ray_blocks`](../rust/entity.md#Entity.trace_ray_blocks)
-    - Go：[`Raw.EditTraceRay`](../go/raw.md#Raw.EditTraceRay)
+    - Go：[`Entity.TraceRayBlocks`](../go/entity.md#Entity.TraceRayBlocks)、[`Raw.EditTraceRay`](../go/raw.md#Raw.EditTraceRay)
+    - Zig：[`Entity.traceRayBlocks`](../zig/entity.md#Entity.traceRayBlocks)
 
 ### `edit_fill_region` {#edit_fill_region}
 
@@ -164,6 +169,7 @@ int64_t (*edit_fill_region)(int32_t dimension, int32_t x1, int32_t y1, int32_t z
 - 各绑定里的调用方：
     - Rust：[`World::fill_region`](../rust/world.md#World.fill_region)
     - Go：[`FillRegion`](../go/edit.md#FillRegion)、[`Raw.EditFillRegion`](../go/raw.md#Raw.EditFillRegion)
+    - Zig：[`world.fillRegion`](../zig/world.md#world.fillRegion)
 
 ### `edit_set_blocks` {#edit_set_blocks}
 
@@ -188,3 +194,4 @@ int64_t (*edit_set_blocks)(int32_t dimension, PierStr const* palette, uint32_t p
 - 各绑定里的调用方：
     - Rust：[`World::set_blocks`](../rust/world.md#World.set_blocks)
     - Go：[`SetBlocks`](../go/edit.md#SetBlocks)
+    - Zig：[`world.setBlocks`](../zig/world.md#world.setBlocks)

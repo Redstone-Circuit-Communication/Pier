@@ -340,6 +340,9 @@ pub enum DimensionRule {
         /// road stops being a corridor as well and everything that is not a player stays where
         /// it stands on it. Same exemptions: players and ridden vehicles pass, and vertical
         /// movement is untouched.
+        ///
+        /// No host acts on this rule yet: `abi.h` numbers the rules up to 12 and a host ignores a
+        /// rule number it does not know, so setting it changes nothing and reading it gives `None`.
         EntityOnGap = 13,
 }
 ```
@@ -476,3 +479,5 @@ pub struct Terrain {
 ```
 
 注册时交给宿主的东西，连同它的两个调色板。
+
+- 实现的 trait：`Debug`

@@ -103,6 +103,7 @@ bool (*register_command_ex)(
 - 各绑定里的调用方：
     - Rust：[`CommandBuilder::register`](../rust/command.md#CommandBuilder.register)
     - Go：[`CommandBuilder.Register`](../go/commands.md#CommandBuilder.Register)
+    - Zig：[`command.Builder.register`](../zig/commands.md#command.Builder.register)
 
 ### `register_command_enum` {#register_command_enum}
 
@@ -122,6 +123,7 @@ bool (*register_command_enum)(PierStr name, PierStr values_snbt);
 - 各绑定里的调用方：
     - Rust：[`command::register_enum`](../rust/command.md#fn.register_enum)
     - Go：[`RegisterCommandEnum`](../go/commands.md#RegisterCommandEnum)、[`Raw.RegisterCommandEnum`](../go/raw.md#Raw.RegisterCommandEnum)
+    - Zig：[`command.registerEnum`](../zig/commands.md#command.registerEnum)
 
 ### `register_command_soft_enum` {#register_command_soft_enum}
 
@@ -141,6 +143,7 @@ bool (*register_command_soft_enum)(PierStr name, PierStr values_snbt);
 - 各绑定里的调用方：
     - Rust：[`command::register_soft_enum`](../rust/command.md#fn.register_soft_enum)
     - Go：[`RegisterSoftEnum`](../go/commands.md#RegisterSoftEnum)、[`Raw.RegisterCommandSoftEnum`](../go/raw.md#Raw.RegisterCommandSoftEnum)
+    - Zig：[`command.registerSoftEnum`](../zig/commands.md#command.registerSoftEnum)
 
 ### `update_command_soft_enum` {#update_command_soft_enum}
 
@@ -161,6 +164,7 @@ bool (*update_command_soft_enum)(PierStr name, int32_t op, PierStr values_snbt);
 - 各绑定里的调用方：
     - Rust：[`command::update_soft_enum`](../rust/command.md#fn.update_soft_enum)
     - Go：[`UpdateSoftEnum`](../go/commands.md#UpdateSoftEnum)、[`Raw.UpdateCommandSoftEnum`](../go/raw.md#Raw.UpdateCommandSoftEnum)
+    - Zig：[`command.updateSoftEnum`](../zig/commands.md#command.updateSoftEnum)
 
 ## 类型 {#types}
 

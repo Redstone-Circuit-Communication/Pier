@@ -25,7 +25,7 @@ pub struct Server(/* private */);
 
 The server runtime facade. Zero sized.
 
-- Implements: `Clone`, `Copy`
+- Implements: `Clone`, `Copy`, `Debug`
 
 ### `Server::get` {#Server.get}
 

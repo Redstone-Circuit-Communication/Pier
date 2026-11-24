@@ -593,6 +593,53 @@ pub fn comparator_signal(&self) -> Result<i32>
 - 返回值类型：`Result<i32>`
 - 对应槽位：[`block_get_num`](../cpp/block.md#block_get_num)
 
+### `Block::is_thin_fence` {#Block.is_thin_fence}
+
+```rust
+pub fn is_thin_fence(&self) -> Result<bool>
+```
+
+- 返回值类型：`Result<bool>`
+- 对应槽位：[`block_get_num`](../cpp/block.md#block_get_num)
+
+### `Block::is_lever` {#Block.is_lever}
+
+```rust
+pub fn is_lever(&self) -> Result<bool>
+```
+
+- 返回值类型：`Result<bool>`
+- 对应槽位：[`block_get_num`](../cpp/block.md#block_get_num)
+
+### `Block::is_stem` {#Block.is_stem}
+
+```rust
+pub fn is_stem(&self) -> Result<bool>
+```
+
+- 返回值类型：`Result<bool>`
+- 对应槽位：[`block_get_num`](../cpp/block.md#block_get_num)
+
+### `Block::can_instatick` {#Block.can_instatick}
+
+```rust
+pub fn can_instatick(&self) -> Result<bool>
+```
+
+- 返回值类型：`Result<bool>`
+- 对应槽位：[`block_get_num`](../cpp/block.md#block_get_num)
+
+### `Block::map_color` {#Block.map_color}
+
+```rust
+pub fn map_color(&self) -> Result<i32>
+```
+
+方块在地图上显示的颜色，0xRRGGBB 形式。
+
+- 返回值类型：`Result<i32>`
+- 对应槽位：[`block_get_num`](../cpp/block.md#block_get_num)
+
 ### `Block::state` {#Block.state}
 
 ```rust

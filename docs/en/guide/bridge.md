@@ -111,7 +111,7 @@ Declare Pier as a dependency in the manifest, which is what orders the two:
   "name": "your-mod",
   "entry": "your_mod.dll",
   "type": "native",
-  "dependencies": [ { "name": "pier" } ]
+  "dependencies": [ { "name": "Pier" } ]
 }
 ```
 

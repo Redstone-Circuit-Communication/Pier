@@ -34,7 +34,7 @@ pub mod prelude {
 pub struct Logger(/* private */);
 ```
 
-- 实现的 trait：`Clone`、`Copy`
+- 实现的 trait：`Clone`、`Copy`、`Debug`
 
 ### `Logger::get` {#Logger.get}
 
@@ -117,6 +117,8 @@ pub struct ModContext(/* private */);
 交给模组生命周期回调的上下文。
 
 它自己不带任何状态，真正的状态在 `RUNTIME` 里。它的存在是为了给各个门面一个共同的入口，也让 `on_load(ctx)` 这样的签名读起来自然。
+
+- 实现的 trait：`Debug`
 
 ### `ModContext::logger` {#ModContext.logger}
 

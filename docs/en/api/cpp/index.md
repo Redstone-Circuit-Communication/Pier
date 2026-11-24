@@ -1,6 +1,6 @@
 # C++ API
 
-A C++ mod compiled with the Pier SDK includes `sdk/abi.h` directly, receives the function table `PierApi` in `pier_main`, and calls `api->slot_name(...)` from then on. The 202 slots of the table are spread over the pages below by subject. Each slot names its section in abi.h and its position in the table, and lists the interfaces of Rust, Go and Zig that call it.
+A C++ mod compiled with the Pier SDK includes `sdk/abi.h` directly, receives the function table `PierApi` in `pier_main`, and calls `api->slot_name(...)` from then on. The 221 slots of the table are spread over the pages below by subject. Each slot names its section in abi.h and its position in the table, and lists the interfaces of Rust, Go and Zig that call it.
 
 Before a slot is called, two things are checked: that `struct_size` reaches the slot, and that the slot is not NULL. The [C++ binding](../../cpp/index.md) page shows how, with a complete mod.
 
@@ -11,20 +11,21 @@ Before a slot is called, two things are checked: that `struct_size` reaches the 
 | [Core](core.md) | 13 | 4 | 0 |
 | [Events](events.md) | 3 | 2 | 0 |
 | [Commands](commands.md) | 6 | 2 | 0 |
-| [Server, ticks and system information](server.md) | 16 | 0 | 8 |
-| [World](world.md) | 31 | 0 | 0 |
+| [Server, ticks and system information](server.md) | 16 | 0 | 14 |
+| [World](world.md) | 32 | 0 | 7 |
 | [Bulk world editing](edit.md) | 7 | 0 | 0 |
-| [Players](player.md) | 23 | 0 | 75 |
-| [Actors](entity.md) | 19 | 0 | 85 |
-| [Blocks](block.md) | 7 | 0 | 42 |
-| [Items and containers](item.md) | 15 | 0 | 52 |
+| [Players](player.md) | 23 | 0 | 85 |
+| [Actors](entity.md) | 19 | 0 | 104 |
+| [Blocks](block.md) | 7 | 0 | 47 |
+| [Items and containers](item.md) | 15 | 0 | 65 |
 | [Scoreboard](scoreboard.md) | 1 | 0 | 10 |
 | [Forms](form.md) | 1 | 1 | 0 |
 | [NBT and the key-value database](data.md) | 10 | 3 | 0 |
 | [Economy](money.md) | 10 | 1 | 4 |
 | [Packets](packet.md) | 6 | 5 | 7 |
 | [Simulated players](sim.md) | 4 | 0 | 0 |
-| [Client](client.md) | 6 | 4 | 0 |
+| [Client](client.md) | 13 | 4 | 102 |
+| [Native escape hatch](native.md) | 11 | 0 | 14 |
 | [Custom dimensions](dimensions.md) | 13 | 5 | 30 |
 | [Cross-mod](crossmod.md) | 16 | 5 | 8 |
 | [Registries](registry.md) | 1 | 0 | 4 |
@@ -83,6 +84,9 @@ Conventions for the whole file; per-slot comments record only the exceptions.
   - Threading: unless a slot says otherwise, call only on the server thread.
     log, gaming_status, schedule and schedule_after are thread-safe. Every
     callback (event, command, scheduled task) fires on the server thread.
+  - No address of an engine object or engine function crosses this boundary.
+    The native_* group is the one exception, off unless the operator turns it
+    on; its section below says what a caller then answers for.
 ```
 
 ```text
@@ -167,6 +171,29 @@ comment on those fields in PierApi for the full contract.
 FFI types for the client capability group. The type declarations are always
 present (they take no layout); whether the capability is available is decided
 by whether the client_* slots in PierApi are NULL.
+```
+
+```text
+Native escape hatch
+
+Every other slot in this file hands over names and ids, and the host looks the object
+up again on each call. The native_* slots are the exception: they hand over raw
+addresses of engine functions and engine objects, and they install native detours.
+They exist for an engine call this table does not wrap, made by a mod that knows the
+engine's own API and LeviLamina's.
+
+The host checks nothing about what a mod does with an address. The caller answers for
+the signature and calling convention of a function, the layout of an object on this
+exact engine build, the thread it calls on, and the lifetime of every object it was
+handed. A pointer from native_player stays valid while that player is online, and
+nothing here tells the mod when the player leaves. No exception and no other
+unwinding may cross an engine function or a detour.
+
+The group is off unless config.json of the host sets "native_detour": true. While it
+is off, every native_* slot except native_enabled returns PIER_NATIVE_DISABLED and
+writes no output, and the host logs once per mod, to that mod's logger, which setting
+to change. One switch covers the whole group, because an engine object's address
+reaches the same memory a detour does.
 ```
 
 ```text

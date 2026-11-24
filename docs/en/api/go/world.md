@@ -245,6 +245,224 @@ SetBiome sets the biome of every column in a rectangle and returns how many chan
 - Return type: `(int32, error)`
 - Slots: [`level_set_biome`](../cpp/world.md#level_set_biome)
 
+### `FindPath` {#FindPath}
+
+```go
+func FindPath(who Entity, x, y, z int32) (*Nbt, error)
+```
+
+FindPath computes a path for an actor to a target cell, as the host's SNBT. Every current host answers not provided.
+
+- Parameters:
+    - who : `Entity`
+    - x : `int32`
+    - y : `int32`
+    - z : `int32`
+- Return type: `(*Nbt, error)`
+- Slots: [`level_find_path`](../cpp/world.md#level_find_path)
+
+### `UpdateWeather` {#UpdateWeather}
+
+```go
+func UpdateWeather(rainLevel float32, rainTicks int32, lightningLevel float32, lightningTicks int32) error
+```
+
+UpdateWeather sets the level and the remaining ticks of rain and of lightning.
+
+- Parameters:
+    - rainLevel : `float32`
+    - rainTicks : `int32`
+    - lightningLevel : `float32`
+    - lightningTicks : `int32`
+- Return type: `error`
+- Slots: [`level_update_weather`](../cpp/world.md#level_update_weather)
+
+### `LevelSleepStatus` {#LevelSleepStatus}
+
+```go
+func LevelSleepStatus() (SleepStatus, error)
+```
+
+LevelSleepStatus reads the sleep status of the players.
+
+- Return type: `(SleepStatus, error)`
+- Slots: [`level_get_sleep_status`](../cpp/world.md#level_get_sleep_status)
+
+### `Villages` {#Villages}
+
+```go
+func Villages(dim int32) ([]Village, error)
+```
+
+Villages lists the villages of one dimension.
+
+- Parameters:
+    - dim : `int32`
+- Return type: `([]Village, error)`
+- Slots: [`villages`](../cpp/world.md#villages)
+
+### `StructuresNear` {#StructuresNear}
+
+```go
+func StructuresNear(dim, x, y, z, radius int32) ([]Structure, error)
+```
+
+StructuresNear lists the hardcoded generation areas of the loaded chunks within a radius.
+
+- Parameters:
+    - dim : `int32`
+    - x : `int32`
+    - y : `int32`
+    - z : `int32`
+    - radius : `int32`
+- Return type: `([]Structure, error)`
+- Slots: [`structures_near`](../cpp/world.md#structures_near)
+
+### `ChunksLoaded` {#ChunksLoaded}
+
+```go
+func ChunksLoaded(dim, minX, minZ, maxX, maxZ int32) (bool, error)
+```
+
+ChunksLoaded reports whether every chunk covered by the region is in memory.
+
+- Parameters:
+    - dim : `int32`
+    - minX : `int32`
+    - minZ : `int32`
+    - maxX : `int32`
+    - maxZ : `int32`
+- Return type: `(bool, error)`
+- Slots: [`level_chunks_loaded`](../cpp/world.md#level_chunks_loaded)
+
+### `DeleteChunkKeys` {#DeleteChunkKeys}
+
+```go
+func DeleteChunkKeys(dim, chunkX, chunkZ int32) (int32, error)
+```
+
+DeleteChunkKeys deletes every save key of a chunk, so the engine regenerates it from the generator on its next load, and returns how many keys went. Only an unloaded chunk can be restored this way.
+
+- Parameters:
+    - dim : `int32`
+    - chunkX : `int32`
+    - chunkZ : `int32`
+- Return type: `(int32, error)`
+- Slots: [`level_delete_chunk_keys`](../cpp/world.md#level_delete_chunk_keys)
+
+### `ChunkKeys` {#ChunkKeys}
+
+```go
+func ChunkKeys(dim, chunkX, chunkZ int32) ([]string, error)
+```
+
+ChunkKeys lists every save key of a chunk. A key is binary, and a Go string holds it as it is.
+
+- Parameters:
+    - dim : `int32`
+    - chunkX : `int32`
+    - chunkZ : `int32`
+- Return type: `([]string, error)`
+- Slots: [`level_chunk_keys`](../cpp/world.md#level_chunk_keys)
+
+### `DeleteSaveKey` {#DeleteSaveKey}
+
+```go
+func DeleteSaveKey(key string) error
+```
+
+DeleteSaveKey deletes one save key byte for byte. The content is not interpreted.
+
+- Parameters:
+    - key : `string`
+- Return type: `error`
+- Slots: [`level_delete_key`](../cpp/world.md#level_delete_key)
+
+### `WorldWeather` {#WorldWeather}
+
+```go
+func WorldWeather(dim, prop int32) (float64, error)
+```
+
+WorldWeather reads one PIER\_WPROP\_\* value of dimension dim. The error covers an unknown key, a dimension that does not exist and a level that is not ready.
+
+- Parameters:
+    - dim : `int32`
+    - prop : `int32`
+- Return type: `(float64, error)`
+
+### `WorldRainLevel` {#WorldRainLevel}
+
+```go
+func WorldRainLevel(dim int32) (float64, error)
+```
+
+WorldRainLevel is the rain level of a dimension, 0 for none to 1 for full rain.
+
+- Parameters:
+    - dim : `int32`
+- Return type: `(float64, error)`
+
+### `WorldTargetRainLevel` {#WorldTargetRainLevel}
+
+```go
+func WorldTargetRainLevel(dim int32) (float64, error)
+```
+
+WorldTargetRainLevel reads `PIER_WPROP_TARGET_RAIN_LEVEL` of dimension dim.
+
+- Parameters:
+    - dim : `int32`
+- Return type: `(float64, error)`
+
+### `WorldLightningLevel` {#WorldLightningLevel}
+
+```go
+func WorldLightningLevel(dim int32) (float64, error)
+```
+
+WorldLightningLevel is the lightning level of a dimension, 0 for none to 1 for a storm.
+
+- Parameters:
+    - dim : `int32`
+- Return type: `(float64, error)`
+
+### `WorldTargetLightningLevel` {#WorldTargetLightningLevel}
+
+```go
+func WorldTargetLightningLevel(dim int32) (float64, error)
+```
+
+WorldTargetLightningLevel reads `PIER_WPROP_TARGET_LIGHTNING_LEVEL` of dimension dim.
+
+- Parameters:
+    - dim : `int32`
+- Return type: `(float64, error)`
+
+### `WorldFogLevel` {#WorldFogLevel}
+
+```go
+func WorldFogLevel(dim int32) (float64, error)
+```
+
+WorldFogLevel reads `PIER_WPROP_FOG_LEVEL` of dimension dim.
+
+- Parameters:
+    - dim : `int32`
+- Return type: `(float64, error)`
+
+### `WorldSkyFlashTime` {#WorldSkyFlashTime}
+
+```go
+func WorldSkyFlashTime(dim int32) (float64, error)
+```
+
+WorldSkyFlashTime reads `PIER_WPROP_SKY_FLASH_TIME` of dimension dim.
+
+- Parameters:
+    - dim : `int32`
+- Return type: `(float64, error)`
+
 ## `EntityInfo` {#EntityInfo}
 
 ```go
@@ -293,3 +511,39 @@ type ExplodeOptions struct {
 ```
 
 ExplodeOptions are the optional parts of an explosion.
+
+## `SleepStatus` {#SleepStatus}
+
+```go
+type SleepStatus struct {
+    Sleeping       bool
+    TotalPlayers   int32
+    ActiveSleeping int32
+}
+```
+
+SleepStatus is how many players sleep.
+
+## `Village` {#Village}
+
+```go
+type Village struct {
+    UUID     string
+    Center   [3]int32
+    Min, Max [3]int32
+    PoiCount int32
+}
+```
+
+Village is one village.
+
+## `Structure` {#Structure}
+
+```go
+type Structure struct {
+    Kind     string
+    Min, Max [3]int32
+}
+```
+
+Structure is one hardcoded generation area: a stronghold, a witch hut, an ocean monument or a similar structure.

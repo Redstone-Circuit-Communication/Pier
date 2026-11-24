@@ -34,7 +34,8 @@ Write a block from serialized NBT ({name,states,version}, i.e. the shape `get_bl
 - Position in the table: slot 167, counting from 0
 - Callers in each binding:
     - Rust: [`Block::set_nbt`](../rust/block.md#Block.set_nbt)
-    - Go: [`Raw.EditSetBlockNbt`](../go/raw.md#Raw.EditSetBlockNbt)
+    - Go: [`BlockAt.SetNBT`](../go/block.md#BlockAt.SetNBT), [`Raw.EditSetBlockNbt`](../go/raw.md#Raw.EditSetBlockNbt)
+    - Zig: [`world.setBlockNbt`](../zig/world.md#world.setBlockNbt)
 
 ### `edit_set_block_states` {#edit_set_block_states}
 
@@ -60,7 +61,8 @@ Write a block from a name + optional partial states. An empty `states_snbt` mean
 - Position in the table: slot 168, counting from 0
 - Callers in each binding:
     - Rust: [`Block::set_states`](../rust/block.md#Block.set_states)
-    - Go: [`Raw.EditSetBlockStates`](../go/raw.md#Raw.EditSetBlockStates)
+    - Go: [`BlockAt.SetStates`](../go/block.md#BlockAt.SetStates), [`Raw.EditSetBlockStates`](../go/raw.md#Raw.EditSetBlockStates)
+    - Zig: [`world.setBlockStates`](../zig/world.md#world.setBlockStates)
 
 ### `edit_set_block_entity` {#edit_set_block_entity}
 
@@ -82,7 +84,8 @@ Write a block entity's NBT back (`BlockActor::load`). The cell must already hold
 - Position in the table: slot 169, counting from 0
 - Callers in each binding:
     - Rust: [`Block::set_block_entity`](../rust/block.md#Block.set_block_entity)
-    - Go: [`Raw.EditSetBlockEntity`](../go/raw.md#Raw.EditSetBlockEntity)
+    - Go: [`BlockAt.SetEntitySNBT`](../go/block.md#BlockAt.SetEntitySNBT), [`Raw.EditSetBlockEntity`](../go/raw.md#Raw.EditSetBlockEntity)
+    - Zig: [`world.setBlockEntity`](../zig/world.md#world.setBlockEntity)
 
 ### `edit_spawn_entity_nbt` {#edit_spawn_entity_nbt}
 
@@ -108,7 +111,8 @@ Spawn an entity from full NBT (the inverse of `actor_snapshot`). When `use_pos` 
 - Position in the table: slot 170, counting from 0
 - Callers in each binding:
     - Rust: [`World::spawn_entity_nbt`](../rust/world.md#World.spawn_entity_nbt)
-    - Go: [`Raw.EditSpawnEntityNbt`](../go/raw.md#Raw.EditSpawnEntityNbt)
+    - Go: [`SpawnEntityNBT`](../go/edit.md#SpawnEntityNBT), [`Raw.EditSpawnEntityNbt`](../go/raw.md#Raw.EditSpawnEntityNbt)
+    - Zig: [`world.spawnEntityNbt`](../zig/world.md#world.spawnEntityNbt)
 
 ### `edit_trace_ray` {#edit_trace_ray}
 
@@ -133,7 +137,8 @@ Ray trace yielding the BLOCK coordinate and hit face: {type, block:\[x,y,z\], fa
 - Position in the table: slot 171, counting from 0
 - Callers in each binding:
     - Rust: [`Entity::trace_ray_blocks`](../rust/entity.md#Entity.trace_ray_blocks)
-    - Go: [`Raw.EditTraceRay`](../go/raw.md#Raw.EditTraceRay)
+    - Go: [`Entity.TraceRayBlocks`](../go/entity.md#Entity.TraceRayBlocks), [`Raw.EditTraceRay`](../go/raw.md#Raw.EditTraceRay)
+    - Zig: [`Entity.traceRayBlocks`](../zig/entity.md#Entity.traceRayBlocks)
 
 ### `edit_fill_region` {#edit_fill_region}
 
@@ -162,6 +167,7 @@ Fills a box with one block. `block_spec` is a bare name such as "minecraft:stone
 - Callers in each binding:
     - Rust: [`World::fill_region`](../rust/world.md#World.fill_region)
     - Go: [`FillRegion`](../go/edit.md#FillRegion), [`Raw.EditFillRegion`](../go/raw.md#Raw.EditFillRegion)
+    - Zig: [`world.fillRegion`](../zig/world.md#world.fillRegion)
 
 ### `edit_set_blocks` {#edit_set_blocks}
 
@@ -186,3 +192,4 @@ Writes many cells in one call. palette holds `palette_count` block specs, each r
 - Callers in each binding:
     - Rust: [`World::set_blocks`](../rust/world.md#World.set_blocks)
     - Go: [`SetBlocks`](../go/edit.md#SetBlocks)
+    - Zig: [`world.setBlocks`](../zig/world.md#world.setBlocks)

@@ -25,6 +25,7 @@ uint64_t (*get_current_tick)(void);
 - 各绑定里的调用方：
     - Rust：[`Host::current_tick`](../rust/host.md#Host.current_tick)
     - Go：[`CurrentTick`](../go/server.md#CurrentTick)、[`Raw.GetCurrentTick`](../go/raw.md#Raw.GetCurrentTick)
+    - Zig：[`server.currentTick`](../zig/server.md#server.currentTick)
 
 ### `get_tick_delta_time` {#get_tick_delta_time}
 
@@ -41,6 +42,7 @@ double (*get_tick_delta_time)(void);
 - 各绑定里的调用方：
     - Rust：[`Server::tick_delta_time`](../rust/server.md#Server.tick_delta_time)
     - Go：[`TickDeltaTime`](../go/server.md#TickDeltaTime)、[`Raw.GetTickDeltaTime`](../go/raw.md#Raw.GetTickDeltaTime)
+    - Zig：[`server.tickDeltaTime`](../zig/server.md#server.tickDeltaTime)
 
 ### `get_player_count` {#get_player_count}
 
@@ -57,6 +59,7 @@ int32_t (*get_player_count)(void);
 - 各绑定里的调用方：
     - Rust：[`Host::player_count`](../rust/host.md#Host.player_count)
     - Go：[`PlayerCount`](../go/server.md#PlayerCount)、[`Raw.GetPlayerCount`](../go/raw.md#Raw.GetPlayerCount)
+    - Zig：[`server.playerCount`](../zig/server.md#server.playerCount)
 
 ### `get_sim_paused` {#get_sim_paused}
 
@@ -73,6 +76,7 @@ bool (*get_sim_paused)(void);
 - 各绑定里的调用方：
     - Rust：[`Server::is_sim_paused`](../rust/server.md#Server.is_sim_paused)
     - Go：[`SimPaused`](../go/server.md#SimPaused)、[`Raw.GetSimPaused`](../go/raw.md#Raw.GetSimPaused)
+    - Zig：[`server.isSimPaused`](../zig/server.md#server.isSimPaused)
 
 ### `sys_info_str` {#sys_info_str}
 
@@ -93,9 +97,9 @@ bool (*sys_info_str)(int32_t prop, void* ctx, PierStrSink sink);
 - 所在分节：§I 二进制 NBT、KvDb（线程安全）、系统与服务器信息（`§I NBT binary, KvDb (thread-safe), system & server info`）
 - 表内序号：第 68 个槽位（从 0 数起）
 - 各绑定里的调用方：
-    - Rust：[`Host::sys_info`](../rust/host.md#Host.sys_info)、[`Host::os_name`](../rust/host.md#Host.os_name)、[`Host::os_version`](../rust/host.md#Host.os_version)、[`Host::locale`](../rust/host.md#Host.locale)、[`Host::local_time`](../rust/host.md#Host.local_time)
-    - Go：[`SystemOsName`](../go/server.md#SystemOsName)、[`SystemOsVersion`](../go/server.md#SystemOsVersion)、[`SystemLocale`](../go/server.md#SystemLocale)、[`SystemLocalTime`](../go/server.md#SystemLocalTime)、[`Raw.SysInfoStr`](../go/raw.md#Raw.SysInfoStr)
-    - Zig：[`props.sysOsName`](../zig/server.md#props.sysOsName)、[`props.sysOsVersion`](../zig/server.md#props.sysOsVersion)、[`props.sysLocale`](../zig/server.md#props.sysLocale)、[`props.sysLocalTime`](../zig/server.md#props.sysLocalTime)
+    - Rust：[`Host::sys_info`](../rust/host.md#Host.sys_info)、[`Host::process_id`](../rust/host.md#Host.process_id)、[`Host::os_name`](../rust/host.md#Host.os_name)、[`Host::os_version`](../rust/host.md#Host.os_version)、[`Host::locale`](../rust/host.md#Host.locale)、[`Host::local_time`](../rust/host.md#Host.local_time)
+    - Go：[`SystemOsName`](../go/server.md#SystemOsName)、[`SystemOsVersion`](../go/server.md#SystemOsVersion)、[`SystemLocale`](../go/server.md#SystemLocale)、[`SystemLocalTime`](../go/server.md#SystemLocalTime)、[`SystemProcessId`](../go/server.md#SystemProcessId)、[`Raw.SysInfoStr`](../go/raw.md#Raw.SysInfoStr)
+    - Zig：[`props.sysOsName`](../zig/server.md#props.sysOsName)、[`props.sysOsVersion`](../zig/server.md#props.sysOsVersion)、[`props.sysLocale`](../zig/server.md#props.sysLocale)、[`props.sysLocalTime`](../zig/server.md#props.sysLocalTime)、[`props.sysProcessId`](../zig/server.md#props.sysProcessId)
 
 ### `sys_get_env` {#sys_get_env}
 
@@ -118,6 +122,7 @@ bool (*sys_get_env)(PierStr name, void* ctx, PierStrSink sink);
 - 各绑定里的调用方：
     - Rust：[`Host::env`](../rust/host.md#Host.env)
     - Go：[`Env`](../go/server.md#Env)、[`Raw.SysGetEnv`](../go/raw.md#Raw.SysGetEnv)
+    - Zig：[`server.env`](../zig/server.md#server.env)
 
 ### `sys_set_env` {#sys_set_env}
 
@@ -139,6 +144,7 @@ bool (*sys_set_env)(PierStr name, PierStr value);
 - 各绑定里的调用方：
     - Rust：[`Host::set_env`](../rust/host.md#Host.set_env)
     - Go：[`SetEnv`](../go/server.md#SetEnv)、[`Raw.SysSetEnv`](../go/raw.md#Raw.SysSetEnv)
+    - Zig：[`server.setEnv`](../zig/server.md#server.setEnv)
 
 ### `sys_is_wine` {#sys_is_wine}
 
@@ -156,7 +162,8 @@ bool (*sys_is_wine)(void);
 - 表内序号：第 71 个槽位（从 0 数起）
 - 各绑定里的调用方：
     - Rust：[`Host::try_is_wine`](../rust/host.md#Host.try_is_wine)、[`Host::is_wine`](../rust/host.md#Host.is_wine)
-    - Go：[`Raw.SysIsWine`](../go/raw.md#Raw.SysIsWine)
+    - Go：[`IsWine`](../go/server.md#IsWine)、[`Raw.SysIsWine`](../go/raw.md#Raw.SysIsWine)
+    - Zig：[`server.isWine`](../zig/server.md#server.isWine)
 
 ### `server_info_str` {#server_info_str}
 
@@ -177,9 +184,9 @@ bool (*server_info_str)(int32_t prop, void* ctx, PierStrSink sink);
 - 所在分节：§I 二进制 NBT、KvDb（线程安全）、系统与服务器信息（`§I NBT binary, KvDb (thread-safe), system & server info`）
 - 表内序号：第 77 个槽位（从 0 数起）
 - 各绑定里的调用方：
-    - Rust：[`Host::server_info`](../rust/host.md#Host.server_info)、[`Host::protocol_version`](../rust/host.md#Host.protocol_version)、[`Host::level_protocol_version`](../rust/host.md#Host.level_protocol_version)、[`Host::game_sem_version`](../rust/host.md#Host.game_sem_version)、[`Host::bds_version`](../rust/host.md#Host.bds_version)
-    - Go：[`ServerBdsVersion`](../go/server.md#ServerBdsVersion)、[`ServerProtocolVersion`](../go/server.md#ServerProtocolVersion)、[`ServerLevelProtocolVersion`](../go/server.md#ServerLevelProtocolVersion)、[`ServerGameSemVersion`](../go/server.md#ServerGameSemVersion)、[`Raw.ServerInfoStr`](../go/raw.md#Raw.ServerInfoStr)
-    - Zig：[`props.srvBdsVersion`](../zig/server.md#props.srvBdsVersion)、[`props.srvProtocolVersion`](../zig/server.md#props.srvProtocolVersion)、[`props.srvLevelProtocolVersion`](../zig/server.md#props.srvLevelProtocolVersion)、[`props.srvGameSemVersion`](../zig/server.md#props.srvGameSemVersion)
+    - Rust：[`Host::server_info`](../rust/host.md#Host.server_info)、[`Host::protocol_version`](../rust/host.md#Host.protocol_version)、[`Host::level_protocol_version`](../rust/host.md#Host.level_protocol_version)、[`Host::game_sem_version`](../rust/host.md#Host.game_sem_version)、[`Host::loader_version`](../rust/host.md#Host.loader_version)、[`Host::level_name`](../rust/host.md#Host.level_name) 等，共 10 个
+    - Go：[`ServerBdsVersion`](../go/server.md#ServerBdsVersion)、[`ServerProtocolVersion`](../go/server.md#ServerProtocolVersion)、[`ServerLevelProtocolVersion`](../go/server.md#ServerLevelProtocolVersion)、[`ServerGameSemVersion`](../go/server.md#ServerGameSemVersion)、[`ServerLoaderVersion`](../go/server.md#ServerLoaderVersion)、[`ServerLevelName`](../go/server.md#ServerLevelName) 等，共 10 个
+    - Zig：[`props.srvBdsVersion`](../zig/server.md#props.srvBdsVersion)、[`props.srvProtocolVersion`](../zig/server.md#props.srvProtocolVersion)、[`props.srvLevelProtocolVersion`](../zig/server.md#props.srvLevelProtocolVersion)、[`props.srvGameSemVersion`](../zig/server.md#props.srvGameSemVersion)、[`props.srvLoaderVersion`](../zig/server.md#props.srvLoaderVersion)、[`props.srvLevelName`](../zig/server.md#props.srvLevelName) 等，共 9 个
 
 ### `tick_freeze` {#tick_freeze}
 
@@ -201,7 +208,8 @@ bool (*tick_freeze)(bool on);
 - 表内序号：第 80 个槽位（从 0 数起）
 - 各绑定里的调用方：
     - Rust：[`Server::set_tick_freeze`](../rust/server.md#Server.set_tick_freeze)
-    - Go：[`Raw.TickFreeze`](../go/raw.md#Raw.TickFreeze)
+    - Go：[`SetTickFreeze`](../go/server.md#SetTickFreeze)、[`Raw.TickFreeze`](../go/raw.md#Raw.TickFreeze)
+    - Zig：[`server.setTickFreeze`](../zig/server.md#server.setTickFreeze)
 
 ### `tick_step` {#tick_step}
 
@@ -225,7 +233,8 @@ bool (*tick_step)(uint32_t n);
 - 表内序号：第 81 个槽位（从 0 数起）
 - 各绑定里的调用方：
     - Rust：[`Server::step_ticks`](../rust/server.md#Server.step_ticks)
-    - Go：[`Raw.TickStep`](../go/raw.md#Raw.TickStep)
+    - Go：[`StepTicks`](../go/server.md#StepTicks)、[`Raw.TickStep`](../go/raw.md#Raw.TickStep)
+    - Zig：[`server.stepTicks`](../zig/server.md#server.stepTicks)
 
 ### `tick_warp` {#tick_warp}
 
@@ -249,7 +258,8 @@ bool (*tick_warp)(double factor);
 - 表内序号：第 82 个槽位（从 0 数起）
 - 各绑定里的调用方：
     - Rust：[`Server::set_tick_warp`](../rust/server.md#Server.set_tick_warp)
-    - Go：[`Raw.TickWarp`](../go/raw.md#Raw.TickWarp)
+    - Go：[`SetTickWarp`](../go/server.md#SetTickWarp)、[`Raw.TickWarp`](../go/raw.md#Raw.TickWarp)
+    - Zig：[`server.setTickWarp`](../zig/server.md#server.setTickWarp)
 
 ### `profile_begin` {#profile_begin}
 
@@ -271,7 +281,8 @@ bool (*profile_begin)(uint32_t ticks);
 - 表内序号：第 83 个槽位（从 0 数起）
 - 各绑定里的调用方：
     - Rust：[`Server::begin_profile`](../rust/server.md#Server.begin_profile)
-    - Go：[`Raw.ProfileBegin`](../go/raw.md#Raw.ProfileBegin)
+    - Go：[`BeginProfile`](../go/server.md#BeginProfile)、[`Raw.ProfileBegin`](../go/raw.md#Raw.ProfileBegin)
+    - Zig：[`server.beginProfile`](../zig/server.md#server.beginProfile)
 
 ### `profile_take` {#profile_take}
 
@@ -303,7 +314,8 @@ bool (*profile_take)(void* ctx, PierStrSink sink);
 - 表内序号：第 84 个槽位（从 0 数起）
 - 各绑定里的调用方：
     - Rust：[`Server::take_profile`](../rust/server.md#Server.take_profile)
-    - Go：[`Raw.ProfileTake`](../go/raw.md#Raw.ProfileTake)
+    - Go：[`TakeProfile`](../go/server.md#TakeProfile)、[`Raw.ProfileTake`](../go/raw.md#Raw.ProfileTake)
+    - Zig：[`server.takeProfile`](../zig/server.md#server.takeProfile)
 
 ### `get_tps` {#get_tps}
 
@@ -322,6 +334,7 @@ double (*get_tps)(int32_t window_seconds);
 - 各绑定里的调用方：
     - Rust：[`Server::tps`](../rust/server.md#Server.tps)、[`Server::tps_over`](../rust/server.md#Server.tps_over)
     - Go：[`Tps`](../go/server.md#Tps)、[`Raw.GetTps`](../go/raw.md#Raw.GetTps)
+    - Zig：[`server.tps`](../zig/server.md#server.tps)、[`server.tpsOver`](../zig/server.md#server.tpsOver)
 
 ### `get_mspt` {#get_mspt}
 
@@ -340,6 +353,7 @@ double (*get_mspt)(int32_t window_seconds);
 - 各绑定里的调用方：
     - Rust：[`Server::mspt`](../rust/server.md#Server.mspt)、[`Server::mspt_over`](../rust/server.md#Server.mspt_over)
     - Go：[`Mspt`](../go/server.md#Mspt)、[`Raw.GetMspt`](../go/raw.md#Raw.GetMspt)
+    - Zig：[`server.mspt`](../zig/server.md#server.mspt)、[`server.msptOver`](../zig/server.md#server.msptOver)
 
 ## `PierSysInfoProp` {#PierSysInfoProp}
 
@@ -349,6 +363,7 @@ double (*get_mspt)(int32_t window_seconds);
 | <span id="PIER_SYS_OS_VERSION"></span>`PIER_SYS_OS_VERSION` | `1` | 取自 `sys_utils::getSystemVersion`，返回字符串 |
 | <span id="PIER_SYS_LOCALE"></span>`PIER_SYS_LOCALE` | `2` | 取自 `sys_utils::getSystemLocaleCode` |
 | <span id="PIER_SYS_LOCAL_TIME"></span>`PIER_SYS_LOCAL_TIME` | `3` | 取自 `sys_utils::getLocalTime`，返回 SNBT `{year,month,day,hour,minute,second,ms}` |
+| <span id="PIER_SYS_PROCESS_ID"></span>`PIER_SYS_PROCESS_ID` | `4` | 服务端进程的 id |
 
 ## `PierServerInfoProp` {#PierServerInfoProp}
 
@@ -360,3 +375,8 @@ double (*get_mspt)(int32_t window_seconds);
 | <span id="PIER_SRV_PROTOCOL_VERSION"></span>`PIER_SRV_PROTOCOL_VERSION` | `1` | `LevelData::mNetworkVersion`：最后一次写这个存档时用的协议版本。它说明存档有多旧，和服务器现在使用的协议无关。 |
 | <span id="PIER_SRV_LEVEL_PROTOCOL_VERSION"></span>`PIER_SRV_LEVEL_PROTOCOL_VERSION` | `2` | 正在运行的构建的版本号 `"major.minor.patch"`，取自 `CurrentGameSemVersion`。模组可以据此自带一张版本到协议的对照表，不必等 Pier 发新版。 |
 | <span id="PIER_SRV_GAME_SEM_VERSION"></span>`PIER_SRV_GAME_SEM_VERSION` | `3` |  |
+| <span id="PIER_SRV_LOADER_VERSION"></span>`PIER_SRV_LOADER_VERSION` | `4` | `ll::getLoaderVersion`，正在运行的 LeviLamina 版本 |
+| <span id="PIER_SRV_LEVEL_NAME"></span>`PIER_SRV_LEVEL_NAME` | `5` | `LevelData::mLevelName`，世界名 |
+| <span id="PIER_SRV_IS_HARDCORE"></span>`PIER_SRV_IS_HARDCORE` | `6` | `LevelData::mIsHardcore`，"1" 或 "0" |
+| <span id="PIER_SRV_WORLD_START_COUNT"></span>`PIER_SRV_WORLD_START_COUNT` | `7` | `LevelData::mWorldStartCount`，世界被打开过的次数 |
+| <span id="PIER_SRV_EDUCATION_FEATURES"></span>`PIER_SRV_EDUCATION_FEATURES` | `8` | `LevelData::mEducationFeaturesEnabled`，"1" 或 "0" |

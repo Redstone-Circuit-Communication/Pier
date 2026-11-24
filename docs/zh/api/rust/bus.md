@@ -88,7 +88,7 @@ pub struct Subscription {
 
 [`Subscription::forget`](bus.md#Subscription.forget) 让它一直存活到模组卸载，那时由宿主清掉。
 
-- 实现的 trait：`Drop`
+- 实现的 trait：`Drop`、`Debug`
 
 ### `Subscription::id` {#Subscription.id}
 

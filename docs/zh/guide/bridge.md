@@ -95,7 +95,7 @@ bridge ABI 1 编出来的 mod，在管理器加端点之后照常能用。
   "name": "your-mod",
   "entry": "your_mod.dll",
   "type": "native",
-  "dependencies": [ { "name": "pier" } ]
+  "dependencies": [ { "name": "Pier" } ]
 }
 ```
 

@@ -116,6 +116,7 @@ The callback's `args` receives the parse result as SNBT
 - Callers in each binding:
     - Rust: [`CommandBuilder::register`](../rust/command.md#CommandBuilder.register)
     - Go: [`CommandBuilder.Register`](../go/commands.md#CommandBuilder.Register)
+    - Zig: [`command.Builder.register`](../zig/commands.md#command.Builder.register)
 
 ### `register_command_enum` {#register_command_enum}
 
@@ -135,6 +136,7 @@ bool (*register_command_enum)(PierStr name, PierStr values_snbt);
 - Callers in each binding:
     - Rust: [`command::register_enum`](../rust/command.md#fn.register_enum)
     - Go: [`RegisterCommandEnum`](../go/commands.md#RegisterCommandEnum), [`Raw.RegisterCommandEnum`](../go/raw.md#Raw.RegisterCommandEnum)
+    - Zig: [`command.registerEnum`](../zig/commands.md#command.registerEnum)
 
 ### `register_command_soft_enum` {#register_command_soft_enum}
 
@@ -154,6 +156,7 @@ bool (*register_command_soft_enum)(PierStr name, PierStr values_snbt);
 - Callers in each binding:
     - Rust: [`command::register_soft_enum`](../rust/command.md#fn.register_soft_enum)
     - Go: [`RegisterSoftEnum`](../go/commands.md#RegisterSoftEnum), [`Raw.RegisterCommandSoftEnum`](../go/raw.md#Raw.RegisterCommandSoftEnum)
+    - Zig: [`command.registerSoftEnum`](../zig/commands.md#command.registerSoftEnum)
 
 ### `update_command_soft_enum` {#update_command_soft_enum}
 
@@ -174,6 +177,7 @@ op: 0=set 1=add 2=remove.
 - Callers in each binding:
     - Rust: [`command::update_soft_enum`](../rust/command.md#fn.update_soft_enum)
     - Go: [`UpdateSoftEnum`](../go/commands.md#UpdateSoftEnum), [`Raw.UpdateCommandSoftEnum`](../go/raw.md#Raw.UpdateCommandSoftEnum)
+    - Zig: [`command.updateSoftEnum`](../zig/commands.md#command.updateSoftEnum)
 
 ## Types {#types}
 

@@ -111,6 +111,84 @@ Container is the cell's block container, such as a chest.
 
 - Return type: `Container`
 
+### `BlockAt.CollisionBox` {#BlockAt.CollisionBox}
+
+```go
+func (b BlockAt) CollisionBox() (string, error)
+```
+
+CollisionBox is the block's collision shape as the host writes it.
+
+- Return type: `(string, error)`
+- Slots: [`block_get_collision_shape`](../cpp/block.md#block_get_collision_shape)
+
+### `BlockAt.ExtraBlock` {#BlockAt.ExtraBlock}
+
+```go
+func (b BlockAt) ExtraBlock() (string, error)
+```
+
+ExtraBlock is the liquid layer of the cell, as a block name; an empty layer is air.
+
+- Return type: `(string, error)`
+- Slots: [`get_extra_block`](../cpp/world.md#get_extra_block)
+
+### `BlockAt.SetExtraBlock` {#BlockAt.SetExtraBlock}
+
+```go
+func (b BlockAt) SetExtraBlock(blockSpec string, updateFlags int32) error
+```
+
+SetExtraBlock writes the liquid layer of the cell; write minecraft:air to clear it.
+
+- Parameters:
+    - blockSpec : `string`
+    - updateFlags : `int32`
+- Return type: `error`
+- Slots: [`set_extra_block`](../cpp/world.md#set_extra_block)
+
+### `BlockAt.SetNBT` {#BlockAt.SetNBT}
+
+```go
+func (b BlockAt) SetNBT(snbt string, updateFlags int32) error
+```
+
+SetNBT writes a block from serialized NBT, the shape Info produces.
+
+- Parameters:
+    - snbt : `string`
+    - updateFlags : `int32`
+- Return type: `error`
+- Slots: [`edit_set_block_nbt`](../cpp/edit.md#edit_set_block_nbt)
+
+### `BlockAt.SetStates` {#BlockAt.SetStates}
+
+```go
+func (b BlockAt) SetStates(name, statesSNBT string, updateFlags int32) error
+```
+
+SetStates writes a block from a name and optional partial states; an empty statesSNBT means every state at its default.
+
+- Parameters:
+    - name : `string`
+    - statesSNBT : `string`
+    - updateFlags : `int32`
+- Return type: `error`
+- Slots: [`edit_set_block_states`](../cpp/edit.md#edit_set_block_states)
+
+### `BlockAt.SetEntitySNBT` {#BlockAt.SetEntitySNBT}
+
+```go
+func (b BlockAt) SetEntitySNBT(snbt string) error
+```
+
+SetEntitySNBT writes the NBT of the block entity of the cell, which must already hold the matching block.
+
+- Parameters:
+    - snbt : `string`
+- Return type: `error`
+- Slots: [`edit_set_block_entity`](../cpp/edit.md#edit_set_block_entity)
+
 ### `BlockAt.IsAir` {#BlockAt.IsAir}
 
 ```go
@@ -434,6 +512,61 @@ RequiresTool reads `PIER_BPROP_REQUIRES_TOOL`: `Block::requiresCorrectToolForDro
 - Return type: `(float64, error)`
 - Slots: [`block_get_num`](../cpp/block.md#block_get_num)
 
+### `BlockAt.IsThinFence` {#BlockAt.IsThinFence}
+
+```go
+func (b BlockAt) IsThinFence() (bool, error)
+```
+
+IsThinFence reads `PIER_BPROP_IS_THIN_FENCE`: `BlockType::isThinFenceBlock`
+
+- Return type: `(bool, error)`
+- Slots: [`block_get_num`](../cpp/block.md#block_get_num)
+
+### `BlockAt.IsLever` {#BlockAt.IsLever}
+
+```go
+func (b BlockAt) IsLever() (bool, error)
+```
+
+IsLever reads `PIER_BPROP_IS_LEVER`: `BlockType::isLeverBlock`
+
+- Return type: `(bool, error)`
+- Slots: [`block_get_num`](../cpp/block.md#block_get_num)
+
+### `BlockAt.IsStem` {#BlockAt.IsStem}
+
+```go
+func (b BlockAt) IsStem() (bool, error)
+```
+
+IsStem reads `PIER_BPROP_IS_STEM`: `BlockType::isStemBlock`
+
+- Return type: `(bool, error)`
+- Slots: [`block_get_num`](../cpp/block.md#block_get_num)
+
+### `BlockAt.CanInstatick` {#BlockAt.CanInstatick}
+
+```go
+func (b BlockAt) CanInstatick() (bool, error)
+```
+
+CanInstatick reads `PIER_BPROP_CAN_INSTATICK`: `BlockType::canInstatick`
+
+- Return type: `(bool, error)`
+- Slots: [`block_get_num`](../cpp/block.md#block_get_num)
+
+### `BlockAt.MapColor` {#BlockAt.MapColor}
+
+```go
+func (b BlockAt) MapColor() (float64, error)
+```
+
+MapColor reads `PIER_BPROP_MAP_COLOR`: `BlockType::getMapColor` as 0xRRGGBB
+
+- Return type: `(float64, error)`
+- Slots: [`block_get_num`](../cpp/block.md#block_get_num)
+
 ### `BlockAt.TypeName` {#BlockAt.TypeName}
 
 ```go
@@ -638,6 +771,11 @@ BlockInfo is one block: its cell, its type name and its block state as SNBT.
 | <span id="BPropBounciness"></span>`BPropBounciness` | `26` | BPropBounciness is `PIER_BPROP_BOUNCINESS`: `Block::getBounciness` |
 | <span id="BPropIsSolid"></span>`BPropIsSolid` | `27` | BPropIsSolid is `PIER_BPROP_IS_SOLID`: `Block::isSolid` |
 | <span id="BPropRequiresTool"></span>`BPropRequiresTool` | `28` | BPropRequiresTool is `PIER_BPROP_REQUIRES_TOOL`: `Block::requiresCorrectToolForDrops` |
+| <span id="BPropIsThinFence"></span>`BPropIsThinFence` | `29` | BPropIsThinFence is `PIER_BPROP_IS_THIN_FENCE`: `BlockType::isThinFenceBlock` |
+| <span id="BPropIsLever"></span>`BPropIsLever` | `30` | BPropIsLever is `PIER_BPROP_IS_LEVER`: `BlockType::isLeverBlock` |
+| <span id="BPropIsStem"></span>`BPropIsStem` | `31` | BPropIsStem is `PIER_BPROP_IS_STEM`: `BlockType::isStemBlock` |
+| <span id="BPropCanInstatick"></span>`BPropCanInstatick` | `32` | BPropCanInstatick is `PIER_BPROP_CAN_INSTATICK`: `BlockType::canInstatick` |
+| <span id="BPropMapColor"></span>`BPropMapColor` | `33` | BPropMapColor is `PIER_BPROP_MAP_COLOR`: `BlockType::getMapColor` as 0xRRGGBB |
 
 ## `BStr*` {#BStr}
 

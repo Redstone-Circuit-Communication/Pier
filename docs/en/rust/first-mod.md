@@ -35,7 +35,7 @@ edition = "2021"
 crate-type = ["cdylib"]
 
 [dependencies]
-pier-rs = { git = "https://github.com/Maskviva/pier", tag = "26.51.3" }
+pier-rs = { git = "https://github.com/Maskviva/pier", tag = "26.51.4" }
 ```
 
 `crate-type = ["cdylib"]` makes cargo build a DLL, which is what the server loads.
@@ -77,7 +77,7 @@ Create `manifest.json` at the root of the project:
   "entry": "my_mod.dll",
   "type": "pier",
   "version": "0.1.0",
-  "dependencies": [{ "name": "pier" }]
+  "dependencies": [{ "name": "Pier" }]
 }
 ```
 

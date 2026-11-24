@@ -15,7 +15,7 @@ pub struct Scoreboard(/* private */);
 
 The scoreboard facade. Zero sized.
 
-- Implements: `Clone`, `Copy`
+- Implements: `Clone`, `Copy`, `Debug`
 
 ### `Scoreboard::get` {#Scoreboard.get}
 

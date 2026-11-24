@@ -29,6 +29,7 @@ int64_t (*get_money)(PierStr xuid);
 - 各绑定里的调用方：
     - Rust：[`money::balance`](../rust/money.md#fn.balance)
     - Go：[`Money`](../go/money.md#Money)、[`Raw.GetMoney`](../go/raw.md#Raw.GetMoney)
+    - Zig：[`money.balance`](../zig/money.md#money.balance)
 
 ### `set_money` {#set_money}
 
@@ -48,6 +49,7 @@ bool (*set_money)(PierStr xuid, int64_t money);
 - 各绑定里的调用方：
     - Rust：[`money::set`](../rust/money.md#fn.set)
     - Go：[`SetMoney`](../go/money.md#SetMoney)、[`Raw.SetMoney`](../go/raw.md#Raw.SetMoney)
+    - Zig：[`money.set`](../zig/money.md#money.set)
 
 ### `add_money` {#add_money}
 
@@ -65,6 +67,7 @@ bool (*add_money)(PierStr xuid, int64_t money);
 - 各绑定里的调用方：
     - Rust：[`money::add`](../rust/money.md#fn.add)
     - Go：[`AddMoney`](../go/money.md#AddMoney)、[`Raw.AddMoney`](../go/raw.md#Raw.AddMoney)
+    - Zig：[`money.add`](../zig/money.md#money.add)
 
 ### `reduce_money` {#reduce_money}
 
@@ -82,6 +85,7 @@ bool (*reduce_money)(PierStr xuid, int64_t money);
 - 各绑定里的调用方：
     - Rust：[`money::reduce`](../rust/money.md#fn.reduce)
     - Go：[`ReduceMoney`](../go/money.md#ReduceMoney)、[`Raw.ReduceMoney`](../go/raw.md#Raw.ReduceMoney)
+    - Zig：[`money.reduce`](../zig/money.md#money.reduce)
 
 ### `trans_money` {#trans_money}
 
@@ -103,6 +107,7 @@ bool (*trans_money)(PierStr from, PierStr to, int64_t val, PierStr note);
 - 各绑定里的调用方：
     - Rust：[`money::transfer`](../rust/money.md#fn.transfer)
     - Go：[`TransferMoney`](../go/money.md#TransferMoney)、[`Raw.TransMoney`](../go/raw.md#Raw.TransMoney)
+    - Zig：[`money.transfer`](../zig/money.md#money.transfer)
 
 ### `money_get_hist` {#money_get_hist}
 
@@ -120,7 +125,8 @@ void (*money_get_hist)(PierStr xuid, int32_t timediff, void* ctx, PierStrSink si
 - 表内序号：第 97 个槽位（从 0 数起）
 - 各绑定里的调用方：
     - Rust：[`money::try_history`](../rust/money.md#fn.try_history)、[`money::history`](../rust/money.md#fn.history)
-    - Go：[`Raw.MoneyGetHist`](../go/raw.md#Raw.MoneyGetHist)
+    - Go：[`MoneyHistory`](../go/money.md#MoneyHistory)、[`Raw.MoneyGetHist`](../go/raw.md#Raw.MoneyGetHist)
+    - Zig：[`money.history`](../zig/money.md#money.history)
 
 ### `money_clear_hist` {#money_clear_hist}
 
@@ -135,7 +141,8 @@ void (*money_clear_hist)(int32_t difftime);
 - 表内序号：第 98 个槽位（从 0 数起）
 - 各绑定里的调用方：
     - Rust：[`money::try_clear_history`](../rust/money.md#fn.try_clear_history)、[`money::clear_history`](../rust/money.md#fn.clear_history)
-    - Go：[`Raw.MoneyClearHist`](../go/raw.md#Raw.MoneyClearHist)
+    - Go：[`ClearMoneyHistory`](../go/money.md#ClearMoneyHistory)、[`Raw.MoneyClearHist`](../go/raw.md#Raw.MoneyClearHist)
+    - Zig：[`money.clearHistory`](../zig/money.md#money.clearHistory)
 
 ### `money_listen_before_event` {#money_listen_before_event}
 
@@ -153,6 +160,7 @@ void (*money_listen_before_event)(PierMoneyCb callback);
 - 各绑定里的调用方：
     - Rust：[`money::on_before`](../rust/money.md#fn.on_before)、[`money::on_before_with`](../rust/money.md#fn.on_before_with)
     - Go：[`OnMoneyBefore`](../go/money.md#OnMoneyBefore)
+    - Zig：[`money.onBefore`](../zig/money.md#money.onBefore)
 
 ### `money_listen_after_event` {#money_listen_after_event}
 
@@ -170,6 +178,7 @@ void (*money_listen_after_event)(PierMoneyCb callback);
 - 各绑定里的调用方：
     - Rust：[`money::on_after`](../rust/money.md#fn.on_after)、[`money::on_after_with`](../rust/money.md#fn.on_after_with)
     - Go：[`OnMoneyAfter`](../go/money.md#OnMoneyAfter)
+    - Zig：[`money.onAfter`](../zig/money.md#money.onAfter)
 
 ### `money_ranking` {#money_ranking}
 
@@ -186,7 +195,8 @@ void (*money_ranking)(uint16_t num, void* ctx, PierStrSink sink);
 - 表内序号：第 101 个槽位（从 0 数起）
 - 各绑定里的调用方：
     - Rust：[`money::try_ranking`](../rust/money.md#fn.try_ranking)、[`money::ranking`](../rust/money.md#fn.ranking)
-    - Go：[`Raw.MoneyRanking`](../go/raw.md#Raw.MoneyRanking)
+    - Go：[`MoneyRanking`](../go/money.md#MoneyRanking)、[`Raw.MoneyRanking`](../go/raw.md#Raw.MoneyRanking)
+    - Zig：[`money.ranking`](../zig/money.md#money.ranking)
 
 ## 类型 {#types}
 

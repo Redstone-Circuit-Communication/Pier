@@ -81,6 +81,7 @@ Enumerate all currently registered event ids. Server thread only.
 - Callers in each binding:
     - Rust: [`event::list`](../rust/event.md#fn.list), [`event::exists`](../rust/event.md#fn.exists), [`Host::list_events`](../rust/host.md#Host.list_events)
     - Go: [`ListEvents`](../go/events.md#ListEvents), [`Raw.ListEvents`](../go/raw.md#Raw.ListEvents)
+    - Zig: [`server.listEvents`](../zig/server.md#server.listEvents)
 
 ## Types {#types}
 

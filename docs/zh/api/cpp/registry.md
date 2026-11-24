@@ -35,6 +35,7 @@ bool (*registry_list)(int32_t kind, void* ctx, PierStrSink sink);
 - 各绑定里的调用方：
     - Rust：[`registry::blocks`](../rust/registry.md#fn.blocks)、[`registry::items`](../rust/registry.md#fn.items)、[`registry::entities`](../rust/registry.md#fn.entities)、[`registry::commands`](../rust/registry.md#fn.commands)
     - Go：[`RegistryList`](../go/registry.md#RegistryList)、[`Raw.RegistryList`](../go/raw.md#Raw.RegistryList)
+    - Zig：[`registry.blocks`](../zig/registry.md#registry.blocks)、[`registry.items`](../zig/registry.md#registry.items)、[`registry.entities`](../zig/registry.md#registry.entities)、[`registry.commands`](../zig/registry.md#registry.commands)
 
 ## `PIER_REGISTRY_*` {#PIER_REGISTRY_BLOCKS-group}
 

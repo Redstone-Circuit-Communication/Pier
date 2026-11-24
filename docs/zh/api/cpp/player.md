@@ -56,7 +56,8 @@ PierPlayerPos (*get_player_position)(PierStr name);
 - 表内序号：第 14 个槽位（从 0 数起）
 - 各绑定里的调用方：
     - Rust：[`Player::position`](../rust/player.md#Player.position)
-    - Go：[`Raw.GetPlayerPosition`](../go/raw.md#Raw.GetPlayerPosition)
+    - Go：[`PositionOf`](../go/player.md#PositionOf)、[`Player.Position`](../go/player.md#Player.Position)、[`Raw.GetPlayerPosition`](../go/raw.md#Raw.GetPlayerPosition)
+    - Zig：[`Player.position`](../zig/player.md#Player.position)、[`world.playerPosition`](../zig/world.md#world.playerPosition)
 
 ### `list_players` {#list_players}
 
@@ -75,6 +76,7 @@ void (*list_players)(void* ctx, PierStrSink snbt_sink);
 - 各绑定里的调用方：
     - Rust：[`Player::list`](../rust/player.md#Player.list)、[`Player::list`](../rust/player.md#Player.list)
     - Go：[`ListPlayers`](../go/player.md#ListPlayers)、[`Raw.ListPlayers`](../go/raw.md#Raw.ListPlayers)
+    - Zig：[`server.listPlayers`](../zig/server.md#server.listPlayers)
 
 ### `player_resolve` {#player_resolve}
 
@@ -94,6 +96,7 @@ bool (*player_resolve)(PierPlayerSel sel, PierActorId* out);
 - 各绑定里的调用方：
     - Rust：[`Player::is_online`](../rust/player.md#Player.is_online)、[`Player::as_entity`](../rust/player.md#Player.as_entity)
     - Go：[`Player.Resolve`](../go/player.md#Player.Resolve)、[`Player.IsOnline`](../go/player.md#Player.IsOnline)、[`Raw.PlayerResolve`](../go/raw.md#Raw.PlayerResolve)
+    - Zig：[`Player.asEntity`](../zig/player.md#Player.asEntity)、[`Player.isOnline`](../zig/player.md#Player.isOnline)
 
 ### `player_send_message` {#player_send_message}
 
@@ -111,6 +114,7 @@ bool (*player_send_message)(PierPlayerSel sel, PierStr msg);
 - 各绑定里的调用方：
     - Rust：[`Player::send_message`](../rust/player.md#Player.send_message)
     - Go：[`Player.SendMessage`](../go/player.md#Player.SendMessage)、[`Raw.PlayerSendMessage`](../go/raw.md#Raw.PlayerSendMessage)
+    - Zig：[`Player.sendMessage`](../zig/player.md#Player.sendMessage)
 
 ### `player_disconnect` {#player_disconnect}
 
@@ -128,6 +132,7 @@ bool (*player_disconnect)(PierPlayerSel sel, PierStr reason);
 - 各绑定里的调用方：
     - Rust：[`Player::disconnect`](../rust/player.md#Player.disconnect)
     - Go：[`Player.Disconnect`](../go/player.md#Player.Disconnect)、[`Raw.PlayerDisconnect`](../go/raw.md#Raw.PlayerDisconnect)
+    - Zig：[`Player.disconnect`](../zig/player.md#Player.disconnect)
 
 ### `broadcast_message` {#broadcast_message}
 
@@ -145,6 +150,7 @@ void (*broadcast_message)(PierStr msg);
 - 各绑定里的调用方：
     - Rust：[`Player::broadcast`](../rust/player.md#Player.broadcast)
     - Go：[`Broadcast`](../go/player.md#Broadcast)、[`Raw.BroadcastMessage`](../go/raw.md#Raw.BroadcastMessage)
+    - Zig：[`server.broadcast`](../zig/server.md#server.broadcast)
 
 ### `player_set_gamemode` {#player_set_gamemode}
 
@@ -164,6 +170,7 @@ bool (*player_set_gamemode)(PierPlayerSel sel, int32_t mode);
 - 各绑定里的调用方：
     - Rust：[`Player::set_gamemode`](../rust/player.md#Player.set_gamemode)
     - Go：[`Player.SetGameType`](../go/player.md#Player.SetGameType)、[`Raw.PlayerSetGamemode`](../go/raw.md#Raw.PlayerSetGamemode)
+    - Zig：[`Player.setGameMode`](../zig/player.md#Player.setGameMode)
 
 ### `player_teleport` {#player_teleport}
 
@@ -186,6 +193,7 @@ bool (*player_teleport)(PierPlayerSel sel, int32_t dim, double x, double y, doub
 - 各绑定里的调用方：
     - Rust：[`Player::teleport`](../rust/player.md#Player.teleport)
     - Go：[`Player.Teleport`](../go/player.md#Player.Teleport)、[`Raw.PlayerTeleport`](../go/raw.md#Raw.PlayerTeleport)
+    - Zig：[`Player.teleport`](../zig/player.md#Player.teleport)
 
 ### `player_get_num` {#player_get_num}
 
@@ -206,9 +214,9 @@ false 和「值为零」是两种结果，调用方不能把它们合成一种�
 - 所在分节：§B 玩家管理（`§B player management`）
 - 表内序号：第 28 个槽位（从 0 数起）
 - 各绑定里的调用方：
-    - Rust：[`Player::num`](../rust/player.md#Player.num)、[`Player::game_type`](../rust/player.md#Player.game_type)、[`Player::permission_level`](../rust/player.md#Player.permission_level)、[`Player::dimension`](../rust/player.md#Player.dimension)、[`Player::level`](../rust/player.md#Player.level)、[`Player::experience`](../rust/player.md#Player.experience) 等，共 37 个
-    - Go：[`Player.GameType`](../go/player.md#Player.GameType)、[`Player.Level`](../go/player.md#Player.Level)、[`Player.Experience`](../go/player.md#Player.Experience)、[`Player.Hunger`](../go/player.md#Player.Hunger)、[`Player.Saturation`](../go/player.md#Player.Saturation)、[`Player.Exhaustion`](../go/player.md#Player.Exhaustion) 等，共 38 个
-    - Zig：[`Player.gameType`](../zig/player.md#Player.gameType)、[`Player.level`](../zig/player.md#Player.level)、[`Player.experience`](../zig/player.md#Player.experience)、[`Player.hunger`](../zig/player.md#Player.hunger)、[`Player.saturation`](../zig/player.md#Player.saturation)、[`Player.exhaustion`](../zig/player.md#Player.exhaustion) 等，共 37 个
+    - Rust：[`Player::num`](../rust/player.md#Player.num)、[`Player::game_type`](../rust/player.md#Player.game_type)、[`Player::permission_level`](../rust/player.md#Player.permission_level)、[`Player::dimension`](../rust/player.md#Player.dimension)、[`Player::level`](../rust/player.md#Player.level)、[`Player::experience`](../rust/player.md#Player.experience) 等，共 42 个
+    - Go：[`Player.GameType`](../go/player.md#Player.GameType)、[`Player.Level`](../go/player.md#Player.Level)、[`Player.Experience`](../go/player.md#Player.Experience)、[`Player.Hunger`](../go/player.md#Player.Hunger)、[`Player.Saturation`](../go/player.md#Player.Saturation)、[`Player.Exhaustion`](../go/player.md#Player.Exhaustion) 等，共 43 个
+    - Zig：[`Player.gameType`](../zig/player.md#Player.gameType)、[`Player.level`](../zig/player.md#Player.level)、[`Player.experience`](../zig/player.md#Player.experience)、[`Player.hunger`](../zig/player.md#Player.hunger)、[`Player.saturation`](../zig/player.md#Player.saturation)、[`Player.exhaustion`](../zig/player.md#Player.exhaustion) 等，共 42 个
 
 ### `player_get_str` {#player_get_str}
 
@@ -226,9 +234,9 @@ bool (*player_get_str)(PierPlayerSel sel, int32_t prop, void* ctx, PierStrSink s
 - 所在分节：§B 玩家管理（`§B player management`）
 - 表内序号：第 29 个槽位（从 0 数起）
 - 各绑定里的调用方：
-    - Rust：[`Player::text`](../rust/player.md#Player.text)、[`Player::last_death_pos`](../rust/player.md#Player.last_death_pos)、[`Player::position`](../rust/player.md#Player.position)、[`Player::real_name`](../rust/player.md#Player.real_name)、[`Player::uuid`](../rust/player.md#Player.uuid)、[`Player::xuid`](../rust/player.md#Player.xuid) 等，共 11 个
-    - Go：[`Player.RealName`](../go/player.md#Player.RealName)、[`Player.Uuid`](../go/player.md#Player.Uuid)、[`Player.Xuid`](../go/player.md#Player.Xuid)、[`Player.IpAndPort`](../go/player.md#Player.IpAndPort)、[`Player.LocaleCode`](../go/player.md#Player.LocaleCode)、[`Player.NameTag`](../go/player.md#Player.NameTag) 等，共 12 个
-    - Zig：[`Player.realName`](../zig/player.md#Player.realName)、[`Player.uuid`](../zig/player.md#Player.uuid)、[`Player.xuid`](../zig/player.md#Player.xuid)、[`Player.ipAndPort`](../zig/player.md#Player.ipAndPort)、[`Player.localeCode`](../zig/player.md#Player.localeCode)、[`Player.nameTag`](../zig/player.md#Player.nameTag) 等，共 11 个
+    - Rust：[`Player::text`](../rust/player.md#Player.text)、[`Player::last_death_pos`](../rust/player.md#Player.last_death_pos)、[`Player::position`](../rust/player.md#Player.position)、[`Player::real_name`](../rust/player.md#Player.real_name)、[`Player::uuid`](../rust/player.md#Player.uuid)、[`Player::xuid`](../rust/player.md#Player.xuid) 等，共 13 个
+    - Go：[`Player.Position`](../go/player.md#Player.Position)、[`Player.RealName`](../go/player.md#Player.RealName)、[`Player.Uuid`](../go/player.md#Player.Uuid)、[`Player.Xuid`](../go/player.md#Player.Xuid)、[`Player.IpAndPort`](../go/player.md#Player.IpAndPort)、[`Player.LocaleCode`](../go/player.md#Player.LocaleCode) 等，共 15 个
+    - Zig：[`Player.realName`](../zig/player.md#Player.realName)、[`Player.uuid`](../zig/player.md#Player.uuid)、[`Player.xuid`](../zig/player.md#Player.xuid)、[`Player.ipAndPort`](../zig/player.md#Player.ipAndPort)、[`Player.localeCode`](../zig/player.md#Player.localeCode)、[`Player.nameTag`](../zig/player.md#Player.nameTag) 等，共 14 个
 
 ### `player_set_num` {#player_set_num}
 
@@ -278,9 +286,9 @@ bool (*player_action)(
 - 所在分节：§B 玩家管理（`§B player management`）
 - 表内序号：第 31 个槽位（从 0 数起）
 - 各绑定里的调用方：
-    - Rust：[`Player::act`](../rust/player.md#Player.act)、[`Player::set_ability`](../rust/player.md#Player.set_ability)、[`Player::set_ability_raw`](../rust/player.md#Player.set_ability_raw)、[`Player::can_use_ability`](../rust/player.md#Player.can_use_ability)、[`Player::set_permission_level`](../rust/player.md#Player.set_permission_level)、[`Player::set_selected_slot`](../rust/player.md#Player.set_selected_slot) 等，共 22 个
-    - Go：[`Player.SetAbility`](../go/player.md#Player.SetAbility)、[`Player.CanUseAbilityAction`](../go/player.md#Player.CanUseAbilityAction)、[`Player.SetSelectedSlot`](../go/player.md#Player.SetSelectedSlot)、[`Player.GiveItem`](../go/player.md#Player.GiveItem)、[`Player.SetSpawnPoint`](../go/player.md#Player.SetSpawnPoint)、[`Player.ClearTitle`](../go/player.md#Player.ClearTitle) 等，共 28 个
-    - Zig：[`Player.setAbility`](../zig/player.md#Player.setAbility)、[`Player.canUseAbilityAction`](../zig/player.md#Player.canUseAbilityAction)、[`Player.setSelectedSlot`](../zig/player.md#Player.setSelectedSlot)、[`Player.giveItem`](../zig/player.md#Player.giveItem)、[`Player.setSpawnPoint`](../zig/player.md#Player.setSpawnPoint)、[`Player.clearTitle`](../zig/player.md#Player.clearTitle) 等，共 27 个
+    - Rust：[`Player::act`](../rust/player.md#Player.act)、[`Player::set_ability`](../rust/player.md#Player.set_ability)、[`Player::set_ability_raw`](../rust/player.md#Player.set_ability_raw)、[`Player::can_use_ability`](../rust/player.md#Player.can_use_ability)、[`Player::set_permission_level`](../rust/player.md#Player.set_permission_level)、[`Player::stop_sleeping`](../rust/player.md#Player.stop_sleeping) 等，共 25 个
+    - Go：[`Player.SetAbility`](../go/player.md#Player.SetAbility)、[`Player.CanUseAbilityAction`](../go/player.md#Player.CanUseAbilityAction)、[`Player.SetSelectedSlot`](../go/player.md#Player.SetSelectedSlot)、[`Player.GiveItem`](../go/player.md#Player.GiveItem)、[`Player.SetSpawnPoint`](../go/player.md#Player.SetSpawnPoint)、[`Player.ClearTitle`](../go/player.md#Player.ClearTitle) 等，共 31 个
+    - Zig：[`Player.setAbility`](../zig/player.md#Player.setAbility)、[`Player.canUseAbilityAction`](../zig/player.md#Player.canUseAbilityAction)、[`Player.setSelectedSlot`](../zig/player.md#Player.setSelectedSlot)、[`Player.giveItem`](../zig/player.md#Player.giveItem)、[`Player.setSpawnPoint`](../zig/player.md#Player.setSpawnPoint)、[`Player.clearTitle`](../zig/player.md#Player.clearTitle) 等，共 30 个
 
 ### `player_send_message_typed` {#player_send_message_typed}
 
@@ -303,6 +311,7 @@ bool (*player_send_message_typed)(PierPlayerSel sel, PierStr msg, int32_t type);
 - 各绑定里的调用方：
     - Rust：[`Player::tell`](../rust/player.md#Player.tell)
     - Go：[`Player.SendMessageTyped`](../go/player.md#Player.SendMessageTyped)、[`Raw.PlayerSendMessageTyped`](../go/raw.md#Raw.PlayerSendMessageTyped)
+    - Zig：[`Player.tell`](../zig/player.md#Player.tell)
 
 ### `player_get_carried_item` {#player_get_carried_item}
 
@@ -321,6 +330,7 @@ bool (*player_get_carried_item)(PierPlayerSel sel, void* ctx, PierStrSink sink);
 - 各绑定里的调用方：
     - Rust：[`Player::carried_item`](../rust/player.md#Player.carried_item)
     - Go：[`Player.CarriedItem`](../go/player.md#Player.CarriedItem)、[`Raw.PlayerGetCarriedItem`](../go/raw.md#Raw.PlayerGetCarriedItem)
+    - Zig：[`Player.carriedItem`](../zig/player.md#Player.carriedItem)
 
 ### `player_get_item` {#player_get_item}
 
@@ -340,6 +350,7 @@ bool (*player_get_item)(PierPlayerSel sel, int32_t slot, void* ctx, PierStrSink 
 - 各绑定里的调用方：
     - Rust：[`Player::item`](../rust/player.md#Player.item)
     - Go：[`Player.InventoryItem`](../go/player.md#Player.InventoryItem)、[`Raw.PlayerGetItem`](../go/raw.md#Raw.PlayerGetItem)
+    - Zig：[`Player.item`](../zig/player.md#Player.item)
 
 ### `player_set_item` {#player_set_item}
 
@@ -358,6 +369,7 @@ bool (*player_set_item)(PierPlayerSel sel, int32_t slot, PierStr item_snbt);
 - 各绑定里的调用方：
     - Rust：[`Player::set_item`](../rust/player.md#Player.set_item)
     - Go：[`Player.SetInventoryItem`](../go/player.md#Player.SetInventoryItem)、[`Raw.PlayerSetItem`](../go/raw.md#Raw.PlayerSetItem)
+    - Zig：[`Player.setItem`](../zig/player.md#Player.setItem)
 
 ### `player_get_equipment` {#player_get_equipment}
 
@@ -377,7 +389,8 @@ bool (*player_get_equipment)(PierPlayerSel sel, void* ctx, PierStrSink sink);
 - 表内序号：第 105 个槽位（从 0 数起）
 - 各绑定里的调用方：
     - Rust：[`Player::equipment`](../rust/player.md#Player.equipment)
-    - Go：[`Raw.PlayerGetEquipment`](../go/raw.md#Raw.PlayerGetEquipment)
+    - Go：[`Player.Equipment`](../go/player.md#Player.Equipment)、[`Raw.PlayerGetEquipment`](../go/raw.md#Raw.PlayerGetEquipment)
+    - Zig：[`Player.equipment`](../zig/player.md#Player.equipment)
 
 ### `player_get_cooldown` {#player_get_cooldown}
 
@@ -396,7 +409,8 @@ int32_t (*player_get_cooldown)(PierPlayerSel sel, PierStr item_name);
 - 表内序号：第 106 个槽位（从 0 数起）
 - 各绑定里的调用方：
     - Rust：[`Player::cooldown`](../rust/player.md#Player.cooldown)
-    - Go：[`Raw.PlayerGetCooldown`](../go/raw.md#Raw.PlayerGetCooldown)
+    - Go：[`Player.Cooldown`](../go/player.md#Player.Cooldown)、[`Raw.PlayerGetCooldown`](../go/raw.md#Raw.PlayerGetCooldown)
+    - Zig：[`Player.cooldown`](../zig/player.md#Player.cooldown)
 
 ### `player_start_cooldown` {#player_start_cooldown}
 
@@ -414,7 +428,8 @@ bool (*player_start_cooldown)(PierPlayerSel sel, PierStr item_name, int32_t tick
 - 表内序号：第 107 个槽位（从 0 数起）
 - 各绑定里的调用方：
     - Rust：[`Player::start_cooldown`](../rust/player.md#Player.start_cooldown)
-    - Go：[`Raw.PlayerStartCooldown`](../go/raw.md#Raw.PlayerStartCooldown)
+    - Go：[`Player.SetCooldown`](../go/player.md#Player.SetCooldown)、[`Raw.PlayerStartCooldown`](../go/raw.md#Raw.PlayerStartCooldown)
+    - Zig：[`Player.setCooldown`](../zig/player.md#Player.setCooldown)
 
 ### `player_get_network_status` {#player_get_network_status}
 
@@ -432,7 +447,8 @@ bool (*player_get_network_status)(PierPlayerSel sel, void* ctx, PierStrSink sink
 - 表内序号：第 108 个槽位（从 0 数起）
 - 各绑定里的调用方：
     - Rust：[`Player::network_status`](../rust/player.md#Player.network_status)
-    - Go：[`Raw.PlayerGetNetworkStatus`](../go/raw.md#Raw.PlayerGetNetworkStatus)
+    - Go：[`Player.NetworkDetail`](../go/player.md#Player.NetworkDetail)、[`Raw.PlayerGetNetworkStatus`](../go/raw.md#Raw.PlayerGetNetworkStatus)
+    - Zig：[`Player.networkDetail`](../zig/player.md#Player.networkDetail)
 
 ### `player_send_title` {#player_send_title}
 
@@ -456,6 +472,7 @@ bool (*player_send_title)(
 - 各绑定里的调用方：
     - Rust：[`Player::send_title`](../rust/player.md#Player.send_title)、[`Player::set_title`](../rust/player.md#Player.set_title)、[`Player::set_subtitle`](../rust/player.md#Player.set_subtitle)、[`Player::set_actionbar`](../rust/player.md#Player.set_actionbar)、[`Player::clear_title`](../rust/player.md#Player.clear_title)
     - Go：[`Player.SendTitle`](../go/player.md#Player.SendTitle)、[`Raw.PlayerSendTitle`](../go/raw.md#Raw.PlayerSendTitle)
+    - Zig：[`Player.sendTitle`](../zig/player.md#Player.sendTitle)
 
 ### `player_conn_id` {#player_conn_id}
 
@@ -482,6 +499,7 @@ uint64_t (*player_conn_id)(PierPlayerSel who);
 - 各绑定里的调用方：
     - Rust：[`Player::conn_id`](../rust/player.md#Player.conn_id)
     - Go：[`Player.ConnID`](../go/player.md#Player.ConnID)、[`Raw.PlayerConnId`](../go/raw.md#Raw.PlayerConnId)
+    - Zig：[`Player.connId`](../zig/player.md#Player.connId)
 
 ### `player_execute_command` {#player_execute_command}
 
@@ -553,6 +571,11 @@ bool (*player_execute_command)(PierPlayerSel sel, PierStr cmd, void* ctx,
 | <span id="PIER_PPROP_HAS_DIED_BEFORE"></span>`PIER_PPROP_HAS_DIED_BEFORE` | `34` | (G) `Player::hasDiedBefore` |
 | <span id="PIER_PPROP_DIMENSION"></span>`PIER_PPROP_DIMENSION` | `35` | (G) `Actor::getDimensionId` |
 | <span id="PIER_PPROP_IS_INITIALIZED"></span>`PIER_PPROP_IS_INITIALIZED` | `36` | (G) `Player::isPlayerInitialized`；模拟玩家读到 1 |
+| <span id="PIER_PPROP_IS_SLEEPING"></span>`PIER_PPROP_IS_SLEEPING` | `37` | (G) `Player::isSleeping` |
+| <span id="PIER_PPROP_IS_SIMULATED"></span>`PIER_PPROP_IS_SIMULATED` | `38` | (G) `Actor::isSimulatedPlayer` |
+| <span id="PIER_PPROP_ITEM_USE_DURATION"></span>`PIER_PPROP_ITEM_USE_DURATION` | `39` | (G) `Player::getItemUseDuration`，单位为刻 |
+| <span id="PIER_PPROP_XP_EARNED_AT_LEVEL"></span>`PIER_PPROP_XP_EARNED_AT_LEVEL` | `40` | (G) `Player::getXpEarnedAtCurrentLevel` |
+| <span id="PIER_PPROP_CAN_FLY"></span>`PIER_PPROP_CAN_FLY` | `41` | (G) `Actor::canFly` |
 
 ## `PierPlayerStrProp` {#PierPlayerStrProp}
 
@@ -571,6 +594,8 @@ bool (*player_execute_command)(PierPlayerSel sel, PierStr cmd, void* ctx,
 | <span id="PIER_PSTR_NETWORK_STATUS"></span>`PIER_PSTR_NETWORK_STATUS` | `8` | SNBT `{ping,avg_ping,packet_loss,max_ping}` |
 | <span id="PIER_PSTR_PLATFORM_ONLINE_ID"></span>`PIER_PSTR_PLATFORM_ONLINE_ID` | `9` | 取自 `Player::getPlatformOnlineId` |
 | <span id="PIER_PSTR_RESPAWN_POS"></span>`PIER_PSTR_RESPAWN_POS` | `10` | SNBT `{x,y,z,dim}`：这名玩家会在哪里重生。不会为空：没有床的玩家报告的是世界出生点，这两种情况区分不开。 |
+| <span id="PIER_PSTR_SELECTED_ITEM"></span>`PIER_PSTR_SELECTED_ITEM` | `11` | `Player::getSelectedItem`，物品 SNBT |
+| <span id="PIER_PSTR_DEVICE_MODEL"></span>`PIER_PSTR_DEVICE_MODEL` | `12` | `ConnectionRequest::getDeviceModel`；没有连接请求的玩家读取失败 |
 
 ## `PierPlayerAction` {#PierPlayerAction}
 
@@ -605,3 +630,6 @@ bool (*player_execute_command)(PierPlayerSel sel, PierStr cmd, void* ctx,
 | <span id="PIER_PACT_SIDEBAR_SET"></span>`PIER_PACT_SIDEBAR_SET` | `24` | `sarg` 为 `"obj\ntitle\nline…"`，只对这名玩家显示的侧边栏 |
 | <span id="PIER_PACT_SIDEBAR_CLEAR"></span>`PIER_PACT_SIDEBAR_CLEAR` | `25` | `sarg` 为计分项，发送 `RemoveObjectivePacket` |
 | <span id="PIER_PACT_SET_PERMISSION_LEVEL"></span>`PIER_PACT_SET_PERMISSION_LEVEL` | `26` | `a` 为 `PlayerPermissionLevel`（0 Visitor，1 Member，2 Operator，3 Custom）。调用 `LayeredAbilities::setPlayerPermissions` 并发送 `UpdateAbilitiesPacket`。读取一侧是 `PIER_PPROP_PERMISSION_LEVEL`。和 `PIER_PACT_SET_ABILITY` 一样，玩家加入完成之前调用会被拒绝。 |
+| <span id="PIER_PACT_STOP_SLEEPING"></span>`PIER_PACT_STOP_SLEEPING` | `27` | a：非零时强制唤醒。`Player::stopSleepInBed`；没在睡觉时返回 false |
+| <span id="PIER_PACT_CAUSE_EXHAUSTION"></span>`PIER_PACT_CAUSE_EXHAUSTION` | `28` | a：数量，必须为正。`Player::causeFoodExhaustion` |
+| <span id="PIER_PACT_EAT"></span>`PIER_PACT_EAT` | `29` | sarg：物品 SNBT。`Player::eat`，按这个物品的食物值进食 |

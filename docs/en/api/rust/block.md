@@ -609,6 +609,53 @@ it is.
 - Return type: `Result<i32>`
 - Slots: [`block_get_num`](../cpp/block.md#block_get_num)
 
+### `Block::is_thin_fence` {#Block.is_thin_fence}
+
+```rust
+pub fn is_thin_fence(&self) -> Result<bool>
+```
+
+- Return type: `Result<bool>`
+- Slots: [`block_get_num`](../cpp/block.md#block_get_num)
+
+### `Block::is_lever` {#Block.is_lever}
+
+```rust
+pub fn is_lever(&self) -> Result<bool>
+```
+
+- Return type: `Result<bool>`
+- Slots: [`block_get_num`](../cpp/block.md#block_get_num)
+
+### `Block::is_stem` {#Block.is_stem}
+
+```rust
+pub fn is_stem(&self) -> Result<bool>
+```
+
+- Return type: `Result<bool>`
+- Slots: [`block_get_num`](../cpp/block.md#block_get_num)
+
+### `Block::can_instatick` {#Block.can_instatick}
+
+```rust
+pub fn can_instatick(&self) -> Result<bool>
+```
+
+- Return type: `Result<bool>`
+- Slots: [`block_get_num`](../cpp/block.md#block_get_num)
+
+### `Block::map_color` {#Block.map_color}
+
+```rust
+pub fn map_color(&self) -> Result<i32>
+```
+
+The color the block shows on a map, as 0xRRGGBB.
+
+- Return type: `Result<i32>`
+- Slots: [`block_get_num`](../cpp/block.md#block_get_num)
+
 ### `Block::state` {#Block.state}
 
 ```rust

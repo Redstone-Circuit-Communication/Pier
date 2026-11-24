@@ -10,7 +10,8 @@ The default file:
 {
   "language": "auto",
   "mods": {
-    "disabled": []
+    "disabled": [],
+    "adopt": true
   },
   "hooks": {
     "disabled": [],
@@ -21,7 +22,8 @@ The default file:
     "warn_ms": 2000,
     "hang_ms": 30000,
     "shutdown_ms": 10000
-  }
+  },
+  "native_detour": false
 }
 ```
 
@@ -162,6 +164,43 @@ brings the server back.
 
     Raise `hang_ms` rather than turning the watchdog off. Set `enabled` to `false` only while
     tracking down a problem where the watchdog has to be ruled out.
+
+## Adopting a mod that names `pier` `mods.adopt` {#mods-adopt}
+
+```json
+"mods": { "disabled": [], "adopt": true }
+```
+
+Earlier releases documented `{ "name": "pier" }` in a mod's `dependencies`. LeviLamina compares
+a dependency with the manifest name of a mod exactly, the host's is `Pier`, and so it refuses
+such a mod at startup with "dependency pier is missing", together with every mod that depends
+on it.
+
+With `adopt` on, the default, Pier looks for those mods once LeviLamina has finished loading.
+It loads each one the way `/pier load` does, as soon as everything the mod depends on is
+enabled, and writes a warning that names the mod and the `manifest.json` to correct.
+LeviLamina's own error line still comes first, since it is printed before any mod runs.
+
+- An adopted mod is in Pier's table and outside LeviLamina's dependency graph, the same as a
+  mod brought up by `/pier load`. A native C++ mod that depends on it is still refused.
+- Only the spelling `pier` is adopted. Any other wrong name stays with LeviLamina's error.
+- `false` leaves those mods refused, and LeviLamina's line is the only report.
+
+## Native access `native_detour` {#native-detour}
+
+```json
+"native_detour": false
+```
+
+The `native_*` functions hand a mod raw engine addresses: functions by symbol, byte pattern or
+module export, the engine's service objects, the Player, Actor, Dimension and BlockSource
+objects, and native detours. Pier checks nothing a mod does with them. A mistake there crashes
+the server or corrupts the world, and the log does not point at the mod.
+
+They answer only while this is `true`. While it is `false`, the default, every such call
+fails and Pier writes one warning per mod into that mod's log: Pier has not enabled this
+feature, check whether `native_detour` is true in this file. Turn it on only for mods you trust
+with the whole process.
 
 ## When the file cannot be read
 

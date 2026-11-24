@@ -20,7 +20,7 @@ pub struct Server(/* private */);
 
 服务器运行时的门面。零大小。
 
-- 实现的 trait：`Clone`、`Copy`
+- 实现的 trait：`Clone`、`Copy`、`Debug`
 
 ### `Server::get` {#Server.get}
 

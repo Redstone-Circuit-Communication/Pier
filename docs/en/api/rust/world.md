@@ -52,7 +52,7 @@ pub struct World(/* private */);
 
 The level facade. Zero sized.
 
-- Implements: `Clone`, `Copy`
+- Implements: `Clone`, `Copy`, `Debug`
 
 ### `World::get` {#World.get}
 
@@ -425,6 +425,90 @@ is what is deleted.
     - key : `&[u8]`
 - Return type: `Result<()>`
 - Slots: [`level_delete_key`](../cpp/world.md#level_delete_key)
+
+### `World::weather_value` {#World.weather_value}
+
+```rust
+pub fn weather_value(&self, dim: i32, prop: i32) -> crate::Result<f64>
+```
+
+One weather value of a dimension by its `PIER_WPROP_*` key.
+
+- Parameters:
+    - dim : `i32`
+    - prop : `i32`
+- Return type: `crate::Result<f64>`
+- Slots: [`world_get_num`](../cpp/world.md#world_get_num)
+
+### `World::rain_level` {#World.rain_level}
+
+```rust
+pub fn rain_level(&self, dim: i32) -> crate::Result<f64>
+```
+
+The rain level of a dimension, 0 for none to 1 for full rain.
+
+- Parameters:
+    - dim : `i32`
+- Return type: `crate::Result<f64>`
+- Slots: [`world_get_num`](../cpp/world.md#world_get_num)
+
+### `World::target_rain_level` {#World.target_rain_level}
+
+```rust
+pub fn target_rain_level(&self, dim: i32) -> crate::Result<f64>
+```
+
+- Parameters:
+    - dim : `i32`
+- Return type: `crate::Result<f64>`
+- Slots: [`world_get_num`](../cpp/world.md#world_get_num)
+
+### `World::lightning_level` {#World.lightning_level}
+
+```rust
+pub fn lightning_level(&self, dim: i32) -> crate::Result<f64>
+```
+
+The lightning level of a dimension, 0 for none to 1 for a storm.
+
+- Parameters:
+    - dim : `i32`
+- Return type: `crate::Result<f64>`
+- Slots: [`world_get_num`](../cpp/world.md#world_get_num)
+
+### `World::target_lightning_level` {#World.target_lightning_level}
+
+```rust
+pub fn target_lightning_level(&self, dim: i32) -> crate::Result<f64>
+```
+
+- Parameters:
+    - dim : `i32`
+- Return type: `crate::Result<f64>`
+- Slots: [`world_get_num`](../cpp/world.md#world_get_num)
+
+### `World::fog_level` {#World.fog_level}
+
+```rust
+pub fn fog_level(&self, dim: i32) -> crate::Result<f64>
+```
+
+- Parameters:
+    - dim : `i32`
+- Return type: `crate::Result<f64>`
+- Slots: [`world_get_num`](../cpp/world.md#world_get_num)
+
+### `World::sky_flash_time` {#World.sky_flash_time}
+
+```rust
+pub fn sky_flash_time(&self, dim: i32) -> crate::Result<i32>
+```
+
+- Parameters:
+    - dim : `i32`
+- Return type: `crate::Result<i32>`
+- Slots: [`world_get_num`](../cpp/world.md#world_get_num)
 
 ### `World::fill_blocks` {#World.fill_blocks}
 

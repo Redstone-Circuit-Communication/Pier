@@ -32,9 +32,30 @@ PAGES = {
     "listServicesJson": "crossmod", "serviceCaller": "crossmod",
     "SelKind": "player", "Player": "player", "Entity": "entity", "BlockAt": "block", "Item": "item",
 }
+# The modules levilamina.zig re-exports whole, by file: the name they are reached by, and the
+# page of the reference they are documented on. Inside one every `pub` declaration is public.
+MODULE_PAGES = {
+    "nbt.zig": ("nbt", "nbt"),
+    "client.zig": ("client", "client"),
+    "native.zig": ("native", "native"),
+    "world.zig": ("world", "world"),
+    "server.zig": ("server", "server"),
+    "types.zig": ("types", "types"),
+    "container.zig": ("container", "item"),
+    "kvdb.zig": ("kvdb", "data"),
+    "money.zig": ("money", "money"),
+    "scoreboard.zig": ("scoreboard", "scoreboard"),
+    "gui.zig": ("gui", "form"),
+    "packet.zig": ("packet", "packet"),
+    "sim.zig": ("sim", "sim"),
+    "dimensions.zig": ("dimensions", "dimensions"),
+    "registry.zig": ("registry", "registry"),
+    "lane.zig": ("lane", "crossmod"),
+    "command.zig": ("command", "commands"),
+}
 # The server and system information readers props_gen.zig writes, one per constant.
 PREFIX_PAGES = [("srv", "server"), ("sys", "server")]
-EXTRA_TOPICS = [("nbt", "SNBT values", "SNBT 值")]
+EXTRA_TOPICS = [("nbt", "SNBT values", "SNBT 值"), ("types", "Shared types", "通用类型")]
 
 DECL = re.compile(r"^([ \t]*)(pub\s+)?(?:inline\s+|export\s+)?(fn|const|var)\s+(@\"[^\"]*\"|\w+)", re.M)
 
@@ -237,7 +258,8 @@ def build(slot_names, slot_page):
     missing, entries = [], []
     groups = {}
     all_decls = {}
-    for fn, module in (("core.zig", "core"), ("props_gen.zig", "props"), ("nbt.zig", "nbt")):
+    sources = [("core.zig", "core"), ("props_gen.zig", "props")] + [(f, m) for f, (m, _) in MODULE_PAGES.items()]
+    for fn, module in sources:
         decls, intro = read(fn)
         if fn == "core.zig":
             pages["core"].intro = intro
@@ -246,10 +268,10 @@ def build(slot_names, slot_page):
         all_decls[fn] = decls
         for d in decls:
             top = d.owner.split(".")[0] if d.owner else d.name
-            if module == "nbt":
+            if fn in MODULE_PAGES:
                 public = d.pub
-                prefix = "nbt."
-                page = "nbt"
+                prefix = module + "."
+                page = MODULE_PAGES[fn][1]
             else:
                 if d.owner is None:
                     public = d.pub and ((module, d.name) in exported or module == "props")

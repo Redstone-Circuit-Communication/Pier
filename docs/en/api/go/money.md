@@ -99,6 +99,46 @@ TransferMoney moves value between two balances; the recipient receives it taxed.
 - Return type: `error`
 - Slots: [`trans_money`](../cpp/money.md#trans_money)
 
+### `MoneyHistory` {#MoneyHistory}
+
+```go
+func MoneyHistory(xuid string, seconds int32) ([]string, error)
+```
+
+MoneyHistory lists the transactions of the last seconds seconds, one per line.
+
+- Parameters:
+    - xuid : `string`
+    - seconds : `int32`
+- Return type: `([]string, error)`
+- Slots: [`money_get_hist`](../cpp/money.md#money_get_hist)
+
+### `ClearMoneyHistory` {#ClearMoneyHistory}
+
+```go
+func ClearMoneyHistory(seconds int32) error
+```
+
+ClearMoneyHistory clears the transactions older than seconds seconds.
+
+- Parameters:
+    - seconds : `int32`
+- Return type: `error`
+- Slots: [`money_clear_hist`](../cpp/money.md#money_clear_hist)
+
+### `MoneyRanking` {#MoneyRanking}
+
+```go
+func MoneyRanking(top uint16) ([]string, error)
+```
+
+MoneyRanking lists the top of the rich list, one per line.
+
+- Parameters:
+    - top : `uint16`
+- Return type: `([]string, error)`
+- Slots: [`money_ranking`](../cpp/money.md#money_ranking)
+
 ## `MoneyKind` {#MoneyKind}
 
 ```go

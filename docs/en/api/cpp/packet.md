@@ -43,7 +43,8 @@ bool (*send_packet)(PierPlayerSel sel, int32_t packet_id, uint8_t const* body, s
 - Position in the table: slot 79, counting from 0
 - Callers in each binding:
     - Rust: [`Player::send_packet`](../rust/player.md#Player.send_packet)
-    - Go: [`Raw.SendPacket`](../go/raw.md#Raw.SendPacket)
+    - Go: [`Player.SendPacket`](../go/player.md#Player.SendPacket), [`Raw.SendPacket`](../go/raw.md#Raw.SendPacket)
+    - Zig: [`packet.send`](../zig/packet.md#packet.send)
 
 ### `packet_hook_register` {#packet_hook_register}
 
@@ -70,6 +71,7 @@ Register a raw packet interceptor. `dir_mask` is `PIER_PKT_MASK_INBOUND` | `PIER
 - Callers in each binding:
     - Rust: [`Packets::intercept`](../rust/packet.md#Packets.intercept), [`Packets::intercept_ids`](../rust/packet.md#Packets.intercept_ids)
     - Go: [`RegisterPacketHook`](../go/packet.md#RegisterPacketHook)
+    - Zig: [`packet.intercept`](../zig/packet.md#packet.intercept)
 
 ### `packet_hook_unregister` {#packet_hook_unregister}
 
@@ -89,6 +91,7 @@ Unregister. Safe to call from inside the callback.
 - Callers in each binding:
     - Rust: [`Packets::intercept`](../rust/packet.md#Packets.intercept), [`Packets::intercept_ids`](../rust/packet.md#Packets.intercept_ids)
     - Go: [`PacketHook.Unregister`](../go/packet.md#PacketHook.Unregister), [`Raw.PacketHookUnregister`](../go/raw.md#Raw.PacketHookUnregister)
+    - Zig: [`packet.Hook.unregister`](../zig/packet.md#packet.Hook.unregister)
 
 ### `packet_conn_hook_register` {#packet_conn_hook_register}
 
@@ -109,6 +112,7 @@ Register a connection open/close observer. Returns NULL on failure. The close no
 - Callers in each binding:
     - Rust: [`Packets::on_connection`](../rust/packet.md#Packets.on_connection)
     - Go: [`RegisterConnHook`](../go/packet.md#RegisterConnHook)
+    - Zig: [`packet.onConnection`](../zig/packet.md#packet.onConnection)
 
 ### `packet_conn_hook_unregister` {#packet_conn_hook_unregister}
 
@@ -128,6 +132,7 @@ Unregister. Safe to call from inside the callback.
 - Callers in each binding:
     - Rust: [`Packets::on_connection`](../rust/packet.md#Packets.on_connection)
     - Go: [`PacketHook.Unregister`](../go/packet.md#PacketHook.Unregister), [`Raw.PacketConnHookUnregister`](../go/raw.md#Raw.PacketConnHookUnregister)
+    - Zig: [`packet.Hook.unregister`](../zig/packet.md#packet.Hook.unregister)
 
 ### `packet_hook_register_ids` {#packet_hook_register_ids}
 
@@ -153,6 +158,7 @@ As `packet_hook_register`, but the callback fires only for the listed packet ids
 - Callers in each binding:
     - Rust: [`Packets::intercept_ids`](../rust/packet.md#Packets.intercept_ids)
     - Go: [`RegisterPacketHookIDs`](../go/packet.md#RegisterPacketHookIDs)
+    - Zig: [`packet.interceptIds`](../zig/packet.md#packet.interceptIds)
 
 ## Types {#types}
 

@@ -38,3 +38,18 @@ func FillRegion(dim, x1, y1, z1, x2, y2, z2 int32, blockSpec string, updateFlags
     - updateFlags : `int32`
 - 返回值类型：`(int64, error)`
 - 对应槽位：[`edit_fill_region`](../cpp/edit.md#edit_fill_region)
+
+### `SpawnEntityNBT` {#SpawnEntityNBT}
+
+```go
+func SpawnEntityNBT(dim int32, snbt string, pos *[3]float64) (Entity, error)
+```
+
+SpawnEntityNBT 用完整的 NBT 生成一个实体，是 Snapshot 的逆操作。pos 不为 nil 时会覆盖 Pos 标签。目前所有宿主都回答 not provided。
+
+- 参数：
+    - dim : `int32`
+    - snbt : `string`
+    - pos : `*[3]float64`
+- 返回值类型：`(Entity, error)`
+- 对应槽位：[`edit_spawn_entity_nbt`](../cpp/edit.md#edit_spawn_entity_nbt)

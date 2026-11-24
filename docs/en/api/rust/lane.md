@@ -130,7 +130,7 @@ pub struct Lane<C: LaneContract> {
 
 An acquired lane. Dropping it returns the lease.
 
-- Implements: `Drop`
+- Implements: `Drop`, `Debug`
 
 ### `Lane::is_alive` {#Lane.is_alive}
 
@@ -186,7 +186,7 @@ pub struct Publication {
 
 One publication. Dropping it withdraws the lane.
 
-- Implements: `Drop`
+- Implements: `Drop`, `Debug`
 
 ### `Publication::id` {#Publication.id}
 
@@ -216,7 +216,7 @@ A span of UTF-8 text passed over a lane.
 The producer decides how long the pointer stays valid, usually only for the duration of
 one call (contract §3). A receiver keeping it has to copy it out.
 
-- Implements: `Clone`, `Copy`
+- Implements: `Clone`, `Copy`, `Debug`
 
 ### `LaneStr::new` {#LaneStr.new}
 
@@ -260,7 +260,7 @@ pub struct LaneSlice<T> {
 
 A contiguous span of same-typed elements passed over a lane.
 
-- Implements: `Clone`, `Copy`
+- Implements: `Clone`, `Copy`, `Debug`
 
 ### `LaneSlice::new` {#LaneSlice.new}
 
@@ -366,7 +366,7 @@ The opaque context pointer of a lane function.
 It wraps rather than using `*mut c_void` directly so that a table signature in the
 contract reads as this parameter being that side's self.
 
-- Implements: `Clone`, `Copy`
+- Implements: `Clone`, `Copy`, `Debug`
 
 ## `LaneStrSink` {#LaneStrSink}
 

@@ -76,6 +76,7 @@ void (*list_events)(void* ctx, PierStrSink sink);
 - 各绑定里的调用方：
     - Rust：[`event::list`](../rust/event.md#fn.list)、[`event::exists`](../rust/event.md#fn.exists)、[`Host::list_events`](../rust/host.md#Host.list_events)
     - Go：[`ListEvents`](../go/events.md#ListEvents)、[`Raw.ListEvents`](../go/raw.md#Raw.ListEvents)
+    - Zig：[`server.listEvents`](../zig/server.md#server.listEvents)
 
 ## 类型 {#types}
 

@@ -30,6 +30,20 @@ OpenKvDb opens the store at path, creating it when createIfMissing is set.
 - Return type: `(*KvDb, error)`
 - Slots: [`kvdb_open`](../cpp/data.md#kvdb_open)
 
+### `BinaryToSnbt` {#BinaryToSnbt}
+
+```go
+func BinaryToSnbt(data []byte, format int32) (string, error)
+```
+
+BinaryToSnbt decodes binary NBT as SNBT. format is 0 for the little-endian disk layout and 1 for the network encoding.
+
+- Parameters:
+    - data : `[]byte`
+    - format : `int32`
+- Return type: `(string, error)`
+- Slots: [`nbt_binary_to_snbt`](../cpp/data.md#nbt_binary_to_snbt)
+
 ## `KvDb` {#KvDb}
 
 ```go

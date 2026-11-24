@@ -379,6 +379,8 @@ let wiring = Wiring::new("plots")
 // wiring 离开作用域时，全部订阅都会取消
 ```
 
+- 实现的 trait：`Debug`
+
 ### `Wiring::new` {#Wiring.new}
 
 ```rust
@@ -533,7 +535,7 @@ pub struct Listener {
 
 [`Listener::forget`](event.md#Listener.forget) 让它一直存活到模组卸载。卸载时宿主会移除剩下的订阅，真的调用 `removeListener`，失败了会报告，不会不声不响。
 
-- 实现的 trait：`Drop`
+- 实现的 trait：`Drop`、`Debug`
 
 ### `Listener::event_id` {#Listener.event_id}
 
