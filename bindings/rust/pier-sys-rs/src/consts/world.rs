@@ -76,6 +76,11 @@ pub const PIER_BPROP_BOUNCINESS: i32 = 26;
 pub const PIER_BPROP_IS_SOLID: i32 = 27;
 /// Block::requiresCorrectToolForDrops
 pub const PIER_BPROP_REQUIRES_TOOL: i32 = 28;
+pub const PIER_BPROP_IS_THIN_FENCE: i32 = 29;
+pub const PIER_BPROP_IS_LEVER: i32 = 30;
+pub const PIER_BPROP_IS_STEM: i32 = 31;
+pub const PIER_BPROP_CAN_INSTATICK: i32 = 32;
+pub const PIER_BPROP_MAP_COLOR: i32 = 33;
 
 // ── PierBlockStrProp ──────────────────────────────────────────
 
@@ -170,6 +175,19 @@ pub const PIER_IPROP_IS_BUNDLE: i32 = 25;
 pub const PIER_IPROP_HAS_USER_DATA: i32 = 26;
 /// ItemStackBase::hasCustomHoverName
 pub const PIER_IPROP_HAS_CUSTOM_NAME: i32 = 27;
+pub const PIER_IPROP_IS_FOOD: i32 = 28;
+pub const PIER_IPROP_IS_DYEABLE: i32 = 29;
+pub const PIER_IPROP_IS_HAND_EQUIPPED: i32 = 30;
+pub const PIER_IPROP_IS_LIQUID_CLIP: i32 = 31;
+pub const PIER_IPROP_IS_STACKED_BY_DATA: i32 = 32;
+pub const PIER_IPROP_COOLDOWN_DURATION: i32 = 33;
+pub const PIER_IPROP_IS_COMPONENT_BASED: i32 = 34;
+pub const PIER_IPROP_IS_HUMANOID_ARMOR: i32 = 35;
+pub const PIER_IPROP_ARMOR_VALUE: i32 = 36;
+pub const PIER_IPROP_CAN_BE_DEPLETED: i32 = 37;
+pub const PIER_IPROP_IS_USEABLE: i32 = 38;
+pub const PIER_IPROP_CAN_DESTROY_IN_CREATIVE: i32 = 39;
+pub const PIER_IPROP_SHOWS_DURABILITY_IN_CREATIVE: i32 = 40;
 
 // ── PierItemStrProp ──────────────────────────────────────────
 
@@ -340,6 +358,7 @@ pub const PIER_SYS_OS_VERSION: i32 = 1;
 pub const PIER_SYS_LOCALE: i32 = 2;
 /// sys_utils::getLocalTime → SNBT {year,month,day,hour,minute,second,ms}
 pub const PIER_SYS_LOCAL_TIME: i32 = 3;
+pub const PIER_SYS_PROCESS_ID: i32 = 4;
 
 // ── PierServerInfoProp ──────────────────────────────────────────
 
@@ -354,3 +373,17 @@ pub const PIER_SRV_PROTOCOL_VERSION: i32 = 1;
 pub const PIER_SRV_LEVEL_PROTOCOL_VERSION: i32 = 2;
 /// `"major.minor.patch"` of the running build.
 pub const PIER_SRV_GAME_SEM_VERSION: i32 = 3;
+pub const PIER_SRV_LOADER_VERSION: i32 = 4;
+pub const PIER_SRV_LEVEL_NAME: i32 = 5;
+pub const PIER_SRV_IS_HARDCORE: i32 = 6;
+pub const PIER_SRV_WORLD_START_COUNT: i32 = 7;
+pub const PIER_SRV_EDUCATION_FEATURES: i32 = 8;
+
+/// `world_get_num` keys.
+pub const PIER_WPROP_RAIN_LEVEL: i32 = 0;
+pub const PIER_WPROP_TARGET_RAIN_LEVEL: i32 = 1;
+pub const PIER_WPROP_LIGHTNING_LEVEL: i32 = 2;
+pub const PIER_WPROP_TARGET_LIGHTNING_LEVEL: i32 = 3;
+pub const PIER_WPROP_FOG_LEVEL: i32 = 4;
+pub const PIER_WPROP_SKY_FLASH_TIME: i32 = 5;
+pub const PIER_WPROP_WEATHER_TICK: i32 = 6;

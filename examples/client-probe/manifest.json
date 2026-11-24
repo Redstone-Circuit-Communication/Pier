@@ -1,0 +1,10 @@
+{
+    "name": "ClientProbe",
+    "entry": "client_probe.dll",
+    "type": "pier",
+    "version": "0.1.0",
+    "description": "ClientProbe",
+    "dependencies": [
+        { "name": "Pier" }
+    ]
+}

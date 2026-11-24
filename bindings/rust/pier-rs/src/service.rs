@@ -256,6 +256,7 @@ fn truncate(s: &str, n: usize) -> String {
 ///
 /// [`Registration::forget`] keeps it alive until the mod unloads, and the host clears what
 /// remains at unload.
+#[must_use = "dropping it withdraws the service; keep it, or call forget() to keep it until the mod unloads"]
 pub struct Registration {
     id: u64,
     /// As with `event::Listener::owned`: only held and dropped, never taken out. What goes in
@@ -404,5 +405,13 @@ unsafe extern "C" fn trampoline(
             reply(ctx, s(&msg));
             false
         }
+    }
+}
+
+impl core::fmt::Debug for Registration {
+    fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
+        f.debug_struct("Registration")
+            .field("id", &self.id)
+            .finish_non_exhaustive()
     }
 }

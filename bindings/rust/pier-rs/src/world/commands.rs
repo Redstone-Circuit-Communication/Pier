@@ -158,3 +158,54 @@ fn dim_sel(dim: i32) -> Result<String> {
         ))
     })
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    fn volume(b: &Box3D) -> i64 {
+        let ((x0, y0, z0), (x1, y1, z1)) = *b;
+        (x1 - x0 + 1) as i64 * (y1 - y0 + 1) as i64 * (z1 - z0 + 1) as i64
+    }
+
+    #[test]
+    fn a_box_within_the_cap_is_one_slice() {
+        let slices = split_box((0, 0, 0), (15, 15, 15));
+        assert_eq!(slices, vec![((0, 0, 0), (15, 15, 15))]);
+    }
+
+    #[test]
+    fn a_tall_box_is_cut_along_y_and_every_layer_is_covered_once() {
+        let slices = split_box((0, 0, 0), (31, 255, 31));
+        assert!(slices.len() > 1);
+        let mut next_y = 0;
+        for s in &slices {
+            assert!(volume(s) <= MAX_FILL_VOLUME);
+            assert_eq!((s.0).1, next_y);
+            next_y = (s.1).1 + 1;
+        }
+        assert_eq!(next_y, 256);
+    }
+
+    #[test]
+    fn a_layer_wider_than_the_cap_still_advances_one_layer_at_a_time() {
+        let slices = split_box((0, 0, 0), (999, 2, 999));
+        assert_eq!(slices.len(), 3);
+    }
+
+    #[test]
+    fn the_corners_may_come_in_either_order() {
+        assert_eq!(
+            split_box((15, 15, 15), (0, 0, 0)),
+            split_box((0, 0, 0), (15, 15, 15))
+        );
+    }
+
+    #[test]
+    fn a_ticking_area_name_is_ascii_letters_digits_and_underscores() {
+        assert!(is_valid_ticking_area_name("plot_1"));
+        assert!(!is_valid_ticking_area_name(""));
+        assert!(!is_valid_ticking_area_name("two words"));
+        assert!(!is_valid_ticking_area_name("naïve"));
+    }
+}

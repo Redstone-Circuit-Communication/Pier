@@ -25,6 +25,7 @@ use crate::sys;
 /// One subscription. Dropping it unsubscribes.
 ///
 /// [`Subscription::forget`] keeps it alive until the mod unloads, when the host clears it.
+#[must_use = "dropping it unsubscribes; keep it, or call forget() to keep it until the mod unloads"]
 pub struct Subscription {
     id: u64,
     topic: String,
@@ -163,5 +164,14 @@ unsafe extern "C" fn trampoline(
             ));
             false
         }
+    }
+}
+
+impl core::fmt::Debug for Subscription {
+    fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
+        f.debug_struct("Subscription")
+            .field("id", &self.id)
+            .field("topic", &self.topic)
+            .finish_non_exhaustive()
     }
 }

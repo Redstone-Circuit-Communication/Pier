@@ -263,6 +263,7 @@ pub fn guard<R>(fallback: R, f: impl FnOnce() -> R) -> R {
 }
 
 /// One publication. Dropping it withdraws the lane.
+#[must_use = "dropping it withdraws the lane; keep it, or call forget() to keep it until the mod unloads"]
 pub struct Publication {
     id: u64,
     name: String,
@@ -507,4 +508,48 @@ pub fn list_json() -> String {
         true
     })
     .unwrap_or_default()
+}
+
+impl<C: LaneContract> core::fmt::Debug for Lane<C> {
+    fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
+        f.debug_struct("Lane")
+            .field("lease", &self.lease)
+            .field("fingerprint", &self.fingerprint)
+            .finish_non_exhaustive()
+    }
+}
+
+impl core::fmt::Debug for Publication {
+    fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
+        f.debug_struct("Publication")
+            .field("id", &self.id)
+            .field("name", &self.name)
+            .finish_non_exhaustive()
+    }
+}
+
+impl core::fmt::Debug for LaneStr {
+    fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
+        f.debug_struct("LaneStr")
+            .field("ptr", &self.ptr)
+            .field("len", &self.len)
+            .finish_non_exhaustive()
+    }
+}
+
+impl<T> core::fmt::Debug for LaneSlice<T> {
+    fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
+        f.debug_struct("LaneSlice")
+            .field("ptr", &self.ptr)
+            .field("len", &self.len)
+            .finish_non_exhaustive()
+    }
+}
+
+impl core::fmt::Debug for LaneData {
+    fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
+        f.debug_struct("LaneData")
+            .field("ptr", &self.0)
+            .finish_non_exhaustive()
+    }
 }

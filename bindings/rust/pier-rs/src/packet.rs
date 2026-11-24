@@ -175,6 +175,7 @@ impl<'a> Packet<'a> {
 /// explicit because registering and discarding looks identical in code to registering and
 /// forgetting to keep the returned value, and the latter is a bug. The host clears what
 /// remains when the mod unloads, at teardown stage 90.
+#[must_use = "dropping it deregisters the hook; keep it, or call forget() to keep it until the mod unloads"]
 pub struct PacketHook {
     handle: Handle,
     unregister: Option<unsafe extern "C" fn(sys::PierModHandle, sys::PierPacketHookHandle) -> bool>,
@@ -423,5 +424,27 @@ unsafe extern "C" fn conn_trampoline(
     };
     if std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| f(conn_id, addr, state))).is_err() {
         Logger::get().error("a connection observer panicked. It was caught here.");
+    }
+}
+
+impl core::fmt::Debug for Packet<'_> {
+    fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
+        f.debug_struct("Packet")
+            .field("packet_id", &self.ev.packet_id)
+            .field("conn_id", &self.ev.conn_id)
+            .field("replaced", &self.replaced)
+            .finish_non_exhaustive()
+    }
+}
+
+impl core::fmt::Debug for PacketHook {
+    fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
+        f.debug_struct("PacketHook").finish_non_exhaustive()
+    }
+}
+
+impl core::fmt::Debug for Packets {
+    fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
+        f.write_str("Packets")
     }
 }

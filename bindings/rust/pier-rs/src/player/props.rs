@@ -75,4 +75,13 @@ accessors! { Player;
     /// players who may still be loading asks this first. A simulated player has no client
     /// and always answers true.
     bool is_initialized             = PIER_PPROP_IS_INITIALIZED;
+    bool is_sleeping                = PIER_PPROP_IS_SLEEPING;
+    bool is_simulated_player        = PIER_PPROP_IS_SIMULATED;
+    i32  item_use_duration          = PIER_PPROP_ITEM_USE_DURATION;
+    i32  xp_earned_at_level         = PIER_PPROP_XP_EARNED_AT_LEVEL;
+    bool can_fly                    = PIER_PPROP_CAN_FLY;
+    /// The item in the selected hotbar slot, as item SNBT.
+    str  selected_item_snbt         = PIER_PSTR_SELECTED_ITEM;
+    /// The device model the client reported when it connected.
+    str  device_model               = PIER_PSTR_DEVICE_MODEL;
 }

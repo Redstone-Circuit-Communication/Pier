@@ -162,6 +162,31 @@ impl Player {
         .map(|_| ())
     }
 
+    /// Wakes a sleeping player; an `Err` when the player is not asleep.
+    pub fn stop_sleeping(&self, forceful: bool) -> Result<()> {
+        let a = if forceful { 1.0 } else { 0.0 };
+        self.act(sys::PIER_PACT_STOP_SLEEPING, "", a, 0.0, 0.0)
+            .map(|_| ())
+    }
+
+    /// Adds food exhaustion, which the engine turns into lost saturation and hunger.
+    pub fn cause_exhaustion(&self, amount: f32) -> Result<()> {
+        self.act(
+            sys::PIER_PACT_CAUSE_EXHAUSTION,
+            "",
+            f64::from(amount),
+            0.0,
+            0.0,
+        )
+        .map(|_| ())
+    }
+
+    /// Feeds the player the food value of an item, given as item SNBT.
+    pub fn eat(&self, item_snbt: &str) -> Result<()> {
+        self.act(sys::PIER_PACT_EAT, item_snbt, 0.0, 0.0, 0.0)
+            .map(|_| ())
+    }
+
     pub fn set_selected_slot(&self, slot: i32) -> Result<()> {
         self.act(sys::PIER_PACT_SET_SELECTED_SLOT, "", slot as f64, 0.0, 0.0)
             .map(|_| ())

@@ -430,3 +430,97 @@ pub struct LocalTime {
     pub second: i32,
     pub ms: i32,
 }
+
+/// One attribute of an entity as `Entity::attribute_info` reads it.
+#[derive(Debug, Clone, Copy, PartialEq)]
+pub struct AttributeValue {
+    pub current: f64,
+    pub min: f64,
+    pub max: f64,
+    pub default: f64,
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn game_mode_numbers_are_the_engines_and_not_the_order() {
+        assert_eq!(GameMode::from_i32(6), Some(GameMode::Spectator));
+        assert_eq!(GameMode::from_i32(3), None);
+        for mode in [
+            GameMode::Survival,
+            GameMode::Creative,
+            GameMode::Adventure,
+            GameMode::Spectator,
+        ] {
+            assert_eq!(GameMode::from_i32(mode.as_i32()), Some(mode));
+        }
+    }
+
+    #[test]
+    fn an_enum_rejects_a_number_it_does_not_list() {
+        assert_eq!(Weather::from_i32(3), None);
+        assert_eq!(Difficulty::from_i32(4), None);
+        assert_eq!(EquipSlot::from_i32(6), None);
+        assert_eq!(PlayerPermission::from_i32(4), None);
+        assert_eq!(Weather::from_i32(2), Some(Weather::Thunder));
+    }
+
+    #[test]
+    fn a_box_is_closed_on_both_ends_and_takes_its_corners_in_either_order() {
+        let b = Bounds::new((5, 10, -3), (1, 12, -1));
+        assert_eq!(b.min, (1, 10, -3));
+        assert_eq!(b.max, (5, 12, -1));
+        assert_eq!(b.size(), (5, 3, 3));
+        assert_eq!(b.volume(), 45);
+        assert!(b.contains((1, 10, -3)));
+        assert!(b.contains((5, 12, -1)));
+        assert!(!b.contains((6, 10, -3)));
+    }
+
+    #[test]
+    fn only_a_title_a_subtitle_and_an_action_bar_carry_text() {
+        assert!(TitleKind::Title.uses_text());
+        assert!(TitleKind::Subtitle.uses_text());
+        assert!(TitleKind::Actionbar.uses_text());
+        assert!(!TitleKind::Clear.uses_text());
+        assert!(!TitleKind::Times.uses_text());
+    }
+
+    #[test]
+    fn the_default_title_times_are_the_vanilla_ones() {
+        let t = TitleTimes::default();
+        assert_eq!((t.fade_in, t.stay, t.fade_out), (10, 60, 10));
+    }
+
+    #[test]
+    fn only_the_three_speed_abilities_are_floating_point() {
+        let floats = [
+            Ability::FlySpeed,
+            Ability::WalkSpeed,
+            Ability::VerticalFlySpeed,
+        ];
+        for ability in floats {
+            assert!(ability.is_float());
+        }
+        for ability in [
+            Ability::Build,
+            Ability::Flying,
+            Ability::NoClip,
+            Ability::Muted,
+        ] {
+            assert!(!ability.is_float());
+        }
+    }
+
+    #[test]
+    fn a_block_write_updates_both_neighbors_and_clients_by_default() {
+        assert_eq!(BlockUpdate::default().bits(), 3);
+        assert_eq!(BlockUpdate::NONE.bits(), 0);
+        assert_eq!(
+            BlockUpdate::NEIGHBORS.bits() | BlockUpdate::NETWORK.bits(),
+            3
+        );
+    }
+}

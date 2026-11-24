@@ -242,6 +242,40 @@ impl Host {
         self.server_info(sys::PIER_SRV_GAME_SEM_VERSION)
     }
 
+    /// The version of the LeviLamina this server runs.
+    pub fn loader_version(&self) -> Result<String> {
+        self.server_info(sys::PIER_SRV_LOADER_VERSION)
+    }
+
+    /// The id of the server process.
+    pub fn process_id(&self) -> Result<u32> {
+        let text = self.sys_info(sys::PIER_SYS_PROCESS_ID)?;
+        text.trim()
+            .parse::<u32>()
+            .map_err(|_| crate::Error("the process id could not be read".to_owned()))
+    }
+
+    /// The name of the loaded world.
+    pub fn level_name(&self) -> Result<String> {
+        self.server_info(sys::PIER_SRV_LEVEL_NAME)
+    }
+
+    pub fn is_hardcore(&self) -> Result<bool> {
+        Ok(self.server_info(sys::PIER_SRV_IS_HARDCORE)? == "1")
+    }
+
+    /// How many times the world has been opened.
+    pub fn world_start_count(&self) -> Result<u32> {
+        let text = self.server_info(sys::PIER_SRV_WORLD_START_COUNT)?;
+        text.trim()
+            .parse::<u32>()
+            .map_err(|_| crate::Error("the world start count could not be read".to_owned()))
+    }
+
+    pub fn education_features_enabled(&self) -> Result<bool> {
+        Ok(self.server_info(sys::PIER_SRV_EDUCATION_FEATURES)? == "1")
+    }
+
     /// The BDS version string, from `Common::getGameVersionString`.
     pub fn bds_version(&self) -> Result<String> {
         self.server_info(sys::PIER_SRV_BDS_VERSION)
@@ -358,5 +392,11 @@ unsafe extern "C" fn task_trampoline(user: *mut c_void) {
     if result.is_err() {
         Logger::get()
             .error("a scheduled task panicked. It was caught here and the task was discarded.");
+    }
+}
+
+impl core::fmt::Debug for Host {
+    fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
+        f.write_str("Host")
     }
 }

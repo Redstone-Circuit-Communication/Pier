@@ -114,6 +114,16 @@ pub const PIER_APROP_IS_IN_LOVE: i32 = 45;
 pub const PIER_APROP_DEATH_TIME: i32 = 46;
 /// (G) Actor::hasPassenger
 pub const PIER_APROP_HAS_PASSENGER: i32 = 47;
+pub const PIER_APROP_IS_SPRINTING: i32 = 48;
+pub const PIER_APROP_IS_SWIMMING: i32 = 49;
+pub const PIER_APROP_IS_SLEEPING: i32 = 50;
+pub const PIER_APROP_IS_SITTING: i32 = 51;
+pub const PIER_APROP_IS_ANGRY: i32 = 52;
+pub const PIER_APROP_STRENGTH: i32 = 53;
+pub const PIER_APROP_IS_PLAYER: i32 = 54;
+pub const PIER_APROP_IS_SIMULATED_PLAYER: i32 = 55;
+pub const PIER_APROP_ENTITY_TYPE: i32 = 56;
+pub const PIER_APROP_CAN_FLY: i32 = 57;
 
 // ── PierActorStrProp ──────────────────────────────────────────
 
@@ -126,6 +136,8 @@ pub const PIER_ASTR_NAME_TAG: i32 = 1;
 pub const PIER_ASTR_SCORE_TAG: i32 = 2;
 /// Actor::getFilteredNameTag
 pub const PIER_ASTR_FILTERED_NAME: i32 = 3;
+pub const PIER_ASTR_TAGS: i32 = 4;
+pub const PIER_ASTR_OWNER_ID: i32 = 5;
 
 // ── PierActorAction ──────────────────────────────────────────
 
@@ -197,3 +209,10 @@ pub const PIER_AACT_REMOVE_ALL_PASSENGERS: i32 = 30;
 pub const PIER_AACT_EXECUTE_EVENT: i32 = 31;
 /// a=pitch b=yaw         Actor::setRotationWrapped
 pub const PIER_AACT_SET_ROTATION: i32 = 32;
+pub const PIER_AACT_SET_SITTING: i32 = 33;
+pub const PIER_AACT_START_RIDING: i32 = 34;
+pub const PIER_AACT_ATTRIBUTE_SET: i32 = 35;
+pub const PIER_AACT_ATTRIBUTE_SET_MAX: i32 = 36;
+pub const PIER_AACT_ATTRIBUTE_SET_DEFAULT: i32 = 37;
+pub const PIER_AACT_ATTRIBUTE_LIST: i32 = 38;
+pub const PIER_AACT_ATTRIBUTE_INFO: i32 = 39;

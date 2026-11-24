@@ -166,3 +166,9 @@ impl Server {
         Ok(v)
     }
 }
+
+impl core::fmt::Debug for Server {
+    fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
+        f.write_str("Server")
+    }
+}

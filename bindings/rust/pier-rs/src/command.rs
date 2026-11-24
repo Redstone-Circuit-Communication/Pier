@@ -273,6 +273,7 @@ pub fn register(
 
 /// The declaration of one overload.
 #[derive(Debug, Clone, Default)]
+#[must_use = "a builder method returns the changed builder, and dropping it drops the change"]
 pub struct OverloadBuilder {
     params: Vec<NbtValue>,
 }
@@ -351,6 +352,7 @@ impl OverloadBuilder {
 ///     .overload(|o| o.text("verb", "rate").required("score", ParamType::Int))
 ///     .register(handler)?;
 /// ```
+#[must_use = "a builder method returns the changed builder, and dropping it drops the change"]
 pub struct CommandBuilder {
     name: String,
     description: String,
@@ -523,5 +525,25 @@ unsafe extern "C" fn trampoline(
             out_ctx,
             s("the command handler failed internally; see the server log"),
         );
+    }
+}
+
+impl core::fmt::Debug for Invocation<'_> {
+    fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
+        f.debug_struct("Invocation")
+            .field("raw", &self.raw)
+            .field("origin", &self.origin_raw)
+            .finish_non_exhaustive()
+    }
+}
+
+impl core::fmt::Debug for CommandBuilder {
+    fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
+        f.debug_struct("CommandBuilder")
+            .field("name", &self.name)
+            .field("description", &self.description)
+            .field("permission", &self.permission)
+            .field("overloads", &self.overloads.len())
+            .finish_non_exhaustive()
     }
 }

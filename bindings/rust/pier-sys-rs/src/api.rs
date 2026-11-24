@@ -462,6 +462,40 @@ pub struct PierApi {
     pub player_execute_command: Option<
         unsafe extern "C" fn(PierPlayerSel, PierStr, *mut c_void, PierCmdOutputSink) -> bool,
     >,
+    pub client_get_num: Option<unsafe extern "C" fn(i32, *mut f64) -> bool>,
+    pub client_get_str: Option<unsafe extern "C" fn(i32, *mut c_void, PierStrSink) -> bool>,
+    pub client_action: Option<unsafe extern "C" fn(i32, PierStr, f64, f64, f64) -> bool>,
+    pub client_list_keys: Option<unsafe extern "C" fn(*mut c_void, PierStrSink) -> bool>,
+    pub native_enabled: Option<unsafe extern "C" fn() -> bool>,
+    pub native_resolve_symbol:
+        Option<unsafe extern "C" fn(PierModHandle, PierStr, *mut *mut c_void) -> i32>,
+    pub native_resolve_signature:
+        Option<unsafe extern "C" fn(PierModHandle, PierStr, *mut *mut c_void) -> i32>,
+    pub native_module_export:
+        Option<unsafe extern "C" fn(PierModHandle, PierStr, PierStr, *mut *mut c_void) -> i32>,
+    pub native_object: Option<unsafe extern "C" fn(PierModHandle, i32, *mut *mut c_void) -> i32>,
+    pub native_player:
+        Option<unsafe extern "C" fn(PierModHandle, PierPlayerSel, *mut *mut c_void) -> i32>,
+    pub native_actor:
+        Option<unsafe extern "C" fn(PierModHandle, PierActorId, *mut *mut c_void) -> i32>,
+    pub native_dimension: Option<unsafe extern "C" fn(PierModHandle, i32, *mut *mut c_void) -> i32>,
+    pub native_block_source:
+        Option<unsafe extern "C" fn(PierModHandle, i32, *mut *mut c_void) -> i32>,
+    pub native_hook_install: Option<
+        unsafe extern "C" fn(
+            PierModHandle,
+            *mut c_void,
+            *mut c_void,
+            i32,
+            *mut *mut c_void,
+            *mut u64,
+        ) -> i32,
+    >,
+    pub native_hook_remove: Option<unsafe extern "C" fn(PierModHandle, u64) -> i32>,
+    pub client_option_list: Option<unsafe extern "C" fn(*mut c_void, PierKvSink) -> bool>,
+    pub client_option_get: Option<unsafe extern "C" fn(PierStr, *mut c_void, PierStrSink) -> bool>,
+    pub client_option_set: Option<unsafe extern "C" fn(PierStr, PierStr) -> bool>,
+    pub world_get_num: Option<unsafe extern "C" fn(i32, i32, *mut f64) -> bool>,
 }
 
 impl PierApi {

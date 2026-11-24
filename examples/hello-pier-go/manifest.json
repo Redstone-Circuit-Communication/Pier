@@ -5,6 +5,6 @@
     "version": "0.1.0",
     "description": "The smallest Go mod that does something: one command, one event listener and one delayed task.",
     "dependencies": [
-        { "name": "pier" }
+        { "name": "Pier" }
     ]
 }

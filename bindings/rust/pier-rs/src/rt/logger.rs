@@ -60,3 +60,9 @@ impl Logger {
         self.log(LogLevel::Trace, msg);
     }
 }
+
+impl core::fmt::Debug for Logger {
+    fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
+        f.write_str("Logger")
+    }
+}

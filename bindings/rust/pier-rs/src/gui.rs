@@ -118,6 +118,7 @@ impl FormResponse {
 
 /// A simple form: a column of buttons.
 #[derive(Debug, Clone, Default)]
+#[must_use = "a builder method returns the changed builder, and dropping it drops the change"]
 pub struct SimpleForm {
     title: String,
     content: String,
@@ -210,6 +211,7 @@ impl SimpleForm {
 
 /// A modal form: some text and two buttons.
 #[derive(Debug, Clone)]
+#[must_use = "a builder method returns the changed builder, and dropping it drops the change"]
 pub struct ModalForm {
     title: String,
     content: String,
@@ -254,6 +256,7 @@ impl ModalForm {
 
 /// A custom form: input fields, toggles, dropdowns and sliders.
 #[derive(Debug, Clone, Default)]
+#[must_use = "a builder method returns the changed builder, and dropping it drops the change"]
 pub struct CustomForm {
     title: String,
     submit: Option<String>,
@@ -509,5 +512,66 @@ fn to_form_value(v: &NbtValue) -> FormValue {
             Some(n) => FormValue::Number(n as f64),
             None => FormValue::Text(other.to_snbt()),
         },
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn a_cancelled_form_carries_its_reason() {
+        assert_eq!(
+            parse_response("{cancelled:1b,reason:2}"),
+            FormResponse::Cancelled { reason: 2 }
+        );
+        assert_eq!(
+            parse_response("{cancelled:1b}"),
+            FormResponse::Cancelled { reason: -1 }
+        );
+    }
+
+    #[test]
+    fn a_simple_form_answers_with_the_index_of_a_button() {
+        assert_eq!(parse_response("{button:2}"), FormResponse::Button(2));
+    }
+
+    #[test]
+    fn a_modal_form_names_the_button_it_got() {
+        assert_eq!(
+            parse_response("{button:\"upper\"}"),
+            FormResponse::Modal { upper: true }
+        );
+        assert_eq!(
+            parse_response("{button:\"lower\"}"),
+            FormResponse::Modal { upper: false }
+        );
+    }
+
+    #[test]
+    fn a_custom_form_answers_by_the_name_of_each_control() {
+        let r = parse_response(
+            "{values:{name:\"Steve\",on:1b,pick:2,amount:2.5d},texts:{pick:\"Hard\"}}",
+        );
+        assert_eq!(r.value("name").and_then(FormValue::as_str), Some("Steve"));
+        assert_eq!(r.value("on").and_then(FormValue::as_bool), Some(true));
+        assert_eq!(r.value("pick").and_then(FormValue::as_index), Some(2));
+        assert_eq!(r.value("amount").and_then(FormValue::as_f64), Some(2.5));
+        assert_eq!(r.text("pick"), Some("Hard"));
+        assert_eq!(r.value("missing"), None);
+    }
+
+    #[test]
+    fn an_answer_in_an_unknown_shape_is_kept_as_it_came() {
+        assert_eq!(
+            parse_response("{foo:1}"),
+            FormResponse::Unknown {
+                raw: "{foo:1}".to_owned()
+            }
+        );
+        assert!(matches!(
+            parse_response("not snbt {"),
+            FormResponse::Unknown { .. }
+        ));
     }
 }

@@ -1,0 +1,14 @@
+[workspace]
+
+[package]
+name = "client_probe"
+version = "0.1.0"
+edition = "2021"
+publish = false
+description = "Runs every client-side interface of the host and records a pass or fail line for each."
+
+[lib]
+crate-type = ["cdylib"]
+
+[dependencies]
+pier-rs = { path = "../../bindings/rust/pier-rs", features = ["client"] }

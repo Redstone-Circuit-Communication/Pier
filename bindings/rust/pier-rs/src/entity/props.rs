@@ -54,4 +54,17 @@ accessors! { Entity;
     /// Holding a totem of undying in a hand or the off hand.
     bool has_totem                = PIER_APROP_HAS_TOTEM;
     bool has_passenger            = PIER_APROP_HAS_PASSENGER;
+    bool is_sprinting             = PIER_APROP_IS_SPRINTING;
+    bool is_swimming              = PIER_APROP_IS_SWIMMING;
+    bool is_sleeping              = PIER_APROP_IS_SLEEPING;
+    bool is_sitting               = PIER_APROP_IS_SITTING;
+    bool is_angry                 = PIER_APROP_IS_ANGRY;
+    i32  strength                 = PIER_APROP_STRENGTH;
+    bool is_player                = PIER_APROP_IS_PLAYER;
+    bool is_simulated_player      = PIER_APROP_IS_SIMULATED_PLAYER;
+    /// The engine's actor type number, whose bits tell a mob, a monster and an animal apart.
+    i32  entity_type              = PIER_APROP_ENTITY_TYPE;
+    bool can_fly                  = PIER_APROP_CAN_FLY;
+    str  tags_json                = PIER_ASTR_TAGS;
+    str  owner_id_text            = PIER_ASTR_OWNER_ID;
 }

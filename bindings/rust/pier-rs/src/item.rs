@@ -294,6 +294,58 @@ impl ItemStack {
         self.num_bool(sys::PIER_IPROP_HAS_CUSTOM_NAME)
     }
 
+    pub fn is_food(&self) -> Result<bool> {
+        self.num_bool(sys::PIER_IPROP_IS_FOOD)
+    }
+
+    pub fn is_dyeable(&self) -> Result<bool> {
+        self.num_bool(sys::PIER_IPROP_IS_DYEABLE)
+    }
+
+    pub fn is_hand_equipped(&self) -> Result<bool> {
+        self.num_bool(sys::PIER_IPROP_IS_HAND_EQUIPPED)
+    }
+
+    pub fn is_liquid_clip(&self) -> Result<bool> {
+        self.num_bool(sys::PIER_IPROP_IS_LIQUID_CLIP)
+    }
+
+    pub fn is_stacked_by_data(&self) -> Result<bool> {
+        self.num_bool(sys::PIER_IPROP_IS_STACKED_BY_DATA)
+    }
+
+    pub fn cooldown_duration(&self) -> Result<i32> {
+        self.num_i32(sys::PIER_IPROP_COOLDOWN_DURATION)
+    }
+
+    pub fn is_component_based(&self) -> Result<bool> {
+        self.num_bool(sys::PIER_IPROP_IS_COMPONENT_BASED)
+    }
+
+    pub fn is_humanoid_armor(&self) -> Result<bool> {
+        self.num_bool(sys::PIER_IPROP_IS_HUMANOID_ARMOR)
+    }
+
+    pub fn armor_value(&self) -> Result<i32> {
+        self.num_i32(sys::PIER_IPROP_ARMOR_VALUE)
+    }
+
+    pub fn can_be_depleted(&self) -> Result<bool> {
+        self.num_bool(sys::PIER_IPROP_CAN_BE_DEPLETED)
+    }
+
+    pub fn is_useable(&self) -> Result<bool> {
+        self.num_bool(sys::PIER_IPROP_IS_USEABLE)
+    }
+
+    pub fn can_destroy_in_creative(&self) -> Result<bool> {
+        self.num_bool(sys::PIER_IPROP_CAN_DESTROY_IN_CREATIVE)
+    }
+
+    pub fn shows_durability_in_creative(&self) -> Result<bool> {
+        self.num_bool(sys::PIER_IPROP_SHOWS_DURABILITY_IN_CREATIVE)
+    }
+
     // String properties
 
     /// Reads a `PIER_ISTR_*` string property.
@@ -565,4 +617,28 @@ pub(crate) fn parse_str_list(text: &str, what: &str) -> Result<Vec<String>> {
             None => e.to_snbt(),
         })
         .collect())
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn a_new_item_is_a_name_and_a_count_capped_at_what_a_byte_holds() {
+        assert_eq!(
+            ItemStack::create("minecraft:apple", 3).snbt(),
+            "{\"Count\":3b,\"Name\":\"minecraft:apple\"}"
+        );
+        assert!(ItemStack::create("minecraft:apple", 200)
+            .snbt()
+            .contains("\"Count\":127b"));
+    }
+
+    #[test]
+    fn an_empty_slot_is_air() {
+        assert_eq!(
+            ItemStack::empty().snbt(),
+            "{\"Count\":0b,\"Name\":\"minecraft:air\"}"
+        );
+    }
 }

@@ -145,3 +145,9 @@ impl Scoreboard {
             .map(|_| ())
     }
 }
+
+impl core::fmt::Debug for Scoreboard {
+    fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
+        f.write_str("Scoreboard")
+    }
+}

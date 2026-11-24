@@ -550,3 +550,51 @@ fn parse_bounds(v: &NbtValue) -> Option<Bounds> {
         max: b.get_block_pos("max").ok()?,
     })
 }
+
+impl World {
+    /// One weather value of a dimension by its `PIER_WPROP_*` key.
+    pub fn weather_value(&self, dim: i32, prop: i32) -> crate::Result<f64> {
+        let f = crate::require_slot!(world_get_num, "reading the world state");
+        let mut out = 0.0f64;
+        if unsafe { f(dim, prop, &mut out) } {
+            Ok(out)
+        } else {
+            Err(crate::Error(format!(
+                "world property {prop} of dimension {dim} could not be read: the key is unknown, the dimension does not exist, or the level is not ready"
+            )))
+        }
+    }
+
+    /// The rain level of a dimension, 0 for none to 1 for full rain.
+    pub fn rain_level(&self, dim: i32) -> crate::Result<f64> {
+        self.weather_value(dim, crate::sys::PIER_WPROP_RAIN_LEVEL)
+    }
+
+    pub fn target_rain_level(&self, dim: i32) -> crate::Result<f64> {
+        self.weather_value(dim, crate::sys::PIER_WPROP_TARGET_RAIN_LEVEL)
+    }
+
+    /// The lightning level of a dimension, 0 for none to 1 for a storm.
+    pub fn lightning_level(&self, dim: i32) -> crate::Result<f64> {
+        self.weather_value(dim, crate::sys::PIER_WPROP_LIGHTNING_LEVEL)
+    }
+
+    pub fn target_lightning_level(&self, dim: i32) -> crate::Result<f64> {
+        self.weather_value(dim, crate::sys::PIER_WPROP_TARGET_LIGHTNING_LEVEL)
+    }
+
+    pub fn fog_level(&self, dim: i32) -> crate::Result<f64> {
+        self.weather_value(dim, crate::sys::PIER_WPROP_FOG_LEVEL)
+    }
+
+    pub fn sky_flash_time(&self, dim: i32) -> crate::Result<i32> {
+        self.weather_value(dim, crate::sys::PIER_WPROP_SKY_FLASH_TIME)
+            .map(|v| v as i32)
+    }
+}
+
+impl core::fmt::Debug for World {
+    fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
+        f.write_str("World")
+    }
+}

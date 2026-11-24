@@ -91,6 +91,119 @@ impl Entity {
         self.act(sys::PIER_AACT_SET_ROTATION, "", pitch, yaw, 0.0)
             .map(|_| ())
     }
+
+    /// The tags the entity carries, the ones `/tag` lists.
+    pub fn tags(&self) -> Result<Vec<String>> {
+        let text = self.tags_json()?;
+        serde_json::from_str(&text).map_err(|e| {
+            crate::Error(format!(
+                "the tags of entity {} could not be read: {e}",
+                self.id()
+            ))
+        })
+    }
+
+    /// The id of the entity's owner, or -1 when it has none.
+    pub fn owner_id(&self) -> Result<i64> {
+        let text = self.owner_id_text()?;
+        text.trim().parse::<i64>().map_err(|_| {
+            crate::Error(format!(
+                "the owner of entity {} could not be read",
+                self.id()
+            ))
+        })
+    }
+
+    pub fn set_sitting(&self, sitting: bool) -> Result<()> {
+        let a = if sitting { 1.0 } else { 0.0 };
+        self.act(sys::PIER_AACT_SET_SITTING, "", a, 0.0, 0.0)
+            .map(|_| ())
+    }
+
+    /// Mounts this entity on `vehicle`; `force` mounts it where the vehicle has no free seat.
+    pub fn start_riding(&self, vehicle: &Entity, force: bool) -> Result<()> {
+        let a = if force { 1.0 } else { 0.0 };
+        self.act(
+            sys::PIER_AACT_START_RIDING,
+            &vehicle.id().to_string(),
+            a,
+            0.0,
+            0.0,
+        )
+        .map(|_| ())
+    }
+
+    /// The current, minimum, maximum and default value of one attribute, by a name such as
+    /// `"minecraft:health"` or `"minecraft:movement"`.
+    pub fn attribute_info(&self, name: &str) -> Result<crate::types::AttributeValue> {
+        let text = self.act(sys::PIER_AACT_ATTRIBUTE_INFO, name, 0.0, 0.0, 0.0)?;
+        let v: serde_json::Value = serde_json::from_str(&text).map_err(|e| {
+            crate::Error(format!(
+                "attribute {name} of entity {} could not be read: {e}",
+                self.id()
+            ))
+        })?;
+        let num = |key: &str| {
+            v.get(key)
+                .and_then(serde_json::Value::as_f64)
+                .ok_or_else(|| {
+                    crate::Error(format!(
+                        "attribute {name} of entity {} has no {key}",
+                        self.id()
+                    ))
+                })
+        };
+        Ok(crate::types::AttributeValue {
+            current: num("current")?,
+            min: num("min")?,
+            max: num("max")?,
+            default: num("default")?,
+        })
+    }
+
+    pub fn set_attribute(&self, name: &str, value: f32) -> Result<()> {
+        self.act(
+            sys::PIER_AACT_ATTRIBUTE_SET,
+            name,
+            f64::from(value),
+            0.0,
+            0.0,
+        )
+        .map(|_| ())
+    }
+
+    pub fn set_attribute_max(&self, name: &str, value: f32) -> Result<()> {
+        self.act(
+            sys::PIER_AACT_ATTRIBUTE_SET_MAX,
+            name,
+            f64::from(value),
+            0.0,
+            0.0,
+        )
+        .map(|_| ())
+    }
+
+    pub fn set_attribute_default(&self, name: &str, value: f32) -> Result<()> {
+        self.act(
+            sys::PIER_AACT_ATTRIBUTE_SET_DEFAULT,
+            name,
+            f64::from(value),
+            0.0,
+            0.0,
+        )
+        .map(|_| ())
+    }
+
+    /// The names of the attributes the entity has, of the ones the attribute calls can name.
+    pub fn attribute_names(&self) -> Result<Vec<String>> {
+        let text = self.act(sys::PIER_AACT_ATTRIBUTE_LIST, "", 0.0, 0.0, 0.0)?;
+        serde_json::from_str(&text).map_err(|e| {
+            crate::Error(format!(
+                "the attributes of entity {} could not be listed: {e}",
+                self.id()
+            ))
+        })
+    }
     pub fn set_velocity(&self, x: f64, y: f64, z: f64) -> Result<()> {
         self.act(sys::PIER_AACT_SET_VELOCITY, "", x, y, z)
             .map(|_| ())

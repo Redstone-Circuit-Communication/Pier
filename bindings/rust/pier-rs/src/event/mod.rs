@@ -390,6 +390,7 @@ impl<'a> Event<'a> {
 /// [`Listener::forget`] keeps it alive until the mod unloads. The host removes whatever
 /// remains at unload, really calling `removeListener` and reporting a failure rather than
 /// staying silent.
+#[must_use = "dropping it unsubscribes; keep it, or call forget() to keep it until the mod unloads"]
 pub struct Listener {
     handle: Handle,
     forgotten: bool,
@@ -730,5 +731,24 @@ impl std::fmt::Debug for Event<'_> {
             .field("id", &self.id)
             .field("snbt", &self.snbt)
             .finish()
+    }
+}
+
+impl core::fmt::Debug for Listener {
+    fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
+        f.debug_struct("Listener")
+            .field("forgotten", &self.forgotten)
+            .finish_non_exhaustive()
+    }
+}
+
+impl core::fmt::Debug for Wiring {
+    fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
+        f.debug_struct("Wiring")
+            .field("owner", &self.owner)
+            .field("pending", &self.pending.len())
+            .field("listeners", &self.listeners.len())
+            .field("failures", &self.failures)
+            .finish_non_exhaustive()
     }
 }

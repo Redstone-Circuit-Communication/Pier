@@ -67,3 +67,9 @@ impl ModContext {
         (r.api.abi_version, r.host_struct_size)
     }
 }
+
+impl core::fmt::Debug for ModContext {
+    fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
+        f.write_str("ModContext")
+    }
+}

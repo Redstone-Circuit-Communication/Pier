@@ -93,6 +93,11 @@ pub const PIER_PPROP_HAS_DIED_BEFORE: i32 = 34;
 pub const PIER_PPROP_DIMENSION: i32 = 35;
 /// (G) Player::isPlayerInitialized; 1 for a simulated player
 pub const PIER_PPROP_IS_INITIALIZED: i32 = 36;
+pub const PIER_PPROP_IS_SLEEPING: i32 = 37;
+pub const PIER_PPROP_IS_SIMULATED: i32 = 38;
+pub const PIER_PPROP_ITEM_USE_DURATION: i32 = 39;
+pub const PIER_PPROP_XP_EARNED_AT_LEVEL: i32 = 40;
+pub const PIER_PPROP_CAN_FLY: i32 = 41;
 
 // ── PierPlayerStrProp ──────────────────────────────────────────
 
@@ -118,6 +123,8 @@ pub const PIER_PSTR_NETWORK_STATUS: i32 = 8;
 /// Player::getPlatformOnlineId
 pub const PIER_PSTR_PLATFORM_ONLINE_ID: i32 = 9;
 pub const PIER_PSTR_RESPAWN_POS: i32 = 10;
+pub const PIER_PSTR_SELECTED_ITEM: i32 = 11;
+pub const PIER_PSTR_DEVICE_MODEL: i32 = 12;
 
 // ── PierPlayerAction ──────────────────────────────────────────
 
@@ -180,3 +187,6 @@ pub const PIER_PACT_SIDEBAR_CLEAR: i32 = 25;
 /// LayeredAbilities::setPlayerPermissions + UpdateAbilitiesPacket.
 /// The reading side is PIER_PPROP_PERMISSION_LEVEL.
 pub const PIER_PACT_SET_PERMISSION_LEVEL: i32 = 26;
+pub const PIER_PACT_STOP_SLEEPING: i32 = 27;
+pub const PIER_PACT_CAUSE_EXHAUSTION: i32 = 28;
+pub const PIER_PACT_EAT: i32 = 29;

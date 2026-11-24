@@ -66,6 +66,7 @@ ALLOWED = {
     "kvdb": {"rt"},
     "money": {"rt"},
     "client": {"rt"},
+    "native": {"rt", "player", "entity"},
     "lane": {"rt"},
     "bus": {"rt"},
     "scoreboard": {"rt", "nbt"},

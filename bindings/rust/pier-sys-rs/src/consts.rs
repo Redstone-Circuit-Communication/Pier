@@ -11,9 +11,13 @@
 //! constant shows up as calling add_effect while remove_effect runs.
 
 pub mod actor;
+pub mod client;
+pub mod native;
 pub mod player;
 pub mod world;
 
 pub use actor::*;
+pub use client::*;
+pub use native::*;
 pub use player::*;
 pub use world::*;

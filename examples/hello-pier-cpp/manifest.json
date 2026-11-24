@@ -5,6 +5,6 @@
     "version": "0.1.0",
     "description": "The smallest C++ mod that does something: one command and one line per lifecycle step. Four build files produce the same DLL.",
     "dependencies": [
-        { "name": "pier" }
+        { "name": "Pier" }
     ]
 }

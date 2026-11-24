@@ -111,6 +111,9 @@ pub enum DimensionRule {
     /// road stops being a corridor as well and everything that is not a player stays where
     /// it stands on it. Same exemptions: players and ridden vehicles pass, and vertical
     /// movement is untouched.
+    ///
+    /// No host acts on this rule yet: `abi.h` numbers the rules up to 12 and a host ignores a
+    /// rule number it does not know, so setting it changes nothing and reading it gives `None`.
     EntityOnGap = 13,
 }
 
@@ -584,5 +587,45 @@ pub fn set_dimension_cells(dim_id: i32, cell: i32, gap: i32) -> Result<()> {
         Err(Error(format!(
             "dimension {dim_id} is not one this host registered, so it has no cell geometry"
         )))
+    }
+}
+
+impl core::fmt::Debug for Terrain {
+    fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
+        f.debug_struct("Terrain")
+            .field("materials", &self.materials)
+            .field("biomes", &self.biomes)
+            .finish_non_exhaustive()
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn a_plot_merge_mask_is_north_east_south_west_from_the_low_bit() {
+        let m = PlotMerge::from_dirs(1, 2, [true, false, true, false]);
+        assert_eq!((m.x, m.z, m.mask), (1, 2, 0b0101));
+        assert!(!m.is_empty());
+        assert!(PlotMerge::from_dirs(0, 0, [false; 4]).is_empty());
+    }
+
+    #[test]
+    fn a_pack_status_keeps_a_code_it_does_not_list() {
+        assert!(matches!(PackStatus::from_code(-1), PackStatus::BadPath));
+        assert!(matches!(PackStatus::from_code(-14), PackStatus::Host));
+        assert!(matches!(PackStatus::from_code(-99), PackStatus::Other(-99)));
+    }
+
+    #[test]
+    fn the_spec_name_and_the_engine_name_of_a_generator_differ_where_they_must() {
+        assert_eq!(GeneratorType::TheEnd.spec_name(), "end");
+        assert_eq!(GeneratorType::TheEnd.engine_name(), "TheEnd");
+        assert_eq!(GeneratorType::from_i32(0).map(GeneratorType::as_i32), None);
+        assert_eq!(
+            GeneratorType::from_i32(5).map(GeneratorType::spec_name),
+            Some("void")
+        );
     }
 }

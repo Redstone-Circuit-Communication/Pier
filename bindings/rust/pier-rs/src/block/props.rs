@@ -63,4 +63,10 @@ accessors! { Block;
     /// The strength a comparator reads from this cell; a container computes it from how full
     /// it is.
     i32  comparator_signal        = PIER_BPROP_COMPARATOR_SIGNAL;
+    bool is_thin_fence        = PIER_BPROP_IS_THIN_FENCE;
+    bool is_lever             = PIER_BPROP_IS_LEVER;
+    bool is_stem              = PIER_BPROP_IS_STEM;
+    bool can_instatick        = PIER_BPROP_CAN_INSTATICK;
+    /// The color the block shows on a map, as 0xRRGGBB.
+    i32  map_color            = PIER_BPROP_MAP_COLOR;
 }

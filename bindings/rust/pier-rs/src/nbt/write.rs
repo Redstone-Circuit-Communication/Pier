@@ -128,3 +128,39 @@ fn escape(s: &str, out: &mut String) {
         }
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    fn snbt(v: &NbtValue) -> String {
+        let mut out = String::new();
+        write(v, &mut out);
+        out
+    }
+
+    #[test]
+    fn a_double_always_carries_its_point_and_its_suffix() {
+        assert_eq!(snbt(&NbtValue::Double(1.0)), "1.0d");
+        assert_eq!(snbt(&NbtValue::Double(-0.5)), "-0.5d");
+        assert_eq!(snbt(&NbtValue::Float(0.5)), "0.5f");
+    }
+
+    #[test]
+    fn a_value_snbt_cannot_express_is_written_as_zero() {
+        assert_eq!(snbt(&NbtValue::Double(f64::NAN)), "0.0d");
+        assert_eq!(snbt(&NbtValue::Double(f64::INFINITY)), "0.0d");
+    }
+
+    #[test]
+    fn a_string_is_quoted_and_its_control_characters_are_escaped() {
+        let s = NbtValue::String("a\"b\\c\nd\u{1}".to_owned());
+        assert_eq!(snbt(&s), "\"a\\\"b\\\\c\\nd\\u0001\"");
+    }
+
+    #[test]
+    fn every_key_is_quoted_so_a_business_key_cannot_break_the_parse() {
+        let v = NbtValue::obj([("1x.y", NbtValue::Byte(1))]);
+        assert_eq!(snbt(&v), "{\"1x.y\":1b}");
+    }
+}

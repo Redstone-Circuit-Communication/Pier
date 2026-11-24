@@ -101,3 +101,16 @@ pub const PIER_REGISTRY_ITEMS: i32 = 1;
 pub const PIER_REGISTRY_ENTITIES: i32 = 2;
 /// `registry_list`: every command the engine's registry holds.
 pub const PIER_REGISTRY_COMMANDS: i32 = 3;
+
+// The native escape hatch. Every `native_*` slot but `native_enabled` answers one of these.
+
+/// Done; the outputs are written.
+pub const PIER_NATIVE_OK: i32 = 0;
+/// `config.json` of the host does not set `native_detour` to true.
+pub const PIER_NATIVE_DISABLED: i32 = 1;
+/// No such symbol, pattern match, export, object or actor right now.
+pub const PIER_NATIVE_NOT_FOUND: i32 = 2;
+/// A null or malformed argument, an unknown kind, or an id this mod does not hold.
+pub const PIER_NATIVE_REFUSED: i32 = 3;
+/// The engine-side call failed, such as a detour that did not install.
+pub const PIER_NATIVE_FAILED: i32 = 4;
